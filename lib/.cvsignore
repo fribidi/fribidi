@@ -1,1 +1,3 @@
+*.i
 fribidi-config.h
+fribidi-unicode-version.h
