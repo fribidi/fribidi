@@ -1,27 +1,51 @@
 
-libfribidi_mans = \
-		fribidi_get_bidi_type.3
-		fribidi_get_bidi_types.3
-		fribidi_log2vis.3
-		fribidi_log2vis_get_embedding_levels.3
-		fribidi_remove_bidi_marks.3
-		fribidi_get_mirror_char.3
-		fribidi_debug_status.3
-		fribidi_set_debug.3
-		fribidi_mirroring_status.3
-		fribidi_set_mirroring.3
-		fribidi_reorder_nsm_status.3
-		fribidi_set_reorder_nsm.3
+# man3
 
-
-if FRIBIDI_CHARSETS
-
-
-endif
-
+includepath = -I$(top_builddir)
+includevpath = $(top_builddir)
 headers = 
-include $(top_srcdir)/charset/Headers.mk
-headers += $(libfribidi_char_sets_la_headers)
+inst_symbols =
+noinst_symbols =
+
 include $(top_srcdir)/lib/Headers.mk
 headers += $(libfribidi_la_headers)
+includepath += -I$(top_srcdir)/lib -I$(top_builddir)/lib
+includevpath += :$(top_srcdir)/lib:$(top_builddir)/lib
+inst_symbols += $(libfribidi_la_symbols)
 
+include $(top_srcdir)/charset/Headers.mk
+headers += $(libfribidi_char_sets_la_headers)
+includepath += -I$(top_srcdir)/charset
+includevpath += :$(top_srcdir)/charset
+if FRIBIDI_CHARSETS
+inst_symbols += $(libfribidi_char_sets_la_symbols)
+else # !FRIBIDI_CHARSETS
+noinst_symbols += $(libfribidi_char_sets_la_symbols)
+endif # !FRIBIDI_CHARSETS
+
+# name of the header to include in the manual
+headers += fribidi.h
+
+dist_man_MANS = $(inst_symbols:=.3)
+dist_noinst_MANS = $(noinst_symbols:=.3)
+
+man3 = $(dist_man_MANS) $(dist_noinst_MANS)
+
+MAINTAINERCLEANFILES = $(man3)
+
+C2MANFLAGS = $(includepath) -DDONT_HAVE_FRIBIDI_CONFIG_H -M "$(PACKAGE_NAME)"
+VPATH += $(includevpath)
+
+c2man.stamp: $(headers)
+	@$(RM) $@.tmp
+	@touch $@.tmp
+	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $^
+	@mv $@.tmp $@
+
+$(man3): c2man.stamp
+	@if test -f $@; then \
+		touch $@; \
+	else \
+		$(RM) $<; \
+		$(MAKE) $(AM_MAKEFLAGS) $<; \
+	fi

@@ -1,11 +1,11 @@
-#if !__C2MAN__
+#ifndef __C2MAN__
 /* FriBidi
  * bidi-types-list.h - list of bidi types
  *
- * $Id: bidi-types-list.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: bidi-types-list.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-27 16:47:22 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/bidi-types-list.h,v $
  *
  * Author:
@@ -64,6 +64,6 @@ _FRIBIDI_ADD_TYPE (WR, 'r')	/* Weak Right to left */
 _FRIBIDI_ADD_TYPE (SOT, '^')	/* Start Of Text */
 _FRIBIDI_ADD_TYPE (EOT, '$')	/* End Of Text */
 
-#if !__C2MAN__
+#ifndef __C2MAN__
 /* *INDENT-ON* */
 #endif /* !__C2MAN__ */

@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: debug.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-27 16:47:22 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -44,7 +44,7 @@
 #if DEBUG
 
 #ifndef FRIBIDI_FPRINTF
-# if !__C2MAN__
+# ifndef __C2MAN__
 #  include <stdio.h>
 # endif	/* !__C2MAN__ */
 # define FRIBIDI_FPRINTF fprintf

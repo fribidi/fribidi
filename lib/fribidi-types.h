@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-types.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-27 16:47:22 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -40,7 +40,7 @@
 
 #if !FRIBIDI_USE_GLIB
 # if HAVE_INTTYPES_H
-#  if !__C2MAN__
+#  ifndef __C2MAN__
 #   include <inttypes.h>
 #  endif /* !__C2MAN__ */
 #  define FRIBIDI_UINT8_LOCAL		uint8_t
@@ -48,7 +48,7 @@
 #  define FRIBIDI_UINT32_LOCAL		uint32_t
 # else /* !HAVE_INTTYPES_H */
 #  if HAVE_STDINT_H
-#   if !__C2MAN__
+#   ifndef __C2MAN__
 #    include <stdint.h>
 #   endif /* !__C2MAN__ */
 #   define FRIBIDI_UINT8_LOCAL		uint8_t
@@ -74,7 +74,7 @@
 #  define FRIBIDI_BOOLEAN_LOCAL		int
 # endif	/* !HAVE_STDBOOL_H */
 # if SIZEOF_WCHAR_T >= 4
-#  if !__C2MAN__
+#  ifndef __C2MAN__
 #   if STDC_HEADERS
 #    include <stdlib.h>
 #    include <stddef.h>
@@ -89,7 +89,7 @@
 #  define FRIBIDI_UNICHAR_LOCAL		fribidi_uint32
 # endif	/* SIZEOF_WCHAR_T < 4 */
 #else /* FRIBIDI_USE_GLIB */
-#  if !__C2MAN__
+#  ifndef __C2MAN__
 #   include <glib/gtypes.h>
 #   include <glib/gunicode.h>
 #  endif /* !__C2MAN__ */

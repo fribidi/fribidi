@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: common.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-27 16:47:22 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -61,7 +61,7 @@
 # ifndef SIZEOF_VOID_P
 #  define SIZEOF_VOID_P GLIB_SIZEOF_VOID_P
 # endif	/* !SIZEOF_VOID_P */
-# if !__C2MAN__
+# ifndef __C2MAN__
 #  include <glib/gmem.h>
 # endif	/* !__C2MAN__ */
 # ifndef fribidi_malloc
@@ -74,7 +74,7 @@
  * No need to include any headers. */
 #ifndef fribidi_malloc
 # if HAVE_STDLIB_H
-#  if !__C2MAN__
+#  ifndef __C2MAN__
 #   include <stdlib.h>
 #  endif /* __C2MAN__ */
 #  define fribidi_malloc malloc
