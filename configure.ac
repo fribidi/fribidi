@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: configure.ac,v 1.8 2004-05-25 12:09:39 behdad Exp $
+## $Id: configure.ac,v 1.9 2004-05-25 12:15:44 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-05-25 12:09:39 $
-## $Revision: 1.8 $
+## $Date: 2004-05-25 12:15:44 $
+## $Revision: 1.9 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 ##                                               -*- Autoconf -*-
@@ -41,7 +41,7 @@ m4_define(fribidi_rpm_release, 1)dnl
 dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.8 2004-05-25 12:09:39 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.9 2004-05-25 12:15:44 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -78,8 +78,8 @@ dnl ==========================================================================
 
 # Checks for Win32.
 AC_MSG_CHECKING([for native Win32])
-  case "$host" in
-    *-*-mingw*) os_win32=yes ;;
+  case $build_os in
+    mingw*) os_win32=yes ;;
     *) os_win32=no ;;
   esac
 AC_MSG_RESULT([$os_win32])
@@ -96,9 +96,8 @@ if test "$os_win32" = "yes"; then
 fi
 
 AC_MSG_CHECKING([for some Win32 platform])
-  echo XXXXXXXXXXXXXXXXXX $host
-  case "$host" in
-    *-*-mingw*|*-*-cygwin*) platform_win32=yes ;;
+  case $build_os in
+    mingw*|cygwin*) platform_win32=yes ;;
     *) platform_win32=no ;;
   esac
 AC_MSG_RESULT([$platform_win32])
