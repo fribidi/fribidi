@@ -46,9 +46,6 @@ C2MANFLAGS = $(includepath) \
 
 VPATH += $(includevpath)
 
-x:
-	@echo $(headers)
-
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp
 	@touch $@.tmp
