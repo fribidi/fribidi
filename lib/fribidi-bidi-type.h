@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.h - get character bidi type
  *
- * $Id: fribidi-bidi-type.h,v 1.4 2004-06-09 08:56:53 behdad Exp $
+ * $Id: fribidi-bidi-type.h,v 1.5 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 08:56:53 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.h,v $
  *
  * Author:
@@ -50,39 +50,6 @@ FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_bidi_type (
   FriBidiChar ch		/* input character */
 ) FRIBIDI_GNUC_CONST;
-
-/* fribidi_get_type is the old name of fribidi_get_bidi_type. deprecated.*/
-#define fribidi_get_type FRIBIDI_NAMESPACE(get_type)
-     FRIBIDI_ENTRY FriBidiCharType fribidi_get_type (
-  FriBidiChar ch
-)
-     FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
-
-#define fribidi_get_type_internal FRIBIDI_NAMESPACE(get_type_internal)
-     FRIBIDI_ENTRY FriBidiCharType fribidi_get_type_internal (
-  FriBidiChar ch
-)
-     FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
-
-#define fribidi_get_bidi_types FRIBIDI_NAMESPACE(get_bidi_types)
-/* fribidi_get_bidi_types - get bidi types for an string of characters
- *
- * This function finds the bidi types of an string of characters.  See
- * fribidi_get_bidi_type for more information.
- */
-     FRIBIDI_ENTRY void fribidi_get_bidi_types (
-  const FriBidiChar *str,	/* input string */
-  FriBidiStrIndex len,		/* input string length */
-  FriBidiCharType *type		/* output bidi types */
-);
-
-/* fribidi_get_types is the old name of fribidi_get_bidi_types. deprecated. */
-#define fribidi_get_types FRIBIDI_NAMESPACE(get_types)
-     FRIBIDI_ENTRY void fribidi_get_types (
-  const FriBidiChar *str,
-  FriBidiStrIndex len,
-  FriBidiCharType *type
-) FRIBIDI_GNUC_DEPRECATED;
 
 #include "fribidi-enddecls.h"
 

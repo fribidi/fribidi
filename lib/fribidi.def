@@ -1,8 +1,5 @@
 fribidi_bidi_type_name
 fribidi_get_bidi_type
-fribidi_get_bidi_types
-fribidi_get_type
-fribidi_get_types
 fribidi_log2vis
 fribidi_get_par_embedding_levels
 fribidi_remove_bidi_marks

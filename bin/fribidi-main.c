@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.8 2004-06-09 08:56:53 behdad Exp $
+ * $Id: fribidi-main.c,v 1.9 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 08:56:53 $
- * $Revision: 1.8 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -185,6 +185,19 @@ version (
   exit (0);
 }
 
+char *my_fribidi_strdup (char *s)
+{
+  char *m;
+
+  m = fribidi_malloc (strlen (s) + 1);
+  if (!m)
+    return NULL;
+
+  strcpy(m, s);
+
+  return m;
+}
+
 int
 main (
   int argc,
@@ -306,14 +319,16 @@ main (
 	  do_break = false;
 	  break;
 	case 'c':
-	  char_set = strdup (optarg);
+	  char_set = my_fribidi_strdup (optarg);
+	  if (!char_set)
+	    die1 ("memory allocation failed for char_set!");
 	  break;
 #if !FRIBIDI_MAIN_USE_ICONV_H
 	case CAPRTL:
 	  char_set = "CapRTL";
 	  break;
 	case CHARSETDESC:
-	  char_set = strdup (optarg);
+	  char_set = optarg;
 	  char_set_num = fribidi_parse_charset (char_set);
 	  if (!char_set_num)
 	    die2 ("unrecognized character set `%s'\n", char_set);

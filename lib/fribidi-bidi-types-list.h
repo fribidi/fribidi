@@ -1,11 +1,11 @@
-#ifndef __C2MAN__
+#ifndef __FRIBIDI_DOC
 /* FriBidi
  * fribidi-bidi-types-list.h - list of bidi types
  *
- * $Id: fribidi-bidi-types-list.h,v 1.3 2004-06-07 20:38:21 behdad Exp $
+ * $Id: fribidi-bidi-types-list.h,v 1.4 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types-list.h,v $
  *
  * Author:
@@ -32,7 +32,7 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 /* *INDENT-OFF* */
-#endif /* !__C2MAN__ */
+#endif /* !__FRIBIDI_DOC */
 #ifndef _FRIBIDI_ADD_TYPE
 # define _FRIBIDI_ADD_TYPE(x,y)
 #endif
@@ -93,6 +93,6 @@ typedef enum {
 } _FRIBIDI_ENUM_TYPES
 #endif /* _FRIBIDI_ENUM_TYPES */
 
-#ifndef __C2MAN__
+#ifndef __FRIBIDI_DOC
 /* *INDENT-ON* */
-#endif /* !__C2MAN__ */
+#endif /* !__FRIBIDI_DOC */

@@ -1,10 +1,10 @@
 /* FriBidi
  * mem.h - memory manipulation routines
  *
- * $Id: mem.h,v 1.5 2004-05-07 06:30:38 behdad Exp $
+ * $Id: mem.h,v 1.6 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/mem.h,v $
  *
  * Author:
@@ -68,9 +68,9 @@ fribidi_mem_chunk_new (
 
 #else /* FRIBIDI_USE_GLIB */
 
-#ifndef __C2MAN__
+#ifndef __FRIBIDI_DOC
 # include <glib/gmem.h>
-#endif /* !__C2MAN__ */
+#endif /* !__FRIBIDI_DOC */
 
 #define FriBidiMemChunk GMemChunk
 #define FRIBIDI_ALLOC_ONLY G_ALLOC_ONLY

@@ -23,10 +23,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.h,v 1.6 2004-06-07 20:38:21 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.7 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
  * Authors:
@@ -62,10 +62,10 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_get_mirror_char (
 #endif /* !_FRIBIDI_MIRRORING_H */
 /* Editor directions:
  * Local Variables:
- *   mode:c
+ *   mode: c
  *   c-basic-offset: 2
- *   indent-tabs-mode:t
+ *   indent-tabs-mode: t
  *   tab-width: 8
  * End:
- * vim: textwidth=78: autoindent: cindent: shiftwidth=2: tabstop=8
+ * vim: textwidth=78: autoindent: cindent: shiftwidth=2: tabstop=8:
  */

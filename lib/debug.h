@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.5 2004-05-31 18:39:39 behdad Exp $
+ * $Id: debug.h,v 1.6 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:39:39 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -55,9 +55,9 @@
 #endif /* !__FILE__ */
 
 #ifndef FRIBIDI_FPRINTF
-# ifndef __C2MAN__
+# ifndef __FRIBIDI_DOC
 #  include <stdio.h>
-# endif	/* !__C2MAN__ */
+# endif	/* !__FRIBIDI_DOC */
 # define FRIBIDI_FPRINTF fprintf
 # define FRIBIDI_STDERR_ stderr,
 #endif /* !FRIBIDI_FPRINTF */

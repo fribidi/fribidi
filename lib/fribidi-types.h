@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
+ * $Id: fribidi-types.h,v 1.5 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -40,17 +40,17 @@
 
 #if !FRIBIDI_USE_GLIB
 # if HAVE_INTTYPES_H
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   include <inttypes.h>
-#  endif /* !__C2MAN__ */
+#  endif /* !__FRIBIDI_DOC */
 #  define FRIBIDI_UINT8_LOCAL		uint8_t
 #  define FRIBIDI_UINT16_LOCAL		uint16_t
 #  define FRIBIDI_UINT32_LOCAL		uint32_t
 # else /* !HAVE_INTTYPES_H */
 #  if HAVE_STDINT_H
-#   ifndef __C2MAN__
+#   ifndef __FRIBIDI_DOC
 #    include <stdint.h>
-#   endif /* !__C2MAN__ */
+#   endif /* !__FRIBIDI_DOC */
 #   define FRIBIDI_UINT8_LOCAL		uint8_t
 #   define FRIBIDI_UINT16_LOCAL		uint16_t
 #   define FRIBIDI_UINT32_LOCAL		uint32_t
@@ -69,15 +69,15 @@
 #  endif /* !HAVE_STDINT_H */
 # endif	/* !HAVE_INTTYPES_H */
 # if HAVE_STDBOOL_H
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   include <stdbool.h>
-#  endif /* !__C2MAN__ */
+#  endif /* !__FRIBIDI_DOC */
 #  define FRIBIDI_BOOLEAN_LOCAL		bool
 # else /* !HAVE_STDBOOL_H */
 #  define FRIBIDI_BOOLEAN_LOCAL		int
 # endif	/* !HAVE_STDBOOL_H */
 # if SIZEOF_WCHAR_T >= 4
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   if STDC_HEADERS
 #    include <stdlib.h>
 #    include <stddef.h>
@@ -86,16 +86,16 @@
 #     include <stdlib.h>
 #    endif /* !HAVE_STDLIB_H */
 #   endif /* !STDC_HEADERS */
-#  endif /* !__C2MAN__ */
+#  endif /* !__FRIBIDI_DOC */
 #  define FRIBIDI_UNICHAR_LOCAL		wchar_t
 # else /* SIZEOF_WCHAR_T < 4 */
 #  define FRIBIDI_UNICHAR_LOCAL		fribidi_uint32
 # endif	/* SIZEOF_WCHAR_T < 4 */
 #else /* FRIBIDI_USE_GLIB */
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   include <glib/gtypes.h>
 #   include <glib/gunicode.h>
-#  endif /* !__C2MAN__ */
+#  endif /* !__FRIBIDI_DOC */
 # define FRIBIDI_UINT8_LOCAL		guint8
 # define FRIBIDI_UINT16_LOCAL		guint16
 # define FRIBIDI_UINT32_LOCAL		guint32

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets.h - character set conversion routines
  *
- * $Id: fribidi-char-sets.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-char-sets.h,v 1.3 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets.h,v $
  *
  * Authors:
@@ -38,13 +38,6 @@
 #include "fribidi-common.h"
 
 #include "fribidi-types.h"
-
-#include "fribidi-char-sets-cap-rtl.h"
-#include "fribidi-char-sets-utf8.h"
-#include "fribidi-char-sets-iso8859-6.h"
-#include "fribidi-char-sets-cp1256.h"
-#include "fribidi-char-sets-iso8859-8.h"
-#include "fribidi-char-sets-cp1255.h"
 
 #include "fribidi-begindecls.h"
 

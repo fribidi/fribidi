@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.5 2004-06-07 20:38:21 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.6 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -86,8 +86,8 @@ typedef struct _FriBidiRun FriBidiRun;
 #define FRIBIDI_MASK_SS		0x00400000L
 #define FRIBIDI_MASK_WS		0x00800000L
 
-/* We reserve the sign bit for user's private use: we will never use it,
-   then negative character types will be never assigned. */
+/* We reserve a single bit for user's private use: we will never use it. */
+#define FRIBIDI_MASK_PRIVATE	0x01000000L
 
 
 /*
@@ -156,14 +156,19 @@ typedef struct _FriBidiRun FriBidiRun;
 /* Weak right to left */
 #define FRIBIDI_TYPE_WRTL_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_RTL )
 
-/* The following is only used internally */
-
-/* Start or end of text (run list) */
+/* Start or end of text (run list).  Only used internally */
 #define FRIBIDI_TYPE_SENTINEL	( FRIBIDI_MASK_SENTINEL )
+
+/* Private types for applications.  More private types can be obtained by
+ * summing up from this one. */
+#define FRIBIDI_TYPE_PRIVATE	( FRIBIDI_MASK_PRIVATE )
 
 /* Define values for FriBidiCharType. */
 
-#if defined(__C2MAN__) || (defined(FRIBIDI_SIZEOF_INT) && ((FRIBIDI_SIZEOF_INT <= 4) && (FRIBIDI_SIZEOF_INT >= 4)))
+/* Define Enums only if sizeof(int) == 4 (UTF-32), and not compiling C++.
+ * The problem with C++ is that then casts between int32 and enum will fail!
+ */
+#if defined(__FRIBIDI_DOC) || (FRIBIDI_SIZEOF_INT+0 == 4 && !defined(__cplusplus))
 
 typedef enum
 {
@@ -171,7 +176,7 @@ typedef enum
 	FRIBIDI_TYPE_##TYPE = FRIBIDI_TYPE_##TYPE##_VAL,
 # include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
-  _FRIBIDI_TYPE_JUNK
+  _FRIBIDI_TYPE_SENTINEL = FRIBIDI_TYPE_SENTINEL /* Don't use this */
 } FriBidiCharType;
 
 typedef enum
@@ -182,7 +187,7 @@ typedef enum
 # include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
 # undef _FRIBIDI_PAR_TYPES
-  _FRIBIDI_TYPE_JUNK
+  _FRIBIDI_PAR_SENTINEL = FRIBIDI_TYPE_SENTINEL /* Don't use this */
 } FriBidiParType;
 
 #else
@@ -217,7 +222,7 @@ typedef fribidi_uint32 FriBidiParType;
 
 #endif
 
-/* Just for compatibility */
+/* For lazy people... */
 #define FRIBIDI_TYPE_WLTR	FRIBIDI_PAR_WLTR
 #define FRIBIDI_TYPE_WL		FRIBIDI_PAR_WLTR
 #define FRIBIDI_TYPE_WRTL	FRIBIDI_PAR_WRTL
@@ -234,9 +239,6 @@ typedef fribidi_uint32 FriBidiParType;
  * implementation of FriBidiCharType.
  */
 
-
-/* Is private-use value? */
-#define FRIBIDI_TYPE_PRIVATE(p)	((p) < 0)
 
 /* Is right-to-left level? */
 #define FRIBIDI_LEVEL_IS_RTL(lev) ((lev) & 1)
@@ -309,6 +311,9 @@ typedef fribidi_uint32 FriBidiParType;
 #define FRIBIDI_IS_EXPLICIT_OR_SEPARATOR_OR_BN_OR_WS(p) \
 	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_SEPARATOR \
 		| FRIBIDI_MASK_BN | FRIBIDI_MASK_WS))
+
+/* Is private-use type for application? */
+#define FRIBIDI_IS_PRIVATE(p) ((p) & FRIBIDI_MASK_PRIVATE)
 
 /* Define some conversions. */
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.6 2004-06-07 20:38:21 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.7 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -99,7 +99,6 @@ fribidi_get_par_embedding_levels (
   FriBidiStrIndex *position_V_to_L_list	/* output mapping from visual string
 					   back to logical string positions */
 ) FRIBIDI_GNUC_WARN_UNUSED;
-
 
 #include "fribidi-enddecls.h"
 

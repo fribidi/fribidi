@@ -1,11 +1,11 @@
-#ifndef __C2MAN__
+#ifndef __FRIBIDI_DOC
 /* FriBidi
  * fribidi-char-sets-list.h - list of supported character sets
  *
- * $Id: fribidi-char-sets-list.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
+ * $Id: fribidi-char-sets-list.h,v 1.3 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 16:47:22 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-list.h,v $
  *
  * Author:
@@ -35,7 +35,7 @@
 
 /* The order of types in this list should not be important at compile time,
  * but apparently it should not be changed after compilation! */
-#endif /* !__C2MAN__ */
+#endif /* !__FRIBIDI_DOC */
 #ifdef _FRIBIDI_ADD_CHAR_SET
 # define _FRIBIDI_ADD_CHAR_SET_OTHERS _FRIBIDI_ADD_CHAR_SET
 # define _FRIBIDI_ADD_CHAR_SET_ONE2ONE _FRIBIDI_ADD_CHAR_SET
@@ -55,6 +55,6 @@ _FRIBIDI_ADD_CHAR_SET_ONE2ONE (CP1256, cp1256)		/* CP1256 (MS Arabic) */
 # undef _FRIBIDI_ADD_CHAR_SET_ONE2ONE
 #endif /* _FRIBIDI_ADD_CHAR_SET */
 
-#ifndef __C2MAN__
+#ifndef __FRIBIDI_DOC
 /* *INDENT-ON* */
-#endif /* !__C2MAN__ */
+#endif /* !__FRIBIDI_DOC */

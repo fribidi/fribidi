@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.9 2004-06-04 09:41:11 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.10 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 09:41:11 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -55,8 +55,8 @@ static const FriBidiCharType linear_enum_to_char_type[] = {
 # undef _FRIBIDI_ADD_TYPE
 };
 
-static inline FriBidiCharType
-get_bidi_type (
+FRIBIDI_ENTRY FriBidiCharType
+fribidi_get_bidi_type (
   /* input */
   FriBidiChar uch
 )
@@ -66,56 +66,4 @@ get_bidi_type (
   else
     return FRIBIDI_TYPE_LTR;
   /* Non-Unicode chars */
-}
-
-FRIBIDI_ENTRY FriBidiCharType
-fribidi_get_bidi_type (
-  /* input */
-  FriBidiChar ch
-)
-{
-  return get_bidi_type (ch);
-}
-
-/* The following is only defined for binary compatibility */
-FriBidiCharType
-fribidi_get_type (
-  FriBidiChar ch
-)
-{
-  return fribidi_get_bidi_type (ch);
-}
-
-/* The following is only defined for binary compatibility */
-FriBidiCharType
-fribidi_get_type_internal (
-  FriBidiChar ch
-)
-{
-  return fribidi_get_bidi_type (ch);
-}
-
-FRIBIDI_ENTRY void
-fribidi_get_bidi_types (
-  /* input */
-  const FriBidiChar *str,
-  FriBidiStrIndex len,
-  /* output */
-  FriBidiCharType *type
-)
-{
-  register FriBidiStrIndex i = len;
-  for (; i; i--)
-    *type++ = get_bidi_type (*str++);
-}
-
-/* The following is only defined for binary compatibility */
-void
-fribidi_get_types (
-  const FriBidiChar *str,
-  FriBidiStrIndex len,
-  FriBidiCharType *type
-)
-{
-  fribidi_get_bidi_types (str, len, type);
 }

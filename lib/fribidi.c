@@ -1,10 +1,10 @@
 /* FriBidi
- * fribidi.c - Unicode bidirectional and Arabic joining algorithms
+ * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.7 2004-06-07 20:38:21 behdad Exp $
+ * $Id: fribidi.c,v 1.8 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:

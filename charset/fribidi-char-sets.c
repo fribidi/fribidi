@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets.c - character set conversion routines
  *
- * $Id: fribidi-char-sets.c,v 1.4 2004-05-22 11:21:40 behdad Exp $
+ * $Id: fribidi-char-sets.c,v 1.5 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 11:21:40 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets.c,v $
  *
  * Authors:
@@ -36,6 +36,13 @@
 #include <common.h>
 
 #include <fribidi-char-sets.h>
+
+#include "fribidi-char-sets-cap-rtl.h"
+#include "fribidi-char-sets-utf8.h"
+#include "fribidi-char-sets-iso8859-6.h"
+#include "fribidi-char-sets-cp1256.h"
+#include "fribidi-char-sets-iso8859-8.h"
+#include "fribidi-char-sets-cp1255.h"
 
 typedef struct
 {
@@ -107,7 +114,7 @@ static FriBidiCharSetHandler char_sets[FRIBIDI_CHAR_SETS_NUM + 1] = {
 };
 
 #if !FRIBIDI_USE_GLIB
-static inline char
+static char
 toupper (
   /* input */
   char c
@@ -116,7 +123,7 @@ toupper (
   return c < 'a' || c > 'z' ? c : c + 'A' - 'a';
 }
 
-static inline int
+static int
 fribidi_strcasecmp (
   /* input */
   const char *s1,
@@ -131,7 +138,6 @@ fribidi_strcasecmp (
   return toupper (*s1) - toupper (*s2);
 }
 #else /* FRIBIDI_USE_GLIB */
-# include <glib/gstrfuncs.h>
 # define fribidi_strcasecmp g_ascii_strcasecmp
 #endif /* FRIBIDI_USE_GLIB */
 

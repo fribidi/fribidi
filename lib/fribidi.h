@@ -1,10 +1,10 @@
 /* FriBidi
- * fribidi.h - Unicode bidirectional and Arabic joining algorithms
+ * fribidi.h - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.h,v 1.3 2004-06-09 08:56:53 behdad Exp $
+ * $Id: fribidi.h,v 1.4 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 08:56:53 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.h,v $
  *
  * Author:
@@ -42,6 +42,7 @@
 # include "fribidi-char-sets.h"
 #endif /* FRIBIDI_CHARSETS */
 
+#include "fribidi-begindecls.h"
 
 /* See fribidi-bidi.h for the core functions fribidi_get_par_embedding_levels
  * and fribidi_reorder_line which are probably the main calls you need.  See
@@ -127,9 +128,16 @@ fribidi_remove_bidi_marks (
 )
      FRIBIDI_GNUC_WARN_UNUSED FRIBIDI_GNUC_DEPRECATED;
 
-
 #define fribidi_log2vis_get_embedding_levels fribidi_get_par_embedding_levels
+#define fribidi_get_type fribidi_get_bidi_type
 
+
+
+#define fribidi_version_info FRIBIDI_NAMESPACE(version_info)
+/* An string containing the version information of the library. */
+extern const char *fribidi_version_info;
+
+#include "fribidi-enddecls.h"
 
 #endif /* !_FRIBIDI_H */
 /* Editor directions:

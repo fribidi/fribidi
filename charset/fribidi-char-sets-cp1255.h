@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cp1255.h - CP1255 character set conversion routines
  *
- * $Id: fribidi-char-sets-cp1255.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-char-sets-cp1255.h,v 1.2 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cp1255.h,v $
  *
  * Authors:
@@ -39,6 +39,8 @@
 #include "fribidi-common.h"
 
 #include "fribidi-types.h"
+
+#include "fribidi-begindecls.h"
 
 #define fribidi_char_set_name_cp1255 "CP1255"
 #define fribidi_char_set_title_cp1255 "CP1255 (MS Hebrew/Yiddish)"

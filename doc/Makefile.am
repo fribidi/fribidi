@@ -40,6 +40,7 @@ MAINTAINERCLEANFILES += $(man3) c2man.stamp
 man3 = $(dist_man_MANS) $(dist_noinst_MANS)
 
 C2MANFLAGS = $(includepath) \
+		-D__FRIBIDI_DOC \
 		-DDONT_HAVE_FRIBIDI_CONFIG_H \
 		-M "Programmer's Manual" \
 		-m "$(PACKAGE_NAME) $(PACKAGE_VERSION)"

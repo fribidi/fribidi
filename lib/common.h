@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.11 2004-05-31 18:39:39 behdad Exp $
+ * $Id: common.h,v 1.12 2004-06-09 14:59:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:39:39 $
- * $Revision: 1.11 $
+ * $Date: 2004-06-09 14:59:21 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -54,22 +54,22 @@
 # ifndef SIZEOF_VOID_P
 #  define SIZEOF_VOID_P GLIB_SIZEOF_VOID_P
 # endif	/* !SIZEOF_VOID_P */
-# ifndef __C2MAN__
+# ifndef __FRIBIDI_DOC
 #  include <glib/gmem.h>
-# endif	/* !__C2MAN__ */
+# endif	/* !__FRIBIDI_DOC */
 # ifndef fribidi_malloc
-#  define fribidi_malloc g_malloc
+#  define fribidi_malloc g_try_malloc
 #  define fribidi_free g_free
 # endif	/* !fribidi_malloc */
 # ifndef fribidi_assert
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   include <glib/gmessages.h>
-#  endif /* !__C2MAN__ */
+#  endif /* !__FRIBIDI_DOC */
 #  define fribidi_assert g_assert
 # endif	/* !fribidi_assert */
-# ifndef __C2MAN__
+# ifndef __FRIBIDI_DOC
 #  include <glib/gmacros.h>
-# endif	/* !__C2MAN__ */
+# endif	/* !__FRIBIDI_DOC */
 # ifndef FRIBIDI_BEGIN_STMT
 #  define FRIBIDI_BEGIN_STMT G_STMT_START {
 #  define FRIBIDI_END_STMT } G_STMT_END
@@ -105,9 +105,9 @@
  * No need to include any headers. */
 #ifndef fribidi_malloc
 # if HAVE_STDLIB_H
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   include <stdlib.h>
-#  endif /* __C2MAN__ */
+#  endif /* __FRIBIDI_DOC */
 #  define fribidi_malloc malloc
 # else /* !HAVE_STDLIB_H */
 #  define fribidi_malloc (void *) malloc
@@ -123,9 +123,9 @@
  * allocated for data structure pools. */
 #ifndef FRIBIDI_CHUNK_SIZE
 # if HAVE_ASM_PAGE_H
-#  ifndef __C2MAN__
+#  ifndef __FRIBIDI_DOC
 #   include <asm/page.h>
-#  endif /* __C2MAN__ */
+#  endif /* __FRIBIDI_DOC */
 #  define FRIBIDI_CHUNK_SIZE (PAGE_SIZE - 16)
 # else /* !HAVE_ASM_PAGE_H */
 #  define FRIBIDI_CHUNK_SIZE (4096 - 16)
