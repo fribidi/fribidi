@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: configure.ac,v 1.9 2004-05-25 12:15:44 behdad Exp $
+## $Id: configure.ac,v 1.10 2004-05-25 12:28:11 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-05-25 12:15:44 $
-## $Revision: 1.9 $
+## $Date: 2004-05-25 12:28:11 $
+## $Revision: 1.10 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 ##                                               -*- Autoconf -*-
@@ -41,7 +41,7 @@ m4_define(fribidi_rpm_release, 1)dnl
 dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.9 2004-05-25 12:15:44 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.10 2004-05-25 12:28:11 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -76,7 +76,11 @@ AC_SUBST(LT_CURRENT_MINUS_AGE)
 
 dnl ==========================================================================
 
-# Checks for Win32.
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_LIBTOOL_WIN32_DLL
+AC_PROG_LIBTOOL
 AC_MSG_CHECKING([for native Win32])
   case $build_os in
     mingw*) os_win32=yes ;;
@@ -84,17 +88,6 @@ AC_MSG_CHECKING([for native Win32])
   esac
 AC_MSG_RESULT([$os_win32])
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
-if test "$os_win32" = "yes"; then
-  if test x$enable_static = xyes -o x$enable_static = x; then
-    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
-    enable_static=no
-  fi
-  if test x$enable_shared = xno; then
-    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
-  fi
-  enable_shared=yes
-fi
-
 AC_MSG_CHECKING([for some Win32 platform])
   case $build_os in
     mingw*|cygwin*) platform_win32=yes ;;
@@ -103,11 +96,6 @@ AC_MSG_CHECKING([for some Win32 platform])
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
-# Checks for programs.
-AC_PROG_CC
-AC_PROG_INSTALL
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
 
 # Checks for header files.
 AC_HEADER_STDC
