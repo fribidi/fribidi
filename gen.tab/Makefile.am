@@ -25,7 +25,9 @@ VPATH += \
 		$(srcdir)/unidata/extracted \
 		$(top_builddir)/lib
 
-# bidi-type.tab.i
+# generate bidi-type.tab.i
+
+gen_bidi_tab = gen-bidi-tab$(EXEEXT)
 
 COMPRESSION = 4
 
@@ -44,9 +46,9 @@ DerivedBidiClass_bidi-type.tab.i: \
 		$(gen_bidi_type_tab_SOURCES)
 
 $(BIDI_TYPE_TAB_VARIANTS):
-	$(MAKE) $(AM_MAKEFLAGS) gen-bidi-type-tab
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_bidi_type_tab)
 	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./gen-bidi-type-tab $(COMPRESSION) \
+	./$(gen_bidi_type_tab) $(COMPRESSION) \
 	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
 
 bidi-type.tab.i:
@@ -59,7 +61,9 @@ bidi-type.tab.i:
 
 DISTCLEANFILES += $(BIDI_TYPE_TAB_VARIANTS)
 
-# mirroring.tab.i
+# generate mirroring.tab.i
+
+gen_mirroring_tab = gen-mirroring-tab$(EXEEXT)
 
 MIRRORING_TAB_VARIANTS = \
 		BidiMirroring_mirroring.tab.i
@@ -68,9 +72,9 @@ BidiMirroring_mirroring.tab.i: \
 		BidiMirroring.txt \
 		fribidi-unicode-version.h \
 		$(gen_mirroring_tab_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) gen-mirroring-tab
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_mirroring_tab)
 	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./gen-mirroring-tab \
+	./$(gen_mirroring_tab) \
 	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
 
 mirroring.tab.i:
@@ -83,7 +87,9 @@ mirroring.tab.i:
 
 DISTCLEANFILES += $(MIRRORING_TAB_VARIANTS)
 
-# fribidi-unicode-version.h
+# generate fribidi-unicode-version.h
+
+gen_unicode_version = gen-unicode-version$(EXEEXT)
 
 UNICODE_VERSION_VARIANTS = \
 		ReadMe_fribidi-unicode-version.h
@@ -91,9 +97,9 @@ UNICODE_VERSION_VARIANTS = \
 ReadMe_fribidi-unicode-version.h: \
 		ReadMe.txt \
 		$(gen_unicode_version_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) gen-unicode-version
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_unicode_version)
 	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./gen-unicode-version \
+	./$(gen_unicode_version) \
 	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
 
 fribidi-unicode-version.h:
