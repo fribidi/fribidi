@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.13 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.14 2004-06-18 19:21:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.13 $
+ * $Date: 2004-06-18 19:21:33 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -44,6 +44,10 @@
 #include "env.h"
 #include "bidi-types.h"
 #include "run.h"
+
+/*
+ * This file implements most of Unicode Standard Annex #9, Tracking Number 13.
+ */
 
 #ifndef MAX
 # define MAX(a,b) ((a) > (b) ? (a) : (b))
@@ -447,19 +451,27 @@ fribidi_get_par_embedding_levels (
 		    FRIBIDI_DIR_TO_LEVEL (this_type);
 		  PUSH_STATUS;
 		}
+
+	      /* Set level to the higher level */
+	      RL_LEVEL (pp) = level;
 	    }
 	  else if (this_type == FRIBIDI_TYPE_PDF)
 	    {
+	      /* Set level to the higher level */
+	      RL_LEVEL (pp) = level;
+
 	      /* 3. Terminating Embeddings and overrides */
 	      /*   X7. With each PDF, determine the matching embedding or
 	         override code. */
 	      for (i = RL_LEN (pp); i; i--)
 		POP_STATUS;
 	    }
+	  else
+	    RL_LEVEL (pp) = level;
+
 	  /* X9. Remove all RLE, LRE, RLO, LRO, PDF, and BN codes. */
 	  /* Remove element and add it to explicits_list */
 	  temp_link.next = pp->next;
-	  pp->level = FRIBIDI_SENTINEL;
 	  move_node_before (pp, explicits_list);
 	  pp = &temp_link;
 	}
@@ -727,11 +739,13 @@ fribidi_get_par_embedding_levels (
     explicits_list = NULL;
     if UNLIKELY
       (!stat) goto out;
+    /* We don't need this code since we set levels for everything we remove.
     p = main_run_list->next;
     if (p != main_run_list && p->level == FRIBIDI_SENTINEL)
       p->level = base_level;
     for_run_list (p, main_run_list) if (p->level == FRIBIDI_SENTINEL)
       p->level = p->prev->level;
+    */
   }
 
 # if DEBUG
@@ -744,13 +758,18 @@ fribidi_get_par_embedding_levels (
     }
 # endif	/* DEBUG */
 
-  DBG ("reset the embedding levels");
+  DBG ("reset the embedding levels, 1, 2, 3.");
   {
     register int j, state, pos;
     register FriBidiCharType char_type;
     register FriBidiRun *p, *q, *list;
 
-    /* L1. Reset the embedding levels of some chars. */
+    /* L1. Reset the embedding levels of some chars:
+           1. segment separators,
+           2. paragraph separators,
+           3. any sequence of whitespace characters preceding a segment
+              separator or paragraph separator, and
+	   ... (to be continued in fribidi_reorder_line()). */
     list = new_run_list ();
     if UNLIKELY
       (!list) goto out;
@@ -759,11 +778,9 @@ fribidi_get_par_embedding_levels (
     pos = len - 1;
     for (j = len - 1; j >= -1; j--)
       {
-	/* if state is on at the very first of the string, do this too. */
+	/* close up the open link at the end */
 	if (j >= 0)
-	  {
-	    char_type = BIDI_TYPE (j);
-	  }
+	  char_type = BIDI_TYPE (j);
 	else
 	  char_type = FRIBIDI_TYPE_ON;
 	if (!state && FRIBIDI_IS_SEPARATOR (char_type))
@@ -868,13 +885,15 @@ index_array_reverse (
 
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_reorder_line (
+  /* input and output */
+  FriBidiChar *str,
   /* input */
-  const FriBidiLevel *embedding_levels,
   const FriBidiStrIndex len,
   const FriBidiStrIndex off,
   const FriBidiCharType *bidi_types,
+  const FriBidiParType base_dir,
   /* input and output */
-  FriBidiChar *str,
+  FriBidiLevel *embedding_levels,
   /* output */
   FriBidiStrIndex *positions_L_to_V,
   FriBidiStrIndex *positions_V_to_L
@@ -904,8 +923,19 @@ fribidi_reorder_line (
 
   DBG ("in fribidi_reorder_line");
 
-  fribidi_assert (embedding_levels);
   fribidi_assert (str || bidi_types);
+  fribidi_assert (embedding_levels);
+
+  DBG ("reset the embedding levels, 4. whitespace at the end of line");
+  {
+    register FriBidiStrIndex i;
+
+    /* L1. Reset the embedding levels of some chars:
+           4. any sequence of white space characters at the end of the line.*/
+    for (i = len - 1; i >= 0 &&
+	FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (BIDI_TYPE (i)); i--)
+      embedding_levels[i] = FRIBIDI_DIR_TO_LEVEL (base_dir);
+  }
 
   /* If l2v is to be calculated we must have v2l as well. If it is not
      given by the caller, we have to make a private instance of it. */

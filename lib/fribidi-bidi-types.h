@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.11 2004-06-15 20:54:00 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.12 2004-06-18 19:21:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 20:54:00 $
- * $Revision: 1.11 $
+ * $Date: 2004-06-18 19:21:33 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -306,10 +306,13 @@ typedef fribidi_uint32 FriBidiParType;
 #define FRIBIDI_IS_EXPLICIT_OR_BN(p) \
 	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_BN))
 
-/* Is explicit or BN or NSM: LRE, RLE, LRO, RLO, PDF, BN, NSM?
- * This is a good approximation of being zero-width. */
+/* Is explicit or BN or NSM: LRE, RLE, LRO, RLO, PDF, BN, NSM? */
 #define FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM(p) \
 	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_BN | FRIBIDI_MASK_NSM))
+
+/* Is explicit or BN or WS: LRE, RLE, LRO, RLO, PDF, BN, WS? */
+#define FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS(p) \
+	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_BN | FRIBIDI_MASK_WS))
 
 /* Is explicit or separator or BN or WS: LRE, RLE, LRO, RLO, PDF, BS, SS, BN, WS? */
 #define FRIBIDI_IS_EXPLICIT_OR_SEPARATOR_OR_BN_OR_WS(p) \

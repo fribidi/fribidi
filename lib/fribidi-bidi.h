@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.10 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.11 2004-06-18 19:21:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-18 19:21:33 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -80,8 +80,9 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
  * This function finds the bidi embedding levels of a single paragraph,
  * as defined by the Unicode Bidirectional Algorithm available at
  * http://www.unicode.org/reports/tr9/.  This function implements rules P2 to
- * L1 inclusive, except for rule X9 which is implemented in
- * fribidi_remove_bidi_marks().
+ * I1 inclusive, and parts 1 to 3 of L1, except for rule X9 which is
+ *  implemented in fribidi_remove_bidi_marks().  Part 4 of L1 is implemented
+ *  in fribidi_reorder_line().
  *
  * You can provide either the string, or the bidi types; or both.
  * If bidi_types are provided, they are used as the bidi types of characters
@@ -109,8 +110,8 @@ fribidi_get_par_embedding_levels (
 /* fribidi_reorder_line - reorder a line of logical string to visual
  *
  * This function reorders the characters in a line of text from logical to
- * final visual order.  This function implements rules L2 and L3 of the
- * Unicode Bidirectional Algorithm available at
+ * final visual order.  This function implements part 4 of rule L1, and rules
+ * L2 and L3 of the Unicode Bidirectional Algorithm available at
  * http://www.unicode.org/reports/tr9/#Reordering_Resolved_Levels.
  *
  * As a side effect it also sets position maps if not NULL.
@@ -122,6 +123,12 @@ fribidi_get_par_embedding_levels (
  * should provide the same types to this function for valid resutls.
  * Providing bidi types if available at your side, saves you a few cycles.
  *
+ * You should provide the resolved paragraph direction and embedding levels as
+ * set by fribidi_get_par_embedding_levels().  Also note that the embedding
+ * levels may change a bit.  To be exact, the embedding level of any sequence
+ * of white space at the end of line is reset to the paragraph embedding level
+ * (That is part 4 of rule L1).
+ *
  * Note that the bidi types and embedding levels are not reordered.  You can
  * reorder these (or any other) arrays using the position_L_to_V_map later.
  *
@@ -132,14 +139,15 @@ fribidi_get_par_embedding_levels (
  * occured (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
-  const FriBidiLevel *embedding_levels,	/* input list of embedding levels,
-					   as returned by
-					   fribidi_get_par_embedding_levels */
+  FriBidiChar *str,		/* string to reorder */
   const FriBidiStrIndex len,	/* input length of the line */
   const FriBidiStrIndex off,	/* input offset of the beginning of the line
 				   in the paragraph */
   const FriBidiCharType *bidi_types,	/* input bidi types */
-  FriBidiChar *str,		/* string to shape */
+  const FriBidiParType base_dir,	/* resolved paragraph base direction */
+  FriBidiLevel *embedding_levels,	/* input list of embedding levels,
+					   as returned by
+					   fribidi_get_par_embedding_levels */
   FriBidiStrIndex *positions_L_to_V,	/* output mapping from logical to
 					   visual string positions */
   FriBidiStrIndex *positions_V_to_L	/* output mapping from visual string

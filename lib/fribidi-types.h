@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.7 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-types.h,v 1.8 2004-06-18 19:21:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-18 19:21:33 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -139,8 +139,8 @@ typedef FRIBIDI_STR_INDEX FriBidiStrIndex;
 
 #ifndef FRIBIDI_MAX_STRING_LENGTH
 # define FRIBIDI_MAX_STRING_LENGTH (sizeof (FriBidiStrIndex) == 2 ?	\
-		0x7FFE : (sizeof (FriBidiStrIndex) == 1 ? \
-		0x7E : 0x8FFFFFFEL))
+		0xFFFF : (sizeof (FriBidiStrIndex) == 1 ? \
+		0xFF : 0xFFFFFFFFL))
 #endif
 
 /* A few macros for working with bits */
