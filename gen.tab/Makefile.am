@@ -27,7 +27,7 @@ VPATH += \
 
 # generate bidi-type.tab.i
 
-gen_bidi_type_tab = gen-bidi-tab$(EXEEXT)
+gen_bidi_type_tab = gen-bidi-type-tab$(EXEEXT)
 
 COMPRESSION = 4
 
