@@ -1,0 +1,13 @@
+Implementation issues:
+
+* BidiTypes enum in manual.
+
+* Update CapRTL with new Unicode reference code.
+
+* Revise reorder API, in fribidi_main.c reorder after link break.
+
+* Add an option to fribidi_main.c to assume two consecutive returns as
+  paragraph separators.
+
+* Design better apis to do reorder based on available levels, remove
+  explicit marks then calculate position maps, ....

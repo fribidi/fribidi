@@ -1,0 +1,110 @@
+#! /bin/sh
+##############################################################################
+# $Id: bootstrap,v 1.1 2004-04-25 18:47:56 behdad Exp $
+# $Author: behdad
+# $Date: 2004-04-25 18:47:56 $
+# $Revision: 1.1 $
+# $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bootstrap,v $
+##############################################################################
+#                                               -*- Bootstrap -*-
+# Run this file to produce a configure script.
+
+DEFAULTARGS="--force --install --autoreconf=auto"
+
+for arg in $DEFAULTARGS $*
+do
+	case $arg in
+		-h | --help)
+			HELP=--help ;;
+		-V | --version)
+			VERSION=--version ;;
+		-v | --verbose)
+			VERBOSE=--verbose ;;
+		-d | --debug)
+			DEBUG=--debug ;;
+		-W | --warning | --warnings=yes)
+			WARNINGS=--warnings=all ;;
+		--no-warning | --warnings=no)
+			WARNINGS= ;;
+		--warning=*)
+			WARNINGS=$arg ;;
+		-f | --force | --force=yes | --force-missing)
+			FORCE=--force ;;
+		--no-force | --force=no)
+			FORCE=--no-force ;;
+		-i | --install | --install=yes | -a | --add-missing)
+			INSTALL=--install ;;
+		--no-install | --install=no)
+			INSTALL= ;;
+		-s | --symlink | --symlink=yes | --no-copy | --copy=no)
+			SYMLINK=--symlink ;;
+		--no-symlink | --symlink=no | --copy | --copy=yes)
+			SYMLINK= ;;
+		-m | --make | --make=yes)
+			MAKE=--make ;;
+		--no-make | --make=no)
+			MAKE= ;;
+		-n | --dry-run)
+			DRYRUN=echo ;;
+		--autoreconf=auto)
+			AUTORECONF=auto ;;
+		--autoreconf | --autoreconf=yes)
+			AUTORECONF=yes ;;
+		--no-autoreconf | --autoreconf=no)
+			AUTORECONF= ;;
+		*)
+			echo Ignoring unknown parameter $arg
+	esac
+done
+
+test -z "$SYMLINK" && COPY=--copy
+test -n "$INSTALL" && ADDMISSING=--add-missing
+
+# use autoreconf if possible, just check for version 2+
+if test "$AUTORECONF" = auto; then
+	case `autoreconf --version 2>/dev/null` in
+		*"autoreconf (GNU Autoconf) 2."* )
+			echo Usable autoreconf found, running
+		;;
+		*)
+			AUTORECONF=
+		;;
+	esac
+fi
+
+if test -n "$AUTORECONF";  then
+	$DRYRUN autoreconf $HELP $VERSION $VERBOSE $DEBUG $FORCE $INSTALL $SYMLINK $MAKE $WARNINGS
+	exit $?
+fi
+
+# add files 'config.guess', 'config.sub', 'ltconfig', 'ltmain.sh'
+$DRYRUN libtoolize $HELP $VERSION --automake $COPY $DEBUG $FORCE || exit 1
+
+# generate 'aclocal.m4'
+if test -f configure.ac -o configure.in; then
+	$DRYRUN aclocal $HELP $VERSION $VERBOSE $FORCE || exit 1
+fi
+
+# generate 'config.h.in'
+if test -f configure.ac -o configure.in; then
+	$DRYRUN autoheader $HELP $VERSION $VERBOSE $DEBUG $FORCE $WARNINGS || exit 1
+fi
+
+#  generate Makefile.in's from Makefile.am's
+if test -f Makefile.am; then
+	$DRYRUN automake $HELP $VERSION $VERBOSE $ADDMISSING $COPY $FORCE $WARNINGS || exit 1
+fi
+
+# generate configure from configure.ac
+if test -f configure.ac -o -f configure.in; then
+	$DRYRUN autoconf $HELP $VERSION $VERBOSE $DEBUG $FORCE $WARNINGS || exit 1
+fi
+
+if test -n "$MAKE"; then
+	if test -f ./configure; then
+		$DRYRUN ./configure $HELP $VERSION || exit 1
+	fi
+	if test -f Makefile; then
+		$DRYRUN make || exit 1
+	fi
+fi

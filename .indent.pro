@@ -1,0 +1,19 @@
+-gnu
+-bfda
+-bfde
+-T TypeLink
+-T LevelInfo
+-T FriBidiChar
+-T FriBidiStrIndex
+-T FriBidiMaskType
+-T FriBidiCharType
+-T FriBidiPropCharType
+-T FriBidiLevel
+-T FriBidiCharSet
+-T FriBidiCharSetHandler
+-T FriBidiMemChunk
+-T FriBidiEnv
+-T fribidi_uint8
+-T fribidi_uint16
+-T fribidi_uint32
+-T fribidi_boolean
