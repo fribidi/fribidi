@@ -20,4 +20,7 @@
 /* Define to 1 if you want to use glib */
 #define FRIBIDI_USE_GLIB @FRIBIDI_USE_GLIB@
 
+/* The size of a `int', as computed by sizeof. */
+#define FRIBIDI_SIZEOF_INT @SIZEOF_INT@
+
 #endif /* FRIBIDI_CONFIG_H */

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.7 2004-05-31 18:39:39 behdad Exp $
+ * $Id: fribidi-common.h,v 1.8 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:39:39 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -78,7 +78,7 @@
 #  define FRIBIDI_GNUC_WARN_UNUSED
 #  define FRIBIDI_GNUC_MALLOC
 #  define FRIBIDI_GNUC_HIDDEN
-# endif /* __GNUC__ <= 2 */
+# endif	/* __GNUC__ <= 2 */
 #else /* !FRIBIDI_USE_GLIB */
 # define FRIBIDI_GNUC_CONST
 # define FRIBIDI_GNUC_DEPRECATED

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.3 2004-05-22 10:35:31 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.4 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 10:35:31 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -69,8 +69,8 @@ fribidi_log2vis (
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
 ) FRIBIDI_GNUC_WARN_UNUSED;
 
-#define fribidi_log2vis_get_embedding_levels FRIBIDI_NAMESPACE(log2vis_get_embedding_levels)
-/* fribidi_log2vis_get_embedding_levels - get bidi embedding levels
+#define fribidi_get_embedding_levels FRIBIDI_NAMESPACE(get_embedding_levels)
+/* fribidi_get_embedding_levels - get bidi embedding levels
  *
  * This function finds the bidi embedding levels of a single paragraph,
  * as defined by the Unicode Bidirectional Algorithm.
@@ -78,12 +78,28 @@ fribidi_log2vis (
  * Returns: Non-zero if it was successful, or zero if any error occured
  * (memory allocation failure most probably).
  */
-     FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis_get_embedding_levels (
+     FRIBIDI_ENTRY fribidi_boolean fribidi_get_embedding_levels (
   const FriBidiChar *str,	/* input logical string */
   FriBidiStrIndex len,		/* input string length */
   FriBidiCharType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
+) FRIBIDI_GNUC_WARN_UNUSED;
+
+#define fribidi_shape_mirroring FRIBIDI_NAMESPACE(shape_mirroring)
+/* fribidi_shape - do mirroring shaping
+ *
+ * This functions replaces mirroring characters on right-to-left embeddings in
+ * strint str with their mirrored equivalent as returned by
+ * fribidi_get_mirror_char().
+ *
+ * Returns: Non-zero if it was successful, or zero if any error occured
+ * (memory allocation failure most probably).
+ */
+     FRIBIDI_ENTRY fribidi_boolean fribidi_shape_mirroring (
+  const FriBidiChar *str,	/* string to shape */
+  FriBidiStrIndex len,		/* input string length */
+  FriBidiLevel *embedding_level_list	/* input list of embedding levels */
 ) FRIBIDI_GNUC_WARN_UNUSED;
 
 #define fribidi_remove_bidi_marks FRIBIDI_NAMESPACE(remove_bidi_marks)

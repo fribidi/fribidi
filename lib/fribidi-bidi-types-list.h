@@ -2,10 +2,10 @@
 /* FriBidi
  * fribidi-bidi-types-list.h - list of bidi types
  *
- * $Id: fribidi-bidi-types-list.h,v 1.1 2004-05-31 18:43:26 behdad Exp $
+ * $Id: fribidi-bidi-types-list.h,v 1.2 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:43:26 $
- * $Revision: 1.1 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types-list.h,v $
  *
  * Author:
@@ -40,7 +40,7 @@
 # define _FRIBIDI_ADD_ALIAS(x1,x2)
 #endif
 
-#if !_FRIBIDI_PAR_TYPES
+#if !defined(_FRIBIDI_PAR_TYPES) || defined(_FRIBIDI_ALL_TYPES)
 /* Bidi types from the standard. */
 /* The order of these types is important.  Don't change. */
 _FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right letter */
@@ -63,7 +63,7 @@ _FRIBIDI_ADD_TYPE (LRO, '+')	/* Left-to-Right Override */
 _FRIBIDI_ADD_TYPE (RLO, '+')	/* Right-to-Left Override */
 _FRIBIDI_ADD_TYPE (PDF, '-')	/* Pop Directional Flag */
 
-#ifdef _FRIBIDI_ADD_ALIAS
+#if defined(_FRIBIDI_ADD_ALIAS)
 /* The followings are just aliases to types, but with the name that appears in
  * the Unicode database. */
 _FRIBIDI_ADD_ALIAS (L, LTR)
@@ -72,18 +72,29 @@ _FRIBIDI_ADD_ALIAS (B, BS)
 _FRIBIDI_ADD_ALIAS (S, SS)
 #endif /* _FRIBIDI_ADD_ALIAS */
 
-#ifdef _FRIBIDI_SENTINEL_TYPE
-_FRIBIDI_ADD_TYPE (SENTINEL, '$')	/* Sentinel */
-#endif /* _FRIBIDI_SENTINEL_TYPES */
-#endif /* !_FRIBIDI_PAR_TYPES */
+#if defined(_FRIBIDI_SENTINEL_TYPE) || defined(_FRIBIDI_ALL_TYPES)
+_FRIBIDI_ADD_TYPE (SENTINEL, '$')	/* SENTINEL */
+#endif /* _FRIBIDI_SENTINEL_TYPES || _FRIBIDI_ALL_TYPES*/
+#endif /* !_FRIBIDI_PAR_TYPES || _FRIBIDI_ALL_TYPES */
 
-#if _FRIBIDI_PAR_TYPES
+#if defined(_FRIBIDI_PAR_TYPES) || defined(_FRIBIDI_ALL_TYPES)
+# if !defined(_FRIBIDI_ALL_TYPES)
 _FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right paragraph */
 _FRIBIDI_ADD_TYPE (RTL, 'R')	/* Right-To-Left paragraph */
-_FRIBIDI_ADD_TYPE (WLTR, 'l')	/* Weak left to right paragraph */
-_FRIBIDI_ADD_TYPE (WRTL, 'r')	/* Weak right to left paragraph */
-_FRIBIDI_ADD_TYPE (ON, 'n')	/* Direction-neutral paragraph */
-#endif /* _FRIBIDI_PAR_TYPES */
+_FRIBIDI_ADD_TYPE (ON, 'n')	/* directiOn-Neutral paragraph */
+# endif /* !_FRIBIDI_ALL_TYPES */
+_FRIBIDI_ADD_TYPE (WLTR, 'l')	/* Weak Left To Right paragraph */
+_FRIBIDI_ADD_TYPE (WRTL, 'r')	/* Weak Right To Left paragraph */
+#endif /* _FRIBIDI_PAR_TYPES || _FRIBIDI_ALL_TYPES*/
+
+#if defined(_FRIBIDI_ENUM_TYPES)
+typedef enum {
+# define _FRIBIDI_ADD_TYPE _FRIBIDI_ENUM_ADD_TYPE
+# include "fribidi-bidi-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+  _FRIBIDI_TYPES_MAX
+} _FRIBIDI_ENUM_TYPES
+#endif /* _FRIBIDI_ENUM_TYPES */
 
 #ifndef __C2MAN__
 /* *INDENT-ON* */

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.h - get character bidi type
  *
- * $Id: fribidi-bidi-type.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-bidi-type.h,v 1.3 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.h,v $
  *
  * Author:
@@ -50,9 +50,15 @@ fribidi_get_bidi_type (
   FriBidiChar ch		/* input character */
 ) FRIBIDI_GNUC_CONST;
 
-/* fribidi_get_type is the old name of fribidi_get_bidi_type */
+/* fribidi_get_type is the old name of fribidi_get_bidi_type. deprecated.*/
 #define fribidi_get_type FRIBIDI_NAMESPACE(get_type)
-     FriBidiCharType fribidi_get_type (
+     FRIBIDI_ENTRY FriBidiCharType fribidi_get_type (
+  FriBidiChar ch
+)
+     FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
+
+#define fribidi_get_type_internal FRIBIDI_NAMESPACE(get_type_internal)
+     FRIBIDI_ENTRY FriBidiCharType fribidi_get_type_internal (
   FriBidiChar ch
 )
      FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
@@ -68,14 +74,13 @@ fribidi_get_bidi_type (
   FriBidiCharType *type		/* output bidi types */
 );
 
-/* fribidi_get_types is the old name of fribidi_get_bidi_types */
+/* fribidi_get_types is the old name of fribidi_get_bidi_types. deprecated. */
 #define fribidi_get_types FRIBIDI_NAMESPACE(get_types)
-     void fribidi_get_bidi_types (
+     FRIBIDI_ENTRY void fribidi_get_types (
   const FriBidiChar *str,
   FriBidiStrIndex len,
   FriBidiCharType *type
-)
-     FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
+) FRIBIDI_GNUC_DEPRECATED;
 
 #include "fribidi-enddecls.h"
 

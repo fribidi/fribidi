@@ -112,3 +112,4 @@ fribidi-unicode-version.h:
 
 DISTCLEANFILES += $(UNICODE_VERSION_VARIANTS)
 
+.DELETE_ON_ERROR:

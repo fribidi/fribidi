@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.c - character bidi types
  *
- * $Id: fribidi-bidi-types.c,v 1.4 2004-05-31 18:39:39 behdad Exp $
+ * $Id: fribidi-bidi-types.c,v 1.5 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:39:39 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.c,v $
  *
  * Authors:
@@ -48,7 +48,9 @@ fribidi_char_from_bidi_type (
   switch (t)
     {
 #   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return SYMBOL;
+#   define _FRIBIDI_ALL_TYPES
 #   include "fribidi-bidi-types-list.h"
+#   undef _FRIBIDI_ALL_TYPES
 #   undef _FRIBIDI_ADD_TYPE
     default:
       return '?';
@@ -66,7 +68,9 @@ fribidi_bidi_type_name (
   switch (t)
     {
 #   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return #TYPE;
+#   define _FRIBIDI_ALL_TYPES
 #   include "fribidi-bidi-types-list.h"
+#   undef _FRIBIDI_ALL_TYPES
 #   undef _FRIBIDI_ADD_TYPE
     default:
       return "?";

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.8 2004-05-31 18:43:26 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.9 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:43:26 $
- * $Revision: 1.8 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -43,7 +43,7 @@ enum FriBidiCharTypeLinearEnum
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
 # include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
-  NUM_TYPES
+  _FRIBIDI_NUM_TYPES
 };
 
 #include "bidi-type.tab.i"
@@ -80,6 +80,15 @@ fribidi_get_bidi_type (
 /* The following is only defined for binary compatibility */
 FriBidiCharType
 fribidi_get_type (
+  FriBidiChar ch
+)
+{
+  return fribidi_get_bidi_type (ch);
+}
+
+/* The following is only defined for binary compatibility */
+FriBidiCharType
+fribidi_get_type_internal (
   FriBidiChar ch
 )
 {

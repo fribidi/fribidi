@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.4 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -160,6 +160,7 @@ typedef FriBidiMaskType FriBidiCharType;
 /* Weak right to left */
 #define FRIBIDI_TYPE_WRTL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_RTL )
 
+
 /* Just for compatibility */
 #define FRIBIDI_TYPE_WL		FRIBIDI_TYPE_WLTR
 #define FRIBIDI_TYPE_WR		FRIBIDI_TYPE_WRTL
@@ -188,11 +189,11 @@ typedef FriBidiMaskType FriBidiCharType;
 
 /* Return the direction of the level number, FRIBIDI_TYPE_LTR for even and
    FRIBIDI_TYPE_RTL for odds. */
-#define FRIBIDI_LEVEL_TO_DIR(lev) (FRIBIDI_TYPE_LTR | (lev & 1))
+#define FRIBIDI_LEVEL_TO_DIR(lev) (FRIBIDI_TYPE_LTR | ((lev) & 1))
 
 /* Return the minimum level of the direction, 0 for FRIBIDI_TYPE_LTR and
    1 for FRIBIDI_TYPE_RTL and FRIBIDI_TYPE_AL. */
-#define FRIBIDI_DIR_TO_LEVEL(dir) ((FriBidiLevel)(dir & 1))
+#define FRIBIDI_DIR_TO_LEVEL(dir) ((FriBidiLevel)((dir) & 1))
 
 /* Is right to left? */
 #define FRIBIDI_IS_RTL(p)      ((p) & FRIBIDI_MASK_RTL)
@@ -267,6 +268,12 @@ typedef FriBidiMaskType FriBidiCharType;
 	(FRIBIDI_IS_OVERRIDE(p) ? FRIBIDI_LEVEL_TO_DIR(FRIBIDI_DIR_TO_LEVEL(p)) \
 				: FRIBIDI_TYPE_ON)
 
+/* Weaken type for paragraph fallback purposes:
+ * LTR->WLTR, RTL->WRTL. */
+#define FRIBIDI_WEAK_PARAGRAPH(p) (FRIBIDI_TYPE_WLTR | ((p) & 1))
+
+
+/* Functions finally */
 
 /* fribidi_type_name is the old name of fribidi_bidi_type_name */
 #define fribidi_type_name fribidi_bidi_type_name

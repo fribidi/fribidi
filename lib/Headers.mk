@@ -14,4 +14,4 @@ libfribidi_la_headers = \
 		fribidi-unicode-version.h \
 		fribidi.h
 
-include $(top_srcdir)/lib/fribidi.def
+libfribidi_la_symbols := $(shell cat "$(top_srcdir)/lib/fribidi.def")

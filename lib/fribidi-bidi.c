@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.7 2004-05-31 18:39:39 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.8 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:39:39 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -118,98 +118,6 @@ compact_neutrals (
     }
 }
 
-/*=========================================================================
- * define macros for push and pop the status in to / out of the stack
- *-------------------------------------------------------------------------*/
-
-/* There's some little points in pushing and poping into the status stack:
-   1. when the embedding level is not valid (more than
-   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61), you must reject it, and not to push
-   into the stack, but when you see a PDF, you must find the matching code,
-   and if it was pushed in the stack, pop it, it means you must pop if and
-   only if you have pushed the matching code, the over_pushed var counts the
-   number of rejected codes yet.
-   2. there's a more confusing point too, when the embedding level is exactly
-   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1=60, an LRO or LRE must be rejected
-   because the new level would be FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL+1=62, that
-   is invalid, but an RLO or RLE must be accepted because the new level is
-   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61, that is valid, so the rejected codes
-   may be not continuous in the logical order, in fact there is at most two
-   continuous intervals of codes, with a RLO or RLE between them.  To support
-   this case, the first_interval var counts the number of rejected codes in
-   the first interval, when it is 0, means that there is only one interval yet.
-*/
-
-/* a. If this new level would be valid, then this embedding code is valid.
-   Remember (push) the current embedding level and override status.
-   Reset current level to this new level, and reset the override status to
-   new_override.
-   b. If the new level would not be valid, then this code is invalid. Don't
-   change the current level or override status.
-*/
-#define PUSH_STATUS \
-    FRIBIDI_BEGIN_STMT \
-      if LIKELY(new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL) \
-        { \
-          if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
-            first_interval = over_pushed; \
-          status_stack[stack_size].level = level; \
-          status_stack[stack_size].override = override; \
-          stack_size++; \
-          level = new_level; \
-          override = new_override; \
-        } else \
-	  over_pushed++; \
-    FRIBIDI_END_STMT
-
-/* If there was a valid matching code, restore (pop) the last remembered
-   (pushed) embedding level and directional override.
-*/
-#define POP_STATUS \
-    FRIBIDI_BEGIN_STMT \
-      if (stack_size) \
-      { \
-        if UNLIKELY(over_pushed > first_interval) \
-          over_pushed--; \
-        else \
-          { \
-            if LIKELY(over_pushed == first_interval) \
-              first_interval = 0; \
-            stack_size--; \
-            level = status_stack[stack_size].level; \
-            override = status_stack[stack_size].override; \
-          } \
-      } \
-    FRIBIDI_END_STMT
-
-/*==========================================================================
- * There was no support for sor and eor in the absence of Explicit Embedding
- * Levels, so define macros, to support them, with as less change as needed.
- *--------------------------------------------------------------------------*/
-
-/* Return the type of previous run or the SOR, if already at the start of
-   a level run. */
-#define PREV_TYPE_OR_SOR(pp) \
-    ( \
-      RL_LEVEL(pp->prev) == RL_LEVEL(pp) ? \
-        RL_TYPE(pp->prev) : \
-        FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->prev), RL_LEVEL(pp))) \
-    )
-
-/* Return the type of next run or the EOR, if already at the end of
-   a level run. */
-#define NEXT_TYPE_OR_EOR(pp) \
-    ( \
-      RL_LEVEL(pp->next) == RL_LEVEL(pp) ? \
-        RL_TYPE(pp->next) : \
-        FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->next), RL_LEVEL(pp))) \
-    )
-
-
-/* Return the embedding direction of a link. */
-#define FRIBIDI_EMBEDDING_DIRECTION(list) \
-    FRIBIDI_LEVEL_TO_DIR(RL_LEVEL(list))
-
 #if DEBUG
 /*======================================================================
  *  For debugging, define some functions for printing the types and the
@@ -307,8 +215,98 @@ print_bidi_string (
 }
 #endif /* DEBUG */
 
+
+/*=========================================================================
+ * define macros for push and pop the status in to / out of the stack
+ *-------------------------------------------------------------------------*/
+
+/* There's some little points in pushing and poping into the status stack:
+   1. when the embedding level is not valid (more than
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61), you must reject it, and not to push
+   into the stack, but when you see a PDF, you must find the matching code,
+   and if it was pushed in the stack, pop it, it means you must pop if and
+   only if you have pushed the matching code, the over_pushed var counts the
+   number of rejected codes yet.
+   2. there's a more confusing point too, when the embedding level is exactly
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1=60, an LRO or LRE must be rejected
+   because the new level would be FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL+1=62, that
+   is invalid, but an RLO or RLE must be accepted because the new level is
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61, that is valid, so the rejected codes
+   may be not continuous in the logical order, in fact there is at most two
+   continuous intervals of codes, with a RLO or RLE between them.  To support
+   this case, the first_interval var counts the number of rejected codes in
+   the first interval, when it is 0, means that there is only one interval yet.
+*/
+
+/* a. If this new level would be valid, then this embedding code is valid.
+   Remember (push) the current embedding level and override status.
+   Reset current level to this new level, and reset the override status to
+   new_override.
+   b. If the new level would not be valid, then this code is invalid. Don't
+   change the current level or override status.
+*/
+#define PUSH_STATUS \
+    FRIBIDI_BEGIN_STMT \
+      if LIKELY(new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL) \
+        { \
+          if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
+            first_interval = over_pushed; \
+          status_stack[stack_size].level = level; \
+          status_stack[stack_size].override = override; \
+          stack_size++; \
+          level = new_level; \
+          override = new_override; \
+        } else \
+	  over_pushed++; \
+    FRIBIDI_END_STMT
+
+/* If there was a valid matching code, restore (pop) the last remembered
+   (pushed) embedding level and directional override.
+*/
+#define POP_STATUS \
+    FRIBIDI_BEGIN_STMT \
+      if (stack_size) \
+      { \
+        if UNLIKELY(over_pushed > first_interval) \
+          over_pushed--; \
+        else \
+          { \
+            if LIKELY(over_pushed == first_interval) \
+              first_interval = 0; \
+            stack_size--; \
+            level = status_stack[stack_size].level; \
+            override = status_stack[stack_size].override; \
+          } \
+      } \
+    FRIBIDI_END_STMT
+
+
+/* Return the type of previous run or the SOR, if already at the start of
+   a level run. */
+#define PREV_TYPE_OR_SOR(pp) \
+    ( \
+      RL_LEVEL(pp->prev) == RL_LEVEL(pp) ? \
+        RL_TYPE(pp->prev) : \
+        FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->prev), RL_LEVEL(pp))) \
+    )
+
+/* Return the type of next run or the EOR, if already at the end of
+   a level run. */
+#define NEXT_TYPE_OR_EOR(pp) \
+    ( \
+      RL_LEVEL(pp->next) == RL_LEVEL(pp) ? \
+        RL_TYPE(pp->next) : \
+        FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->next), RL_LEVEL(pp))) \
+    )
+
+
+/* Return the embedding direction of a link. */
+#define FRIBIDI_EMBEDDING_DIRECTION(list) \
+    FRIBIDI_LEVEL_TO_DIR(RL_LEVEL(list))
+
+
 static fribidi_boolean
-fribidi_analyse_string (
+fribidi_get_embedding_levels_internal (
   const FriBidiChar *str,
   FriBidiStrIndex len,
   FriBidiCharType *pbase_dir,
@@ -319,7 +317,7 @@ fribidi_analyse_string (
 /*======================================================================
  *  This function should follow the Unicode specification closely!
  *----------------------------------------------------------------------*/
-     static fribidi_boolean fribidi_analyse_string (
+     static fribidi_boolean fribidi_get_embedding_levels_internal (
   /* input */
   const FriBidiChar *str,
   FriBidiStrIndex len,
@@ -335,12 +333,10 @@ fribidi_analyse_string (
   FriBidiRun *main_run_list = NULL, *explicits_list = NULL, *pp;
   fribidi_boolean status = false;
 
-  DBG ("entering fribidi_analyse_string");
+  DBG ("entering fribidi_get_embedding_levels_internal");
 
   fribidi_assert (str);
   fribidi_assert (pbase_dir);
-  fribidi_assert (pmain_run_list);
-  fribidi_assert (pmax_level);
 
   /* Determinate character types */
   DBG ("  determine character types");
@@ -361,20 +357,17 @@ fribidi_analyse_string (
 
   /* Find base level */
   DBG ("  finding the base level");
-  if (FRIBIDI_IS_STRONG (*pbase_dir))
-    base_level = FRIBIDI_DIR_TO_LEVEL (*pbase_dir);
-  /* P2. P3. Search for first strong character and use its direction as
-     base direction */
-  else
+  /* If no strong base_dir was found, resort to the weak direction
+     that was passed on input. */
+  base_level = FRIBIDI_DIR_TO_LEVEL (*pbase_dir);
+  if (!FRIBIDI_IS_STRONG (*pbase_dir))
+    /* P2. P3. Search for first strong character and use its direction as
+       base direction */
     {
-      /* If no strong base_dir was found, resort to the weak direction
-         that was passed on input. */
-      base_level = FRIBIDI_DIR_TO_LEVEL (*pbase_dir);
-      base_dir = FRIBIDI_TYPE_ON;
       for_run_list (pp, main_run_list) if (FRIBIDI_IS_LETTER (RL_TYPE (pp)))
 	{
 	  base_level = FRIBIDI_DIR_TO_LEVEL (RL_TYPE (pp));
-	  base_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
+	  *pbase_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
 	  break;
 	}
     }
@@ -525,7 +518,7 @@ fribidi_analyse_string (
 
     for_run_list (pp, main_run_list)
     {
-      FriBidiCharType prev_type, this_type, next_type;
+      register FriBidiCharType prev_type, this_type, next_type;
 
       prev_type = PREV_TYPE_OR_SOR (pp);
       this_type = RL_TYPE (pp);
@@ -576,7 +569,7 @@ fribidi_analyse_string (
 
     for_run_list (pp, main_run_list)
     {
-      FriBidiCharType prev_type, this_type, next_type;
+      register FriBidiCharType prev_type, this_type, next_type;
 
       prev_type = PREV_TYPE_OR_SOR (pp);
       this_type = RL_TYPE (pp);
@@ -698,8 +691,8 @@ fribidi_analyse_string (
       if (FRIBIDI_IS_NUMBER (this_type))
 	RL_LEVEL (pp) = (level + 2) & ~1;
       else
-	RL_LEVEL (pp) = (level ^ FRIBIDI_DIR_TO_LEVEL (this_type)) +
-	  (level & 1);
+	RL_LEVEL (pp) =
+	  level + ((level & 1) ^ FRIBIDI_DIR_TO_LEVEL (this_type));
 
       if (RL_LEVEL (pp) > max_level)
 	max_level = RL_LEVEL (pp);
@@ -802,11 +795,17 @@ fribidi_analyse_string (
 # endif	/* DEBUG */
 
   status = true;
-  *pmain_run_list = main_run_list;
-  *pmax_level = max_level;
-  *pbase_dir = base_dir;
+  if (pmain_run_list)
+    *pmain_run_list = main_run_list;
+  else
+    {
+      free_run_list (main_run_list);
+      main_run_list = NULL;
+    }
+  if (pmax_level)
+    *pmax_level = max_level;
 
-  DBG ("leaving fribidi_analyse_string");
+  DBG ("leaving fribidi_get_embedding_levels_internal");
 out:
   if UNLIKELY
     (explicits_list) free_run_list (explicits_list);
@@ -867,7 +866,7 @@ fribidi_remove_bidi_marks (
 
   DBG ("entering fribidi_remove_bidi_marks");
 
-  /* If to_this is to not null, we must have from_this as well. If it is
+  /* If to_this is to not NULL, we must have from_this as well. If it is
      not given by the caller, we have to make a private instance of it. */
   if (position_to_this_list && !position_from_this_list)
     {
@@ -949,9 +948,9 @@ fribidi_log2vis (
     }
 
   if UNLIKELY
-    (!fribidi_analyse_string (str, len, pbase_dir,
-			      /* output */
-			      &main_run_list, &max_level))
+    (!fribidi_get_embedding_levels_internal (str, len, pbase_dir,
+					     /* output */
+					     &main_run_list, &max_level))
     {
       status = false;
       goto out;
@@ -1010,30 +1009,29 @@ fribidi_log2vis (
 	DBG ("  fill the embedding levels array, done");
       }
 
+    if (fribidi_mirroring_status () && visual_str)
+      {
+	/* L4. Mirror all characters that are in odd levels and have mirrors. */
+	DBG ("  mirroring");
+	for_run_list (pp, main_run_list)
+	{
+	  if (pp->level & 1)
+	    {
+	      FriBidiStrIndex i;
+	      for (i = RL_POS (pp); i < RL_POS (pp) + RL_LEN (pp); i++)
+		{
+		  FriBidiChar mirrored_ch;
+		  if (fribidi_get_mirror_char (visual_str[i], &mirrored_ch))
+		    visual_str[i] = mirrored_ch;
+		}
+	    }
+	}
+	DBG ("  mirroring, done");
+      }
+
     /* Reorder both the outstring and the order array */
     if (visual_str || position_V_to_L_list)
       {
-	if (fribidi_mirroring_status () && visual_str)
-	  {
-	    /* L4. Mirror all characters that are in odd levels and have mirrors. */
-	    DBG ("  mirroring");
-	    for_run_list (pp, main_run_list)
-	    {
-	      if (pp->level & 1)
-		{
-		  FriBidiStrIndex i;
-		  for (i = RL_POS (pp); i < RL_POS (pp) + RL_LEN (pp); i++)
-		    {
-		      FriBidiChar mirrored_ch;
-		      if (fribidi_get_mirror_char
-			  (visual_str[i], &mirrored_ch))
-			visual_str[i] = mirrored_ch;
-		    }
-		}
-	    }
-	    DBG ("  mirroring, done");
-	  }
-
 	if (fribidi_reorder_nsm_status ())
 	  {
 	    /* L3. Reorder NSMs. */
@@ -1132,7 +1130,7 @@ out:
 }
 
 FRIBIDI_ENTRY fribidi_boolean
-fribidi_log2vis_get_embedding_levels (
+fribidi_get_embedding_levels (
   /* input */
   const FriBidiChar *str,
   FriBidiStrIndex len,
@@ -1143,10 +1141,10 @@ fribidi_log2vis_get_embedding_levels (
 )
 {
   FriBidiRun *main_run_list, *pp;
-  FriBidiLevel max_level;
   fribidi_boolean status = true;
+  register FriBidiStrIndex pos;
 
-  DBG ("entering fribidi_log2vis_get_embedding_levels()");
+  DBG ("entering fribidi_get_embedding_levels()");
 
   fribidi_assert (str);
   fribidi_assert (pbase_dir);
@@ -1155,23 +1153,24 @@ fribidi_log2vis_get_embedding_levels (
     (len == 0) goto out;
 
   if UNLIKELY
-    (!fribidi_analyse_string (str, len, pbase_dir,
-			      /* output */
-			      &main_run_list, &max_level))
+    (!fribidi_get_embedding_levels_internal (str, len, pbase_dir,
+					     /* output */
+					     &main_run_list, NULL))
     {
       status = false;
       goto out;
     }
 
+  pos = 0;
   for_run_list (pp, main_run_list)
   {
-    register FriBidiStrIndex i, pos = pp->pos, len = pp->len;
+    register FriBidiStrIndex l;
     register FriBidiLevel level = pp->level;
-    for (i = 0; i < len; i++)
+    for (l = pp->len; l; l--)
       embedding_level_list[pos++] = level;
   }
 
-  DBG ("leaving fribidi_log2vis_get_embedding_levels()");
+  DBG ("leaving fribidi_get_embedding_levels()");
 out:
   free_run_list (main_run_list);
 

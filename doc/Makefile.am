@@ -46,20 +46,22 @@ C2MANFLAGS = $(includepath) \
 
 VPATH += $(includevpath)
 
+x:
+	@echo $(headers)
+
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp
 	@touch $@.tmp
-	($(LN_S) $^ . || cp $^ .)
-	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) \
+	@($(LN_S) $^ . || cp $^ .)
+	@echo Running c2man
+	@$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) \
 	|| true
-	$(RM) $(headers)
+	@$(RM) $(headers)
 	@mv $@.tmp $@
 
 $(man3): c2man.stamp
-	@if test -f $@; then \
-		touch $@; \
-	else \
+	@if ! test -f $@; then \
 		$(RM) $<; \
-		$(MAKE) $(AM_MAKEFLAGS) $< || touch $<; \
-		touch $@; \
+		$(MAKE) $(AM_MAKEFLAGS) $<;\
 	fi
+	@touch $@

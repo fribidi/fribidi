@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.9 2004-05-31 18:43:26 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.10 2004-06-04 09:41:11 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:43:26 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-04 09:41:11 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -97,7 +97,7 @@ enum FriBidiCharTypeLinearEnumOffsetOne
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
 # define _FRIBIDI_ADD_ALIAS(TYPE1,TYPE2) TYPE1 = TYPE2,
-# include <bidi-types-list.h>
+# include <fribidi-bidi-types-list.h>
 # undef _FRIBIDI_ADD_ALIAS
 # undef _FRIBIDI_ADD_TYPE
   NUM_TYPES
@@ -112,7 +112,7 @@ type_names[] =
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) {STRINGIZE(TYPE), TYPE},
 # define _FRIBIDI_ADD_ALIAS(TYPE1,TYPE2) _FRIBIDI_ADD_TYPE(TYPE1, SYMBOL)
-# include <bidi-types-list.h>
+# include <fribidi-bidi-types-list.h>
 # undef _FRIBIDI_ADD_ALIAS
 # undef _FRIBIDI_ADD_TYPE
 };
@@ -170,7 +170,7 @@ init_tab_unicode_data_txt (
 {
   register FriBidiChar c;
 
-  clear_tab();
+  clear_tab ();
 
   for (c = 0x0590; c < 0x0600; c++)
     table[c] = RTL;
@@ -208,10 +208,10 @@ init_tab_unicode_data_txt (
 }
 
 static void
-init_tab_derived_bidi_class_txt(
+init_tab_derived_bidi_class_txt (
 )
 {
-  clear_tab();
+  clear_tab ();
 }
 
 static void
@@ -222,7 +222,7 @@ read_unicode_data_txt (
   char tp[10];
   unsigned long c, l;
 
-  init_tab_unicode_data_txt();
+  init_tab_unicode_data_txt ();
 
   l = 0;
   while (fgets (s, sizeof s, f))
@@ -250,7 +250,7 @@ read_derived_bidi_class_txt (
   char tp[10];
   unsigned long c, c2, l;
 
-  init_tab_derived_bidi_class_txt();
+  init_tab_derived_bidi_class_txt ();
 
   l = 0;
   while (fgets (s, sizeof s, f))
