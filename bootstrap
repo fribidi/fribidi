@@ -1,9 +1,9 @@
 #! /bin/sh
 ##############################################################################
-# $Id: bootstrap,v 1.1 2004-04-25 18:47:56 behdad Exp $
+# $Id: bootstrap,v 1.1.1.1 2004-04-25 18:47:56 behdad Exp $
 # $Author: behdad
 # $Date: 2004-04-25 18:47:56 $
-# $Revision: 1.1 $
+# $Revision: 1.1.1.1 $
 # $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bootstrap,v $
 ##############################################################################
 #                                               -*- Bootstrap -*-

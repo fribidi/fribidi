@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.1.1.1 2004-04-25 18:47:57 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Revision: 1.1.1.1 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:

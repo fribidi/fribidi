@@ -2,10 +2,10 @@
 /* FriBidi
  * fribidi-char-sets-list.h - list of supported character sets
  *
- * $Id: fribidi-char-sets-list.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-char-sets-list.h,v 1.1.1.1 2004-04-25 18:47:57 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Revision: 1.1.1.1 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-list.h,v $
  *
  * Author:

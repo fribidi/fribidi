@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.1.1.1 2004-04-25 18:47:57 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Revision: 1.1.1.1 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:

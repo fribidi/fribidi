@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-utf8.c - UTF-8 character set conversion routines
  *
- * $Id: fribidi-char-sets-utf8.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-char-sets-utf8.c,v 1.1.1.1 2004-04-25 18:47:57 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Revision: 1.1.1.1 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-utf8.c,v $
  *
  * Authors:

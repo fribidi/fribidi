@@ -1,10 +1,10 @@
 /* FriBidi
  * bidi-types.h - define internal bidi types
  *
- * $Id: bidi-types.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: bidi-types.h,v 1.1.1.1 2004-04-25 18:47:57 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Revision: 1.1.1.1 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/bidi-types.h,v $
  *
  * Author:
