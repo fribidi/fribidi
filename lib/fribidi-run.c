@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-run.c - text run data type
  *
- * $Id: fribidi-run.c,v 1.3 2004-06-04 16:43:51 behdad Exp $
+ * $Id: fribidi-run.c,v 1.4 2004-06-14 17:00:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 16:43:51 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-14 17:00:33 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-run.c,v $
  *
  * Authors:
@@ -157,14 +157,15 @@ FriBidiRun *
 run_list_encode_bidi_types (
   /* input */
   const FriBidiChar *str,
-  FriBidiStrIndex len
+  const FriBidiStrIndex len,
+  const FriBidiCharType *bidi_types
 )
 {
   FriBidiRun *list, *last;
   register FriBidiRun *run = NULL;
   FriBidiStrIndex i;
 
-  fribidi_assert (str);
+  fribidi_assert (str || bidi_types);
 
   /* Create the list sentinel */
   list = new_run_list ();
@@ -175,7 +176,7 @@ run_list_encode_bidi_types (
   /* Scan over the character types */
   for (i = 0; i < len; i++)
     {
-      register FriBidiCharType char_type = fribidi_get_bidi_type (str[i]);
+      register FriBidiCharType char_type = BIDI_TYPE (i);
       if (char_type != last->type)
 	{
 	  run = new_run ();

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.7 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.8 2004-06-14 17:00:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-14 17:00:33 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -48,6 +48,12 @@
  * This function finds the bidi embedding levels of a single paragraph,
  * as defined by the Unicode Bidirectional Algorithm.
  *
+ * You can provide either the string, or the bidi types; or both.  If bidi_types are
+ * provided, they are used as the bidi types of characters in the string, otherwise
+ * the types are computed from the characters in str.  Providing bidi types if
+ * available at your side, saves you a few cycles.  Bidi types can be obtained
+ * by calling fribidi_get_bidi_types.
+ *
  * Returns: Maximum level found plus one, or zero if any error occured
  * (memory allocation failure most probably).
  */
@@ -55,6 +61,7 @@ FRIBIDI_ENTRY FriBidiLevel
 fribidi_get_par_embedding_levels (
   const FriBidiChar *str,	/* input paragraph string */
   const FriBidiStrIndex len,	/* input string length of the paragraph */
+  const FriBidiCharType *bidi_types, /* input bidi types */
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
@@ -79,20 +86,32 @@ fribidi_get_par_embedding_levels (
 /* fribidi_reorder_line - reorder a line of logical string to visual
  *
  * This function reorders the characters in a line of text from logical
- * to final visual order.  Also sets position maps if not NULL.  You can leave
- * str NULL if all you need is the maps.  Some features of this function can
- * be turned on/off using environmental settings functions fribidi_env_*.
+ * to final visual order.  Also sets position maps if not NULL.
+ *
+ * You can provide either the string, or the bidi types; or both.  If bidi_types are
+ * provided, they are used as the bidi types of characters in the string, otherwise
+ * the types are computed from the characters in str.  If you have obtained
+ * the embedding levels using custom bidi types, you should provide the same
+ * types to this function for valid resutls.  Providing bidi types if
+ * available at your side, saves you a few cycles.
+ *
+ * Note that the bidi types and embedding levels are not reordered.  You can
+ * reorder these (or any other) arrays using the position_L_to_V_map later.
+ *
+ * Some features of this function can be turned on/off using environmental settings
+ * functions fribidi_env_*.
  *
  * Returns: Maximum level found in this line plus one, or zero if any error
  * occured (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
-  FriBidiLevel *embedding_level_list,	/* input list of embedding levels,
+  const FriBidiLevel *embedding_level_list,	/* input list of embedding levels,
 					   as returned by
 					   fribidi_get_par_embedding_levels */
   const FriBidiStrIndex len,	/* input length of the line */
   const FriBidiStrIndex off,	/* input offset of the beginning of the line
 				   in the paragraph */
+  const FriBidiCharType *bidi_types,	/* input bidi types */
   FriBidiChar *str,		/* string to shape */
   FriBidiStrIndex *position_L_to_V_list,	/* output mapping from logical to
 						   visual string positions */

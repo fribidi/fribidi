@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.8 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi.c,v 1.9 2004-06-14 17:00:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.8 $
+ * $Date: 2004-06-14 17:00:33 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -160,7 +160,7 @@ fribidi_log2vis (
       private_embedding_level_list = true;
     }
 
-  max_level = fribidi_get_par_embedding_levels (str, len, pbase_dir,
+  max_level = fribidi_get_par_embedding_levels (str, len, NULL, pbase_dir,
 						embedding_level_list) - 1;
   if UNLIKELY
     (max_level < 0) goto out;
@@ -186,7 +186,7 @@ fribidi_log2vis (
 
   fribidi_shape (embedding_level_list, len, visual_str);
 
-  status = fribidi_reorder_line (embedding_level_list, len, 0, visual_str,
+  status = fribidi_reorder_line (embedding_level_list, len, 0, NULL, visual_str,
 				 position_L_to_V_list, position_V_to_L_list);
 
 out:

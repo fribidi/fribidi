@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.10 2004-06-07 20:38:21 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.11 2004-06-14 17:00:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-14 17:00:33 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -196,16 +196,18 @@ static void
 print_bidi_string (
   /* input */
   const FriBidiChar *str,
-  const FriBidiStrIndex len
+  const FriBidiStrIndex len,
+  const FriBidiCharType *bidi_types
 )
 {
   register FriBidiStrIndex i;
 
-  fribidi_assert (str);
+  fribidi_assert (str || bidi_types);
 
   MSG ("  Org. types : ");
-  for (i = len; i; i--)
-    MSG2 ("%c", fribidi_char_from_bidi_type (fribidi_get_bidi_type (*str++)));
+  if (bidi_types)
+  for (i = 0; i < len; i++)
+    MSG2 ("%c", fribidi_char_from_bidi_type (BIDI_TYPE(i)));
   MSG ("\n");
 }
 #endif /* DEBUG */
@@ -215,22 +217,23 @@ print_bidi_string (
  * define macros for push and pop the status in to / out of the stack
  *-------------------------------------------------------------------------*/
 
-/* There's some little points in pushing and poping into the status stack:
+/* There are a few little points in pushing into and poping from the status
+   stack:
    1. when the embedding level is not valid (more than
    FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61), you must reject it, and not to push
    into the stack, but when you see a PDF, you must find the matching code,
    and if it was pushed in the stack, pop it, it means you must pop if and
    only if you have pushed the matching code, the over_pushed var counts the
-   number of rejected codes yet.
+   number of rejected codes so far.
    2. there's a more confusing point too, when the embedding level is exactly
-   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1=60, an LRO or LRE must be rejected
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1=60, an LRO or LRE is rejected
    because the new level would be FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL+1=62, that
-   is invalid, but an RLO or RLE must be accepted because the new level is
+   is invalid; but an RLO or RLE is accepted because the new level is
    FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61, that is valid, so the rejected codes
-   may be not continuous in the logical order, in fact there is at most two
-   continuous intervals of codes, with a RLO or RLE between them.  To support
+   may be not continuous in the logical order, in fact there are at most two
+   continuous intervals of codes, with an RLO or RLE between them.  To support
    this case, the first_interval var counts the number of rejected codes in
-   the first interval, when it is 0, means that there is only one interval yet.
+   the first interval, when it is 0, means that there is only one interval.
 */
 
 /* a. If this new level would be valid, then this embedding code is valid.
@@ -305,6 +308,7 @@ fribidi_get_par_embedding_levels (
   /* input */
   const FriBidiChar *str,
   const FriBidiStrIndex len,
+  const FriBidiCharType *bidi_types,
   /* input and output */
   FriBidiParType *pbase_dir,
   /* output */
@@ -318,7 +322,7 @@ fribidi_get_par_embedding_levels (
 
   DBG ("entering fribidi_get_par_embedding_levels");
 
-  fribidi_assert (str);
+  fribidi_assert (str || bidi_types);
   fribidi_assert (pbase_dir);
   fribidi_assert (embedding_level_list);
 
@@ -332,7 +336,7 @@ fribidi_get_par_embedding_levels (
   /* Determinate character types */
   {
     /* Get run-length encoded character types */
-    main_run_list = run_list_encode_bidi_types (str, len);
+    main_run_list = run_list_encode_bidi_types (str, len, bidi_types);
     if UNLIKELY
       (!main_run_list) goto out;
   }
@@ -485,7 +489,7 @@ fribidi_get_par_embedding_levels (
     (fribidi_debug_status ())
     {
       print_types_re (main_run_list);
-      print_bidi_string (str, len);
+      print_bidi_string (str, len, bidi_types);
       print_resolved_levels (main_run_list);
       print_resolved_types (main_run_list);
     }
@@ -688,7 +692,7 @@ fribidi_get_par_embedding_levels (
   if UNLIKELY
     (fribidi_debug_status ())
     {
-      print_bidi_string (str, len);
+      print_bidi_string (str, len, bidi_types);
       print_resolved_levels (main_run_list);
       print_resolved_types (main_run_list);
     }
@@ -738,7 +742,9 @@ fribidi_get_par_embedding_levels (
       {
 	/* if state is on at the very first of the string, do this too. */
 	if (j >= 0)
-	  char_type = fribidi_get_bidi_type (str[j]);
+	{
+	  char_type = BIDI_TYPE(j);
+	}
 	else
 	  char_type = FRIBIDI_TYPE_ON;
 	if (!state && FRIBIDI_IS_SEPARATOR (char_type))
@@ -872,9 +878,10 @@ index_array_reverse (
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_reorder_line (
   /* input */
-  FriBidiLevel *embedding_level_list,
+  const FriBidiLevel *embedding_level_list,
   const FriBidiStrIndex len,
   const FriBidiStrIndex off,
+  const FriBidiCharType *bidi_types,
   /* input and output */
   FriBidiChar *str,
   /* output */
@@ -887,6 +894,7 @@ fribidi_reorder_line (
   FriBidiLevel max_level = 0;
 
   fribidi_assert (embedding_level_list);
+  fribidi_assert (str || bidi_types);
 
   if UNLIKELY
     (len == 0)
@@ -937,14 +945,13 @@ fribidi_reorder_line (
 	  /* L3. Reorder NSMs. */
 	  for (i = off + len - 1; i >= off; i--)
 	    if (FRIBIDI_LEVEL_IS_RTL (embedding_level_list[i])
-		&& fribidi_get_bidi_type (str[i]) == FRIBIDI_TYPE_NSM)
+		&& BIDI_TYPE(i) == FRIBIDI_TYPE_NSM)
 	      {
 		register FriBidiStrIndex seq_end = i;
 		level = embedding_level_list[i];
 
 		for (i--; i >= off &&
-		     FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM (fribidi_get_bidi_type
-						       (str[i]))
+		     FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM (BIDI_TYPE (i))
 		     && embedding_level_list[i] == level; i--)
 		  ;
 

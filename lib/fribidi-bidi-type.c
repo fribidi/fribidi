@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.12 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.13 2004-06-14 17:00:33 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.12 $
+ * $Date: 2004-06-14 17:00:33 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -60,3 +60,21 @@ fribidi_get_bidi_type (
 {
   return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (ch)];
 }
+
+FRIBIDI_ENTRY void
+fribidi_get_bidi_types (
+  /* input */
+  const FriBidiChar *str,
+  FriBidiStrIndex len,
+  /* output */
+  FriBidiCharType *type
+)
+{
+  register FriBidiStrIndex i = len;
+  for (; i; i--)
+    *type++ = fribidi_get_bidi_type (*str++);
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
