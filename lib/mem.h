@@ -1,10 +1,10 @@
 /* FriBidi
  * mem.h - memory manipulation routines
  *
- * $Id: mem.h,v 1.3 2004-04-28 02:37:56 behdad Exp $
+ * $Id: mem.h,v 1.4 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/mem.h,v $
  *
  * Author:
@@ -33,11 +33,9 @@
 #ifndef _MEM_H
 #define _MEM_H
 
-#include <fribidi-common.h>
+#include "common.h"
 
 #include <fribidi-types.h>
-
-#include "common.h"
 
 #include <fribidi-begindecls.h>
 
@@ -48,22 +46,25 @@ typedef struct _FriBidiMemChunk FriBidiMemChunk;
 #define FRIBIDI_ALLOC_ONLY      1
 
 #define fribidi_mem_chunk_new FRIBIDI_PRIVATESPACE(mem_chunk_new)
-FriBidiMemChunk *fribidi_mem_chunk_new (
+FriBidiMemChunk *
+fribidi_mem_chunk_new (
   const char *name,
   int atom_size,
   unsigned long area_size,
   int alloc_type
-);
+)
+     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
 
 #define fribidi_mem_chunk_alloc FRIBIDI_PRIVATESPACE(mem_chunk_alloc)
-void *fribidi_mem_chunk_alloc (
+     void *fribidi_mem_chunk_alloc (
   FriBidiMemChunk *mem_chunk
-);
+)
+     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
 
 #define fribidi_mem_chunk_destroy FRIBIDI_PRIVATESPACE(mem_chunk_destroy)
-void *fribidi_mem_chunk_destroy (
+     void *fribidi_mem_chunk_destroy (
   FriBidiMemChunk *mem_chunk
-);
+) FRIBIDI_GNUC_HIDDEN;
 
 #else /* FRIBIDI_USE_GLIB */
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-run.c - text run data type
  *
- * $Id: fribidi-run.c,v 1.1 2004-04-28 02:37:56 behdad Exp $
+ * $Id: fribidi-run.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-run.c,v $
  *
  * Authors:
@@ -33,18 +33,18 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include "common.h"
+
 #include "run.h"
 #include "env.h"
 #include "bidi-types.h"
-
-#include "common.h"
 
 FriBidiRun *
 new_run (
   void
 )
 {
-  FriBidiRun *run;
+  register FriBidiRun *run;
 
 #if USE_SIMPLE_MALLOC
   run = fribidi_malloc (sizeof (FriBidiRun));
@@ -52,30 +52,42 @@ new_run (
   if (free_runs)
     {
       run = free_runs;
-      free_runs = free_runs->next;
+      free_runs = run->next;
     }
   else
     {
-      if (!run_mem_chunk)
-	run_mem_chunk = fribidi_chunk_new_for_type (FriBidiRun);
+      if UNLIKELY
+	(!run_mem_chunk) run_mem_chunk = fribidi_chunk_new_for_type (FriBidiRun
+	);
 
-      run = fribidi_chunk_new (FriBidiRun, run_mem_chunk);
+      if LIKELY
+	(run_mem_chunk)
+	{
+	  run = fribidi_chunk_new (FriBidiRun,
+				   run_mem_chunk
+	  );
+	}
+      else
+	run = NULL;
     }
 #endif /* !USE_SIMPLE_MALLOC */
 
-  run->len = 0;
-  run->pos = 0;
-  run->level = 0;
-  run->next = NULL;
-  run->prev = NULL;
+  if LIKELY
+    (run)
+    {
+      run->len = run->pos = run->level = 0;
+      run->next = run->prev = NULL;
+    }
   return run;
 }
 
 void
 free_run (
-  FriBidiRun * run
+  /* input */
+  FriBidiRun *run
 )
 {
+  fribidi_assert (run);
 #if USE_SIMPLE_MALLOC
   fribidi_free (run);
 #else /* !USE_SIMPLE_MALLOC */
@@ -84,70 +96,111 @@ free_run (
 #endif /* !USE_SIMPLE_MALLOC */
 }
 
-#define FRIBIDI_ADD_TYPE_LINK(p,q) \
-	FRIBIDI_BEGIN_STMT	\
-		(p)->len = (q)->pos - (p)->pos;	\
-		(p)->next = (q);	\
-		(q)->prev = (p);	\
-		(p) = (q);	\
-	FRIBIDI_END_STMT
+FriBidiRun *
+new_run_list (
+  void
+)
+{
+  register FriBidiRun *run;
+
+  run = new_run ();
+
+  if LIKELY
+    (run)
+    {
+      run->type = FRIBIDI_TYPE_SENTINEL;
+      run->level = FRIBIDI_SENTINEL;
+      run->pos = FRIBIDI_SENTINEL;
+      run->len = FRIBIDI_SENTINEL;
+      run->next = run->prev = run;
+    }
+
+  return run;
+}
+
+void
+free_run_list (
+  FriBidiRun *run_list
+)
+{
+  if (!run_list)
+    return;
+
+  fribidi_validate_run_list (run_list);
+
+#if USE_SIMPLE_MALLOC
+  {
+    register FriBidiRun *pp;
+
+    pp = run_list;
+    pp->prev->next = NULL;
+    while LIKELY
+      (pp)
+      {
+	register FriBidiRun *p;
+
+	p = pp;
+	pp = pp->next;
+	free_run (p);
+      };
+  }
+#else /* !USE_SIMPLE_MALLOC */
+  run_list->prev->next = free_runs;
+  free_runs = run_list;
+#endif /* !USE_SIMPLE_MALLOC */
+}
+
 
 FriBidiRun *
 run_list_encode_bidi_types (
+  /* input */
   FriBidiCharType *char_type,
   FriBidiStrIndex len
 )
 {
-  FriBidiRun *list, *last, *run;
-
+  FriBidiRun *list, *last;
+  register FriBidiRun *run = NULL;
   FriBidiStrIndex i;
 
-  /* Add the starting run */
-  list = new_run ();
-  list->type = FRIBIDI_TYPE_SOT;
-  list->level = FRIBIDI_LEVEL_START;
+  fribidi_assert (char_type);
+
+  /* Create the list sentinel */
+  list = new_run_list ();
+  if UNLIKELY
+    (!list) return NULL;
   last = list;
 
-  /* Sweep over the string_type s */
+  /* Scan over the character types */
   for (i = 0; i < len; i++)
     if (char_type[i] != last->type)
       {
 	run = new_run ();
+	if UNLIKELY
+	  (!run) break;
 	run->type = char_type[i];
 	run->pos = i;
-	FRIBIDI_ADD_TYPE_LINK (last, run);
+	last->len = run->pos - last->pos;
+	last->next = run;
+	run->prev = last;
+	last = run;
       }
 
-  /* Add the ending run */
-  run = new_run ();
-  run->type = FRIBIDI_TYPE_EOT;
-  run->level = FRIBIDI_LEVEL_END;
-  run->pos = len;
-  FRIBIDI_ADD_TYPE_LINK (last, run);
+  /* Close the circle */
+  last->len = len - last->pos;
+  last->next = list;
+  list->prev = last;
+
+  if UNLIKELY
+    (!run)
+    {
+      /* Memory allocation failed */
+      free_run_list (list);
+      return NULL;
+    }
+
+  fribidi_validate_run_list (list);
 
   return list;
-}
-
-/* move a run before another element in a list, the list must have a
-   previous element, used to update explicits_list.
-   assuming that p have both prev and next or none of them, also update
-   the list that p is currently in, if any.
-*/
-void
-move_run_before (
-  FriBidiRun * p,
-  FriBidiRun * list
-)
-{
-  if (p->prev)
-    {
-      p->prev->next = p->next;
-      p->next->prev = p->prev;
-    }
-  p->prev = list->prev;
-  list->prev->next = p;
-  p->next = list;
-  list->prev = p;
 }
 
 /* override the run list 'base', with the runs in the list 'over', to
@@ -162,105 +215,153 @@ move_run_before (
    of the last element of the 'over' list. these two conditions are always
    satisfied for the two usages mentioned above.
 
+   Note:
+     frees the over list.
+
    Todo:
      use some explanatory names instead of p, q, ...
      rewrite comment above to remove references to special usage.
 */
-void
+fribidi_boolean
 shadow_run_list (
-  FriBidiRun * base,
-  FriBidiRun * over
+  /* input */
+  FriBidiRun *base,
+  FriBidiRun *over,
+  fribidi_boolean preserve_length
 )
 {
-  FriBidiRun *p = base, *q, *r, *s, *t;
-  FriBidiStrIndex pos = 0, pos2;
+  register FriBidiRun *p = base, *q, *r, *s, *t;
+  register FriBidiStrIndex pos = 0, pos2;
+  fribidi_boolean status = false;
 
-  if (!over)
-    return;
-  q = over;
-  while (q)
-    {
-      if (!q->len || q->pos < pos)
-	{
-	  t = q;
-	  q = q->next;
-	  free_run (t);
-	  continue;
-	}
-      pos = q->pos;
-      while (p->next && p->next->pos <= pos)
-	p = p->next;
-      /* now p is the element that q must be inserted 'in'. */
-      pos2 = pos + q->len;
-      r = p;
-      while (r->next && r->next->pos < pos2)
-	r = r->next;
-      /* now r is the last element that q affects. */
-      if (p == r)
-	{
-	  /* split p into at most 3 interval, and insert q in the place of
-	     the second interval, set r to be the third part. */
-	  /* third part needed? */
-	  if (p->next && p->next->pos == pos2)
-	    r = r->next;
-	  else
-	    {
-	      r = new_run ();
-	      *r = *p;
-	      if (r->next)
-		{
-		  r->next->prev = r;
-		  r->len = r->next->pos - pos2;
-		}
-	      else
-		r->len -= pos - p->pos;
-	      r->pos = pos2;
-	    }
-	  /* first part needed? */
-	  if (p->prev && p->pos == pos)
-	    {
-	      t = p;
+  fribidi_validate_run_list (base);
+  fribidi_validate_run_list (over);
+
+  for_run_list (q, over)
+  {
+    if UNLIKELY
+      (!q->len || q->pos < pos) continue;
+    pos = q->pos;
+    while (p->next->type != FRIBIDI_TYPE_SENTINEL && p->next->pos <= pos)
+      p = p->next;
+    /* now p is the element that q must be inserted 'in'. */
+    pos2 = pos + q->len;
+    r = p;
+    while (r->next->type != FRIBIDI_TYPE_SENTINEL && r->next->pos < pos2)
+      r = r->next;
+    if (preserve_length)
+      r->len += q->len;
+    /* now r is the last element that q affects. */
+    if LIKELY
+      (p == r)
+      {
+	/* split p into at most 3 intervals, and insert q in the place of
+	   the second interval, set r to be the third part. */
+	/* third part needed? */
+	if (p->pos + p->len > pos2)
+	  {
+	    r = new_run ();
+	    if UNLIKELY
+	      (!r) goto out;
+	    p->next->prev = r;
+	    r->next = p->next;
+	    r->level = p->level;
+	    r->type = p->type;
+	    r->len = p->pos + p->len - pos2;
+	    r->pos = pos2;
+	  }
+	else
+	  r = r->next;
+
+	if LIKELY
+	  (p->pos + p->len >= pos)
+	  {
+	    /* first part needed? */
+	    if (p->pos < pos)
+	      /* cut the end of p. */
+	      p->len = pos - p->pos;
+	    else
+	      {
+		t = p;
+		p = p->prev;
+		free_run (t);
+	      }
+	  }
+      }
+    else
+      {
+	if LIKELY
+	  (p->pos + p->len >= pos)
+	  {
+	    /* p needed? */
+	    if (p->pos < pos)
+	      /* cut the end of p. */
+	      p->len = pos - p->pos;
+	    else
 	      p = p->prev;
-	      free_run (t);
-	    }
-	  else
-	    p->len = pos - p->pos;
-	}
-      else
-	{
-	  /* cut the end of p. */
-	  p->len = pos - p->pos;
-	  /* if all of p is cut, remove it. */
-	  if (!p->len && p->prev)
-	    p = p->prev;
+	  }
 
-	  /* cut the begining of r. */
-	  r->pos = pos2;
-	  if (r->next)
-	    r->len = r->next->pos - pos2;
-	  /* if all of r is cut, remove it. */
-	  if (!r->len && r->next)
-	    r = r->next;
+	/* r needed? */
+	if (r->pos + r->len > pos2)
+	  {
+	    /* cut the begining of r. */
+	    r->len = r->pos + r->len - pos2;
+	    r->pos = pos2;
+	  }
+	else
+	  r = r->next;
 
-	  /* remove the elements between p and r. */
-	  for (s = p->next; s != r;)
-	    {
-	      t = s;
-	      s = s->next;
-	      free_run (t);
-	    }
-	}
-      /* before updating the next and prev runs to point to the inserted q,
-         we must remember the next element of q in the 'over' list.
-       */
-      t = q;
-      q = q->next;
-      p->next = t;
-      t->prev = p;
-      t->next = r;
-      r->prev = t;
-    }
+	/* remove the elements between p and r. */
+	for (s = p->next; s != r;)
+	  {
+	    t = s;
+	    s = s->next;
+	    free_run (t);
+	  }
+      }
+    /* before updating the next and prev runs to point to the inserted q,
+       we must remember the next element of q in the 'over' list.
+     */
+    t = q;
+    q = q->prev;
+    delete_node (t);
+    p->next = t;
+    t->prev = p;
+    t->next = r;
+    r->prev = t;
+  }
+  status = true;
+
+  fribidi_validate_run_list (base);
+
+out:
+  free_run_list (over);
+
+  return status;
 }
+
+#if DEBUG
+
+void
+fribidi_validate_run_list (
+  FriBidiRun *run_list		/* input run list */
+)
+{
+  register FriBidiRun *q;
+
+  fribidi_assert (run_list);
+  fribidi_assert (run_list->next);
+  fribidi_assert (run_list->next->prev == run_list);
+  fribidi_assert (run_list->type == FRIBIDI_TYPE_SENTINEL);
+  for_run_list (q, run_list)
+  {
+    fribidi_assert (q->next);
+    fribidi_assert (q->next->prev == q);
+  }
+  fribidi_assert (q == run_list);
+}
+
+#endif /* !DEBUG */
 
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets.h - character set conversion routines
  *
- * $Id: fribidi-char-sets.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-char-sets.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets.h,v $
  *
  * Authors:
@@ -80,7 +80,7 @@ FRIBIDI_ENTRY FriBidiStrIndex fribidi_charset_to_unicode (
 /* fribidi_unicode_to_charset - convert string from Unicode
  *
  * This function converts a Unicode string to an string in another character
- * set.  It also zero-terminates the output string.
+ * set.  It also null-terminates the output string.
  *
  * Returns: The length of the new string.
  */

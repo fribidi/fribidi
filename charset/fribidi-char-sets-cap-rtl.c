@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -33,13 +33,14 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include <common.h>
+
 #include <fribidi-char-sets-cap-rtl.h>
 
 #include <fribidi-unicode.h>
 #include <fribidi-mirroring.h>
 #include <fribidi-bidi-type.h>
 
-#include <common.h>
 #include <bidi-types.h>
 
 #include <stdio.h>
@@ -241,7 +242,7 @@ fribidi_unicode_to_cap_rtl (
   for (i = 0; i < len; i++)
     {
       FriBidiChar ch = us[i];
-      if (!FRIBIDI_IS_EXPLICIT (fribidi_get_type (ch)) && ch != '_'
+      if (!FRIBIDI_IS_EXPLICIT (fribidi_get_bidi_type (ch)) && ch != '_'
 	  && ch != FRIBIDI_CHAR_LRM && ch != FRIBIDI_CHAR_RLM)
 	s[j++] = fribidi_unicode_to_cap_rtl_c (ch);
       else

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.h - get character bidi type
  *
- * $Id: fribidi-bidi-type.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-bidi-type.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.h,v $
  *
  * Author:
@@ -40,31 +40,42 @@
 
 #include "fribidi-begindecls.h"
 
-/* fribidi_get_type is the old name of fribidi_get_bidi_type */
-#define fribidi_get_type fribidi_get_bidi_type
-
 #define fribidi_get_bidi_type FRIBIDI_NAMESPACE(get_bidi_type)
 /* fribidi_get_bidi_type - get character bidi type
  *
  * This function returns the bidi type of a character.
  */
-FRIBIDI_ENTRY FriBidiCharType fribidi_get_bidi_type (
+FRIBIDI_ENTRY FriBidiCharType
+fribidi_get_bidi_type (
   FriBidiChar ch		/* input character */
-);
+) FRIBIDI_GNUC_CONST;
 
-/* fribidi_get_types is the old name of fribidi_get_bidi_types */
-#define fribidi_get_types fribidi_get_bidi_types
+/* fribidi_get_type is the old name of fribidi_get_bidi_type */
+#define fribidi_get_type FRIBIDI_NAMESPACE(get_type)
+     FriBidiCharType fribidi_get_type (
+  FriBidiChar ch
+)
+     FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
 
 #define fribidi_get_bidi_types FRIBIDI_NAMESPACE(get_bidi_types)
 /* fribidi_get_bidi_types - get bidi types for an string of characters
  *
  * This function finds the bidi types of an string of characters.
  */
-FRIBIDI_ENTRY void fribidi_get_bidi_types (
+     FRIBIDI_ENTRY void fribidi_get_bidi_types (
   const FriBidiChar *str,	/* input string */
   FriBidiStrIndex len,		/* input string length */
   FriBidiCharType *type		/* output bidi types */
 );
+
+/* fribidi_get_types is the old name of fribidi_get_bidi_types */
+#define fribidi_get_types FRIBIDI_NAMESPACE(get_types)
+     void fribidi_get_bidi_types (
+  const FriBidiChar *str,
+  FriBidiStrIndex len,
+  FriBidiCharType *type
+)
+     FRIBIDI_GNUC_CONST FRIBIDI_GNUC_DEPRECATED;
 
 #include "fribidi-enddecls.h"
 

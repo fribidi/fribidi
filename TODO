@@ -16,3 +16,7 @@ Implementation issues:
 
 * Design better apis to do reorder based on available levels, remove
   explicit marks then calculate position maps, ....
+
+* Add more tests.  For:
+  - Checking that not removing explicit marks in analyze is not changing the
+    output in anyway.

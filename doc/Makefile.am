@@ -33,13 +33,17 @@ man3 = $(dist_man_MANS) $(dist_noinst_MANS)
 
 MAINTAINERCLEANFILES = $(man3)
 
-C2MANFLAGS = $(includepath) -DDONT_HAVE_FRIBIDI_CONFIG_H -M "$(PACKAGE_NAME)"
+C2MANFLAGS = $(includepath) \
+		-DDONT_HAVE_FRIBIDI_CONFIG_H \
+		-M "Programmer's Manual" \
+		-m "$(PACKAGE_NAME) $(PACKAGE_VERSION)"
+
 VPATH += $(includevpath)
 
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp
 	@touch $@.tmp
-	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $^
+	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $^ || true
 	@mv $@.tmp $@
 
 $(man3): c2man.stamp
@@ -47,5 +51,6 @@ $(man3): c2man.stamp
 		touch $@; \
 	else \
 		$(RM) $<; \
-		$(MAKE) $(AM_MAKEFLAGS) $<; \
+		$(MAKE) $(AM_MAKEFLAGS) $< || true; \
+		touch $@; \
 	fi

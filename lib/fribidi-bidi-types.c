@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.c - character bidi types
  *
- * $Id: fribidi-bidi-types.c,v 1.2 2004-04-28 02:37:56 behdad Exp $
+ * $Id: fribidi-bidi-types.c,v 1.3 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.c,v $
  *
  * Authors:
@@ -31,15 +31,15 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include "common.h"
+
 #include <fribidi-bidi-types.h>
 
 #include "bidi-types.h"
 
-#include "common.h"
-
 #ifdef DEBUG
 
-FRIBIDI_ENTRY char
+char
 fribidi_char_from_bidi_type (
   /* input */
   FriBidiCharType t

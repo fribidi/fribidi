@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.4 2004-04-28 02:37:56 behdad Exp $
+ * $Id: common.h,v 1.5 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -73,6 +73,26 @@
 #  define fribidi_malloc g_malloc
 #  define fribidi_free g_free
 # endif	/* !fribidi_malloc */
+# ifndef fribidi_assert
+#  ifndef __C2MAN__
+#   include <glib/gmessages.h>
+#  endif /* !__C2MAN__ */
+#  define fribidi_assert g_assert
+# endif	/* !fribidi_assert */
+# ifndef FRIBIDI_BEGIN_STMT
+#  ifndef __C2MAN__
+#   include <glib/gmacros.h>
+#  endif /* !__C2MAN__ */
+#  define FRIBIDI_BEGIN_STMT G_STMT_START {
+#  define FRIBIDI_END_STMT } G_STMT_END
+# endif	/* !FRIBIDI_BEGIN_STMT */
+# ifndef LIKELY
+#  ifndef __C2MAN__
+#   include <glib/gmacros.h>
+#  endif /* !__C2MAN__ */
+#  define LIKELY G_LIKELY
+#  define UNLIKELY G_UNLIKELY
+# endif	/* !LIKELY */
 #endif /* FRIBIDI_USE_GLIB */
 
 /* fribidi_malloc and fribidi_free should be used instead of malloc and free. 
@@ -92,7 +112,14 @@
 /* FRIBIDI_CHUNK_SIZE is the number of bytes in each chunk of memory being
  * allocated for data structure pools. */
 #ifndef FRIBIDI_CHUNK_SIZE
-# define FRIBIDI_CHUNK_SIZE 4096
+# if HAVE_ASM_PAGE_H
+#  ifndef __C2MAN__
+#   include <asm/page.h>
+#  endif /* __C2MAN__ */
+#  define FRIBIDI_CHUNK_SIZE (PAGE_SIZE - 16)
+# else /* !HAVE_ASM_PAGE_H */
+#  define FRIBIDI_CHUNK_SIZE (4096 - 16)
+# endif	/* !HAVE_ASM_PAGE_H */
 #else /* FRIBIDI_CHUNK_SIZE */
 # if FRIBIDI_CHUNK_SIZE < 256
 #  error FRIBIDI_CHUNK_SIZE now should define the size of a chunk in bytes.
@@ -101,11 +128,22 @@
 
 /* FRIBIDI_BEGIN_STMT should be used at the beginning of your macro
  * definitions that are to behave like simple statements.  Use
- * FRIBIDI_END_STMT at the end of the macro after the semicolon or brace */
+ * FRIBIDI_END_STMT at the end of the macro after the semicolon or brace. */
 #ifndef FRIBIDI_BEGIN_STMT
 # define FRIBIDI_BEGIN_STMT do {
 # define FRIBIDI_END_STMT } while (0)
 #endif /* !FRIBIDI_BEGIN_STMT */
+
+/* LIKEYLY and UNLIKELY are used to give a hint on branch prediction to the
+ * compiler. */
+#ifndef LIKELY
+# define LIKELY(expr) (expr)
+# define UNLIKELY(expr) (expr)
+#endif /* !LIKELY */
+
+#ifndef FRIBIDI_EMPTY_STMT
+# define FRIBIDI_EMPTY_STMT FRIBIDI_BEGIN_STMT (void) 0; FRIBIDI_END_STMT
+#endif /* !FRIBIDI_EMPTY_STMT */
 
 #include "debug.h"
 

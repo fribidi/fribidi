@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-mem.c - memory manipulation routines
  *
- * $Id: fribidi-mem.c,v 1.3 2004-04-28 02:37:56 behdad Exp $
+ * $Id: fribidi-mem.c,v 1.4 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mem.c,v $
  *
  * Authors:
@@ -31,9 +31,9 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
-#include "mem.h"
-
 #include "common.h"
+
+#include "mem.h"
 
 #if !FRIBIDI_USE_GLIB
 
@@ -54,10 +54,13 @@ fribidi_mem_chunk_new (
   int alloc_type
 )
 {
-  register FriBidiMemChunk *m =
-    (FriBidiMemChunk *) fribidi_malloc (sizeof (FriBidiMemChunk));
+  register FriBidiMemChunk *m;
 
-  if (m)
+  fribidi_assert (area_size >= atom_size * 8);
+
+  m = (FriBidiMemChunk *) fribidi_malloc (sizeof (FriBidiMemChunk));
+  if LIKELY
+    (m)
     {
       m->atom_size = atom_size;
       m->area_size = area_size;
@@ -74,10 +77,14 @@ fribidi_mem_chunk_alloc (
   FriBidiMemChunk *mem_chunk
 )
 {
-  if (mem_chunk->empty_size < mem_chunk->atom_size)
+  fribidi_assert (mem_chunk);
+
+  if UNLIKELY
+    (mem_chunk->empty_size < mem_chunk->atom_size)
     {
       register void *chunk = fribidi_malloc (mem_chunk->area_size);
-      if (chunk)
+      if LIKELY
+	(chunk)
 	{
 	  (void *) chunk = (void *) mem_chunk->chunk + emptysize - area_size;
 	  (char *) chunk += sizeof (void *);
@@ -89,8 +96,7 @@ fribidi_mem_chunk_alloc (
     }
 
   {
-    register void *m;
-    m = mem_chunk->chunk;
+    register void *m = mem_chunk->chunk;
     mem_chunk->chunk = (void *)
       ((char *) mem_chunk->chunk + mem_chunk->atom_size);
     mem_chunk->empty_size -= mem_chunk->atom_size;
@@ -105,8 +111,13 @@ fribidi_mem_chunk_destroy (
   FriBidiMemChunk *mem_chunk
 )
 {
-  register void *chunk = mem_chunk->chunk + emptysize - areasize;
-  while (chunk)
+  register void *chunk;
+
+  fribidi_assert (mem_chunk);
+
+  chunk = mem_chunk->chunk + emptysize - areasize;
+  while LIKELY
+    (chunk)
     {
       register void *tofree = chunk;
       chunk = *(void *) chunk;

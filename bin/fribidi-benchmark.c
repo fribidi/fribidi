@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-benchmark.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
  *
  * Authors:
@@ -33,9 +33,9 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
-#include <fribidi.h>
-
 #include <common.h>
+
+#include <fribidi.h>
 
 #include <stdio.h>
 #if STDC_HEADERS

@@ -22,10 +22,10 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.c,v 1.3 2004-04-27 23:53:43 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.4 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 23:53:43 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:
@@ -33,11 +33,11 @@
  *   Dov Grobgeld, 1999, 2000
  */
 
+#include "common.h"
+
 #include <fribidi-mirroring.h>
 
 #include "mirroring-table.i"
-
-#include "common.h"
 
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_get_mirror_char (
@@ -53,7 +53,8 @@ fribidi_get_mirror_char (
 
   pos = step = (nFriBidiMirroredChars / 2) + 1;
 
-  while (step > 1)
+  while LIKELY
+    (step > 1)
     {
       FriBidiChar cmp_ch = FriBidiMirroredChars[pos].ch;
       step = (step + 1) / 2;
@@ -61,14 +62,15 @@ fribidi_get_mirror_char (
       if (cmp_ch < ch)
 	{
 	  pos += step;
-	  if (pos > nFriBidiMirroredChars - 1)
-	    pos = nFriBidiMirroredChars - 1;
+	  if UNLIKELY
+	    (pos >= nFriBidiMirroredChars) pos = nFriBidiMirroredChars - 1;
 	}
-      else if (cmp_ch > ch)
+      else if LIKELY
+	(cmp_ch > ch)
 	{
 	  pos -= step;
-	  if (pos < 0)
-	    pos = 0;
+	  if UNLIKELY
+	    (pos < 0) pos = 0;
 	}
       else
 	break;

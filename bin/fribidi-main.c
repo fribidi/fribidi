@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.2 2004-04-28 03:20:22 behdad Exp $
+ * $Id: fribidi-main.c,v 1.3 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 03:20:22 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -33,6 +33,8 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include <common.h>
+
 #include <fribidi.h>
 #if !FRIBIDI_CHARSETS
 # if FRIBIDI_MAIN_USE_ICONV_H
@@ -41,8 +43,6 @@
 #  include <fribidi-char-sets.h>
 # endif	/* FRIBIDI_MAIN_USE_ICONV_H */
 #endif /* !FRIBIDI_CHARSETS */
-
-#include <common.h>
 
 #include <stdio.h>
 #if STDC_HEADERS
@@ -254,8 +254,8 @@ main (
 	{"nomirror", 0, &do_mirror, false},
 	{"reordernsm", 0, &do_reorder_nsm, true},
 	{"clean", 0, &do_clean, true},
-	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_L},
-	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_R},
+	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_LTR},
+	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_RTL},
 	{"wltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WL},
 	{"wrtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WR},
 	{"basedir", 0, &show_basedir, true},
@@ -481,9 +481,9 @@ main (
 			      while (wid > 0 && idx < len)
 				{
 				  wid -=
-				    fribidi_get_type (visual[idx]) &
-				    (FRIBIDI_MASK_BN | FRIBIDI_MASK_NSM) ? 0 :
-				    1;
+				    FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM
+				    (fribidi_get_bidi_type (visual[idx])) ? 0
+				    : 1;
 				  idx++;
 				}
 #if !FRIBIDI_MAIN_USE_ICONV_H

@@ -1,7 +1,6 @@
 -gnu
 -bfda
 -bfde
--T TypeLink
 -T LevelInfo
 -T FriBidiChar
 -T FriBidiStrIndex
@@ -13,6 +12,7 @@
 -T FriBidiCharSetHandler
 -T FriBidiMemChunk
 -T FriBidiEnv
+-T FriBidiRun
 -T fribidi_uint8
 -T fribidi_uint16
 -T fribidi_uint32

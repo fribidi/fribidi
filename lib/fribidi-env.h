@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-env.h - state manipulation routines
  *
- * $Id: fribidi-env.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-env.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-env.h,v $
  *
  * Author:
@@ -60,16 +60,17 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_debug_status (
  *
  * Returns: the new debugging output status.
  */
-FRIBIDI_ENTRY fribidi_boolean fribidi_set_debug (
+FRIBIDI_ENTRY fribidi_boolean
+fribidi_set_debug (
   fribidi_boolean state		/* new state to set */
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
 
 #define fribidi_mirroring_status FRIBIDI_NAMESPACE(mirroring_status)
 /* fribidi_mirroring_status - get current mirroring status */
-FRIBIDI_ENTRY fribidi_boolean fribidi_mirroring_status (
+     FRIBIDI_ENTRY fribidi_boolean fribidi_mirroring_status (
   void
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
 #define fribidi_set_mirroring FRIBIDI_NAMESPACE(set_mirroring)
 /* fribidi_set_mirroring - set mirroring on or off
@@ -85,16 +86,16 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_mirroring_status (
  *
  * Returns: the new mirroring status.
  */
-FRIBIDI_ENTRY fribidi_boolean fribidi_set_mirroring (
+     FRIBIDI_ENTRY fribidi_boolean fribidi_set_mirroring (
   fribidi_boolean state		/* new state to set */
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
 
 #define fribidi_reorder_nsm_status FRIBIDI_NAMESPACE(reorder_nsm_status)
 /* fribidi_reorder_nsm_status - get current marks reordering status */
-FRIBIDI_ENTRY fribidi_boolean fribidi_reorder_nsm_status (
+     FRIBIDI_ENTRY fribidi_boolean fribidi_reorder_nsm_status (
   void
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
 #define fribidi_set_reorder_nsm FRIBIDI_NAMESPACE(set_reorder_nsm)
 /* fribidi_set_reorder_nsm - set marks reordering on or off
@@ -112,9 +113,9 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_reorder_nsm_status (
  *
  * Returns: the new marks reordering status.
  */
-FRIBIDI_ENTRY fribidi_boolean fribidi_set_reorder_nsm (
+     FRIBIDI_ENTRY fribidi_boolean fribidi_set_reorder_nsm (
   fribidi_boolean state		/* new state to set */
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
 
 #include "fribidi-enddecls.h"

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
+ * $Id: fribidi-types.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 16:47:22 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -56,12 +56,12 @@
 #   define FRIBIDI_UINT32_LOCAL		uint32_t
 #  else	/* !HAVE_STDINT_H */
 #   define FRIBIDI_UINT8_LOCAL		unsigned char
-#   if SIZEOF_SHORT >= 2
+#   if !defined(SIZEOF_SHORT) || SIZEOF_SHORT >= 2
 #    define FRIBIDI_UINT16_LOCAL	unsigned short
 #   else /* SIZEOF_SHORT < 2 */
 #    define FRIBIDI_UINT16_LOCAL	unsigned int
 #   endif /* SIZEOF_SHORT < 2 */
-#   if SIZEOF_INT >= 4
+#   if !defined(SIZEOF_INT) || SIZEOF_INT >= 4
 #    define FRIBIDI_UINT32_LOCAL	unsigned int
 #   else /* SIZEOF_INT < 4 */
 #    define FRIBIDI_UINT32_LOCAL	unsigned long

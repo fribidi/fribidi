@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining algorithms
  *
- * $Id: fribidi.c,v 1.2 2004-04-25 19:12:42 behdad Exp $
+ * $Id: fribidi.c,v 1.3 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 19:12:42 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -33,9 +33,9 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
-#include <fribidi.h>
-
 #include "common.h"
+
+#include <fribidi.h>
 
 const char *fribidi_version_info =
   "(" FRIBIDI_NAME ") " FRIBIDI_VERSION "\n"

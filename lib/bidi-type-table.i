@@ -3,8 +3,8 @@
   by fribidi_create_char_types
 */
 
-#ifndef FRIBIDI_TAB_CHAR_TYPE_2_I
-#define FRIBIDI_TAB_CHAR_TYPE_2_I
+#ifndef BIDI_TYPE_TABLE_I
+#define BIDI_TYPE_TABLE_I
 
 #include "bidi-types.h"
 
@@ -5211,7 +5211,7 @@ static const PACKTAB_UINT16 FriBidiPropertyBlockLevel0[4352*1] = {
 #undef RTL
 #undef LTR
 
-static FriBidiCharType
+static inline FriBidiCharType
 get_bidi_type (
   /* input */
   FriBidiChar uch
@@ -5225,4 +5225,4 @@ get_bidi_type (
 }
 
 
-#endif /* FRIBIDI_TAB_CHAR_TYPE_2_I */
+#endif /* BIDI_TYPE_TABLE_I */

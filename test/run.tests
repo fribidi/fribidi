@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/sh
 # run.tests - Check that the algorithm does what it is supposed to
 # Copyright (C) 1999,2000 Dov Grobgeld, and
 # Copyright (C) 2001,2002 Behdad Esfahbod.
@@ -26,7 +26,7 @@ if test -z "$top_builddir"; then
 fi
 
 if test -z "$srcdir"; then
-  srcdir=.
+  srcdir=`echo "$0" | sed 's,/[^/]*$,,'`
 fi
 
 test "${VERBOSE+set}" != "set" && VERBOSE=yes

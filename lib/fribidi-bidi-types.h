@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.2 2004-04-28 02:37:56 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -60,7 +60,7 @@ typedef FriBidiMaskType FriBidiCharType;
 #define FRIBIDI_MASK_STRONG	0x00000010L	/* Is strong */
 #define FRIBIDI_MASK_WEAK	0x00000020L	/* Is weak */
 #define FRIBIDI_MASK_NEUTRAL	0x00000040L	/* Is neutral */
-#define FRIBIDI_MASK_SENTINEL	0x00000080L	/* Is sentinel: SOT, EOT */
+#define FRIBIDI_MASK_SENTINEL	0x00000080L	/* Is sentinel */
 /* Sentinels are not valid chars, just identify the start and end of strings. */
 
 /* Each char can be only one of the five following. */
@@ -151,23 +151,26 @@ typedef FriBidiMaskType FriBidiCharType;
 /* Other Neutral */
 #define FRIBIDI_TYPE_ON		( FRIBIDI_MASK_NEUTRAL )
 
-/* The following are used to identify the paragraph direction,
-   types L, R, N are not used internally anymore, and recommended to use
-   LTR, RTL and ON instead, didn't removed because of compatability. */
-#define FRIBIDI_TYPE_L		( FRIBIDI_TYPE_LTR )
-#define FRIBIDI_TYPE_R		( FRIBIDI_TYPE_RTL )
-#define FRIBIDI_TYPE_N		( FRIBIDI_TYPE_ON )
+
+/* The following are used in specifying paragraph direction only, not real
+ * types. */
+
 /* Weak left to right */
-#define FRIBIDI_TYPE_WL		( FRIBIDI_MASK_WEAK )
+#define FRIBIDI_TYPE_WLTR	( FRIBIDI_MASK_WEAK )
 /* Weak right to left */
-#define FRIBIDI_TYPE_WR		( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_RTL )
+#define FRIBIDI_TYPE_WRTL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_RTL )
 
-/* The following are only used internally */
+/* Just for compatibility */
+#define FRIBIDI_TYPE_WL		FRIBIDI_TYPE_WLTR
+#define FRIBIDI_TYPE_WR		FRIBIDI_TYPE_WRTL
+#define FRIBIDI_TYPE_L		FRIBIDI_TYPE_LTR
+#define FRIBIDI_TYPE_R		FRIBIDI_TYPE_RTL
+#define FRIBIDI_TYPE_N		FRIBIDI_TYPE_ON
 
-/* Start of text */
-#define FRIBIDI_TYPE_SOT	( FRIBIDI_MASK_SENTINEL )
-/* End of text */
-#define FRIBIDI_TYPE_EOT	( FRIBIDI_MASK_SENTINEL + FRIBIDI_MASK_RTL )
+/* The following is only used internally */
+
+/* Start or end of text (run list) */
+#define FRIBIDI_TYPE_SENTINEL	( FRIBIDI_MASK_SENTINEL )
 
 /*
  * End of define values for FriBidiCharType
@@ -242,6 +245,11 @@ typedef FriBidiMaskType FriBidiCharType;
 #define FRIBIDI_IS_EXPLICIT_OR_BN(p) \
 	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_BN))
 
+/* Is explicit or BN or NSM: LRE, RLE, LRO, RLO, PDF, BN, NSM?
+ * This is a good approximation of being zero-width. */
+#define FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM(p) \
+	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_BN | FRIBIDI_MASK_NSM))
+
 /* Is explicit or separator or BN or WS: LRE, RLE, LRO, RLO, PDF, BS, SS, BN, WS? */
 #define FRIBIDI_IS_EXPLICIT_OR_SEPARATOR_OR_BN_OR_WS(p) \
 	((p) & (FRIBIDI_MASK_EXPLICIT | FRIBIDI_MASK_SEPARATOR \
@@ -253,7 +261,8 @@ typedef FriBidiMaskType FriBidiCharType;
 #define FRIBIDI_CHANGE_NUMBER_TO_RTL(p) \
 	(FRIBIDI_IS_NUMBER(p) ? FRIBIDI_TYPE_RTL : (p))
 
-/* Override status of an explicit mark: LRO->LTR, RLO->RTL, otherwise->ON. */
+/* Override status of an explicit mark:
+ * LRO,LRE->LTR, RLO,RLE->RTL, otherwise->ON. */
 #define FRIBIDI_EXPLICIT_TO_OVERRIDE_DIR(p) \
 	(FRIBIDI_IS_OVERRIDE(p) ? FRIBIDI_LEVEL_TO_DIR(FRIBIDI_DIR_TO_LEVEL(p)) \
 				: FRIBIDI_TYPE_ON)
@@ -268,9 +277,10 @@ typedef FriBidiMaskType FriBidiCharType;
  * This function returns the bidi type name of a character type.  The
  * returned string is a static string and should not be freed.
  */
-FRIBIDI_ENTRY const char *fribidi_bidi_type_name (
+FRIBIDI_ENTRY const char *
+fribidi_bidi_type_name (
   FriBidiCharType t		/* input bidi type */
-);
+) FRIBIDI_GNUC_CONST;
 
 #include "fribidi-enddecls.h"
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.2 2004-04-28 02:37:56 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.3 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -31,12 +31,12 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include "common.h"
+
 #include <fribidi-bidi-type.h>
 
 #include "bidi-types.h"
 #include "bidi-type-table.i"
-
-#include "common.h"
 
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_bidi_type (
@@ -48,8 +48,17 @@ fribidi_get_bidi_type (
 }
 
 /* The following is only defined for binary compatibility */
+FriBidiCharType
+fribidi_get_type (
+  FriBidiChar ch
+)
+{
+  return fribidi_get_bidi_type (ch);
+}
+
+/* The following is only defined for binary compatibility */
 #define fribidi_get_type_internal FRIBIDI_NAMESPACE(get_type_internal)
-FRIBIDI_ENTRY FriBidiCharType
+FriBidiCharType
 fribidi_get_type_internal (
   /* input */
   FriBidiChar ch
@@ -67,8 +76,20 @@ fribidi_get_bidi_types (
   FriBidiCharType *type
 )
 {
-  for (; len; len--)
-    *type++ = fribidi_get_bidi_type (*str++);
+  register FriBidiStrIndex i = len;
+  for (; i; i--)
+    *type++ = get_bidi_type (*str++);
+}
+
+/* The following is only defined for binary compatibility */
+void
+fribidi_get_types (
+  const FriBidiChar *str,
+  FriBidiStrIndex len,
+  FriBidiCharType *type
+)
+{
+  fribidi_get_bidi_types (str, len, type);
 }
 
 /* Map fribidi_prop_types to fribidi_types. */

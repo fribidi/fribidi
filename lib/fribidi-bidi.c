@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.4 2004-04-28 02:37:56 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.5 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -33,6 +33,8 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include "common.h"
+
 #include <fribidi-bidi.h>
 #include <fribidi-bidi-type.h>
 #include <fribidi-mirroring.h>
@@ -44,10 +46,9 @@
 #include "bidi-types.h"
 #include "run.h"
 
-#include "common.h"
-
-#undef MAX
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
+#ifndef MAX
+# define MAX(a,b) ((a) > (b) ? (a) : (b))
+#endif /* !MAX */
 
 typedef struct
 {
@@ -55,69 +56,6 @@ typedef struct
   FriBidiLevel level;
 }
 LevelInfo;
-
-static void
-bidi_string_reverse (
-  FriBidiChar *str,
-  FriBidiStrIndex len
-)
-{
-  FriBidiStrIndex i;
-  for (i = 0; i < len / 2; i++)
-    {
-      FriBidiChar tmp = str[i];
-      str[i] = str[len - 1 - i];
-      str[len - 1 - i] = tmp;
-    }
-}
-
-static void
-index_array_reverse (
-  FriBidiStrIndex *arr,
-  FriBidiStrIndex len
-)
-{
-  FriBidiStrIndex i;
-  for (i = 0; i < len / 2; i++)
-    {
-      FriBidiStrIndex tmp = arr[i];
-      arr[i] = arr[len - 1 - i];
-      arr[len - 1 - i] = tmp;
-    }
-}
-
-/* explicits_list is a list like type_rl_list, that holds the explicit
-   codes that are removed from rl_list, to reinsert them later by calling
-   the override_list.
-*/
-static void
-init_list (
-  FriBidiRun ** start,
-  FriBidiRun ** end
-)
-{
-  FriBidiRun *list;
-  FriBidiRun *link;
-
-  /* Add the starting link */
-  list = new_run ();
-  list->type = FRIBIDI_TYPE_SOT;
-  list->level = FRIBIDI_LEVEL_START;
-  list->len = 0;
-  list->pos = 0;
-
-  /* Add the ending link */
-  link = new_run ();
-  link->type = FRIBIDI_TYPE_EOT;
-  link->level = FRIBIDI_LEVEL_END;
-  link->len = 0;
-  link->pos = 0;
-  list->next = link;
-  link->prev = list;
-
-  *start = list;
-  *end = link;
-}
 
 /* Some convenience macros */
 #define RL_TYPE(list) ((list)->type)
@@ -127,10 +65,16 @@ init_list (
 
 static FriBidiRun *
 merge_with_prev (
-  FriBidiRun * second
+  FriBidiRun *second
 )
 {
-  FriBidiRun *first = second->prev;
+  FriBidiRun *first;
+
+  fribidi_assert (second);
+  fribidi_assert (second->next);
+  first = second->prev;
+  fribidi_assert (first);
+
   first->next = second->next;
   first->next->prev = first;
   RL_LEN (first) += RL_LEN (second);
@@ -140,33 +84,37 @@ merge_with_prev (
 
 static void
 compact_list (
-  FriBidiRun * list
+  FriBidiRun *list
 )
 {
+  fribidi_assert (list);
+
   if (list->next)
-    for (list = list->next; list; list = list->next)
+    for_run_list (list, list)
       if (RL_TYPE (list->prev) == RL_TYPE (list)
 	  && RL_LEVEL (list->prev) == RL_LEVEL (list))
-	list = merge_with_prev (list);
+      list = merge_with_prev (list);
 }
 
 static void
 compact_neutrals (
-  FriBidiRun * list
+  FriBidiRun *list
 )
 {
+  fribidi_assert (list);
+
   if (list->next)
     {
-      for (list = list->next; list; list = list->next)
-	{
-	  if (RL_LEVEL (list->prev) == RL_LEVEL (list)
-	      &&
-	      ((RL_TYPE
-		(list->prev) == RL_TYPE (list)
-		|| (FRIBIDI_IS_NEUTRAL (RL_TYPE (list->prev))
-		    && FRIBIDI_IS_NEUTRAL (RL_TYPE (list))))))
-	    list = merge_with_prev (list);
-	}
+      for_run_list (list, list)
+      {
+	if (RL_LEVEL (list->prev) == RL_LEVEL (list)
+	    &&
+	    ((RL_TYPE
+	      (list->prev) == RL_TYPE (list)
+	      || (FRIBIDI_IS_NEUTRAL (RL_TYPE (list->prev))
+		  && FRIBIDI_IS_NEUTRAL (RL_TYPE (list))))))
+	  list = merge_with_prev (list);
+      }
     }
 }
 
@@ -175,20 +123,21 @@ compact_neutrals (
  *-------------------------------------------------------------------------*/
 
 /* There's some little points in pushing and poping into the status stack:
-   1. when the embedding level is not valid (more than FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61),
-   you must reject it, and not to push into the stack, but when you see a
-   PDF, you must find the matching code, and if it was pushed in the stack,
-   pop it, it means you must pop if and only if you have pushed the
-   matching code, the over_pushed var counts the number of rejected codes yet.
+   1. when the embedding level is not valid (more than
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61), you must reject it, and not to push
+   into the stack, but when you see a PDF, you must find the matching code,
+   and if it was pushed in the stack, pop it, it means you must pop if and
+   only if you have pushed the matching code, the over_pushed var counts the
+   number of rejected codes yet.
    2. there's a more confusing point too, when the embedding level is exactly
-   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1=60, an LRO or LRE must be rejected because the new
-   level would be FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL+1=62, that is invalid, but an RLO or RLE
-   must be accepted because the new level is FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61, that is
-   valid, so the rejected codes may be not continuous in the logical order,
-   in fact there is at most two continuous intervals of codes, with a RLO or
-   RLE between them.  To support this case, the first_interval var counts the
-   number of rejected codes in the first interval, when it is 0, means that
-   there is only one interval yet.
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1=60, an LRO or LRE must be rejected
+   because the new level would be FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL+1=62, that
+   is invalid, but an RLO or RLE must be accepted because the new level is
+   FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL=61, that is valid, so the rejected codes
+   may be not continuous in the logical order, in fact there is at most two
+   continuous intervals of codes, with a RLO or RLE between them.  To support
+   this case, the first_interval var counts the number of rejected codes in
+   the first interval, when it is 0, means that there is only one interval yet.
 */
 
 /* a. If this new level would be valid, then this embedding code is valid.
@@ -200,9 +149,9 @@ compact_neutrals (
 */
 #define PUSH_STATUS \
     FRIBIDI_BEGIN_STMT \
-      if (new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL) \
+      if LIKELY(new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL) \
         { \
-          if (level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
+          if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
             first_interval = over_pushed; \
           status_stack[stack_size].level = level; \
           status_stack[stack_size].override = override; \
@@ -218,13 +167,13 @@ compact_neutrals (
 */
 #define POP_STATUS \
     FRIBIDI_BEGIN_STMT \
-      if (over_pushed || stack_size) \
+      if (stack_size) \
       { \
-        if (over_pushed > first_interval) \
+        if UNLIKELY(over_pushed > first_interval) \
           over_pushed--; \
         else \
           { \
-            if (over_pushed == first_interval) \
+            if LIKELY(over_pushed == first_interval) \
               first_interval = 0; \
             stack_size--; \
             level = status_stack[stack_size].level; \
@@ -238,25 +187,22 @@ compact_neutrals (
  * Levels, so define macros, to support them, with as less change as needed.
  *--------------------------------------------------------------------------*/
 
-/* Return the type of previous char or the sor, if already at the start of
-   a run level. */
+/* Return the type of previous run or the SOR, if already at the start of
+   a level run. */
 #define PREV_TYPE_OR_SOR(pp) \
     ( \
-     RL_LEVEL(pp->prev) == RL_LEVEL(pp) ? \
-      RL_TYPE(pp->prev) : \
-      FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->prev), RL_LEVEL(pp))) \
+      RL_LEVEL(pp->prev) == RL_LEVEL(pp) ? \
+        RL_TYPE(pp->prev) : \
+        FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->prev), RL_LEVEL(pp))) \
     )
 
-/* Return the type of next char or the eor, if already at the end of
-   a run level. */
+/* Return the type of next run or the EOR, if already at the end of
+   a level run. */
 #define NEXT_TYPE_OR_EOR(pp) \
     ( \
-     !pp->next ? \
-      FRIBIDI_LEVEL_TO_DIR(RL_LEVEL(pp)) : \
-      (RL_LEVEL(pp->next) == RL_LEVEL(pp) ? \
+      RL_LEVEL(pp->next) == RL_LEVEL(pp) ? \
         RL_TYPE(pp->next) : \
         FRIBIDI_LEVEL_TO_DIR(MAX(RL_LEVEL(pp->next), RL_LEVEL(pp))) \
-      ) \
     )
 
 
@@ -271,11 +217,10 @@ compact_neutrals (
  *----------------------------------------------------------------------*/
 
 static char char_from_level_array[] = {
-  '!',				/* FRIBIDI_LEVEL_REMOVED, internal error, this level shouldn't be seen.  */
-  '^',				/* FRIBIDI_LEVEL_START, indicating start of string. */
-  '$',				/* FRIBIDI_LEVEL_END, indicating end of string. */
-  /* 0-9,a-z,A-Z are the the only valid levels before resolving implicits.
-     after that the level @ may be appear too. */
+  '$',				/* -1 == FRIBIDI_SENTINEL, indicating
+				 * start or end of string. */
+  /* 0-61 == 0-9,a-z,A-Z are the the only valid levels before resolving
+   * implicits.  after that the level @ may be appear too. */
   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
   'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
   'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
@@ -284,56 +229,65 @@ static char char_from_level_array[] = {
   'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
   'Y', 'Z',
 
-  '@',				/* only must appear after resolving implicits. */
-  '*', '*', '*'			/* overflows, this levels and higher levels show a bug!. */
+  '@',				/* 62 == only must appear after resolving
+				 * implicits. */
+
+  '!',				/* 63 == FRIBIDI_LEVEL_INVALID, internal error,
+				 * this level shouldn't be seen.  */
+
+  '*', '*', '*', '*', '*'	/* >= 64 == overflows, this levels and higher
+				 * levels show a real bug!. */
 };
 
-#define fribidi_char_from_level(level) char_from_level_array[(level) + 3]
+#define fribidi_char_from_level(level) char_from_level_array[(level) + 1]
 
 static void
 print_types_re (
-  FriBidiRun * pp
+  FriBidiRun *pp
 )
 {
+  fribidi_assert (pp);
+
   MSG ("  Run types  : ");
-  while (pp)
-    {
-      MSG5 ("%d:l%d(%s)[%d] ",
-	    pp->pos, pp->len, fribidi_type_name (pp->type), pp->level);
-      pp = pp->next;
-    }
+  for_run_list (pp, pp)
+  {
+    MSG5 ("%d:%d(%s)[%d] ",
+	  pp->pos, pp->len, fribidi_bidi_type_name (pp->type), pp->level);
+  }
   MSG ("\n");
 }
 
 static void
 print_resolved_levels (
-  FriBidiRun * pp
+  FriBidiRun *pp
 )
 {
+  fribidi_assert (pp);
+
   MSG ("  Res. levels: ");
-  while (pp)
-    {
-      FriBidiStrIndex i;
-      for (i = RL_LEN (pp); i; i--)
-	MSG2 ("%c", fribidi_char_from_level (RL_LEVEL (pp)));
-      pp = pp->next;
-    }
+  for_run_list (pp, pp)
+  {
+    FriBidiStrIndex i;
+    for (i = RL_LEN (pp); i; i--)
+      MSG2 ("%c", fribidi_char_from_level (RL_LEVEL (pp)));
+  }
   MSG ("\n");
 }
 
 static void
 print_resolved_types (
-  FriBidiRun * pp
+  FriBidiRun *pp
 )
 {
+  fribidi_assert (pp);
+
   MSG ("  Res. types : ");
-  while (pp)
-    {
-      FriBidiStrIndex i;
-      for (i = RL_LEN (pp); i; i--)
-	MSG2 ("%c", fribidi_char_from_bidi_type (pp->type));
-      pp = pp->next;
-    }
+  for_run_list (pp, pp)
+  {
+    FriBidiStrIndex i;
+    for (i = RL_LEN (pp); i; i--)
+      MSG2 ("%c", fribidi_char_from_bidi_type (pp->type));
+  }
   MSG ("\n");
 }
 
@@ -344,6 +298,8 @@ print_bidi_string (
   FriBidiStrIndex len
 )
 {
+  fribidi_assert (str);
+
   MSG ("  Org. types : ");
   for (; len; len--)
     MSG2 ("%c", fribidi_char_from_bidi_type (fribidi_get_bidi_type (*str++)));
@@ -351,43 +307,57 @@ print_bidi_string (
 }
 #endif /* DEBUG */
 
+static fribidi_boolean
+fribidi_analyse_string (
+  const FriBidiChar *str,
+  FriBidiStrIndex len,
+  FriBidiCharType *pbase_dir,
+  FriBidiRun **pmain_run_list,
+  FriBidiLevel *pmax_level
+) FRIBIDI_GNUC_WARN_UNUSED;
+
 /*======================================================================
  *  This function should follow the Unicode specification closely!
  *----------------------------------------------------------------------*/
-static void
-fribidi_analyse_string (
+     static fribidi_boolean fribidi_analyse_string (
   /* input */
   const FriBidiChar *str,
   FriBidiStrIndex len,
   /* input and output */
   FriBidiCharType *pbase_dir,
   /* output */
-  FriBidiRun ** ptype_rl_list,
+  FriBidiRun **pmain_run_list,
   FriBidiLevel *pmax_level
 )
 {
   FriBidiLevel base_level, max_level;
   FriBidiCharType base_dir;
-  FriBidiStrIndex i;
-  FriBidiRun *type_rl_list, *explicits_list, *explicits_list_end, *pp;
+  FriBidiRun *main_run_list = NULL, *explicits_list = NULL, *pp;
+  fribidi_boolean status = false;
 
   DBG ("Entering fribidi_analyse_string");
+
+  fribidi_assert (str);
+  fribidi_assert (pbase_dir);
+  fribidi_assert (pmain_run_list);
+  fribidi_assert (pmax_level);
 
   /* Determinate character types */
   DBG ("  Determine character types");
   {
-    FriBidiCharType *char_type =
+    FriBidiCharType *char_types =
       (FriBidiCharType *) fribidi_malloc (len * sizeof (FriBidiCharType));
-    for (i = 0; i < len; i++)
-      char_type[i] = fribidi_get_type (str[i]);
+    if (!char_types)
+      goto out;
+    fribidi_get_bidi_types (str, len, char_types);
 
     /* Run length encode the character types */
-    type_rl_list = run_list_encode_bidi_types (char_type, len);
-    fribidi_free (char_type);
+    main_run_list = run_list_encode_bidi_types (char_types, len);
+    fribidi_free (char_types);
+    if (!main_run_list)
+      goto out;
   }
   DBG ("  Determine character types, Done");
-
-  init_list (&explicits_list, &explicits_list_end);
 
   /* Find base level */
   DBG ("  Finding the base level");
@@ -401,13 +371,12 @@ fribidi_analyse_string (
          that was passed on input. */
       base_level = FRIBIDI_DIR_TO_LEVEL (*pbase_dir);
       base_dir = FRIBIDI_TYPE_ON;
-      for (pp = type_rl_list; pp; pp = pp->next)
-	if (FRIBIDI_IS_LETTER (RL_TYPE (pp)))
-	  {
-	    base_level = FRIBIDI_DIR_TO_LEVEL (RL_TYPE (pp));
-	    base_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
-	    break;
-	  }
+      for_run_list (pp, main_run_list) if (FRIBIDI_IS_LETTER (RL_TYPE (pp)))
+	{
+	  base_level = FRIBIDI_DIR_TO_LEVEL (RL_TYPE (pp));
+	  base_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
+	  break;
+	}
     }
   base_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
   DBG2 ("  Base level : %c", fribidi_char_from_level (base_level));
@@ -415,25 +384,35 @@ fribidi_analyse_string (
   DBG ("  Finding the base level, Done");
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
-      print_types_re (type_rl_list);
+      print_types_re (main_run_list);
     }
 # endif	/* DEBUG */
 
   /* Explicit Levels and Directions */
   DBG ("Explicit Levels and Directions");
   {
-    /* X1. Begin by setting the current embedding level to the paragraph
-       embedding level. Set the directional override status to neutral.
-       Process each character iteratively, applying rules X2 through X9.
-       Only embedding levels from 0 to 61 are valid in this phase. */
     FriBidiLevel level, new_level;
     FriBidiCharType override, new_override;
     FriBidiStrIndex i;
     int stack_size, over_pushed, first_interval;
     LevelInfo *status_stack;
     FriBidiRun temp_link;
+
+/* explicits_list is a list like main_run_list, that holds the explicit
+   codes that are removed from main_run_list, to reinsert them later by
+   calling the shadow_run_list.
+*/
+    explicits_list = new_run_list ();
+    if UNLIKELY
+      (!explicits_list) goto out;
+
+    /* X1. Begin by setting the current embedding level to the paragraph
+       embedding level. Set the directional override status to neutral.
+       Process each character iteratively, applying rules X2 through X9.
+       Only embedding levels from 0 to 61 are valid in this phase. */
 
     level = base_level;
     override = FRIBIDI_TYPE_ON;
@@ -445,61 +424,67 @@ fribidi_analyse_string (
       (LevelInfo *) fribidi_malloc (sizeof (LevelInfo) *
 				    FRIBIDI_BIDI_MAX_RESOLVED_LEVELS);
 
-    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-      {
-	FriBidiCharType this_type = RL_TYPE (pp);
-	if (FRIBIDI_IS_EXPLICIT_OR_BN (this_type))
-	  {
-	    if (FRIBIDI_IS_STRONG (this_type))
-	      {			/* LRE, RLE, LRO, RLO */
-		/* 1. Explicit Embeddings */
-		/*   X2. With each RLE, compute the least greater odd embedding level. */
-		/*   X3. With each LRE, compute the least greater even embedding level. */
-		/* 2. Explicit Overrides */
-		/*   X4. With each RLO, compute the least greater odd embedding level. */
-		/*   X5. With each LRO, compute the least greater even embedding level. */
-		new_override = FRIBIDI_EXPLICIT_TO_OVERRIDE_DIR (this_type);
-		for (i = RL_LEN (pp); i; i--)
-		  {
-		    new_level =
-		      ((level + FRIBIDI_DIR_TO_LEVEL (this_type) + 2) & ~1) -
-		      FRIBIDI_DIR_TO_LEVEL (this_type);
-		    PUSH_STATUS;
-		  }
-	      }
-	    else if (this_type == FRIBIDI_TYPE_PDF)
-	      {
-		/* 3. Terminating Embeddings and overrides */
-		/*   X7. With each PDF, determine the matching embedding or
-		   override code. */
-		for (i = RL_LEN (pp); i; i--)
-		  POP_STATUS;
-	      }
-	    /* X9. Remove all RLE, LRE, RLO, LRO, PDF, and BN codes. */
-	    /* Remove element and add it to explicits_list */
-	    temp_link.next = pp->next;
-	    pp->level = FRIBIDI_LEVEL_REMOVED;
-	    move_run_before (pp, explicits_list_end);
-	    pp = &temp_link;
-	  }
-	else
-	  {
-	    /* X6. For all typed besides RLE, LRE, RLO, LRO, and PDF:
-	       a. Set the level of the current character to the current
-	       embedding level.
-	       b. Whenever the directional override status is not neutral,
-	       reset the current character type to the directional override
-	       status. */
-	    RL_LEVEL (pp) = level;
-	    if (!FRIBIDI_IS_NEUTRAL (override))
-	      RL_TYPE (pp) = override;
-	  }
-	/* X8. All explicit directional embeddings and overrides are
-	   completely terminated at the end of each paragraph. Paragraph
-	   separators are not included in the embedding. */
-	/* This function is running on a single paragraph, so we can do
-	   X8 after all the input is processed. */
-      }
+    for_run_list (pp, main_run_list)
+    {
+      FriBidiCharType this_type = RL_TYPE (pp);
+      if (FRIBIDI_IS_EXPLICIT_OR_BN (this_type))
+	{
+	  register FriBidiLevel level_before = level;
+
+	  if (FRIBIDI_IS_STRONG (this_type))
+	    {			/* LRE, RLE, LRO, RLO */
+	      /* 1. Explicit Embeddings */
+	      /*   X2. With each RLE, compute the least greater odd
+	         embedding level. */
+	      /*   X3. With each LRE, compute the least greater even
+	         embedding level. */
+	      /* 2. Explicit Overrides */
+	      /*   X4. With each RLO, compute the least greater odd
+	         embedding level. */
+	      /*   X5. With each LRO, compute the least greater even
+	         embedding level. */
+	      new_override = FRIBIDI_EXPLICIT_TO_OVERRIDE_DIR (this_type);
+	      for (i = RL_LEN (pp); i; i--)
+		{
+		  new_level =
+		    ((level + FRIBIDI_DIR_TO_LEVEL (this_type) + 2) & ~1) -
+		    FRIBIDI_DIR_TO_LEVEL (this_type);
+		  PUSH_STATUS;
+		}
+	    }
+	  else if (this_type == FRIBIDI_TYPE_PDF)
+	    {
+	      /* 3. Terminating Embeddings and overrides */
+	      /*   X7. With each PDF, determine the matching embedding or
+	         override code. */
+	      for (i = RL_LEN (pp); i; i--)
+		POP_STATUS;
+	    }
+	  /* X9. Remove all RLE, LRE, RLO, LRO, PDF, and BN codes. */
+	  /* Remove element and add it to explicits_list */
+	  temp_link.next = pp->next;
+	  pp->level = FRIBIDI_SENTINEL;
+	  move_node_before (pp, explicits_list);
+	  pp = &temp_link;
+	}
+      else
+	{
+	  /* X6. For all types besides RLE, LRE, RLO, LRO, and PDF:
+	     a. Set the level of the current character to the current
+	     embedding level.
+	     b. Whenever the directional override status is not neutral,
+	     reset the current character type to the directional override
+	     status. */
+	  RL_LEVEL (pp) = level;
+	  if (!FRIBIDI_IS_NEUTRAL (override))
+	    RL_TYPE (pp) = override;
+	}
+      /* X8. All explicit directional embeddings and overrides are
+         completely terminated at the end of each paragraph. Paragraph
+         separators are not included in the embedding. */
+      /* This function is running on a single paragraph, so we can do
+         X8 after all the input is processed. */
+    }
 
     /* Implementing X8. It has no effect on a single paragraph! */
     level = base_level;
@@ -519,65 +504,66 @@ fribidi_analyse_string (
   /* Resolving Implicit Levels can be done out of X10 loop, so only change
      of Resolving Weak Types and Resolving Neutral Types is needed. */
 
-  compact_list (type_rl_list);
+  compact_list (main_run_list);
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
-      print_types_re (type_rl_list);
+      print_types_re (main_run_list);
       print_bidi_string (str, len);
-      print_resolved_levels (type_rl_list);
-      print_resolved_types (type_rl_list);
+      print_resolved_levels (main_run_list);
+      print_resolved_types (main_run_list);
     }
 # endif	/* DEBUG */
 
   /* 4. Resolving weak types */
   DBG ("Resolving weak types");
   {
-    FriBidiCharType last_strong, prev_type_org;
+    FriBidiCharType last_strong, prev_type_orig;
     fribidi_boolean w4;
 
     last_strong = base_dir;
 
-    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-      {
-	FriBidiCharType prev_type, this_type, next_type;
+    for_run_list (pp, main_run_list)
+    {
+      FriBidiCharType prev_type, this_type, next_type;
 
-	prev_type = PREV_TYPE_OR_SOR (pp);
-	this_type = RL_TYPE (pp);
-	next_type = NEXT_TYPE_OR_EOR (pp);
+      prev_type = PREV_TYPE_OR_SOR (pp);
+      this_type = RL_TYPE (pp);
+      next_type = NEXT_TYPE_OR_EOR (pp);
 
-	if (FRIBIDI_IS_STRONG (prev_type))
-	  last_strong = prev_type;
+      if (FRIBIDI_IS_STRONG (prev_type))
+	last_strong = prev_type;
 
-	/* W1. NSM
-	   Examine each non-spacing mark (NSM) in the level run, and change the
-	   type of the NSM to the type of the previous character. If the NSM
-	   is at the start of the level run, it will get the type of sor. */
-	/* Implementation note: it is important that if the previous character
-	   is not sor, then we should merge this run with the previous,
-	   because of rules like W5, that we assume all of a sequence of
-	   adjacent ETs are in one FriBidiRun. */
-	if (this_type == FRIBIDI_TYPE_NSM)
-	  {
-	    if (RL_LEVEL (pp->prev) == RL_LEVEL (pp))
-	      pp = merge_with_prev (pp);
-	    else
-	      RL_TYPE (pp) = prev_type;
-	    continue;		/* As we know the next condition cannot be true. */
-	  }
+      /* W1. NSM
+         Examine each non-spacing mark (NSM) in the level run, and change the
+         type of the NSM to the type of the previous character. If the NSM
+         is at the start of the level run, it will get the type of sor. */
+      /* Implementation note: it is important that if the previous character
+         is not sor, then we should merge this run with the previous,
+         because of rules like W5, that we assume all of a sequence of
+         adjacent ETs are in one FriBidiRun. */
+      if (this_type == FRIBIDI_TYPE_NSM)
+	{
+	  if (RL_LEVEL (pp->prev) == RL_LEVEL (pp))
+	    pp = merge_with_prev (pp);
+	  else
+	    RL_TYPE (pp) = prev_type;
+	  continue;		/* As we know the next condition cannot be true. */
+	}
 
-	/* W2: European numbers. */
-	if (this_type == FRIBIDI_TYPE_EN && last_strong == FRIBIDI_TYPE_AL)
-	  {
-	    RL_TYPE (pp) = FRIBIDI_TYPE_AN;
+      /* W2: European numbers. */
+      if (this_type == FRIBIDI_TYPE_EN && last_strong == FRIBIDI_TYPE_AL)
+	{
+	  RL_TYPE (pp) = FRIBIDI_TYPE_AN;
 
-	    /* Resolving dependency of loops for rules W1 and W2, so we
-	       can merge them in one loop. */
-	    if (next_type == FRIBIDI_TYPE_NSM)
-	      RL_TYPE (pp->next) = FRIBIDI_TYPE_AN;
-	  }
-      }
+	  /* Resolving dependency of loops for rules W1 and W2, so we
+	     can merge them in one loop. */
+	  if (next_type == FRIBIDI_TYPE_NSM)
+	    RL_TYPE (pp->next) = FRIBIDI_TYPE_AN;
+	}
+    }
 
 
     last_strong = base_dir;
@@ -586,78 +572,80 @@ fribidi_analyse_string (
        through "w4". */
     w4 = true;
     /* Resolving dependency of loops for rules W4 and W5 with W7,
-       W7 may change an EN to L but it sets the prev_type_org if needed,
+       W7 may change an EN to L but it sets the prev_type_orig if needed,
        so W4 and W5 in next turn can still do their works. */
-    prev_type_org = FRIBIDI_TYPE_ON;
+    prev_type_orig = FRIBIDI_TYPE_ON;
 
-    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-      {
-	FriBidiCharType prev_type, this_type, next_type;
+    for_run_list (pp, main_run_list)
+    {
+      FriBidiCharType prev_type, this_type, next_type;
 
-	prev_type = PREV_TYPE_OR_SOR (pp);
-	this_type = RL_TYPE (pp);
-	next_type = NEXT_TYPE_OR_EOR (pp);
+      prev_type = PREV_TYPE_OR_SOR (pp);
+      this_type = RL_TYPE (pp);
+      next_type = NEXT_TYPE_OR_EOR (pp);
 
-	if (FRIBIDI_IS_STRONG (prev_type))
-	  last_strong = prev_type;
+      if (FRIBIDI_IS_STRONG (prev_type))
+	last_strong = prev_type;
 
-	/* W3: Change ALs to R. */
-	if (this_type == FRIBIDI_TYPE_AL)
-	  {
-	    RL_TYPE (pp) = FRIBIDI_TYPE_RTL;
-	    w4 = true;
-	    prev_type_org = FRIBIDI_TYPE_ON;
-	    continue;
-	  }
+      /* W3: Change ALs to R. */
+      if (this_type == FRIBIDI_TYPE_AL)
+	{
+	  RL_TYPE (pp) = FRIBIDI_TYPE_RTL;
+	  w4 = true;
+	  prev_type_orig = FRIBIDI_TYPE_ON;
+	  continue;
+	}
 
-	/* W4. A single european separator changes to a european number.
-	   A single common separator between two numbers of the same type
-	   changes to that type. */
-	if (w4
-	    && RL_LEN (pp) == 1 && FRIBIDI_IS_ES_OR_CS (this_type)
-	    && FRIBIDI_IS_NUMBER (prev_type_org) && prev_type_org == next_type
-	    && (prev_type_org == FRIBIDI_TYPE_EN
-		|| this_type == FRIBIDI_TYPE_CS))
-	  {
-	    RL_TYPE (pp) = prev_type;
-	    this_type = RL_TYPE (pp);
-	  }
-	w4 = true;
+      /* W4. A single european separator changes to a european number.
+         A single common separator between two numbers of the same type
+         changes to that type. */
+      if (w4
+	  && RL_LEN (pp) == 1 && FRIBIDI_IS_ES_OR_CS (this_type)
+	  && FRIBIDI_IS_NUMBER (prev_type_orig)
+	  && prev_type_orig == next_type
+	  && (prev_type_orig == FRIBIDI_TYPE_EN
+	      || this_type == FRIBIDI_TYPE_CS))
+	{
+	  RL_TYPE (pp) = prev_type;
+	  this_type = RL_TYPE (pp);
+	}
+      w4 = true;
 
-	/* W5. A sequence of European terminators adjacent to European
-	   numbers changes to All European numbers. */
-	if (this_type == FRIBIDI_TYPE_ET
-	    && (prev_type_org == FRIBIDI_TYPE_EN
-		|| next_type == FRIBIDI_TYPE_EN))
-	  {
-	    RL_TYPE (pp) = FRIBIDI_TYPE_EN;
-	    w4 = false;
-	    this_type = RL_TYPE (pp);
-	  }
+      /* W5. A sequence of European terminators adjacent to European
+         numbers changes to All European numbers. */
+      if (this_type == FRIBIDI_TYPE_ET
+	  && (prev_type_orig == FRIBIDI_TYPE_EN
+	      || next_type == FRIBIDI_TYPE_EN))
+	{
+	  RL_TYPE (pp) = FRIBIDI_TYPE_EN;
+	  w4 = false;
+	  this_type = RL_TYPE (pp);
+	}
 
-	/* W6. Otherwise change separators and terminators to other neutral. */
-	if (FRIBIDI_IS_NUMBER_SEPARATOR_OR_TERMINATOR (this_type))
-	  RL_TYPE (pp) = FRIBIDI_TYPE_ON;
+      /* W6. Otherwise change separators and terminators to other neutral. */
+      if (FRIBIDI_IS_NUMBER_SEPARATOR_OR_TERMINATOR (this_type))
+	RL_TYPE (pp) = FRIBIDI_TYPE_ON;
 
-	/* W7. Change european numbers to L. */
-	if (this_type == FRIBIDI_TYPE_EN && last_strong == FRIBIDI_TYPE_LTR)
-	  {
-	    RL_TYPE (pp) = FRIBIDI_TYPE_LTR;
-	    prev_type_org = (RL_LEVEL (pp) == RL_LEVEL (pp->next) ?
-			     FRIBIDI_TYPE_EN : FRIBIDI_TYPE_ON);
-	  }
-	else
-	  prev_type_org = PREV_TYPE_OR_SOR (pp->next);
-      }
+      /* W7. Change european numbers to L. */
+      if (this_type == FRIBIDI_TYPE_EN && last_strong == FRIBIDI_TYPE_LTR)
+	{
+	  RL_TYPE (pp) = FRIBIDI_TYPE_LTR;
+	  prev_type_orig = (RL_LEVEL (pp) == RL_LEVEL (pp->next) ?
+			    FRIBIDI_TYPE_EN : FRIBIDI_TYPE_ON);
+	}
+      else
+	prev_type_orig = PREV_TYPE_OR_SOR (pp->next);
+    }
   }
 
-  compact_neutrals (type_rl_list);
+  compact_neutrals (main_run_list);
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
-      print_resolved_levels (type_rl_list);
-      print_resolved_types (type_rl_list);
+      print_resolved_levels (main_run_list);
+      print_resolved_types (main_run_list);
     }
 # endif	/* DEBUG */
 
@@ -666,30 +654,31 @@ fribidi_analyse_string (
   {
     /* N1. and N2.
        For each neutral, resolve it. */
-    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-      {
-	FriBidiCharType prev_type, this_type, next_type;
+    for_run_list (pp, main_run_list)
+    {
+      FriBidiCharType prev_type, this_type, next_type;
 
-	/* "European and arabic numbers are treated as though they were R"
-	   FRIBIDI_CHANGE_NUMBER_TO_RTL does this. */
-	this_type = FRIBIDI_CHANGE_NUMBER_TO_RTL (RL_TYPE (pp));
-	prev_type = FRIBIDI_CHANGE_NUMBER_TO_RTL (PREV_TYPE_OR_SOR (pp));
-	next_type = FRIBIDI_CHANGE_NUMBER_TO_RTL (NEXT_TYPE_OR_EOR (pp));
+      /* "European and Arabic numbers are treated as though they were R"
+         FRIBIDI_CHANGE_NUMBER_TO_RTL does this. */
+      this_type = FRIBIDI_CHANGE_NUMBER_TO_RTL (RL_TYPE (pp));
+      prev_type = FRIBIDI_CHANGE_NUMBER_TO_RTL (PREV_TYPE_OR_SOR (pp));
+      next_type = FRIBIDI_CHANGE_NUMBER_TO_RTL (NEXT_TYPE_OR_EOR (pp));
 
-	if (FRIBIDI_IS_NEUTRAL (this_type))
-	  RL_TYPE (pp) = (prev_type == next_type) ?
-	    /* N1. */ prev_type :
-	    /* N2. */ FRIBIDI_EMBEDDING_DIRECTION (pp);
-      }
+      if (FRIBIDI_IS_NEUTRAL (this_type))
+	RL_TYPE (pp) = (prev_type == next_type) ?
+	  /* N1. */ prev_type :
+	  /* N2. */ FRIBIDI_EMBEDDING_DIRECTION (pp);
+    }
   }
 
-  compact_list (type_rl_list);
+  compact_list (main_run_list);
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
-      print_resolved_levels (type_rl_list);
-      print_resolved_types (type_rl_list);
+      print_resolved_levels (main_run_list);
+      print_resolved_types (main_run_list);
     }
 # endif	/* DEBUG */
 
@@ -698,77 +687,83 @@ fribidi_analyse_string (
   {
     max_level = base_level;
 
-    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-      {
-	FriBidiCharType this_type;
-	int level;
+    for_run_list (pp, main_run_list)
+    {
+      FriBidiCharType this_type;
+      int level;
 
-	this_type = RL_TYPE (pp);
-	level = RL_LEVEL (pp);
+      this_type = RL_TYPE (pp);
+      level = RL_LEVEL (pp);
 
-	/* I1. Even */
-	/* I2. Odd */
-	if (FRIBIDI_IS_NUMBER (this_type))
-	  RL_LEVEL (pp) = (level + 2) & ~1;
-	else
-	  RL_LEVEL (pp) = (level ^ FRIBIDI_DIR_TO_LEVEL (this_type)) +
-	    (level & 1);
+      /* I1. Even */
+      /* I2. Odd */
+      if (FRIBIDI_IS_NUMBER (this_type))
+	RL_LEVEL (pp) = (level + 2) & ~1;
+      else
+	RL_LEVEL (pp) = (level ^ FRIBIDI_DIR_TO_LEVEL (this_type)) +
+	  (level & 1);
 
-	if (RL_LEVEL (pp) > max_level)
-	  max_level = RL_LEVEL (pp);
-      }
+      if (RL_LEVEL (pp) > max_level)
+	max_level = RL_LEVEL (pp);
+    }
   }
 
-  compact_list (type_rl_list);
+  compact_list (main_run_list);
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
       print_bidi_string (str, len);
-      print_resolved_levels (type_rl_list);
-      print_resolved_types (type_rl_list);
+      print_resolved_levels (main_run_list);
+      print_resolved_types (main_run_list);
     }
 # endif	/* DEBUG */
 
-/* Reinsert the explicit codes & bn's that already removed, from the
-   explicits_list to type_rl_list. */
+/* Reinsert the explicit codes & BN's that are already removed, from the
+   explicits_list to main_run_list. */
   DBG ("Reinserting explicit codes");
   {
-    FriBidiRun *p;
-
-    shadow_run_list (type_rl_list, explicits_list);
-    p = type_rl_list->next;
-    if (p->level < 0)
+    register FriBidiRun *p;
+    register fribidi_boolean stat =
+      shadow_run_list (main_run_list, explicits_list, true);
+    explicits_list = NULL;
+    if UNLIKELY
+      (!stat) goto out;
+    p = main_run_list->next;
+    if (p != main_run_list && p->level == FRIBIDI_SENTINEL)
       p->level = base_level;
-    for (; p->next; p = p->next)
-      if (p->level < 0)
-	p->level = p->prev->level;
+    for_run_list (p, main_run_list) if (p->level == FRIBIDI_SENTINEL)
+      p->level = p->prev->level;
   }
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
-      print_types_re (type_rl_list);
-      print_resolved_levels (type_rl_list);
-      print_resolved_types (type_rl_list);
+      print_types_re (main_run_list);
+      print_resolved_levels (main_run_list);
+      print_resolved_types (main_run_list);
     }
 # endif	/* DEBUG */
 
   DBG ("Reset the embedding levels");
   {
-    int j, k, state, pos;
-    FriBidiRun *p, *q, *list, *list_end;
+    register int j, k, state, pos;
+    register FriBidiRun *p, *q, *list;
 
     /* L1. Reset the embedding levels of some chars. */
-    init_list (&list, &list_end);
-    q = list_end;
+    list = new_run_list ();
+    if UNLIKELY
+      (!list) goto out;
+    q = list;
     state = 1;
     pos = len - 1;
     for (j = len - 1; j >= -1; j--)
       {
-	/* if state is on at the very first of string, do this too. */
+	/* if state is on at the very first of the string, do this too. */
 	if (j >= 0)
-	  k = fribidi_get_type (str[j]);
+	  k = fribidi_get_bidi_type (str[j]);
 	else
 	  k = FRIBIDI_TYPE_ON;
 	if (!state && FRIBIDI_IS_SEPARATOR (k))
@@ -780,85 +775,86 @@ fribidi_analyse_string (
 	  {
 	    state = 0;
 	    p = new_run ();
-	    p->prev = p->next = NULL;
+	    if UNLIKELY
+	      (!p)
+	      {
+		free_run_list (list);
+		goto out;
+	      }
 	    p->pos = j + 1;
 	    p->len = pos - j;
 	    p->type = base_dir;
 	    p->level = base_level;
-	    move_run_before (p, q);
+	    move_node_before (p, q);
 	    q = p;
 	  }
       }
-    shadow_run_list (type_rl_list, list);
+    if UNLIKELY
+      (!shadow_run_list (main_run_list, list, false)) goto out;
   }
 
 # if DEBUG
-  if (fribidi_debug_status ())
+  if UNLIKELY
+    (fribidi_debug_status ())
     {
-      print_types_re (type_rl_list);
-      print_resolved_levels (type_rl_list);
-      print_resolved_types (type_rl_list);
+      print_types_re (main_run_list);
+      print_resolved_levels (main_run_list);
+      print_resolved_types (main_run_list);
     }
 # endif	/* DEBUG */
 
-  *ptype_rl_list = type_rl_list;
+  status = true;
+  *pmain_run_list = main_run_list;
   *pmax_level = max_level;
   *pbase_dir = base_dir;
 
   DBG ("Leaving fribidi_analyse_string");
-  return;
+out:
+  if UNLIKELY
+    (explicits_list) free_run_list (explicits_list);
+  if UNLIKELY
+    (!status && main_run_list) free_run_list (main_run_list);
+
+  return status;
 }
 
-/*======================================================================
- *  Frees up the rl_list, must be called after each call to
- *  fribidi_analyse_string(), after the list is not needed anymore.
- *----------------------------------------------------------------------*/
 static void
-free_rl_list (
-  FriBidiRun * type_rl_list
+bidi_string_reverse (
+  FriBidiChar *str,
+  FriBidiStrIndex len
 )
 {
+  FriBidiStrIndex i;
 
-  FriBidiRun *pp;
+  fribidi_assert (str);
 
-  DBG ("Entering free_rl_list");
-
-  if (!type_rl_list)
+  for (i = 0; i < len / 2; i++)
     {
-      DBG ("Leaving free_rl_list");
-      return;
+      FriBidiChar tmp = str[i];
+      str[i] = str[len - 1 - i];
+      str[len - 1 - i] = tmp;
     }
-
-#if USE_SIMPLE_MALLOC
-  pp = type_rl_list;
-  while (pp)
-    {
-      FriBidiRun *p;
-
-      p = pp;
-      pp = pp->next;
-      free_run (p);
-    };
-#else /* !USE_SIMPLE_MALLOC */
-  for (pp = type_rl_list->next; pp->next; pp = pp->next)
-    /* Nothing */ ;
-  pp->next = free_runs;
-  free_runs = type_rl_list;
-  type_rl_list = NULL;
-#endif /* !USE_SIMPLE_MALLOC */
-
-  DBG ("Leaving free_rl_list");
-  return;
 }
 
-/*======================================================================
- *  Here starts the exposed front end functions.
- *----------------------------------------------------------------------*/
+static void
+index_array_reverse (
+  FriBidiStrIndex *arr,
+  FriBidiStrIndex len
+)
+{
+  FriBidiStrIndex i;
 
-/*======================================================================
- *  fribidi_remove_bidi_marks() removes bidirectional marks, and returns
- *  the new length, updates each of other inputs if not NULL.
- *----------------------------------------------------------------------*/
+  fribidi_assert (arr);
+
+  for (i = 0; i < len / 2; i++)
+    {
+      FriBidiStrIndex tmp = arr[i];
+      arr[i] = arr[len - 1 - i];
+      arr[len - 1 - i] = tmp;
+    }
+}
+
+
 FRIBIDI_ENTRY FriBidiStrIndex
 fribidi_remove_bidi_marks (
   FriBidiChar *str,
@@ -885,7 +881,7 @@ fribidi_remove_bidi_marks (
 
   j = 0;
   for (i = 0; i < length; i++)
-    if (!FRIBIDI_IS_EXPLICIT (fribidi_get_type (str[i]))
+    if (!FRIBIDI_IS_EXPLICIT (fribidi_get_bidi_type (str[i]))
 	&& str[i] != FRIBIDI_CHAR_LRM && str[i] != FRIBIDI_CHAR_RLM)
       {
 	str[j] = str[i];
@@ -915,10 +911,6 @@ fribidi_remove_bidi_marks (
 }
 
 
-/*======================================================================
- *  fribidi_log2vis() calls the function_analyse_string() and then
- *  does reordering and fills in the output strings.
- *----------------------------------------------------------------------*/
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_log2vis (
   /* input */
@@ -933,41 +925,57 @@ fribidi_log2vis (
   FriBidiLevel *embedding_level_list
 )
 {
-  FriBidiRun *type_rl_list, *pp = NULL;
+  FriBidiRun *main_run_list = NULL, *pp = NULL;
   FriBidiLevel max_level;
   fribidi_boolean private_V_to_L = false;
+  fribidi_boolean status = true;
 
-  DBG ("Entering fribidi_log2vis()\n");
+  DBG ("Entering fribidi_log2vis()");
+
+  fribidi_assert (str);
+  fribidi_assert (pbase_dir);
 
   if (len == 0)
+    goto out;
+
+  if UNLIKELY
+    (len > FRIBIDI_MAX_STRING_LENGTH && (position_V_to_L_list ||
+					 position_L_to_V_list))
     {
-      DBG ("Leaving fribidi_log2vis()\n");
-      return true;
+#     if DEBUG
+      MSG2 (FRIBIDI ": cannot handle strings > %ld characters\n",
+	    (long) FRIBIDI_MAX_STRING_LENGTH);
+#     endif /* DEBUG */
+      status = false;
+      goto out;
+    }
+
+  if UNLIKELY
+    (!fribidi_analyse_string (str, len, pbase_dir,
+			      /* output */
+			      &main_run_list, &max_level))
+    {
+      status = false;
+      goto out;
     }
 
   /* If l2v is to be calculated we must have v2l as well. If it is not
      given by the caller, we have to make a private instance of it. */
   if (position_L_to_V_list && !position_V_to_L_list)
     {
-      private_V_to_L = true;
       position_V_to_L_list =
 	(FriBidiStrIndex *) fribidi_malloc (sizeof (FriBidiStrIndex) * len);
+      if (!position_V_to_L_list)
+	{
+	  status = false;
+	  goto out;
+	}
+      private_V_to_L = true;
     }
 
-  if (len > FRIBIDI_MAX_STRING_LENGTH && position_V_to_L_list)
-    {
-#     if DEBUG
-      MSG2 (FRIBIDI ": cannot handle strings > %ld characters\n",
-	    (long) FRIBIDI_MAX_STRING_LENGTH);
-#     endif /* DEBUG */
-      return false;
-    }
-  fribidi_analyse_string (str, len, pbase_dir,
-			  /* output */
-			  &type_rl_list, &max_level);
 
   /* 7. Reordering resolved levels */
-  DBG ("Reordering resolved levels\n");
+  DBG ("Reordering resolved levels");
   {
     FriBidiLevel level_idx;
     FriBidiStrIndex i;
@@ -975,37 +983,33 @@ fribidi_log2vis (
     /* Set up the ordering array to sorted order */
     if (position_V_to_L_list)
       {
-	DBG ("  Initialize position_V_to_L_list\n");
+	DBG ("  Initialize position_V_to_L_list");
 	for (i = 0; i < len; i++)
 	  position_V_to_L_list[i] = i;
-	DBG ("  Initialize position_V_to_L_list, Done\n");
+	DBG ("  Initialize position_V_to_L_list, Done");
       }
     /* Copy the logical string to the visual */
     if (visual_str)
       {
-	DBG ("  Initialize visual_str\n");
+	DBG ("  Initialize visual_str");
 	for (i = 0; i < len; i++)
 	  visual_str[i] = str[i];
 	visual_str[len] = 0;
-	DBG ("  Initialize visual_str, Done\n");
+	DBG ("  Initialize visual_str, Done");
       }
 
     /* Assign the embedding level array */
     if (embedding_level_list)
       {
-	DBG ("  Fill the embedding levels array\n");
-	for (pp = type_rl_list->next; pp->next; pp = pp->next)
-	  {
-	    FriBidiStrIndex i, pos, len;
-	    FriBidiLevel level;
-
-	    pos = pp->pos;
-	    len = pp->len;
-	    level = pp->level;
-	    for (i = 0; i < len; i++)
-	      embedding_level_list[pos + i] = level;
-	  }
-	DBG ("  Fill the embedding levels array, Done\n");
+	DBG ("  Fill the embedding levels array");
+	for_run_list (pp, main_run_list)
+	{
+	  register FriBidiStrIndex i, pos = pp->pos, len = pp->len;
+	  register FriBidiLevel level = pp->level;
+	  for (i = 0; i < len; i++)
+	    embedding_level_list[pos + i] = level;
+	}
+	DBG ("  Fill the embedding levels array, Done");
       }
 
     /* Reorder both the outstring and the order array */
@@ -1014,125 +1018,121 @@ fribidi_log2vis (
 	if (fribidi_mirroring_status () && visual_str)
 	  {
 	    /* L4. Mirror all characters that are in odd levels and have mirrors. */
-	    DBG ("  Mirroring\n");
-	    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-	      {
-		if (pp->level & 1)
-		  {
-		    FriBidiStrIndex i;
-		    for (i = RL_POS (pp); i < RL_POS (pp) + RL_LEN (pp); i++)
-		      {
-			FriBidiChar mirrored_ch;
-			if (fribidi_get_mirror_char
-			    (visual_str[i], &mirrored_ch))
-			  visual_str[i] = mirrored_ch;
-		      }
-		  }
-	      }
-	    DBG ("  Mirroring, Done\n");
+	    DBG ("  Mirroring");
+	    for_run_list (pp, main_run_list)
+	    {
+	      if (pp->level & 1)
+		{
+		  FriBidiStrIndex i;
+		  for (i = RL_POS (pp); i < RL_POS (pp) + RL_LEN (pp); i++)
+		    {
+		      FriBidiChar mirrored_ch;
+		      if (fribidi_get_mirror_char
+			  (visual_str[i], &mirrored_ch))
+			visual_str[i] = mirrored_ch;
+		    }
+		}
+	    }
+	    DBG ("  Mirroring, Done");
 	  }
 
 	if (fribidi_reorder_nsm_status ())
 	  {
 	    /* L3. Reorder NSMs. */
-	    DBG ("  Reordering NSM sequences\n");
+	    DBG ("  Reordering NSM sequences");
 	    /* We apply this rule before L2, so go backward in odd levels. */
-	    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-	      {
-		if (pp->level & 1)
-		  {
-		    FriBidiStrIndex i, seq_end = 0;
-		    fribidi_boolean is_nsm_seq;
+	    for_run_list (pp, main_run_list)
+	    {
+	      if (pp->level & 1)
+		{
+		  FriBidiStrIndex i, seq_end = 0;
+		  fribidi_boolean is_nsm_seq;
 
-		    is_nsm_seq = false;
-		    for (i = RL_POS (pp) + RL_LEN (pp) - 1; i >= RL_POS (pp);
-			 i--)
-		      {
-			FriBidiCharType this_type;
+		  is_nsm_seq = false;
+		  for (i = RL_POS (pp) + RL_LEN (pp) - 1; i >= RL_POS (pp);
+		       i--)
+		    {
+		      FriBidiCharType this_type;
 
-			this_type = fribidi_get_type (str[i]);
-			if (is_nsm_seq && this_type != FRIBIDI_TYPE_NSM)
-			  {
-			    if (visual_str)
-			      {
-				bidi_string_reverse (visual_str + i,
-						     seq_end - i + 1);
-			      }
-			    if (position_V_to_L_list)
-			      {
-				index_array_reverse (position_V_to_L_list + i,
-						     seq_end - i + 1);
-			      }
-			    is_nsm_seq = 0;
-			  }
-			else if (!is_nsm_seq && this_type == FRIBIDI_TYPE_NSM)
-			  {
-			    seq_end = i;
-			    is_nsm_seq = 1;
-			  }
-		      }
-		    if (is_nsm_seq)
-		      {
-			DBG
-			  ("Warning: NSMs at the beggining of run level.\n");
-		      }
-		  }
-	      }
-	    DBG ("  Reordering NSM sequences, Done\n");
+		      this_type = fribidi_get_bidi_type (str[i]);
+		      if (is_nsm_seq && this_type != FRIBIDI_TYPE_NSM)
+			{
+			  if (visual_str)
+			    {
+			      bidi_string_reverse (visual_str + i,
+						   seq_end - i + 1);
+			    }
+			  if (position_V_to_L_list)
+			    {
+			      index_array_reverse (position_V_to_L_list + i,
+						   seq_end - i + 1);
+			    }
+			  is_nsm_seq = 0;
+			}
+		      else if (!is_nsm_seq && this_type == FRIBIDI_TYPE_NSM)
+			{
+			  seq_end = i;
+			  is_nsm_seq = 1;
+			}
+		    }
+		  if (is_nsm_seq)
+		    {
+		      DBG ("Warning: NSMs at the beggining of level run.\n");
+		    }
+		}
+	    }
+	    DBG ("  Reordering NSM sequences, Done");
 	  }
 
 	/* L2. Reorder. */
-	DBG ("  Reordering\n");
+	DBG ("  Reordering");
 	for (level_idx = max_level; level_idx > 0; level_idx--)
 	  {
-	    for (pp = type_rl_list->next; pp->next; pp = pp->next)
-	      {
-		if (RL_LEVEL (pp) >= level_idx)
-		  {
-		    /* Find all stretches that are >= level_idx */
-		    FriBidiStrIndex len = RL_LEN (pp), pos = RL_POS (pp);
-		    FriBidiRun *pp1 = pp->next;
-		    while (pp1->next && RL_LEVEL (pp1) >= level_idx)
-		      {
-			len += RL_LEN (pp1);
-			pp1 = pp1->next;
-		      }
-		    pp = pp1->prev;
-		    if (visual_str)
-		      bidi_string_reverse (visual_str + pos, len);
-		    if (position_V_to_L_list)
-		      index_array_reverse (position_V_to_L_list + pos, len);
-		  }
-	      }
+	    for_run_list (pp, main_run_list)
+	    {
+	      if (RL_LEVEL (pp) >= level_idx)
+		{
+		  /* Find all stretches that are >= level_idx */
+		  register FriBidiStrIndex len = pp->len, pos = pp->pos;
+		  register FriBidiRun *pp1 = pp->next;
+		  while (pp1->next && pp1->level >= level_idx)
+		    {
+		      len += pp1->len;
+		      pp1 = pp1->next;
+		    }
+		  pp = pp1->prev;
+		  if (visual_str)
+		    bidi_string_reverse (visual_str + pos, len);
+		  if (position_V_to_L_list)
+		    index_array_reverse (position_V_to_L_list + pos, len);
+		}
+	    }
 	  }
-	DBG ("  Reordering, Done\n");
+	DBG ("  Reordering, Done");
       }
 
     /* Convert the v2l list to l2v */
     if (position_L_to_V_list)
       {
-	DBG ("  Converting v2l list to l2v\n");
+	DBG ("  Converting v2l list to l2v");
 	for (i = 0; i < len; i++)
 	  position_L_to_V_list[position_V_to_L_list[i]] = i;
-	DBG ("  Converting v2l list to l2v, Done\n");
+	DBG ("  Converting v2l list to l2v, Done");
       }
   }
-  DBG ("Reordering resolved levels, Done\n");
+  DBG ("Reordering resolved levels, Done");
 
+  DBG ("Leaving fribidi_log2vis()");
+out:
   if (private_V_to_L)
     fribidi_free (position_V_to_L_list);
 
-  free_rl_list (type_rl_list);
+  free_run_list (main_run_list);
 
-  DBG ("Leaving fribidi_log2vis()\n");
-  return true;
+  return status;
 
 }
 
-/*======================================================================
- *  fribidi_log2vis_get_embedding_levels() is used in order to just get
- *  the embedding levels.
- *----------------------------------------------------------------------*/
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_log2vis_get_embedding_levels (
   /* input */
@@ -1144,33 +1144,40 @@ fribidi_log2vis_get_embedding_levels (
   FriBidiLevel *embedding_level_list
 )
 {
-  FriBidiRun *type_rl_list, *pp;
+  FriBidiRun *main_run_list, *pp;
   FriBidiLevel max_level;
+  fribidi_boolean status = true;
 
-  DBG ("Entering fribidi_log2vis_get_embedding_levels()\n");
+  DBG ("Entering fribidi_log2vis_get_embedding_levels()");
 
-  if (len == 0)
+  fribidi_assert (str);
+  fribidi_assert (pbase_dir);
+
+  if UNLIKELY
+    (len == 0) goto out;
+
+  if UNLIKELY
+    (!fribidi_analyse_string (str, len, pbase_dir,
+			      /* output */
+			      &main_run_list, &max_level))
     {
-      DBG ("Leaving fribidi_log2vis_get_embedding_levels()\n");
-      return true;
+      status = false;
+      goto out;
     }
 
-  fribidi_analyse_string (str, len, pbase_dir,
-			  /* output */
-			  &type_rl_list, &max_level);
+  for_run_list (pp, main_run_list)
+  {
+    register FriBidiStrIndex i, pos = pp->pos, len = pp->len;
+    register FriBidiLevel level = pp->level;
+    for (i = 0; i < len; i++)
+      embedding_level_list[pos++] = level;
+  }
 
-  for (pp = type_rl_list->next; pp->next; pp = pp->next)
-    {
-      FriBidiStrIndex i, pos = RL_POS (pp), len = RL_LEN (pp);
-      FriBidiLevel level = RL_LEVEL (pp);
-      for (i = 0; i < len; i++)
-	embedding_level_list[pos + i] = level;
-    }
+  DBG ("Leaving fribidi_log2vis_get_embedding_levels()");
+out:
+  free_run_list (main_run_list);
 
-  free_rl_list (type_rl_list);
-
-  DBG ("Leaving fribidi_log2vis_get_embedding_levels()\n");
-  return true;
+  return status;
 }
 
 /* Editor directions:

@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: configure.ac,v 1.3 2004-04-25 19:13:04 behdad Exp $
+## $Id: configure.ac,v 1.4 2004-05-03 22:05:19 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-04-25 19:13:04 $
-## $Revision: 1.3 $
+## $Date: 2004-05-03 22:05:19 $
+## $Revision: 1.4 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 ##                                               -*- Autoconf -*-
@@ -41,7 +41,7 @@ m4_define(fribidi_rpm_release, 1)dnl
 dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.3 2004-04-25 19:13:04 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.4 2004-05-03 22:05:19 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -101,11 +101,12 @@ AC_PROG_LIBTOOL
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_TIME
-AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h stdbool.h wchar.h sys/times.h])
+AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h stdbool.h wchar.h sys/times.h asm/page.h])
 
 # Checks for typedefs and structures.
 AC_C_CONST
 AC_C_INLINE
+AC_C_STRINGIZE
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(void *)

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -53,7 +53,8 @@
  *
  * Returns: Non-zero if it was successful, or zero if any error occured.
  */
-FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis (
+FRIBIDI_ENTRY fribidi_boolean
+fribidi_log2vis (
   const FriBidiChar *str,	/* input logical string */
   FriBidiStrIndex len,		/* input string length */
   FriBidiCharType *pbase_dir,	/* requested and resolved paragraph
@@ -65,7 +66,7 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis (
 						 * back to the logical string
 						 * positions */
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
-);
+) FRIBIDI_GNUC_WARN_UNUSED;
 
 #define fribidi_log2vis_get_embedding_levels FRIBIDI_NAMESPACE(log2vis_get_embedding_levels)
 /* fribidi_log2vis_get_embedding_levels - get bidi embedding levels
@@ -75,13 +76,13 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis (
  *
  * Returns: Non-zero if it was successful, or zero if any error occured.
  */
-FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis_get_embedding_levels (
+     FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis_get_embedding_levels (
   const FriBidiChar *str,	/* input logical string */
   FriBidiStrIndex len,		/* input string length */
   FriBidiCharType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
-);
+) FRIBIDI_GNUC_WARN_UNUSED;
 
 #define fribidi_remove_bidi_marks FRIBIDI_NAMESPACE(remove_bidi_marks)
 /* fribidi_remove_bidi_marks - remove bidi marks out an string
@@ -96,13 +97,13 @@ FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis_get_embedding_levels (
  *
  * Returns: New length of the string.
  */
-FRIBIDI_ENTRY FriBidiStrIndex fribidi_remove_bidi_marks (
+     FRIBIDI_ENTRY FriBidiStrIndex fribidi_remove_bidi_marks (
   FriBidiChar *str,
   FriBidiStrIndex length,
   FriBidiStrIndex *position_to_this_list,
   FriBidiStrIndex *position_from_this_list,
   FriBidiLevel *embedding_level_list
-);
+) FRIBIDI_GNUC_WARN_UNUSED;
 
 #include "fribidi-enddecls.h"
 

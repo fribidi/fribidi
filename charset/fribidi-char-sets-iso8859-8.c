@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-iso8859-8.c - ISO8859-8 character set conversion routines
  *
- * $Id: fribidi-char-sets-iso8859-8.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-char-sets-iso8859-8.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-03 22:05:19 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-iso8859-8.c,v $
  *
  * Authors:
@@ -33,11 +33,11 @@
  * For licensing issues, contact <license@farsiweb.info>.
  */
 
+#include <common.h>
+
 #include <fribidi-char-sets-iso8859-8.h>
 
 #include <fribidi-unicode.h>
-
-#include <common.h>
 
 /* The following are proposed extensions to ISO8859-8. */
 #define ISO_8859_8_LRM		0xFD

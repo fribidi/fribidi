@@ -3,8 +3,8 @@
   by fribidi_create_mirroring
 */
 
-#ifndef FRIBIDI_TAB_MIRRORING_I
-#define FRIBIDI_TAB_MIRRORING_I
+#ifndef MIRRORING_TABLE_I
+#define MIRRORING_TABLE_I
 
 #include <fribidi-types.h>
 
@@ -348,6 +348,8 @@ FriBidiMirroredChars[] =
   {0xFF60, 0xFF5F},
   {0xFF62, 0xFF63},
   {0xFF63, 0xFF62},
+  /* add an extra entry, doesn't harm ;-), but helps in binary search */
+  {0x0000, 0x0000}
 } ;
 
 /* *INDENT-ON* */
@@ -355,4 +357,4 @@ FriBidiMirroredChars[] =
 static const int nFriBidiMirroredChars = 318;
 
 
-#endif /* FRIBIDI_TAB_MIRRORING_I */
+#endif /* MIRRORING_TABLE_I */
