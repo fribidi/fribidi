@@ -36,7 +36,7 @@ EXTRA_DIST = c2man.stamp
 MAINTAINERCLEANFILES = $(man3)
 
 C2MANFLAGS = $(includepath) \
-		-DDONT_HAVE_FRIBIDI_CONFIG_H \
+		-DDONT_HAVE_FRIBIDI_CONFIG_H
 		-M "Programmer's Manual" \
 		-m "$(PACKAGE_NAME) $(PACKAGE_VERSION)"
 

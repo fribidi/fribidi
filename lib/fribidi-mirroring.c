@@ -2,8 +2,8 @@
  * fribidi-mirroring.c - get mirrored character
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002 Behdad Esfahbod
- * Copyright (C) 1999,2000 Dov Grobgeld
+ * Copyright (C) 2001, 2002, 2004 Behdad Esfahbod
+ * Copyright (C) 1999, 2000 Dov Grobgeld
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,10 +22,10 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.c,v 1.5 2004-05-07 06:30:38 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.6 2004-05-22 10:35:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-22 10:35:31 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:

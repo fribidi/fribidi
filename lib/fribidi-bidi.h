@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.3 2004-05-22 10:35:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-22 10:35:31 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -51,7 +51,8 @@
  * list of embedding levels as defined by the algorithm.  If any of the the
  * lists are passed as NULL, the list is ignored and not filled.
  *
- * Returns: Non-zero if it was successful, or zero if any error occured.
+ * Returns: Non-zero if it was successful, or zero if any error occured
+ * (memory allocation failure most probably).
  */
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_log2vis (
@@ -74,7 +75,8 @@ fribidi_log2vis (
  * This function finds the bidi embedding levels of a single paragraph,
  * as defined by the Unicode Bidirectional Algorithm.
  *
- * Returns: Non-zero if it was successful, or zero if any error occured.
+ * Returns: Non-zero if it was successful, or zero if any error occured
+ * (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY fribidi_boolean fribidi_log2vis_get_embedding_levels (
   const FriBidiChar *str,	/* input logical string */

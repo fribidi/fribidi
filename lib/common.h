@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.8 2004-05-12 08:17:19 behdad Exp $
+ * $Id: common.h,v 1.9 2004-05-22 10:35:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 08:17:19 $
- * $Revision: 1.8 $
+ * $Date: 2004-05-22 10:35:31 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -47,18 +47,6 @@
 # define FRIBIDI_ENTRY __declspec(dllexport)
 #endif /* WIN32 */
 
-#ifndef false
-# define false (0==1)
-#endif /* !false */
-
-#ifndef true
-# define true (!false)
-#endif /* !true */
-
-#ifndef NULL
-# define NULL (void *) 0
-#endif /* !NULL */
-
 #if FRIBIDI_USE_GLIB
 # ifndef SIZEOF_LONG
 #  define SIZEOF_LONG GLIB_SIZEOF_LONG
@@ -79,21 +67,39 @@
 #  endif /* !__C2MAN__ */
 #  define fribidi_assert g_assert
 # endif	/* !fribidi_assert */
+# ifndef __C2MAN__
+#  include <glib/gmacros.h>
+# endif /* !__C2MAN__ */
 # ifndef FRIBIDI_BEGIN_STMT
-#  ifndef __C2MAN__
-#   include <glib/gmacros.h>
-#  endif /* !__C2MAN__ */
 #  define FRIBIDI_BEGIN_STMT G_STMT_START {
 #  define FRIBIDI_END_STMT } G_STMT_END
 # endif	/* !FRIBIDI_BEGIN_STMT */
 # ifndef LIKELY
-#  ifndef __C2MAN__
-#   include <glib/gmacros.h>
-#  endif /* !__C2MAN__ */
 #  define LIKELY G_LIKELY
 #  define UNLIKELY G_UNLIKELY
 # endif	/* !LIKELY */
+# ifndef false
+#  define false FALSE
+# endif /* !false */
+# ifndef true
+#  define true TRUE
+# endif /* !true */
 #endif /* FRIBIDI_USE_GLIB */
+
+#ifndef false
+# define false (0)
+# endif /* !false */
+# ifndef true
+#  define true (!false)
+# endif /* !true */
+
+#ifndef NULL
+#  ifdef __cplusplus
+#    define NULL        (0L)
+#  else /* !__cplusplus */
+#    define NULL        ((void*) 0)
+#  endif /* !__cplusplus */
+#endif /* !NULL */
 
 /* fribidi_malloc and fribidi_free should be used instead of malloc and free. 
  * No need to include any headers. */

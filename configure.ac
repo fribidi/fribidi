@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: configure.ac,v 1.6 2004-05-07 06:30:37 behdad Exp $
+## $Id: configure.ac,v 1.7 2004-05-22 10:35:30 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-05-07 06:30:37 $
-## $Revision: 1.6 $
+## $Date: 2004-05-22 10:35:30 $
+## $Revision: 1.7 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 ##                                               -*- Autoconf -*-
@@ -41,7 +41,7 @@ m4_define(fribidi_rpm_release, 1)dnl
 dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.6 2004-05-07 06:30:37 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.7 2004-05-22 10:35:30 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -137,7 +137,7 @@ m4_define(debug_default,
 
 # --enable-debug
 AC_ARG_ENABLE(debug,
-              AS_HELP_STRING([--enable-debug],
+              AC_HELP_STRING([--enable-debug],
                              [turn on debugging @<:@default=debug_default()@:>@]),,
               enableval=debug_default())
 if test x$enableval = xyes; then
@@ -147,7 +147,7 @@ fi
 
 # --enable-malloc
 AC_ARG_ENABLE(debug,
-              AS_HELP_STRING([--enable-malloc],
+              AC_HELP_STRING([--enable-malloc],
                              [use simple malloc instead of memory chunks]))
 if test x$enable_glib = xyes; then
 	AC_DEFINE(USE_SIMPLE_MALLOC,1,
@@ -156,7 +156,7 @@ fi
 
 # --disable-charsets
 AC_ARG_ENABLE(charsets,
-              AS_HELP_STRING([--disable-charsets],
+              AC_HELP_STRING([--disable-charsets],
                              [exclude charset conversion codes from the library]))
 if test x$enable_charsets = xno; then
 	FRIBIDI_CHARSETS=0
@@ -168,7 +168,7 @@ AM_CONDITIONAL(FRIBIDI_CHARSETS, test x$FRIBIDI_CHARSETS = x1)
 
 # --without-glib
 AC_ARG_WITH(glib,
-              AS_HELP_STRING([--without-glib],
+              AC_HELP_STRING([--without-glib],
                              [do not use Glib]))
 GLIB_PACKAGE=glib-2.0
 GLIB_LIBS=
@@ -188,11 +188,16 @@ fi
 if test x$FRIBIDI_USER_GLIB = x0; then
 	GLIB_PACKAGE=
 fi
-AC_SUBST(GLIB_PACKAGE)
-AC_SUBST(GLIB_LIBS)
-AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(FRIBIDI_USE_GLIB)
-AM_CONDITIONAL(FRIBIDI_USE_GLIB, test "$FRIBIDI_USE_GLIB" = 1)
+AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
+
+
+MISC_CFLAGS="$GLIB_CFLAGS"
+MISC_LIBS="$GLIB_LIBS"
+MISC_PACKAGES="$GLIB_PACKAGES"
+AC_SUBST(MISC_CFLAGS)
+AC_SUBST(MISC_LIBS)
+AC_SUBST(MISC_PACKAGES)
 
 # Generate output
 AC_CONFIG_FILES([fribidi.pc

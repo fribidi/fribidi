@@ -38,7 +38,8 @@ static char **name, *key_type_name, *table_name, *macro_name;
 static FILE *f;
 
 static inline void
-init ()
+init (
+)
 {
   int i;
   pow[0] = 1;
@@ -337,7 +338,7 @@ pack_table (
   char *p_key_type_name,
   char *p_table_name,
   char *p_macro_name,
-  FILE * out
+  FILE *out
 )
 {
   N = key_num;

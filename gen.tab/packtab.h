@@ -39,7 +39,7 @@ extern "C"
   char *key_type_name,
   char *table_name,
   char *macro_name,
-  FILE * out
+  FILE *out
   );
 
 #ifdef	__cplusplus

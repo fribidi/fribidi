@@ -2,7 +2,7 @@
  * fribidi-mirroring.h - get mirrored character
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002 Behdad Esfahbod
+ * Copyright (C) 2001, 2002, 2004 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,10 +21,10 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.h,v 1.3 2004-05-12 07:06:21 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.4 2004-05-22 10:35:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-22 10:35:31 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
  * Author:
@@ -47,7 +47,7 @@
  * and has a mirrored equivalent.  The matching mirrored character is put in
  * the output, otherwise the input character itself is put.
  *
- * Returns: if the character has a mirror or not.
+ * Returns: if the character has a mirroring equivalent or not.
  */
 FRIBIDI_ENTRY fribidi_boolean fribidi_get_mirror_char (
   FriBidiChar ch,		/* input character */

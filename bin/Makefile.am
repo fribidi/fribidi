@@ -1,6 +1,6 @@
 bin_PROGRAMS = fribidi
 
-noinst_PROGRAMS = fribidi-benchmark
+noinst_PROGRAMS = fribidi-benchmark bidi-type-serialize
 
 getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h
 
@@ -12,7 +12,7 @@ AM_CPPFLAGS = \
 		-I$(top_builddir)/lib \
 		-I$(top_srcdir)/lib \
 		-I$(top_srcdir)/charset \
-		$(GLIB_CFLAGS)
+		$(MISC_CFLAGS)
 
 LDADD = $(top_builddir)/lib/libfribidi.la $(GLIB_LIBS)
 

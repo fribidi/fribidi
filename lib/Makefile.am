@@ -1,9 +1,9 @@
 lib_LTLIBRARIES = libfribidi.la
 
-AM_CPPFLAGS = $(GLIB_CFLAGS)
+AM_CPPFLAGS = $(MISC_CFLAGS)
 
 libfribidi_la_LDFLAGS = -version-info $(LT_VERSION_INFO)
-libfribidi_la_LIBADD = $(GLIB_LIBS)
+libfribidi_la_LIBADD = $(MISC_LIBS)
 libfribidi_la_DEPENDENCIES =
 
 if PLATFORM_WIN32
@@ -50,29 +50,14 @@ libfribidi_la_SOURCES =	\
 BUILT_SOURCES= \
 		bidi-type.tab.i \
 		mirroring.tab.i \
-		fribidi-unicode-version.h \
-		fribidi-config.h
+		fribidi-unicode-version.h
+
+$(BUILT_SOURCES):
+	(cd $(top_builddir)/gen.tab && \
+	 $(MAKE) $(AM_MAKEFLAGS) $@) && \
+	mv $(top_builddir)/gen.tab/$@ .
 
 MAINTAINERCLEANFILES = $(BUILT_SOURCES)
-
-fribidi_tab_mirroring_0.i: $(fribidi_create_mirroring_SOURCES) fribidi_types.h	\
-		unidata/BidiMirroring.txt
-	$(MAKE) fribidi_create_mirroring
-	if test -d unidata; then UNIDATA=unidata;	\
-	else UNIDATA="$(srcdir)/unidata"; fi &&	\
-	./fribidi_create_mirroring "$$UNIDATA" ||	\
-	($(RM) "$@"; false)
-
-fribidi_tab_bidi_type.i: $(fribidi_create_char_types_SOURCES)	\
-		unidata/UnicodeData.txt
-	$(MAKE) fribidi_create_char_types
-	if test -d unidata; then UNIDATA=unidata;	\
-	else UNIDATA="$(srcdir)/unidata"; fi &&	\
-	./fribidi_create_char_types "`echo "$@"	\
-	  | $(SED) 's/[^0-9]*//g'`" "$$UNIDATA" ||	\
-	($(RM) "$@"; false)
-	$(RM) fribidi_tab_char_type_stamp
-	$(MAKE) fribidi_tab_char_type_stamp
 
 $(top_builddir)/config.h: $(top_srcdir)/config.h.in
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) config.h

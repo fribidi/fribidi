@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.4 2004-05-12 23:13:55 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.5 2004-05-22 10:35:30 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 23:13:55 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-22 10:35:30 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -80,7 +80,20 @@ die2 (
   exit (1);
 }
 
-enum FriBidiCharTypeLinearEnum
+static void
+die3 (
+  char *fmt,
+  unsigned long l,
+  char *p
+)
+{
+  fprintf (stderr, appname ": ");
+  fprintf (stderr, fmt, l, p);
+  fprintf (stderr, "\n");
+  exit (1);
+}
+
+enum FriBidiCharTypeLinearEnumOffsetOne
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
 # define _FRIBIDI_ADD_ALIAS(TYPE1,TYPE2) TYPE1 = TYPE2,
@@ -126,32 +139,64 @@ get_type (
 #define macro_name "FRIBIDI_GET_BIDI_TYPE"
 
 static int table[FRIBIDI_UNICODE_CHARS];
+static char s[4000];
 
 static void
 init_tab (
 )
 {
-  register int i;
   register FriBidiChar c;
+
+  /* default types for reserved and noncharacter code points */
+  for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
+    table[c] = LTR;
+
+  for (c = 0x0590; c < 0x0600; c++)
+    table[c] = RTL;
+  for (c = 0x07C0; c < 0x0900; c++)
+    table[c] = RTL;
+  for (c = 0xFB1D; c < 0xFB50; c++)
+    table[c] = RTL;
+
+  for (c = 0x0600; c < 0x07C0; c++)
+    table[c] = AL;
+  for (c = 0xFB50; c < 0xFE00; c++)
+    table[c] = AL;
+  for (c = 0xFE70; c < 0xFF00; c++)
+    table[c] = AL;
+
+  for (c = 0x2060; c < 0x2070; c++)
+    table[c] = BN;
+  for (c = 0xFDD0; c < 0xFDF0; c++)
+    table[c] = BN;
+  for (c = 0xFFF0; c < 0xFFF9; c++)
+    table[c] = BN;
+  for (c = 0xFFFF; c < FRIBIDI_UNICODE_CHARS; c += 0x10000)
+    table[c - 1] = table[c] = BN;
+
+  if (FRIBIDI_UNICODE_CHARS > 0x10000)
+    {
+      for (c = 0x10800; c < 0x11000; c++)
+	table[c] = RTL;
+      for (c = 0xE0000; c < 0xE0100; c++)
+	table[c] = BN;
+      for (c = 0xE01F0; c < 0xE1000; c++)
+	table[c] = BN;
+    }
+}
+
+static void
+init (
+)
+{
+  register int i;
 
   for (i = 0; i < type_names_count; i++)
     names[i] = 0;
   for (i = type_names_count - 1; i >= 0; i--)
     names[type_names[i].key] = type_names[i].name;
 
-  /* initialize table */
-  for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
-    table[i] = LTR;
-  for (c = 0x0590; c < 0x0600; c++)
-    table[i] = RTL;
-  for (c = 0xFB1D; c < 0xFB50; c++)
-    table[i] = RTL;
-  for (c = 0x0600; c < 0x07C0; c++)
-    table[i] = AL;
-  for (c = 0xFB50; c < 0xFE00; c++)
-    table[i] = AL;
-  for (c = 0xFE70; c < 0xFF00; c++)
-    table[i] = AL;
+  init_tab();
 }
 
 static void
@@ -159,13 +204,24 @@ read_unicode_data_txt (
   FILE *f
 )
 {
-  char s[200], tp[10];
-  unsigned int i;
+  char tp[10];
+  unsigned long c, l;
 
+  l = 0;
   while (fgets (s, sizeof s, f))
     {
-      sscanf (s, "%x;%*[^;];%*[^;];%*[^;];%[^;]", &i, tp);
-      table[i] = get_type (tp);
+      int i;
+
+      l++;
+
+      if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
+	continue;
+
+      i = sscanf (s, "%lx;%*[^;];%*[^;];%*[^;];%[^; ]", &c, tp);
+      if (i != 2 || c >= FRIBIDI_UNICODE_CHARS)
+	die3 ("invalid input at line %ld: %s", l, s);
+
+      table[c] = get_type (tp);
     }
 }
 
@@ -174,17 +230,37 @@ read_derived_bidi_class_txt (
   FILE *f
 )
 {
-  char s[200], tp[10];
-  unsigned int i;
+  char tp[10];
+  unsigned long c, c2, l;
 
+  l = 0;
   while (fgets (s, sizeof s, f))
     {
-      sscanf (s, "%x;%*[^;];%*[^;];%*[^;];%9[^;]", &i, tp);
-      table[i] = get_type (tp);
+      int i;
+      register char typ;
+
+      l++;
+
+      if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
+	continue;
+
+      i = sscanf (s, "%lx ; %s", &c, tp);
+      if (i == 2)
+	c2 = c;
+      else
+	i = sscanf (s, "%lx..%lx ; %s", &c, &c2, tp) - 1;
+
+      if (i != 2 || c > c2 || c2 >= FRIBIDI_UNICODE_CHARS)
+	die3 ("invalid input at line %ld: %s", l, s);
+
+      typ = get_type (tp);
+      for (; c <= c2; c++)
+	table[c] = typ;
     }
 }
 
-static void read_data (
+static void
+read_data (
   char *data_file_type,
   char *data_file_name
 )
@@ -195,14 +271,14 @@ static void read_data (
   if (!(f = fopen (data_file_name, "rt")))
     die2 ("error: cannot open `%s' for reading", data_file_name);
 
-  if (!strcmp(data_file_type, "UnicodeData.txt"))
-    read_unicode_data_txt(f);
-  else if (!strcmp(data_file_type, "DerivedBidiClass.txt"))
-    read_derived_bidi_class_txt(f);
+  if (!strcmp (data_file_type, "UnicodeData.txt"))
+    read_unicode_data_txt (f);
+  else if (!strcmp (data_file_type, "DerivedBidiClass.txt"))
+    read_derived_bidi_class_txt (f);
   else
     die2 ("error: unknown data-file type %s", data_file_type);
 
-  fclose(f);
+  fclose (f);
 }
 
 static void
@@ -212,9 +288,9 @@ gen_bidi_type_tab (
 )
 {
   fprintf (stderr, "Generating output, it may take up to a few minutes\n");
-  printf (
-	  "/* " outputname "\n * generated by " appname " (" FRIBIDI_NAME FRIBIDI_VERSION ")\n"
-	  " * from the file %s of Unicode version " FRIBIDI_UNICODE_VERSION ". */\n\n", data_file_type);
+  printf ("/* " outputname "\n * generated by " appname " (" FRIBIDI_NAME
+	  FRIBIDI_VERSION ")\n" " * from the file %s of Unicode version "
+	  FRIBIDI_UNICODE_VERSION ". */\n\n", data_file_type);
 
   printf ("#define PACKTAB_UINT8 fribidi_uint8\n"
 	  "#define PACKTAB_UINT16 fribidi_uint16\n"
@@ -237,19 +313,18 @@ main (
   if (argc != 4)
     die ("usage:\n  " appname " max-depth data-file-type data-file-name\n"
 	 "where data-file-type is one of these:\n"
-	 "  * UnicodeData.txt\n"
-	 "  * DerivedBidiClass.txt");
+	 "  * UnicodeData.txt\n" "  * DerivedBidiClass.txt");
   {
-  int max_depth = atoi (argv[1]);
-  char *data_file_type = argv[2];
-  char *data_file_name = argv[3];
+    int max_depth = atoi (argv[1]);
+    char *data_file_type = argv[2];
+    char *data_file_name = argv[3];
 
-  if (max_depth < 2)
-    die ("invalid depth");
+    if (max_depth < 2)
+      die ("invalid depth");
 
-  init_tab ();
-  read_data (data_file_type, data_file_name);
-  gen_bidi_type_tab (max_depth, data_file_type);
+    init ();
+    read_data (data_file_type, data_file_name);
+    gen_bidi_type_tab (max_depth, data_file_type);
   }
 
   return 0;
