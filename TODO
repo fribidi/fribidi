@@ -20,3 +20,11 @@ Implementation issues:
 * Add more tests.  For:
   - Checking that not removing explicit marks in analyze is not changing the
     output in anyway.
+
+* Change fribidi-main cmd-line parameters: --mirror --no-mirror...  change the
+  defaults too.
+
+* cindent:  support function attributes and _PARAMS like things.  Also
+  FRIBIDI_BEGIN_DECLS, and LIKELY.
+
+* c2man:  parse Author and Copyright from the while file.
