@@ -1,10 +1,10 @@
 /* FriBidi
- * gen-unicode-version.c - generate fribidi-unicode-version.h for libfribidi
+ * gen-unicode-version.c - generate fribidi-unicode-version.h
  *
- * $Id: gen-unicode-version.c,v 1.7 2004-06-15 11:52:02 behdad Exp $
+ * $Id: gen-unicode-version.c,v 1.8 2004-08-27 21:55:59 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.7 $
+ * $Date: 2004-08-27 21:55:59 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-unicode-version.c,v $
  *
  * Author:
@@ -166,6 +166,7 @@ main (
 
   if (argc < 2)
     die2 ("usage:\n  " appname " /path/to/%s [junk...]", data_file_type);
+
   {
     const char *data_file_name = argv[1];
 

@@ -1,10 +1,10 @@
 ##                                               -*- Automake -*-
 ## Process this file with automake to produce Makefile.in
 ##############################################################################
-## $Id: Makefile.am,v 1.7 2004-06-04 09:41:11 behdad Exp $
+## $Id: Makefile.am,v 1.8 2004-08-27 21:55:59 behdad Exp $
 ## $Author: behdad $
-## $Date: 2004-06-04 09:41:11 $
-## $Revision: 1.7 $
+## $Date: 2004-08-27 21:55:59 $
+## $Revision: 1.8 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
 ##############################################################################
 
@@ -15,6 +15,10 @@ EXTRA_DIST = bootstrap ChangeLog.old
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = @PACKAGE@.pc
+
+BUILT_SOURCES = lib/fribidi-unicode-version.h
+lib/fribidi-unicode-version.h:
+	(cd lib && $(MAKE) $(AM_MAKEFLAGS) fribidi-unicode-version.h)
 
 MAINTAINERCLEANFILES = \
 		$(srcdir)/INSTALL \
@@ -36,10 +40,6 @@ MAINTAINERCLEANFILES = \
 # GNU Coding Standards recommends that `make maintainer-clean' should not 
 # remove the configure script.
 # We instead make configure call bootstrap.
-
-BUILT_SOURCES = lib/fribidi-unicode-version.h
-lib/fribidi-unicode-version.h:
-	(cd lib && $(MAKE) $(AM_MAKEFLAGS) fribidi-unicode-version.h)
 
 # Indent all C source and header files, using indent(1):
 

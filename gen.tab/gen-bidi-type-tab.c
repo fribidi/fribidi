@@ -1,10 +1,10 @@
 /* FriBidi
- * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
+ * gen-bidi-type-tab.c - generate bidi-type.tab.i
  *
- * $Id: gen-bidi-type-tab.c,v 1.13 2004-06-15 11:52:02 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.14 2004-08-27 21:55:59 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.13 $
+ * $Date: 2004-08-27 21:55:59 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -340,9 +340,11 @@ main (
 )
 {
   const char *data_file_type = "UnicodeData.txt";
+
   if (argc < 3)
     die2 ("usage:\n  " appname " max-depth /path/to/%s [junk...]",
 	  data_file_type);
+
   {
     int max_depth = atoi (argv[1]);
     const char *data_file_name = argv[2];

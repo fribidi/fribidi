@@ -1,10 +1,10 @@
 /* FriBidi
- * gen-joining-type-tab.c - generate joining-type.tab.i for libfribidi
+ * gen-joining-type-tab.c - generate joining-type.tab.i
  *
- * $Id: gen-joining-type-tab.c,v 1.2 2004-06-15 11:52:02 behdad Exp $
+ * $Id: gen-joining-type-tab.c,v 1.3 2004-08-27 21:55:59 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.2 $
+ * $Date: 2004-08-27 21:55:59 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-joining-type-tab.c,v $
  *
  * Author:
@@ -335,9 +335,11 @@ main (
 {
   const char *data_file_type[] =
     { "UnicodeData.txt", "ArabicShaping.txt", NULL };
+
   if (argc < 4)
     die3 ("usage:\n  " appname " max-depth /path/to/%s /path/to/%s [junk...]",
 	  data_file_type[0], data_file_type[1]);
+
   {
     int max_depth = atoi (argv[1]);
     const char *data_file_name[] = { NULL, NULL, NULL };

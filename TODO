@@ -1,12 +1,12 @@
 Implementation issues:
 
+* Mix __attr... with DLLIMPORT?
+
 * Better FRIBIDI_NAMESPACE.
 
 * Define symbols to be included in library.
 
 * Still better bootstrap script: steal from GNOME autogen.sh.
-
-* Test ./configure without pkg-config installed.
 
 * Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]
   is always the reference.

@@ -1,10 +1,10 @@
 /* FriBidi
- * gen-mirroring-tab.c - generate bidi-mirroring.i for libfribidi
+ * gen-mirroring-tab.c - generate mirroring.tab.i
  *
- * $Id: gen-mirroring-tab.c,v 1.10 2004-06-15 11:52:02 behdad Exp $
+ * $Id: gen-mirroring-tab.c,v 1.11 2004-08-27 21:55:59 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.10 $
+ * $Date: 2004-08-27 21:55:59 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-mirroring-tab.c,v $
  *
  * Author:
@@ -226,9 +226,11 @@ main (
 )
 {
   const char *data_file_type = "BidiMirroring.txt";
+
   if (argc < 3)
     die2 ("usage:\n  " appname " max-depth /path/to/%s [junk...]",
 	  data_file_type);
+
   {
     int max_depth = atoi (argv[1]);
     const char *data_file_name = argv[2];
