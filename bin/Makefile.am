@@ -2,7 +2,7 @@ bin_PROGRAMS = fribidi
 
 noinst_PROGRAMS = fribidi-benchmark
 
-getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h
+getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h gettext.h
 
 fribidi_SOURCES = fribidi-main.c $(getopt_SOURCES)
 
