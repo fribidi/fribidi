@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: configure.ac,v 1.7 2004-05-22 10:35:30 behdad Exp $
+## $Id: configure.ac,v 1.8 2004-05-25 12:09:39 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-05-22 10:35:30 $
-## $Revision: 1.7 $
+## $Date: 2004-05-25 12:09:39 $
+## $Revision: 1.8 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 ##                                               -*- Autoconf -*-
@@ -41,7 +41,7 @@ m4_define(fribidi_rpm_release, 1)dnl
 dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.7 2004-05-22 10:35:30 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.8 2004-05-25 12:09:39 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -80,11 +80,23 @@ dnl ==========================================================================
 AC_MSG_CHECKING([for native Win32])
   case "$host" in
     *-*-mingw*) os_win32=yes ;;
-    *) pango_os_win32=no ;;
+    *) os_win32=no ;;
   esac
 AC_MSG_RESULT([$os_win32])
 AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+if test "$os_win32" = "yes"; then
+  if test x$enable_static = xyes -o x$enable_static = x; then
+    AC_MSG_WARN([Disabling static library build, must build as DLL on Windows.])
+    enable_static=no
+  fi
+  if test x$enable_shared = xno; then
+    AC_MSG_WARN([Enabling shared library build, must build as DLL on Windows.])
+  fi
+  enable_shared=yes
+fi
+
 AC_MSG_CHECKING([for some Win32 platform])
+  echo XXXXXXXXXXXXXXXXXX $host
   case "$host" in
     *-*-mingw*|*-*-cygwin*) platform_win32=yes ;;
     *) platform_win32=no ;;
