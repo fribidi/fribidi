@@ -1,34 +1,36 @@
-/* FriBidi
- * fribidi-mirroring.h - get mirrored character
+/* fribidi-mirroring.h - get mirrored character
  *
- * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001, 2002, 2004 Behdad Esfahbod
+ * Copyright (C) 2004  Sharif FarsiWeb, Inc
+ * Copyright (C) 2001, 2002, 2004  Behdad Esfahbod
+ * Copyright (C) 1999, 2000  Dov Grobgeld
  * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This file is part of GNU FriBidi.
  * 
- * This library is distributed in the hope that it will be useful,
+ * GNU FriBidi is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1
+ * of the License, or (at your option) any later version.
+ * 
+ * GNU FriBidi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public License
- * along with this library, in a file named COPYING; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
- * Boston, MA 02111-1307, USA
+ * along with GNU FriBidi; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.h,v 1.4 2004-05-22 10:35:31 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.5 2004-05-29 11:32:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 10:35:31 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-29 11:32:23 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
- * Author:
+ * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Dov Grobgeld, 1999, 2000
  */
 #ifndef _FRIBIDI_MIRRORING_H
 #define _FRIBIDI_MIRRORING_H

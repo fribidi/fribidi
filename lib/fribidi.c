@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining algorithms
  *
- * $Id: fribidi.c,v 1.4 2004-05-07 06:30:38 behdad Exp $
+ * $Id: fribidi.c,v 1.5 2004-05-29 11:32:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-29 11:32:23 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -58,7 +58,9 @@ const char *fribidi_version_info =
   " --without-glib"
 #endif /* !FRIBIDI_USE_GLIB */
   ".\n\n"
-  "Copyright (C) 2004 Sharif FarsiWeb, Inc.\n"
+  "Copyright (C) 2004  Sharif FarsiWeb, Inc.\n"
+  "Copyright (C) 2001, 2002, 2004  Behdad Esfahbod\n"
+  "Copyright (C) 1999, 2000  Dov Grobgeld\n"
   FRIBIDI_NAME " comes with ABSOLUTELY NO WARRANTY.\n"
   "You may redistribute copies of " FRIBIDI_NAME " under the terms of\n"
   "the GNU Lesser General Public License.\n"
