@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.2 2004-04-25 18:58:25 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-25 18:58:25 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -102,7 +102,7 @@ index_array_reverse (
     }
 }
 
-#ifndef USE_SIMPLE_MALLOC
+#if !USE_SIMPLE_MALLOC
 static TypeLink *free_type_links = NULL;
 #endif /* !USE_SIMPLE_MALLOC */
 
