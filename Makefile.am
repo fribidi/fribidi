@@ -1,15 +1,15 @@
 ##############################################################################
-## $Id: Makefile.am,v 1.4 2004-05-22 11:21:39 behdad Exp $
+## $Id: Makefile.am,v 1.5 2004-05-25 11:14:14 behdad Exp $
 ## $Author: behdad $
-## $Date: 2004-05-22 11:21:39 $
-## $Revision: 1.4 $
+## $Date: 2004-05-25 11:14:14 $
+## $Revision: 1.5 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
 ##############################################################################
 ##                                               -*- Automake -*-
 ## Process this file with automake to produce Makefile.in
 
 ## The order of subdirs is important, don't change without a reason.
-SUBDIRS = charset gen.tab lib bin doc test
+SUBDIRS = gen.tab charset lib bin doc test
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = @PACKAGE@.pc
