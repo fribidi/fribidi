@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.5 2004-05-12 08:17:19 behdad Exp $
+ * $Id: fribidi-common.h,v 1.6 2004-05-25 12:00:29 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 08:17:19 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-25 12:00:29 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -75,25 +75,28 @@
 #if FRIBIDI_USE_GLIB
 # ifndef __C2MAN__
 #  include <glib/gmacros.h>
+# endif	/* !__C2MAN__ */
 # define FRIBIDI_GNUC_CONST		G_GNUC_CONST
 # define FRIBIDI_GNUC_DEPRECATED	G_GNUC_DEPRECATED
-# endif	/* !__C2MAN__ */
+# if __GNUC__ > 2
+#  define FRIBIDI_GNUC_WARN_UNUSED	\
+	__attribute__((__warn_unused_result__))
+#  define FRIBIDI_GNUC_MALLOC		\
+	__attribute__((__malloc__))
+#  define FRIBIDI_GNUC_HIDDEN		\
+	__attribute__((__visibility__ ("hidden")))
+# else /* __GNUC__ <= 2 */
+#  define FRIBIDI_GNUC_WARN_UNUSED
+#  define FRIBIDI_GNUC_MALLOC
+#  define FRIBIDI_GNUC_HIDDEN
+# endif /* __GNUC__ <= 2 */
 #else /* !FRIBIDI_USE_GLIB */
 # define FRIBIDI_GNUC_CONST
 # define FRIBIDI_GNUC_DEPRECATED
-#endif /* !FRIBIDI_USE_GLIB */
-#if __GNUC__ > 2
-# define FRIBIDI_GNUC_WARN_UNUSED	\
-	__attribute__((__warn_unused_result__))
-# define FRIBIDI_GNUC_MALLOC		\
-	__attribute__((__malloc__))
-# define FRIBIDI_GNUC_HIDDEN		\
-	__attribute__((__visibility__ ("hidden")))
-#else /* __GNUC__ <= 2 */
 # define FRIBIDI_GNUC_WARN_UNUSED
 # define FRIBIDI_GNUC_MALLOC
 # define FRIBIDI_GNUC_HIDDEN
-#endif /* __GNUC__ <= 2 */
+#endif /* !FRIBIDI_USE_GLIB */
 
 
 #define fribidi_version_info FRIBIDI_NAMESPACE(version_info)
