@@ -20,12 +20,13 @@
  * along with GNU FriBidi; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <license@farsiweb.info> or write to
+ * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.h,v 1.5 2004-05-29 11:32:23 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.6 2004-06-07 20:38:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-29 11:32:23 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-07 20:38:21 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
  * Authors:

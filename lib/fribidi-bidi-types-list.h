@@ -2,10 +2,10 @@
 /* FriBidi
  * fribidi-bidi-types-list.h - list of bidi types
  *
- * $Id: fribidi-bidi-types-list.h,v 1.2 2004-06-04 09:41:11 behdad Exp $
+ * $Id: fribidi-bidi-types-list.h,v 1.3 2004-06-07 20:38:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 09:41:11 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-07 20:38:21 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types-list.h,v $
  *
  * Author:
@@ -41,8 +41,7 @@
 #endif
 
 #if !defined(_FRIBIDI_PAR_TYPES) || defined(_FRIBIDI_ALL_TYPES)
-/* Bidi types from the standard. */
-/* The order of these types is important.  Don't change. */
+
 _FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right letter */
 _FRIBIDI_ADD_TYPE (RTL, 'R')	/* Right-To-Left letter */
 _FRIBIDI_ADD_TYPE (AL, 'A')	/* Arabic Letter */
@@ -64,8 +63,6 @@ _FRIBIDI_ADD_TYPE (RLO, '+')	/* Right-to-Left Override */
 _FRIBIDI_ADD_TYPE (PDF, '-')	/* Pop Directional Flag */
 
 #if defined(_FRIBIDI_ADD_ALIAS)
-/* The followings are just aliases to types, but with the name that appears in
- * the Unicode database. */
 _FRIBIDI_ADD_ALIAS (L, LTR)
 _FRIBIDI_ADD_ALIAS (R, RTL)
 _FRIBIDI_ADD_ALIAS (B, BS)

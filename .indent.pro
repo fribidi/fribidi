@@ -2,12 +2,10 @@
 -bfda
 -bfde
 -T FILE
--T LevelInfo
 -T FriBidiChar
 -T FriBidiStrIndex
--T FriBidiMaskType
 -T FriBidiCharType
--T FriBidiPropCharType
+-T FriBidiParType
 -T FriBidiLevel
 -T FriBidiCharSet
 -T FriBidiCharSetHandler

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.5 2004-06-04 16:43:51 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.6 2004-06-07 20:38:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 16:43:51 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-07 20:38:21 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -42,35 +42,8 @@
 
 #include "fribidi-begindecls.h"
 
-#define fribidi_log2vis FRIBIDI_NAMESPACE(log2vis)
-/* fribidi_log2vis - get visual string
- *
- * This function converts the logical input string to the visual output
- * strings as specified by the Unicode Bidirectional Algorithm.  As a side
- * effect it also generates mapping lists between the two strings, and the
- * list of embedding levels as defined by the algorithm.  If any of the the
- * lists are passed as NULL, the list is ignored and not filled.
- *
- * Returns: Maximum level found plus one, or zero if any error occured
- * (memory allocation failure most probably).
- */
-FRIBIDI_ENTRY FriBidiLevel
-fribidi_log2vis (
-  const FriBidiChar *str,	/* input logical string */
-  FriBidiStrIndex len,		/* input string length */
-  FriBidiCharType *pbase_dir,	/* requested and resolved paragraph
-				 * base direction */
-  FriBidiChar *visual_str,	/* output visual string */
-  FriBidiStrIndex *position_L_to_V_list,	/* output mapping from logical to 
-						 * visual string positions */
-  FriBidiStrIndex *position_V_to_L_list,	/* output mapping from visual string
-						 * back to the logical string
-						 * positions */
-  FriBidiLevel *embedding_level_list	/* output list of embedding levels */
-) FRIBIDI_GNUC_WARN_UNUSED;
-
-#define fribidi_get_embedding_levels FRIBIDI_NAMESPACE(get_embedding_levels)
-/* fribidi_get_embedding_levels - get bidi embedding levels
+#define fribidi_get_par_embedding_levels FRIBIDI_NAMESPACE(get_par_embedding_levels)
+/* fribidi_get_par_embedding_levels - get bidi embedding levels of a paragraph
  *
  * This function finds the bidi embedding levels of a single paragraph,
  * as defined by the Unicode Bidirectional Algorithm.
@@ -78,10 +51,11 @@ fribidi_log2vis (
  * Returns: Maximum level found plus one, or zero if any error occured
  * (memory allocation failure most probably).
  */
-     FRIBIDI_ENTRY FriBidiLevel fribidi_get_embedding_levels (
-  const FriBidiChar *str,	/* input logical string */
-  FriBidiStrIndex len,		/* input string length */
-  FriBidiCharType *pbase_dir,	/* requested and resolved paragraph
+FRIBIDI_ENTRY FriBidiLevel
+fribidi_get_par_embedding_levels (
+  const FriBidiChar *str,	/* input paragraph string */
+  const FriBidiStrIndex len,	/* input string length of the paragraph */
+  FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
 ) FRIBIDI_GNUC_WARN_UNUSED;
@@ -90,38 +64,42 @@ fribidi_log2vis (
 /* fribidi_shape - do mirroring shaping
  *
  * This functions replaces mirroring characters on right-to-left embeddings in
- * strint str with their mirrored equivalent as returned by
+ * string str with their mirrored equivalent as returned by
  * fribidi_get_mirror_char().
- *
- * Returns: Non-zero if it was successful, or zero if any error occured
- * (memory allocation failure most probably).
  */
-     FRIBIDI_ENTRY fribidi_boolean fribidi_shape_mirroring (
-  const FriBidiChar *str,	/* string to shape */
-  FriBidiStrIndex len,		/* input string length */
-  FriBidiLevel *embedding_level_list	/* input list of embedding levels */
+     FRIBIDI_ENTRY void fribidi_shape_mirroring (
+  const FriBidiLevel *embedding_level_list,	/* input list of embedding
+						   levels, as returned by
+						   fribidi_get_par_embedding_levels */
+  const FriBidiStrIndex len,	/* input string length */
+  FriBidiChar *str		/* string to shape */
+);
+
+#define fribidi_reorder_line FRIBIDI_NAMESPACE(reorder_line)
+/* fribidi_reorder_line - reorder a line of logical string to visual
+ *
+ * This function reorders the characters in a line of text from logical
+ * to final visual order.  Also sets position maps if not NULL.  You can leave
+ * str NULL if all you need is the maps.  Some features of this function can
+ * be turned on/off using environmental settings functions fribidi_env_*.
+ *
+ * Returns: Maximum level found in this line plus one, or zero if any error
+ * occured (memory allocation failure most probably).
+ */
+     FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
+  FriBidiLevel *embedding_level_list,	/* input list of embedding levels,
+					   as returned by
+					   fribidi_get_par_embedding_levels */
+  const FriBidiStrIndex len,	/* input length of the line */
+  const FriBidiStrIndex off,	/* input offset of the beginning of the line
+				   in the paragraph */
+  FriBidiChar *str,		/* string to shape */
+  FriBidiStrIndex *position_L_to_V_list,	/* output mapping from logical to
+						   visual string positions */
+  FriBidiStrIndex *position_V_to_L_list	/* output mapping from visual string
+					   back to logical string positions */
 ) FRIBIDI_GNUC_WARN_UNUSED;
 
-#define fribidi_remove_bidi_marks FRIBIDI_NAMESPACE(remove_bidi_marks)
-/* fribidi_remove_bidi_marks - remove bidi marks out an string
- *
- * This function removes the bidi marks out of an string and the
- * accompanying lists.  If any of the input lists are NULL, the list is
- * skipped.
- *
- * Bugs: It is not clear that if the input string is a logical, or visual
- * string.  It is know to have problems handling position lists.  In short,
- * it should be avoided.
- *
- * Returns: New length of the string.
- */
-     FRIBIDI_ENTRY FriBidiStrIndex fribidi_remove_bidi_marks (
-  FriBidiChar *str,
-  FriBidiStrIndex length,
-  FriBidiStrIndex *position_to_this_list,
-  FriBidiStrIndex *position_from_this_list,
-  FriBidiLevel *embedding_level_list
-) FRIBIDI_GNUC_WARN_UNUSED;
 
 #include "fribidi-enddecls.h"
 

@@ -63,6 +63,8 @@ Implementation issues:
 * Configure gen.tab/ with host=build to avoid cross-compiling table
   generators.
 
+* Replace Arabic Yeh with Persian Yeh in Hafez piece in test/*.
+
 From GNU Coding Standards:
 
 * The distribution should contain a file named `README' which gives the name
