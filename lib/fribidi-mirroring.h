@@ -23,13 +23,13 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.h,v 1.9 2004-06-15 11:52:02 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.10 2004-09-28 07:58:57 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.9 $
+ * $Date: 2004-09-28 07:58:57 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
- * Authors:
+ * Author(s):
  *   Behdad Esfahbod, 2001, 2002, 2004
  *   Dov Grobgeld, 1999, 2000
  */
