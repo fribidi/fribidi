@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.4 2004-05-22 11:21:40 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.5 2004-05-31 18:43:26 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 11:21:40 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-31 18:43:26 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -48,7 +48,7 @@
 enum MyFriBidiTypeEnum
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE = FRIBIDI_TYPE_##TYPE,
-# include "bidi-types-list.h"
+# include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
   MY_NUM_TYPES
 };

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.7 2004-05-22 11:21:40 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.8 2004-05-31 18:43:26 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 11:21:40 $
- * $Revision: 1.7 $
+ * $Date: 2004-05-31 18:43:26 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -41,7 +41,7 @@
 enum FriBidiCharTypeLinearEnum
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
-# include "bidi-types-list.h"
+# include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
   NUM_TYPES
 };
@@ -51,7 +51,7 @@ enum FriBidiCharTypeLinearEnum
 /* Map FriBidiCharTypeLinearEnum to FriBidiCharType. */
 static const FriBidiCharType linear_enum_to_char_type[] = {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
-# include "bidi-types-list.h"
+# include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
 };
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.5 2004-05-12 07:06:21 behdad Exp $
+ * $Id: fribidi-main.c,v 1.6 2004-05-31 18:43:26 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-31 18:43:26 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -253,8 +253,8 @@ main (
 	{"clean", 0, (int *) (void *) &do_clean, true},
 	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_LTR},
 	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_RTL},
-	{"wltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WL},
-	{"wrtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WR},
+	{"wltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WLTR},
+	{"wrtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WRTL},
 	{"basedir", 0, (int *) (void *) &show_basedir, true},
 	{"ltov", 0, (int *) (void *) &show_ltov, true},
 	{"vtol", 0, (int *) (void *) &show_vtol, true},

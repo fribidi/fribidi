@@ -49,7 +49,7 @@ VPATH += $(includevpath)
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp
 	@touch $@.tmp
-	$(LN_S) $^ .
+	($(LN_S) $^ . || cp $^ .)
 	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) \
 	|| true
 	$(RM) $(headers)
@@ -60,6 +60,6 @@ $(man3): c2man.stamp
 		touch $@; \
 	else \
 		$(RM) $<; \
-		$(MAKE) $(AM_MAKEFLAGS) $< || true; \
+		$(MAKE) $(AM_MAKEFLAGS) $< || touch $<; \
 		touch $@; \
 	fi

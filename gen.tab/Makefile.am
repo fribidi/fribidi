@@ -53,11 +53,11 @@ $(BIDI_TYPE_TAB_VARIANTS):
 
 bidi-type.tab.i:
 	@for x in $(BIDI_TYPE_TAB_VARIANTS); do \
-	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x $@; then \
+	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x bidi-type.tab.i; then \
 	     break; \
 	   fi; \
 	 done; \
-	 test -f $@ || (echo Could not build $@; false)
+	 test -f bidi-type.tab.i || (echo Could not build $@; false)
 
 DISTCLEANFILES += $(BIDI_TYPE_TAB_VARIANTS)
 
@@ -79,11 +79,11 @@ BidiMirroring_mirroring.tab.i: \
 
 mirroring.tab.i:
 	@for x in $(MIRRORING_TAB_VARIANTS); do \
-	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x $@; then \
+	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x mirroring.tab.i; then \
 	     break; \
 	   fi; \
 	 done; \
-	 test -f $@ || (echo Could not build $@; false)
+	 test -f mirroring.tab.i || (echo Could not build $@; false)
 
 DISTCLEANFILES += $(MIRRORING_TAB_VARIANTS)
 
@@ -104,11 +104,11 @@ ReadMe_fribidi-unicode-version.h: \
 
 fribidi-unicode-version.h:
 	@for x in $(UNICODE_VERSION_VARIANTS); do \
-	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x $@; then \
+	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x fribidi-unicode-version.h; then \
 	     break; \
 	   fi; \
 	 done; \
-	 test -f $@ || (echo Could not build $@; false)
+	 test -f fribidi-unicode-version.h || (echo Could not build $@; false)
 
 DISTCLEANFILES += $(UNICODE_VERSION_VARIANTS)
 

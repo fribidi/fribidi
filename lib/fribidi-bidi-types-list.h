@@ -1,12 +1,12 @@
 #ifndef __C2MAN__
 /* FriBidi
- * bidi-types-list.h - list of bidi types
+ * fribidi-bidi-types-list.h - list of bidi types
  *
- * $Id: bidi-types-list.h,v 1.5 2004-05-12 07:06:21 behdad Exp $
+ * $Id: fribidi-bidi-types-list.h,v 1.1 2004-05-31 18:43:26 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.5 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/bidi-types-list.h,v $
+ * $Date: 2004-05-31 18:43:26 $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types-list.h,v $
  *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
@@ -40,7 +40,9 @@
 # define _FRIBIDI_ADD_ALIAS(x1,x2)
 #endif
 
+#if !_FRIBIDI_PAR_TYPES
 /* Bidi types from the standard. */
+/* The order of these types is important.  Don't change. */
 _FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right letter */
 _FRIBIDI_ADD_TYPE (RTL, 'R')	/* Right-To-Left letter */
 _FRIBIDI_ADD_TYPE (AL, 'A')	/* Arabic Letter */
@@ -70,15 +72,18 @@ _FRIBIDI_ADD_ALIAS (B, BS)
 _FRIBIDI_ADD_ALIAS (S, SS)
 #endif /* _FRIBIDI_ADD_ALIAS */
 
-#ifdef _FRIBIDI_PSEUDO_TYPES
-/* The following two types are not official Unicode bidi types, but used for
- * paragraph direction handling only. */
-_FRIBIDI_ADD_TYPE (WLTR, 'l')	/* Weak Left to right */
-_FRIBIDI_ADD_TYPE (WRTL, 'r')	/* Weak Right to left */
+#ifdef _FRIBIDI_SENTINEL_TYPE
+_FRIBIDI_ADD_TYPE (SENTINEL, '$')	/* Sentinel */
+#endif /* _FRIBIDI_SENTINEL_TYPES */
+#endif /* !_FRIBIDI_PAR_TYPES */
 
-/* The following type is used internally only. */
-_FRIBIDI_ADD_TYPE (SENTINEL, '$')	/* Start Of Text */
-#endif /* _FRIBIDI_PSEUDO_TYPES */
+#if _FRIBIDI_PAR_TYPES
+_FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right paragraph */
+_FRIBIDI_ADD_TYPE (RTL, 'R')	/* Right-To-Left paragraph */
+_FRIBIDI_ADD_TYPE (WLTR, 'l')	/* Weak left to right paragraph */
+_FRIBIDI_ADD_TYPE (WRTL, 'r')	/* Weak right to left paragraph */
+_FRIBIDI_ADD_TYPE (ON, 'n')	/* Direction-neutral paragraph */
+#endif /* _FRIBIDI_PAR_TYPES */
 
 #ifndef __C2MAN__
 /* *INDENT-ON* */

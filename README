@@ -24,9 +24,9 @@ and GNOME using GNU FriBidi), AbiWord, MLTerm, MPlayer, and BiCon.
 Dependencies
 ============
 
-Currently GNU FriBidi does not depend on any other library.  It uses GNU Build
-System for build and installation on POSIX systems.  There are some files to
-assist you creating a w32 DLL in the w32/ folder.
+Currently GNU FriBidi does not depend on any other library, but uses Glib if
+available.  It uses GNU Build System for build and installation on POSIX
+systems.
 
 Downloading
 ===========
@@ -38,25 +38,27 @@ The latest version of GNU FriBidi may be found at:
 Building
 ========
 
-See INSTALL for a description of how to build and install this library.
+See INSTALL for a description of how to build and install GNU FriBidi.
 
 License
 =========
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 2.1 of the License, or (at your option) any later version.
+GNU FriBidi is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
+GNU FriBidi is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with this library, in a file named COPYING; if not, write to the
+along with GNU FriBidi, in a file named COPYING; if not, write to the
 Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 Boston, MA  02111-1307  USA
+
+For licensing issues, contact <license@farsiweb.info>.
 
 Implementation
 ==============

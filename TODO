@@ -32,3 +32,44 @@ Implementation issues:
   FRIBIDI_BEGIN_DECLS, and LIKELY.
 
 * c2man:  parse Author and Copyright from the whole file.
+
+* Write texinfo documentation.
+
+* Set up gnu.org web pages, and the entry in Free Software Directory.
+
+* Use gengetopt.
+
+* Add FriBidiEnv functionality at compile time.  Also, ifdef out the memory
+  cleanup stuff if asked to fail on memory allocation failure (xmalloc).
+
+* Fix cvs2cl bug with spacing around author names read with -U option.  Then
+  fix spacing in AUTHORS.
+
+* Use `-' before any command for installing a man page, so that make will
+  ignore any errors.
+
+* Should fail if cannot build ChangeLog, right?
+
+* Clean up README and NEWS, and check all files' headers.  Write
+  gen.tab/README.
+
+* Add make rules for lib/$(BUILT_SOURCES) to depend on gen.tab/ stuff.
+
+* When called in interactive mode, fribidi cmd-line should greet, write
+  about copyrtight stuff, and shared-libs' version and Unicode version.
+
+* Add Unicode Character Database data structure, to support more than
+  one UCD version at the same time.
+
+* Configure gen.tab/ with host=build to avoid cross-compiling table
+  generators.
+
+From GNU Coding Standards:
+
+* make maintainer-clean should not clean configure system.
+
+* The distribution should contain a file named `README' which gives the name
+  of the package, and a general description of what it does. It is also good
+  to explain the purpose of each of the first-level subdirectories in the
+  package, if there are any. The `README' file should either state the version
+  number of the package, or refer to where in the package it can be found.

@@ -1,12 +1,12 @@
-##############################################################################
-## $Id: Makefile.am,v 1.5 2004-05-25 11:14:14 behdad Exp $
-## $Author: behdad $
-## $Date: 2004-05-25 11:14:14 $
-## $Revision: 1.5 $
-## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
-##############################################################################
 ##                                               -*- Automake -*-
 ## Process this file with automake to produce Makefile.in
+##############################################################################
+## $Id: Makefile.am,v 1.6 2004-05-31 18:43:26 behdad Exp $
+## $Author: behdad $
+## $Date: 2004-05-31 18:43:26 $
+## $Revision: 1.6 $
+## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
+##############################################################################
 
 ## The order of subdirs is important, don't change without a reason.
 SUBDIRS = gen.tab charset lib bin doc test

@@ -1,14 +1,14 @@
-##############################################################################
-## $Id: configure.ac,v 1.10 2004-05-25 12:28:11 behdad Exp $
-## $Auther: behdad $
-## $Date: 2004-05-25 12:28:11 $
-## $Revision: 1.10 $
-## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
-##############################################################################
 ##                                               -*- Autoconf -*-
 ## Process this file with autoconf to produce a configure script.
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
+##############################################################################
+## $Id: configure.ac,v 1.11 2004-05-31 18:43:26 behdad Exp $
+## $Auther: behdad $
+## $Date: 2004-05-31 18:43:26 $
+## $Revision: 1.11 $
+## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
+##############################################################################
 
 AC_PREREQ(2.56)
 
@@ -33,15 +33,18 @@ dnl
 m4_define(fribidi_major_version, 0)dnl
 m4_define(fribidi_minor_version, 19)dnl
 m4_define(fribidi_micro_version, 0)dnl
-m4_define(fribidi_version,fribidi_major_version.fribidi_minor_version.fribidi_micro_version)dnl
 m4_define(fribidi_interface_version, 3)dnl
 m4_define(fribidi_interface_age, 0)dnl
 m4_define(fribidi_binary_age, 3)dnl
 m4_define(fribidi_rpm_release, 1)dnl
 dnl
+m4_define(fribidi_version,
+	  m4_if(m4_eval(fribidi_micro_version()),0,
+	    fribidi_major_version.fribidi_minor_version,
+	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.10 2004-05-25 12:28:11 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.11 2004-05-31 18:43:26 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -131,10 +134,9 @@ AC_TYPE_SIGNAL
 
 # Checks for configure options
 
-m4_define(debug_default,
-          m4_if(m4_eval(fribidi_minor_version() % 2),1,yes,minimum))
-
 # --enable-debug
+m4_define(debug_default,
+          m4_if(m4_eval(fribidi_minor_version() % 2),1,yes,no))
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],
                              [turn on debugging @<:@default=debug_default()@:>@]),,
@@ -145,10 +147,10 @@ if test x$enableval = xyes; then
 fi
 
 # --enable-malloc
-AC_ARG_ENABLE(debug,
+AC_ARG_ENABLE(malloc,
               AC_HELP_STRING([--enable-malloc],
                              [use simple malloc instead of memory chunks]))
-if test x$enable_glib = xyes; then
+if test x$enable_malloc = xyes; then
 	AC_DEFINE(USE_SIMPLE_MALLOC,1,
                   [Define to 1 if you want to use simple mallocs instead of memory chunks])
 fi
@@ -156,7 +158,7 @@ fi
 # --disable-charsets
 AC_ARG_ENABLE(charsets,
               AC_HELP_STRING([--disable-charsets],
-                             [exclude charset conversion codes from the library]))
+                             [exclude charset conversion routines from the library]))
 if test x$enable_charsets = xno; then
 	FRIBIDI_CHARSETS=0
 else
@@ -165,10 +167,10 @@ fi
 AC_SUBST(FRIBIDI_CHARSETS)
 AM_CONDITIONAL(FRIBIDI_CHARSETS, test x$FRIBIDI_CHARSETS = x1)
 
-# --without-glib
+# --with[out]-glib
 AC_ARG_WITH(glib,
-              AC_HELP_STRING([--without-glib],
-                             [do not use Glib]))
+              AC_HELP_STRING([--with-glib=@<:@no/auto/yes@:>@],
+                             [use Glib @<:@default=auto@:>@]))
 GLIB_PACKAGE=glib-2.0
 GLIB_LIBS=
 GLIB_CFLAGS=
@@ -184,7 +186,7 @@ else
 		FRIBIDI_USE_GLIB=0)
 fi
 fi
-if test x$FRIBIDI_USER_GLIB = x0; then
+if test x$FRIBIDI_USE_GLIB = x0; then
 	GLIB_PACKAGE=
 fi
 AC_SUBST(FRIBIDI_USE_GLIB)
