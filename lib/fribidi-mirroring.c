@@ -1,16 +1,6 @@
 /* FriBidi
  * fribidi-mirroring.c - get mirrored character
  *
- * $Id: fribidi-mirroring.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
- * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
- *
- * Authors:
- *   Behdad Esfahbod, 2001, 2002, 2004
- *   Dov Grobgeld, 1999, 2000
- *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
  * Copyright (C) 2001,2002 Behdad Esfahbod
  * Copyright (C) 1999,2000 Dov Grobgeld
@@ -31,6 +21,16 @@
  * Boston, MA 02111-1307, USA
  * 
  * For licensing issues, contact <license@farsiweb.info>.
+ */
+/* $Id: fribidi-mirroring.c,v 1.2 2004-04-27 15:23:25 behdad Exp $
+ * $Author: behdad $
+ * $Date: 2004-04-27 15:23:25 $
+ * $Revision: 1.2 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
+ *
+ * Authors:
+ *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Dov Grobgeld, 1999, 2000
  */
 
 #include <fribidi-mirroring.h>
