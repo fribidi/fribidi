@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-benchmark.c,v 1.3 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
  *
  * Authors:
@@ -198,9 +198,13 @@ benchmark (
     {
       /* Create a bidi string */
       base = FRIBIDI_TYPE_ON;
-      fribidi_log2vis (us, len, &base,
-		       /* output */
-		       out_us, positionVtoL, positionLtoV, embedding_list);
+      if (!fribidi_log2vis (us, len, &base,
+			    /* output */
+			    out_us, positionVtoL, positionLtoV,
+			    embedding_list))
+	die2
+	  ("something failed in fribidi_log2vis.\n"
+	   "perhaps memory allocation failure.", NULL);
     }
 
   /* stop timer */

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.3 2004-05-07 06:30:37 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.4 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:37 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -93,11 +93,11 @@ init_cap_rtl (
 	  if (to_type[j] == CapRTLCharTypes[i])
 	    break;
 	if (j == num_types)
-	{
-	  num_types++;
-	  to_type[j] = CapRTLCharTypes[i];
-	  request[j] = 0;
-	}
+	  {
+	    num_types++;
+	    to_type[j] = CapRTLCharTypes[i];
+	    request[j] = 0;
+	  }
 	request[j]++;
 	count++;
       }

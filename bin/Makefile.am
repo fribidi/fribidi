@@ -1,6 +1,6 @@
 bin_PROGRAMS = fribidi
 
-noinst_PROGRAMS = fribidi-benchmark bidi-type-serialize
+noinst_PROGRAMS = fribidi-benchmark
 
 getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h
 
@@ -14,7 +14,7 @@ AM_CPPFLAGS = \
 		-I$(top_srcdir)/charset \
 		$(MISC_CFLAGS)
 
-LDADD = $(top_builddir)/lib/libfribidi.la $(GLIB_LIBS)
+LDADD = $(top_builddir)/lib/libfribidi.la $(MISC_LIBS)
 
 if FRIBIDI_CHARSETS
 else # !FRIBIDI_CHARSETS

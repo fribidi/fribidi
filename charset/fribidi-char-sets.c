@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets.c - character set conversion routines
  *
- * $Id: fribidi-char-sets.c,v 1.3 2004-05-12 07:06:21 behdad Exp $
+ * $Id: fribidi-char-sets.c,v 1.4 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets.c,v $
  *
  * Authors:
@@ -128,7 +128,7 @@ fribidi_strcasecmp (
       s1++;
       s2++;
     }
-  return toupper(*s1) - toupper(*s2);
+  return toupper (*s1) - toupper (*s2);
 }
 #else /* FRIBIDI_USE_GLIB */
 # include <glib/gstrfuncs.h>

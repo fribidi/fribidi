@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.6 2004-05-12 08:17:19 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.7 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 08:17:19 $
- * $Revision: 1.6 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -110,4 +110,3 @@ fribidi_get_types (
 {
   fribidi_get_bidi_types (str, len, type);
 }
-

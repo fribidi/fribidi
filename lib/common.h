@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.9 2004-05-22 10:35:31 behdad Exp $
+ * $Id: common.h,v 1.10 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 10:35:31 $
- * $Revision: 1.9 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -69,7 +69,7 @@
 # endif	/* !fribidi_assert */
 # ifndef __C2MAN__
 #  include <glib/gmacros.h>
-# endif /* !__C2MAN__ */
+# endif	/* !__C2MAN__ */
 # ifndef FRIBIDI_BEGIN_STMT
 #  define FRIBIDI_BEGIN_STMT G_STMT_START {
 #  define FRIBIDI_END_STMT } G_STMT_END
@@ -80,23 +80,23 @@
 # endif	/* !LIKELY */
 # ifndef false
 #  define false FALSE
-# endif /* !false */
+# endif	/* !false */
 # ifndef true
 #  define true TRUE
-# endif /* !true */
+# endif	/* !true */
 #endif /* FRIBIDI_USE_GLIB */
 
 #ifndef false
 # define false (0)
-# endif /* !false */
+# endif	/* !false */
 # ifndef true
 #  define true (!false)
-# endif /* !true */
+# endif	/* !true */
 
 #ifndef NULL
 #  ifdef __cplusplus
 #    define NULL        (0L)
-#  else /* !__cplusplus */
+#  else	/* !__cplusplus */
 #    define NULL        ((void*) 0)
 #  endif /* !__cplusplus */
 #endif /* !NULL */
@@ -116,7 +116,7 @@
 #else /* fribidi_malloc */
 # ifndef fribidi_free
 #  error You should define fribidi_free too when you define fribidi_malloc.
-# endif /* !fribidi_free */
+# endif	/* !fribidi_free */
 #endif /* fribidi_malloc */
 
 /* FRIBIDI_CHUNK_SIZE is the number of bytes in each chunk of memory being

@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-unicode-version.c - generate fribidi-unicode-version.h for libfribidi
  *
- * $Id: gen-unicode-version.c,v 1.2 2004-05-22 10:35:30 behdad Exp $
+ * $Id: gen-unicode-version.c,v 1.3 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 10:35:30 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-unicode-version.c,v $
  *
  * Author:
@@ -79,14 +79,14 @@ die2 (
 }
 
 int version_major, version_minor, version_micro;
-char *unicode_version;
+char unicode_version[100];
 
 static void
 init_tab (
 )
 {
   version_major = version_minor = version_micro = 0;
-  unicode_version = "unknown";
+  strcpy (unicode_version, "(unknown)");
 }
 
 static void
@@ -102,7 +102,6 @@ read_read_me_txt (
       {
 	sscanf (p, "Version %d.%d.%d", &version_major, &version_minor,
 		&version_micro);
-	unicode_version = fribidi_malloc (100);
 	sprintf (unicode_version, "%d.%d.%d", version_major, version_minor,
 		 version_micro);
 	return;

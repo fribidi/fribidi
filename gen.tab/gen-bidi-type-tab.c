@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.5 2004-05-22 10:35:30 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.6 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 10:35:30 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -196,7 +196,7 @@ init (
   for (i = type_names_count - 1; i >= 0; i--)
     names[type_names[i].key] = type_names[i].name;
 
-  init_tab();
+  init_tab ();
 }
 
 static void

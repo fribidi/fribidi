@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-mirroring-tab.c - generate mirroring.tab.i for libfribidi
  *
- * $Id: gen-mirroring-tab.c,v 1.4 2004-05-22 10:35:30 behdad Exp $
+ * $Id: gen-mirroring-tab.c,v 1.5 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 10:35:30 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-mirroring-tab.c,v $
  *
  * Author:
@@ -82,8 +82,8 @@ static void
 die4 (
   char *fmt,
   unsigned long l,
-  char *p,
-  char *q
+  unsigned long p,
+  unsigned long q
 )
 {
   fprintf (stderr, appname ": ");

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-mem.c - memory manipulation routines
  *
- * $Id: fribidi-mem.c,v 1.5 2004-05-07 06:30:38 behdad Exp $
+ * $Id: fribidi-mem.c,v 1.6 2004-05-22 11:21:40 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-22 11:21:40 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mem.c,v $
  *
  * Authors:
@@ -87,7 +87,9 @@ fribidi_mem_chunk_alloc (
 	(chunk)
 	{
 	  if (mem_chunk->chunk)
-	    * (void **) chunk = (char *) mem_chunk->chunk + mem_chunk->empty_size - mem_chunk->area_size;
+	    *(void **) chunk =
+	      (char *) mem_chunk->chunk + mem_chunk->empty_size -
+	      mem_chunk->area_size;
 	  chunk = (char *) chunk + mem_chunk->atom_size;
 	  mem_chunk->chunk = chunk;
 	  mem_chunk->empty_size = mem_chunk->area_size - mem_chunk->atom_size;
@@ -115,7 +117,8 @@ fribidi_mem_chunk_destroy (
 
   fribidi_assert (mem_chunk);
 
-  chunk = (char *) mem_chunk->chunk + mem_chunk->empty_size - mem_chunk->area_size;
+  chunk =
+    (char *) mem_chunk->chunk + mem_chunk->empty_size - mem_chunk->area_size;
   while LIKELY
     (chunk)
     {

@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: Makefile.am,v 1.3 2004-05-07 06:30:37 behdad Exp $
+## $Id: Makefile.am,v 1.4 2004-05-22 11:21:39 behdad Exp $
 ## $Author: behdad $
-## $Date: 2004-05-07 06:30:37 $
-## $Revision: 1.3 $
+## $Date: 2004-05-22 11:21:39 $
+## $Revision: 1.4 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
 ##############################################################################
 ##                                               -*- Automake -*-
@@ -30,6 +30,10 @@ MAINTAINERCLEANFILES = \
 		$(srcdir)/missing \
 		`find "$(srcdir)" -type f -name Makefile.in -print` \
 		`find "$(srcdir)" -type f -name "*~" -print`
+
+BUILT_SOURCES = lib/fribidi-unicode-version.h
+lib/fribidi-unicode-version.h:
+	(cd lib && $(MAKE) $(AM_MAKEFLAGS) fribidi-unicode-version.h)
 
 # Indent all C source and header files
 
