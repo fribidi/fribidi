@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.h - Unicode bidirectional and Arabic joining algorithms
  *
- * $Id: fribidi.h,v 1.2 2004-06-07 20:38:21 behdad Exp $
+ * $Id: fribidi.h,v 1.3 2004-06-09 08:56:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-07 20:38:21 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-09 08:56:53 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.h,v $
  *
  * Author:
@@ -43,13 +43,21 @@
 #endif /* FRIBIDI_CHARSETS */
 
 
+/* See fribidi-bidi.h for the core functions fribidi_get_par_embedding_levels
+ * and fribidi_reorder_line which are probably the main calls you need.  See
+ * README for a better understanding of what calls you need.
+ */
+
+
 #define fribidi_shape FRIBIDI_NAMESPACE(shape)
 /* fribidi_shape - do bidi-dependent shaping
  *
  * This function does all shaping work that depends on the resolved embedding
  * levels of the characters.  Currently it does mirroring and Arabic shaping,
  * but the list may grow later.  Individual shaping features can be turned
- * on/off using environmental setting functions fribidi_env_*.
+ * on/off using environmental setting functions fribidi_env_*.  Feel free to
+ * do your own shaping before or after calling this function, but you should
+ * take care of embedding levels yourself then.
  */
 FRIBIDI_ENTRY void fribidi_shape (
   const FriBidiLevel *embedding_level_list,	/* input list of embedding

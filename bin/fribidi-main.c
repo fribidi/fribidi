@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.7 2004-06-04 09:41:11 behdad Exp $
+ * $Id: fribidi-main.c,v 1.8 2004-06-09 08:56:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 09:41:11 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-09 08:56:53 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -251,12 +251,12 @@ main (
 	{"nomirror", 0, (int *) (void *) &do_mirror, false},
 	{"reordernsm", 0, (int *) (void *) &do_reorder_nsm, true},
 	{"clean", 0, (int *) (void *) &do_clean, true},
-	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_LTR},
-	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_RTL},
+	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_PAR_LTR},
+	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_PAR_RTL},
 	{"wltr", 0, (int *) (void *) &input_base_direction,
-	 FRIBIDI_TYPE_WLTR},
+	 FRIBIDI_PAR_WLTR},
 	{"wrtl", 0, (int *) (void *) &input_base_direction,
-	 FRIBIDI_TYPE_WRTL},
+	 FRIBIDI_PAR_WRTL},
 	{"basedir", 0, (int *) (void *) &show_basedir, true},
 	{"ltov", 0, (int *) (void *) &show_ltov, true},
 	{"vtol", 0, (int *) (void *) &show_vtol, true},

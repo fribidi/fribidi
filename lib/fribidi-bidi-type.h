@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.h - get character bidi type
  *
- * $Id: fribidi-bidi-type.h,v 1.3 2004-06-04 09:41:11 behdad Exp $
+ * $Id: fribidi-bidi-type.h,v 1.4 2004-06-09 08:56:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 09:41:11 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-09 08:56:53 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.h,v $
  *
  * Author:
@@ -43,7 +43,8 @@
 #define fribidi_get_bidi_type FRIBIDI_NAMESPACE(get_bidi_type)
 /* fribidi_get_bidi_type - get character bidi type
  *
- * This function returns the bidi type of a character.
+ * This function returns the bidi type of a character.  There are a few macros
+ * defined in fribidi-bidi-types.h for querying a bidi type.
  */
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_bidi_type (
@@ -66,7 +67,8 @@ fribidi_get_bidi_type (
 #define fribidi_get_bidi_types FRIBIDI_NAMESPACE(get_bidi_types)
 /* fribidi_get_bidi_types - get bidi types for an string of characters
  *
- * This function finds the bidi types of an string of characters.
+ * This function finds the bidi types of an string of characters.  See
+ * fribidi_get_bidi_type for more information.
  */
      FRIBIDI_ENTRY void fribidi_get_bidi_types (
   const FriBidiChar *str,	/* input string */

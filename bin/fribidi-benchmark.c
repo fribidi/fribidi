@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.3 2004-05-22 11:21:40 behdad Exp $
+ * $Id: fribidi-benchmark.c,v 1.4 2004-06-09 08:56:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 11:21:40 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-09 08:56:53 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
  *
  * Authors:
@@ -197,7 +197,7 @@ benchmark (
   for (i = 0; i < niter; i++)
     {
       /* Create a bidi string */
-      base = FRIBIDI_TYPE_ON;
+      base = FRIBIDI_PAR_ON;
       if (!fribidi_log2vis (us, len, &base,
 			    /* output */
 			    out_us, positionVtoL, positionLtoV,
