@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.12 2004-06-18 19:21:33 behdad Exp $
+ * $Id: fribidi.c,v 1.13 2004-06-21 16:15:27 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-18 19:21:33 $
- * $Revision: 1.12 $
+ * $Date: 2004-06-21 16:15:27 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -172,14 +172,22 @@ fribidi_log2vis (
   if UNLIKELY
     (max_level < 0) goto out;
 
+  if (visual_str)
+    {
+      register FriBidiStrIndex i;
+
+      for (i = len - 1; i >= 0; i--)
+	visual_str[i] = str[i];
+
 #if !FRIBIDI_NO_ARABIC
-  /* Arabic joining */
-  {
-    ar_props = fribidi_malloc (len * sizeof ar_props[0]);
-    fribidi_get_joining_types (str, len, ar_props);
-    fribidi_join_arabic (embedding_levels, len, ar_props);
-  }
+      /* Arabic joining */
+      ar_props = fribidi_malloc (len * sizeof ar_props[0]);
+      fribidi_get_joining_types (str, len, ar_props);
+      fribidi_join_arabic (embedding_levels, len, ar_props);
 #endif /* !FRIBIDI_NO_ARABIC */
+
+      fribidi_shape (embedding_levels, len, visual_str);
+    }
 
   /* If l2v is to be calculated we must have v2l as well. If it is not
      given by the caller, we have to make a private instance of it. */
@@ -192,17 +200,10 @@ fribidi_log2vis (
       private_V_to_L = true;
     }
 
-  if (visual_str)
-    {
-      register FriBidiStrIndex i;
-
-      for (i = len; i >= 0; i--)
-	visual_str[i] = str[i];
-    }
-
-  fribidi_shape (embedding_levels, len, visual_str);
-
-  status = fribidi_reorder_line (visual_str, len, 0, NULL, *pbase_dir, embedding_levels, positions_L_to_V, positions_V_to_L);
+  status =
+    fribidi_reorder_line (str, len, 0, NULL, *pbase_dir,
+			  embedding_levels, visual_str,
+			  positions_L_to_V, positions_V_to_L);
 
 out:
 

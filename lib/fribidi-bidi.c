@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.15 2004-06-18 22:41:39 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.16 2004-06-21 16:15:27 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-18 22:41:39 $
- * $Revision: 1.15 $
+ * $Date: 2004-06-21 16:15:27 $
+ * $Revision: 1.16 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -757,11 +757,11 @@ fribidi_get_par_embedding_levels (
     register FriBidiRun *p, *q, *list;
 
     /* L1. Reset the embedding levels of some chars:
-           1. segment separators,
-           2. paragraph separators,
-           3. any sequence of whitespace characters preceding a segment
-              separator or paragraph separator, and
-	   ... (to be continued in fribidi_reorder_line()). */
+       1. segment separators,
+       2. paragraph separators,
+       3. any sequence of whitespace characters preceding a segment
+       separator or paragraph separator, and
+       ... (to be continued in fribidi_reorder_line()). */
     list = new_run_list ();
     if UNLIKELY
       (!list) goto out;
@@ -877,8 +877,7 @@ index_array_reverse (
 
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_reorder_line (
-  /* input and output */
-  FriBidiChar *str,
+  const FriBidiChar *str,
   /* input */
   const FriBidiStrIndex len,
   const FriBidiStrIndex off,
@@ -886,6 +885,7 @@ fribidi_reorder_line (
   const FriBidiParType base_dir,
   /* input and output */
   FriBidiLevel *embedding_levels,
+  FriBidiChar *visual_str,
   /* output */
   FriBidiStrIndex *positions_L_to_V,
   FriBidiStrIndex *positions_V_to_L
@@ -915,17 +915,20 @@ fribidi_reorder_line (
 
   DBG ("in fribidi_reorder_line");
 
-  fribidi_assert (str || bidi_types);
+  fribidi_assert (str || visual_str || bidi_types);
   fribidi_assert (embedding_levels);
+
+  if (!str)
+    str = visual_str;
 
   DBG ("reset the embedding levels, 4. whitespace at the end of line");
   {
     register FriBidiStrIndex i;
 
     /* L1. Reset the embedding levels of some chars:
-           4. any sequence of white space characters at the end of the line.*/
+       4. any sequence of white space characters at the end of the line. */
     for (i = off + len - 1; i >= off &&
-	FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (BIDI_TYPE (i)); i--)
+	 FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (BIDI_TYPE (i)); i--)
       embedding_levels[i] = FRIBIDI_DIR_TO_LEVEL (base_dir);
   }
 
@@ -975,9 +978,9 @@ fribidi_reorder_line (
 		    DBG ("warning: NSM(s) at the beggining of level run");
 		  }
 
-		if (str)
+		if (visual_str)
 		  {
-		    bidi_string_reverse (str + i, seq_end - i + 1);
+		    bidi_string_reverse (visual_str + i, seq_end - i + 1);
 		  }
 		if (positions_V_to_L)
 		  {
@@ -1004,8 +1007,8 @@ fribidi_reorder_line (
 	      for (i--; i >= off && embedding_levels[i] >= level; i--)
 		;
 
-	      if (str)
-		bidi_string_reverse (str + i + 1, seq_end - i);
+	      if (visual_str)
+		bidi_string_reverse (visual_str + i + 1, seq_end - i);
 	      if (positions_V_to_L)
 		index_array_reverse (positions_V_to_L + i + 1, seq_end - i);
 	    }

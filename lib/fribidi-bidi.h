@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.11 2004-06-18 19:21:33 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.12 2004-06-21 16:15:27 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-18 19:21:33 $
- * $Revision: 1.11 $
+ * $Date: 2004-06-21 16:15:27 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -116,12 +116,19 @@ fribidi_get_par_embedding_levels (
  *
  * As a side effect it also sets position maps if not NULL.
  *
- * You can provide either the string, or the bidi types; or both.  If
+ * You can provide either the string str, or the bidi types; or both.  If
  * bidi_types are provided, they are used as the bidi types of characters in
  * the string, otherwise the types are computed from the characters in str.
+ * If neither str nor bidi types are provided, visual_str is used instead.
+ * Feel free to pass the same string as both str and visual_str, but if you
+ * done extensive complicated shaping in visual_str, you better provide
+ * logical string as str.  There is no known differences yet between providing
+ * logical or visual string as str.
+ *
  * If you have obtained the embedding levels using custom bidi types, you
  * should provide the same types to this function for valid resutls.
- * Providing bidi types if available at your side, saves you a few cycles.
+ * Providing bidi types if available at your side, saves you a few cycles, and
+ * you don't need to provide str anymore.
  *
  * You should provide the resolved paragraph direction and embedding levels as
  * set by fribidi_get_par_embedding_levels().  Also note that the embedding
@@ -139,15 +146,16 @@ fribidi_get_par_embedding_levels (
  * occured (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
-  FriBidiChar *str,		/* string to reorder */
+  const FriBidiChar *str,	/* input string */
   const FriBidiStrIndex len,	/* input length of the line */
   const FriBidiStrIndex off,	/* input offset of the beginning of the line
 				   in the paragraph */
   const FriBidiCharType *bidi_types,	/* input bidi types */
   const FriBidiParType base_dir,	/* resolved paragraph base direction */
-  FriBidiLevel *embedding_levels,	/* input list of embedding levels,
+  FriBidiLevel *embedding_levels,	/* list of embedding levels,
 					   as returned by
 					   fribidi_get_par_embedding_levels */
+  FriBidiChar *visual_str,	/* visual string to reorder */
   FriBidiStrIndex *positions_L_to_V,	/* output mapping from logical to
 					   visual string positions */
   FriBidiStrIndex *positions_V_to_L	/* output mapping from visual string
