@@ -22,10 +22,10 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.c,v 1.4 2004-05-03 22:05:19 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.5 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:
@@ -37,7 +37,12 @@
 
 #include <fribidi-mirroring.h>
 
-#include "mirroring-table.i"
+struct _FriBidiMirroredPair
+{
+  FriBidiChar ch, mirrored_ch;
+};
+
+#include "mirroring.tab.i"
 
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_get_mirror_char (

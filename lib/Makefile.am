@@ -31,7 +31,7 @@ pkginclude_HEADERS = $(libfribidi_la_headers)
 libfribidi_la_SOURCES =	\
 		bidi-types.h \
 		bidi-types-list.h \
-		bidi-type-table.i \
+		bidi-type.tab.i \
 		common.h \
 		debug.h \
 		env.h \
@@ -44,12 +44,12 @@ libfribidi_la_SOURCES =	\
 		fribidi-mirroring.c \
 		fribidi-run.c \
 		mem.h \
-		mirroring-table.i \
+		mirroring.tab.i \
 		run.h
 
 BUILT_SOURCES= \
-		bidi-type-table.i \
-		mirroring-table.i \
+		bidi-type.tab.i \
+		mirroring.tab.i \
 		fribidi-config.h \
 		fribidi-unicode-version.h
 

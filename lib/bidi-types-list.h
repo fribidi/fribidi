@@ -2,10 +2,10 @@
 /* FriBidi
  * bidi-types-list.h - list of bidi types
  *
- * $Id: bidi-types-list.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: bidi-types-list.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/bidi-types-list.h,v $
  *
  * Author:
@@ -33,6 +33,9 @@
  */
 /* *INDENT-OFF* */
 #endif /* !__C2MAN__ */
+#ifndef _FRIBIDI_ADD_TYPE
+# define _FRIBIDI_ADD_TYPE(x,y)
+#endif
 
 /* Bidi types from the standard. */
 _FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right letter */
@@ -55,6 +58,7 @@ _FRIBIDI_ADD_TYPE (LRO, '+')	/* Left-to-Right Override */
 _FRIBIDI_ADD_TYPE (RLO, '+')	/* Right-to-Left Override */
 _FRIBIDI_ADD_TYPE (PDF, '-')	/* Pop Directional Flag */
 
+#ifdef _FRIBIDI_PSEUDO_TYPES
 /* The following two types are not official Unicode bidi types, but used for
  * paragraph direction handling only. */
 _FRIBIDI_ADD_TYPE (WLTR, 'l')	/* Weak Left to right */
@@ -62,6 +66,7 @@ _FRIBIDI_ADD_TYPE (WRTL, 'r')	/* Weak Right to left */
 
 /* The following type is used internally only. */
 _FRIBIDI_ADD_TYPE (SENTINEL, '$')	/* Start Of Text */
+#endif /* _FRIBIDI_PSEUDO_TYPES */
 
 #ifndef __C2MAN__
 /* *INDENT-ON* */

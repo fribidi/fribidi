@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-common.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -72,7 +72,7 @@
 # endif	/* !__cplusplus */
 #endif /* !FRIBIDI_BEGIN_DECLS */
 
-#ifdef FRIBIDI_USE_GLIB
+#if FRIBIDI_USE_GLIB
 # ifndef __C2MAN__
 #  include <glib/gmacros.h>
 # define FRIBIDI_GNUC_CONST		G_GNUC_CONST
@@ -99,6 +99,10 @@
 #define fribidi_version_info FRIBIDI_NAMESPACE(version_info)
 /* An string containing the version information of the library. */
 extern const char *fribidi_version_info;
+
+#define fribidi_unicode_version FRIBIDI_NAMESPACE(unicode_version)
+/* An string containing the version the Unicode standard implemented. */
+extern const char *fribidi_unicode_version;
 
 #endif /* !_FRIBIDI_COMMON_H */
 /* Editor directions:

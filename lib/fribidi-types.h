@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-types.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -69,6 +69,9 @@
 #  endif /* !HAVE_STDINT_H */
 # endif	/* !HAVE_INTTYPES_H */
 # if HAVE_STDBOOL_H
+#  ifndef __C2MAN__
+#   include <stdbool.h>
+#  endif /* !__C2MAN__ */
 #  define FRIBIDI_BOOLEAN_LOCAL		bool
 # else /* !HAVE_STDBOOL_H */
 #  define FRIBIDI_BOOLEAN_LOCAL		int

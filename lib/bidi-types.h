@@ -1,10 +1,10 @@
 /* FriBidi
  * bidi-types.h - define internal bidi types
  *
- * $Id: bidi-types.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: bidi-types.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/bidi-types.h,v $
  *
  * Author:
@@ -42,25 +42,6 @@
 
 #define FRIBIDI_LEVEL_INVALID FRIBIDI_BIDI_MAX_RESOLVED_LEVELS
 #define FRIBIDI_SENTINEL -1
-
-/*
- * Define character types that char_type_tables use.
- * define them to be 0, 1, 2, ... and then in fribidi_get_type.c map them
- * to FriBidiCharTypes.
- */
-typedef char FriBidiPropCharType;
-
-enum FriBidiPropEnum
-{
-# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_PROP_TYPE_##TYPE,
-# include "bidi-types-list.h"
-# undef _FRIBIDI_ADD_TYPE
-  _FRIBIDI_PROP_TYPES_COUNT
-};
-
-#define fribidi_prop_to_type_ FRIBIDI_NAMESPACE(prop_to_type_)
-/* Maps fribidi_prop_types to fribidi_types */
-extern const FriBidiCharType fribidi_prop_to_type_[];
 
 #if DEBUG
 

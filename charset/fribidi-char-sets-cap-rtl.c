@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.3 2004-05-07 06:30:37 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-07 06:30:37 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -45,62 +45,27 @@
 
 #include <stdio.h>
 
-#define WS FRIBIDI_PROP_TYPE_WS
-#define BS FRIBIDI_PROP_TYPE_BS
-#define EO FRIBIDI_PROP_TYPE_EO
-#define CTL FRIBIDI_PROP_TYPE_CTL
-#define LRE FRIBIDI_PROP_TYPE_LRE
-#define RLE FRIBIDI_PROP_TYPE_RLE
-#define ES FRIBIDI_PROP_TYPE_ES
-#define LRO FRIBIDI_PROP_TYPE_LRO
-#define RLO FRIBIDI_PROP_TYPE_RLO
-#define AL FRIBIDI_PROP_TYPE_AL
-#define SS FRIBIDI_PROP_TYPE_SS
-#define ET FRIBIDI_PROP_TYPE_ET
-#define NSM FRIBIDI_PROP_TYPE_NSM
-#define LTR FRIBIDI_PROP_TYPE_LTR
-#define ON FRIBIDI_PROP_TYPE_ON
-#define AN FRIBIDI_PROP_TYPE_AN
-#define BN FRIBIDI_PROP_TYPE_BN
-#define RTL FRIBIDI_PROP_TYPE_RTL
-#define CS FRIBIDI_PROP_TYPE_CS
-#define PDF FRIBIDI_PROP_TYPE_PDF
-#define EN FRIBIDI_PROP_TYPE_EN
+enum MyFriBidiTypeEnum
+{
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE = FRIBIDI_TYPE_##TYPE,
+# include "bidi-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+  MY_NUM_TYPES
+};
 
-static FriBidiPropCharType CapRTLCharTypes[] = {
+
+static FriBidiCharType CapRTLCharTypes[] = {
 /* *INDENT-OFF* */
   ON, ON, ON, ON, LTR,RTL,ON, ON, ON, ON, ON, ON, ON, BS, RLO,RLE, /* 00-0f */
   LRO,LRE,PDF,WS, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON, ON,  /* 10-1f */
   WS, ON, ON, ON, ET, ON, ON, ON, ON, ON, ON, ET, CS, ON, ES, ES,  /* 20-2f */
   EN, EN, EN, EN, EN, EN, AN, AN, AN, AN, CS, ON, ON, ON, ON, ON,  /* 30-3f */
   RTL,AL, AL, AL, AL, AL, AL, RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL, /* 40-4f */
-  RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,ON, BS, ON, ON, ON,  /* 50-5f */
+  RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,RTL,ON, BS, ON, BN, ON,  /* 50-5f */
   NSM,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR, /* 60-6f */
   LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,LTR,ON, SS, ON, WS, ON,  /* 70-7f */
 /* *INDENT-ON* */
 };
-
-#undef WS
-#undef BS
-#undef EO
-#undef CTL
-#undef LRE
-#undef RLE
-#undef ES
-#undef LRO
-#undef RLO
-#undef AL
-#undef SS
-#undef ET
-#undef NSM
-#undef LTR
-#undef ON
-#undef AN
-#undef BN
-#undef RTL
-#undef CS
-#undef PDF
-#undef EN
 
 #define CAPRTL_CHARS (sizeof CapRTLCharTypes / sizeof CapRTLCharTypes[0])
 
@@ -111,34 +76,42 @@ init_cap_rtl (
   void
 )
 {
-  int request[_FRIBIDI_PROP_TYPES_COUNT + 1];
-  int i, count;
+  int request[MY_NUM_TYPES];
+  FriBidiCharType to_type[MY_NUM_TYPES];
+  int num_types = 0, j, count = 0;
+  FriBidiCharType i;
 
   caprtl_to_unicode =
     (FriBidiChar *) fribidi_malloc (CAPRTL_CHARS *
 				    sizeof caprtl_to_unicode[0]);
-  for (i = 0; i < _FRIBIDI_PROP_TYPES_COUNT; i++)
-    request[i] = 0;
   for (i = 0; i < CAPRTL_CHARS; i++)
     if (fribidi_get_mirror_char (i, NULL))
       caprtl_to_unicode[i] = i;
-  for (count = 0, i = 0; i < CAPRTL_CHARS; i++)
-    if (caprtl_to_unicode[i] == 0)
+    else
       {
-	request[(unsigned char) CapRTLCharTypes[i]]++;
+	for (j = 0; j < num_types; j++)
+	  if (to_type[j] == CapRTLCharTypes[i])
+	    break;
+	if (j == num_types)
+	{
+	  num_types++;
+	  to_type[j] = CapRTLCharTypes[i];
+	  request[j] = 0;
+	}
+	request[j]++;
 	count++;
       }
   for (i = 1; i < 0x10000 && count; i++)	/* Assign BMP chars to CapRTL entries */
     if (!fribidi_get_mirror_char (i, NULL))
       {
 	int j, k;
-	for (j = 0; j < _FRIBIDI_PROP_TYPES_COUNT; j++)
-	  if (fribidi_prop_to_type_[j] == fribidi_get_bidi_type (i))
+	for (j = 0; j < num_types; j++)
+	  if (to_type[j] == fribidi_get_bidi_type (i))
 	    break;
 	if (!request[j])	/* Do not need this type */
 	  continue;
 	for (k = 0; k < CAPRTL_CHARS; k++)
-	  if (!caprtl_to_unicode[k] && j == CapRTLCharTypes[k])
+	  if (!caprtl_to_unicode[k] && to_type[j] == CapRTLCharTypes[k])
 	    break;
 	if (k < CAPRTL_CHARS)
 	  {
@@ -318,8 +291,7 @@ fribidi_char_set_desc_cap_rtl (
       i += sprintf (s + i, /*l - i, */ "  * 0x%02x %c%c %-3s ", j,
 		    j < 0x20 ? '^' : ' ',
 		    j < 0x20 ? j + '@' : j < 0x7f ? j : ' ',
-		    fribidi_type_name (fribidi_prop_to_type_
-				       [(unsigned char) CapRTLCharTypes[j]]));
+		    fribidi_type_name (CapRTLCharTypes[j]));
     }
   i += sprintf (s + i,		/*l - i, */
 		"\n\n"

@@ -31,6 +31,8 @@ dist_noinst_MANS = $(noinst_symbols:=.3)
 
 man3 = $(dist_man_MANS) $(dist_noinst_MANS)
 
+EXTRA_DIST = c2man.stamp
+
 MAINTAINERCLEANFILES = $(man3)
 
 C2MANFLAGS = $(includepath) \

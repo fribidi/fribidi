@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.5 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.6 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -429,8 +429,6 @@ fribidi_analyse_string (
       FriBidiCharType this_type = RL_TYPE (pp);
       if (FRIBIDI_IS_EXPLICIT_OR_BN (this_type))
 	{
-	  register FriBidiLevel level_before = level;
-
 	  if (FRIBIDI_IS_STRONG (this_type))
 	    {			/* LRE, RLE, LRO, RLO */
 	      /* 1. Explicit Embeddings */

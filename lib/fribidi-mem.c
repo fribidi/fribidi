@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-mem.c - memory manipulation routines
  *
- * $Id: fribidi-mem.c,v 1.4 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-mem.c,v 1.5 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mem.c,v $
  *
  * Authors:
@@ -86,10 +86,11 @@ fribidi_mem_chunk_alloc (
       if LIKELY
 	(chunk)
 	{
-	  (void *) chunk = (void *) mem_chunk->chunk + emptysize - area_size;
-	  (char *) chunk += sizeof (void *);
+	  if (mem_chunk->chunk)
+	    * (void **) chunk = (char *) mem_chunk->chunk + mem_chunk->empty_size - mem_chunk->area_size;
+	  chunk = (char *) chunk + mem_chunk->atom_size;
 	  mem_chunk->chunk = chunk;
-	  mem_chunk->empty_size = mem_chunk->area_size - sizeof (void *);
+	  mem_chunk->empty_size = mem_chunk->area_size - mem_chunk->atom_size;
 	}
       else
 	return NULL;
@@ -97,8 +98,7 @@ fribidi_mem_chunk_alloc (
 
   {
     register void *m = mem_chunk->chunk;
-    mem_chunk->chunk = (void *)
-      ((char *) mem_chunk->chunk + mem_chunk->atom_size);
+    mem_chunk->chunk = (char *) mem_chunk->chunk + mem_chunk->atom_size;
     mem_chunk->empty_size -= mem_chunk->atom_size;
 
     return m;
@@ -115,12 +115,12 @@ fribidi_mem_chunk_destroy (
 
   fribidi_assert (mem_chunk);
 
-  chunk = mem_chunk->chunk + emptysize - areasize;
+  chunk = (char *) mem_chunk->chunk + mem_chunk->empty_size - mem_chunk->area_size;
   while LIKELY
     (chunk)
     {
       register void *tofree = chunk;
-      chunk = *(void *) chunk;
+      chunk = *(void **) chunk;
       fribidi_free (tofree);
     }
   fribidi_free (mem_chunk);

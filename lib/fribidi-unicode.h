@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.2 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:
@@ -48,10 +48,20 @@
 # define FRIBIDI_UNICODE_VERSION "unknown"
 #endif /* DONT_HAVE_FRIBIDI_UNICODE_VERSION_H */
 
+
+
+/* The Unicode Bidirectional Algorithm constants */
+
+/* Number of types defined in the bidi algorithm */
+#define FRIBIDI_BIDI_NUM_TYPES			19
+
 /* The maximum embedding level value assigned by explicit marks */
 #define FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL		61
 /* The maximum *number* of different resolved embedding levels: 0-62 */
 #define FRIBIDI_BIDI_MAX_RESOLVED_LEVELS	63
+
+
+/* A few Unicode characters */
 
 /* Bidirectional marks */
 #define FRIBIDI_CHAR_LRM		0x200E

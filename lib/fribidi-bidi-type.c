@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.4 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -36,7 +36,43 @@
 #include <fribidi-bidi-type.h>
 
 #include "bidi-types.h"
-#include "bidi-type-table.i"
+
+/*
+ * Define character types that char_type_tables use.
+ * define them to be 0, 1, 2, ... and then in fribidi_get_type.c map them
+ * to FriBidiCharTypes.
+ */
+typedef unsigned char FriBidiPropCharType;
+
+enum FriBidiPropEnum
+{
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
+# include "bidi-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+  NUM_TYPES
+};
+
+#include "bidi-type.tab.i"
+
+/* Map fribidi_prop_types to fribidi_types. */
+static const FriBidiCharType prop_to_type[] = {
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
+# include "bidi-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+};
+
+static inline FriBidiCharType
+get_bidi_type (
+  /* input */
+  FriBidiChar uch
+)
+{
+  if (uch < 0x110000)
+    return prop_to_type[FRIBIDI_GET_TYPE (uch)];
+  else
+    return FRIBIDI_TYPE_LTR;
+  /* Non-Unicode chars */
+}
 
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_bidi_type (
@@ -54,17 +90,6 @@ fribidi_get_type (
 )
 {
   return fribidi_get_bidi_type (ch);
-}
-
-/* The following is only defined for binary compatibility */
-#define fribidi_get_type_internal FRIBIDI_NAMESPACE(get_type_internal)
-FriBidiCharType
-fribidi_get_type_internal (
-  /* input */
-  FriBidiChar ch
-)
-{
-  return get_bidi_type (ch);
 }
 
 FRIBIDI_ENTRY void
@@ -92,9 +117,3 @@ fribidi_get_types (
   fribidi_get_bidi_types (str, len, type);
 }
 
-/* Map fribidi_prop_types to fribidi_types. */
-const FriBidiCharType fribidi_prop_to_type_[] = {
-# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
-# include "bidi-types-list.h"
-# undef _FRIBIDI_ADD_TYPE
-};

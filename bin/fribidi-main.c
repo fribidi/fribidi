@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-main.c,v 1.4 2004-05-07 06:30:37 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:37 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -245,24 +245,24 @@ main (
 	{"charsetdesc", 1, 0, CHARSETDESC},
 	{"caprtl", 0, 0, CAPRTL},
 #endif /* FRIBIDI_MAIN_USE_ICONV_H */
-	{"showinput", 0, &show_input, true},
-	{"nopad", 0, &do_pad, false},
-	{"nobreak", 0, &do_break, false},
+	{"showinput", 0, (int *) (void *) &show_input, true},
+	{"nopad", 0, (int *) (void *) &do_pad, false},
+	{"nobreak", 0, (int *) (void *) &do_break, false},
 	{"width", 1, 0, 'w'},
 	{"bol", 1, 0, 'B'},
 	{"eol", 1, 0, 'E'},
-	{"nomirror", 0, &do_mirror, false},
-	{"reordernsm", 0, &do_reorder_nsm, true},
-	{"clean", 0, &do_clean, true},
+	{"nomirror", 0, (int *) (void *) &do_mirror, false},
+	{"reordernsm", 0, (int *) (void *) &do_reorder_nsm, true},
+	{"clean", 0, (int *) (void *) &do_clean, true},
 	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_LTR},
 	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_RTL},
 	{"wltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WL},
 	{"wrtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WR},
-	{"basedir", 0, &show_basedir, true},
-	{"ltov", 0, &show_ltov, true},
-	{"vtol", 0, &show_vtol, true},
-	{"levels", 0, &show_levels, true},
-	{"novisual", 0, &show_visual, false},
+	{"basedir", 0, (int *) (void *) &show_basedir, true},
+	{"ltov", 0, (int *) (void *) &show_ltov, true},
+	{"vtol", 0, (int *) (void *) &show_vtol, true},
+	{"levels", 0, (int *) (void *) &show_levels, true},
+	{"novisual", 0, (int *) (void *) &show_visual, false},
 	{0, 0, 0, 0}
       };
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.5 2004-05-03 22:05:19 behdad Exp $
+ * $Id: common.h,v 1.6 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -137,8 +137,8 @@
 /* LIKEYLY and UNLIKELY are used to give a hint on branch prediction to the
  * compiler. */
 #ifndef LIKELY
-# define LIKELY(expr) (expr)
-# define UNLIKELY(expr) (expr)
+# define LIKELY
+# define UNLIKELY
 #endif /* !LIKELY */
 
 #ifndef FRIBIDI_EMPTY_STMT

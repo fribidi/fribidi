@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.3 2004-05-03 22:05:19 behdad Exp $
+ * $Id: debug.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-05-07 06:30:38 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -78,6 +78,7 @@
 #endif /* !MSG */
 
 #ifndef DBG
+# include <fribidi-env.h>
 # define DBG(s) \
 	FRIBIDI_BEGIN_STMT \
 	if (fribidi_debug_status()) MSG(FRIBIDI ": " s "\n"); \
