@@ -1,10 +1,10 @@
 /* FriBidi
  * bidi-types.h - define internal bidi types
  *
- * $Id: bidi-types.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: bidi-types.h,v 1.2 2004-04-28 02:37:56 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-28 02:37:56 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/bidi-types.h,v $
  *
  * Author:
@@ -42,6 +42,10 @@
 
 #include <fribidi-begindecls.h>
 
+#define FRIBIDI_LEVEL_REMOVED -3
+#define FRIBIDI_LEVEL_START   -2
+#define FRIBIDI_LEVEL_END     -1
+
 /*
  * Define character types that char_type_tables use.
  * define them to be 0, 1, 2, ... and then in fribidi_get_type.c map them
@@ -63,7 +67,7 @@ extern const FriBidiCharType fribidi_prop_to_type_[];
 
 #if DEBUG
 
-#define fribidi_char_from_bidi_type FRIBIDI_NAMESPACE(char_from_bidi_type)
+#define fribidi_char_from_bidi_type FRIBIDI_PRIVATESPACE(char_from_bidi_type)
 FRIBIDI_ENTRY char fribidi_char_from_bidi_type (
   FriBidiCharType t		/* input bidi type */
 );

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-mirroring.c - get mirrored character
  *
- * $Id: fribidi-env.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-env.c,v 1.2 2004-04-28 02:37:56 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-28 02:37:56 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-env.c,v $
  *
  * Authors:
@@ -35,11 +35,26 @@
 
 #include <fribidi-env.h>
 
+#include "env.h"
+
 #include "common.h"
 
+/* Library state variables */
+
 #if DEBUG
-static fribidi_boolean flag_debug = FALSE;
+static fribidi_boolean flag_debug = false;
 #endif
+static fribidi_boolean flag_mirroring = true;
+static fribidi_boolean flag_reorder_nsm = false;
+
+
+#if !USE_SIMPLE_MALLOC
+FriBidiRun *free_runs = NULL;
+FriBidiMemChunk *run_mem_chunk = NULL;
+#endif /* !USE_SIMPLE_MALLOC */
+
+
+/* And their manipulation routines */
 
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_debug_status (
@@ -65,8 +80,6 @@ fribidi_set_debug (
 #endif
 }
 
-static fribidi_boolean flag_mirroring = TRUE;
-
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_set_mirroring (
   fribidi_boolean state
@@ -82,8 +95,6 @@ fribidi_mirroring_status (
 {
   return flag_mirroring;
 }
-
-static fribidi_boolean flag_reorder_nsm = FALSE;
 
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_set_reorder_nsm (

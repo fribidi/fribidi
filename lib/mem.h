@@ -1,10 +1,10 @@
 /* FriBidi
  * mem.h - memory manipulation routines
  *
- * $Id: mem.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
+ * $Id: mem.h,v 1.3 2004-04-28 02:37:56 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 16:47:22 $
- * $Revision: 1.2 $
+ * $Date: 2004-04-28 02:37:56 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/mem.h,v $
  *
  * Author:
@@ -47,7 +47,7 @@ typedef struct _FriBidiMemChunk FriBidiMemChunk;
 
 #define FRIBIDI_ALLOC_ONLY      1
 
-#define fribidi_mem_chunk_new FRIBIDI_NAMESPACE(mem_chunk_new)
+#define fribidi_mem_chunk_new FRIBIDI_PRIVATESPACE(mem_chunk_new)
 FriBidiMemChunk *fribidi_mem_chunk_new (
   const char *name,
   int atom_size,
@@ -55,8 +55,13 @@ FriBidiMemChunk *fribidi_mem_chunk_new (
   int alloc_type
 );
 
-#define fribidi_mem_chunk_alloc FRIBIDI_NAMESPACE(mem_chunk_alloc)
+#define fribidi_mem_chunk_alloc FRIBIDI_PRIVATESPACE(mem_chunk_alloc)
 void *fribidi_mem_chunk_alloc (
+  FriBidiMemChunk *mem_chunk
+);
+
+#define fribidi_mem_chunk_destroy FRIBIDI_PRIVATESPACE(mem_chunk_destroy)
+void *fribidi_mem_chunk_destroy (
   FriBidiMemChunk *mem_chunk
 );
 
@@ -70,6 +75,7 @@ void *fribidi_mem_chunk_alloc (
 #define FRIBIDI_ALLOC_ONLY G_ALLOC_ONLY
 #define fribidi_mem_chunk_new g_mem_chunk_new
 #define fribidi_mem_chunk_alloc g_mem_chunk_alloc
+#define fribidi_mem_chunk_destroy g_mem_chunk_destroy
 
 #endif /* FRIBIDI_USE_GLIB */
 

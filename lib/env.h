@@ -1,17 +1,19 @@
 /* FriBidi
- * fribidi-bidi-types.c - character bidi types
+ * env.h - private state variables
  *
- * $Id: fribidi-bidi-types.c,v 1.2 2004-04-28 02:37:56 behdad Exp $
+ * $Id: env.h,v 1.1 2004-04-28 02:37:56 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-04-28 02:37:56 $
- * $Revision: 1.2 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.c,v $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/env.h,v $
  *
- * Authors:
+ * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Dov Grobgeld, 1999, 2000
  *
- * Copyright (C) 2004 Sharif FarsiWeb, Inc.
+ * Copyright (C) 2004 Sharif FarsiWeb, Inc
  * Copyright (C) 2001,2002 Behdad Esfahbod
+ * Copyright (C) 1999,2000 Dov Grobgeld
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,52 +29,35 @@
  * along with this library, in a file named COPYING; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA
- *
+ * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
+#ifndef _ENV_H
+#define _ENV_H
+
+#include <fribidi-common.h>
 
 #include <fribidi-bidi-types.h>
 
-#include "bidi-types.h"
+#include "mem.h"
 
 #include "common.h"
 
-#ifdef DEBUG
+#include <fribidi-begindecls.h>
 
-FRIBIDI_ENTRY char
-fribidi_char_from_bidi_type (
-  /* input */
-  FriBidiCharType t
-)
-{
-  switch (t)
-    {
-#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return SYMBOL;
-#   include "bidi-types-list.h"
-#   undef _FRIBIDI_ADD_TYPE
-    default:
-      return '?';
-    }
-}
+#if !USE_SIMPLE_MALLOC
 
-#endif
+#define free_runs FRIBIDI_PRIVATESPACE(free_runs)
+extern FriBidiRun *free_runs;
 
-FRIBIDI_ENTRY const char *
-fribidi_bidi_type_name (
-  /* input */
-  FriBidiCharType t
-)
-{
-  switch (t)
-    {
-#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return #TYPE;
-#   include "bidi-types-list.h"
-#   undef _FRIBIDI_ADD_TYPE
-    default:
-      return "?";
-    }
-}
+#define run_mem_chunk FRIBIDI_PRIVATESPACE(run_mem_chunk)
+extern FriBidiMemChunk *run_mem_chunk;
 
+#endif /* !USE_SIMPLE_MALLOC */
+
+#include "fribidi-enddecls.h"
+
+#endif /* !_ENV_H */
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
  */

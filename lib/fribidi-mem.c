@@ -1,10 +1,10 @@
 /* FriBidi
- * mem.h - memory manipulation routines
+ * fribidi-mem.c - memory manipulation routines
  *
- * $Id: fribidi-mem.c,v 1.2 2004-04-25 18:58:25 behdad Exp $
+ * $Id: fribidi-mem.c,v 1.3 2004-04-28 02:37:56 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:58:25 $
- * $Revision: 1.2 $
+ * $Date: 2004-04-28 02:37:56 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mem.c,v $
  *
  * Authors:
@@ -54,13 +54,16 @@ fribidi_mem_chunk_new (
   int alloc_type
 )
 {
-  FriBidiMemChunk *m =
+  register FriBidiMemChunk *m =
     (FriBidiMemChunk *) fribidi_malloc (sizeof (FriBidiMemChunk));
 
-  m->atom_size = atom_size;
-  m->area_size = area_size;
-  m->empty_size = 0;
-  m->chunk = NULL;
+  if (m)
+    {
+      m->atom_size = atom_size;
+      m->area_size = area_size;
+      m->empty_size = 0;
+      m->chunk = NULL;
+    }
 
   return m;
 }
@@ -71,20 +74,45 @@ fribidi_mem_chunk_alloc (
   FriBidiMemChunk *mem_chunk
 )
 {
-  void *m;
-
   if (mem_chunk->empty_size < mem_chunk->atom_size)
     {
-      mem_chunk->chunk = fribidi_malloc (mem_chunk->area_size);
-      mem_chunk->empty_size = mem_chunk->area_size;
+      register void *chunk = fribidi_malloc (mem_chunk->area_size);
+      if (chunk)
+	{
+	  (void *) chunk = (void *) mem_chunk->chunk + emptysize - area_size;
+	  (char *) chunk += sizeof (void *);
+	  mem_chunk->chunk = chunk;
+	  mem_chunk->empty_size = mem_chunk->area_size - sizeof (void *);
+	}
+      else
+	return NULL;
     }
 
-  m = mem_chunk->chunk;
-  mem_chunk->chunk = (void *)
-    ((char *) mem_chunk->chunk + mem_chunk->atom_size);
-  mem_chunk->empty_size -= mem_chunk->atom_size;
+  {
+    register void *m;
+    m = mem_chunk->chunk;
+    mem_chunk->chunk = (void *)
+      ((char *) mem_chunk->chunk + mem_chunk->atom_size);
+    mem_chunk->empty_size -= mem_chunk->atom_size;
 
-  return m;
+    return m;
+  }
+}
+
+void
+fribidi_mem_chunk_destroy (
+  /* input */
+  FriBidiMemChunk *mem_chunk
+)
+{
+  register void *chunk = mem_chunk->chunk + emptysize - areasize;
+  while (chunk)
+    {
+      register void *tofree = chunk;
+      chunk = *(void *) chunk;
+      fribidi_free (tofree);
+    }
+  fribidi_free (mem_chunk);
 }
 
 #endif /* !FRIBIDI_USE_GLIB */

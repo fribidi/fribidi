@@ -34,6 +34,7 @@ libfribidi_la_SOURCES =	\
 		bidi-type-table.i \
 		common.h \
 		debug.h \
+		env.h \
 		fribidi.c \
 		fribidi-bidi.c \
 		fribidi-bidi-type.c \
@@ -41,8 +42,10 @@ libfribidi_la_SOURCES =	\
 		fribidi-env.c \
 		fribidi-mem.c \
 		fribidi-mirroring.c \
+		fribidi-run.c \
 		mem.h \
-		mirroring-table.i
+		mirroring-table.i \
+		run.h
 
 BUILT_SOURCES= \
 		bidi-type-table.i \
