@@ -1,39 +1,36 @@
 behdad: Behdad Esfahbod <behdad@gnu.org>
 #
-# Behdad Esfahbod is the only one that actually codes these days.  He
-# maintains it himself too.  He has revised all code written by anyone else,
-# and written much of the code himslef.  He's listed (or at least should be
-# listed) on every file in the package as one of the authors.  He designs,
-# implements, documents, maintains, all alone... :'-(.
+# Behdad Esfahbod is the only author that actually codes these days.  He
+# maintains the package too.  He has revised all of the code written by
+# others, and has written much of the code himself.  He's listed (or should
+# be listed) on every file in the package as one of the authors.  Behdad
+# designs, implements, documents, maintains, ...
 #
 
 dov-g: Dov Grobgeld <dov@imagic.weizmann.ac.il>
 #
-# Dov Grobgeld originally wrote FriBidi.  The 0.1.* versions are all comletely
-# done by Dov.  After that, he almost never touched the code, but contributed
-# ideas.  All files that Dov has written originally have him listed as an
-# author in the header of the file.
+# Dov Grobgeld originally wrote FriBidi.  The 0.1.* releases were all done
+# by him.  After that, Dov rarely touched the code, but contributed ideas. 
+# All files that he has originally authored have him listed as an author in
+# the header of the file.
 #
 
-#roozbeh: Roozbeh Pournader <roozbeh@gnu.org>
+roozbeh: Roozbeh Pournader <roozbeh@gnu.org>
 #
-# Roozbeh Pournader actually didn't contributed much code to GNU FriBidi; but
-# he has promoted and psychologically supported the project.  He has helped
-# with making GNU FriBidi standards compliant, and has lobbied with the
-# Unicode standard when needed.  He was supposed to become a co-maintainer of
-# GNU FriBidi, so applied and got the @gnu.org account, but apparently he's
-# not doing that.  He's credited for being a GNU FriBidi author wrongly in
-# some communities still.  That's why his name appears in this file, but
-# commented out.
+# Roozbeh Pournader hasn't contributed much code to FriBidi personally; but
+# has maintained, promoted, and supported the project for a while.  He has
+# helped with making GNU FriBidi standards compliant, and has sometimes
+# lobbied with the Unicode Consortium when needed.  Roozbeh was supposed to
+# be a co-maintainer of GNU FriBidi, but he's not doing that yet.
 #
 
 
 #
-# Note: Other people have contributed significant amounts of code, but the
-# code has been faded out by restructuring and redesigning things around GNU
-# FriBidi.  As an example, the FriBidiEnv patch by Omer Zak, made itself into
-# FriBidi CVS for a couple of years, but finally implemented in a more correct
-# way by Behdad Esfahbod.
+# Note: Other people have contributed significant amounts of code, but
+# usually the code has faded out because of restructuring and redesigning
+# things around GNU FriBidi.  As an example, the FriBidiEnv patch by Omer
+# Zak, made itself into FriBidi CVS for a couple of years, but was finally
+# implemented in a better way by Behdad.
 #
 # Note: GNU getopt is distributed with and used in GNU FriBidi under bin/, but
 # is not part of GNU FriBidi.
