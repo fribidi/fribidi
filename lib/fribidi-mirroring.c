@@ -23,10 +23,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.c,v 1.10 2004-06-09 20:01:00 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.11 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 20:01:00 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:
@@ -49,10 +49,10 @@ fribidi_get_mirror_char (
 )
 {
   register FriBidiChar result;
-  result = FRIBIDI_GET_MIRRORING_DELTA (ch);
+  result = FRIBIDI_GET_MIRRORING (ch);
   if (mirrored_ch)
-    *mirrored_ch = ch + result;
-  return result ? true : false;
+    *mirrored_ch = result;
+  return ch != result ? true : false;
 }
 
 /* Editor directions:

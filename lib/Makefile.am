@@ -1,3 +1,5 @@
+EXTRA_DIST = fribidi.def
+
 lib_LTLIBRARIES = libfribidi.la
 
 AM_CPPFLAGS = $(MISC_CFLAGS)
@@ -26,11 +28,11 @@ $(top_builddir)/charset/libfribidi-char-sets.la:
 endif # FRIBIDI_CHARSETS
 
 include Headers.mk
-pkginclude_HEADERS = $(libfribidi_la_headers)
+pkginclude_HEADERS = $(libfribidi_la_headers) fribidi-config.h
 
 libfribidi_la_SOURCES =	\
-		bidi-types.h \
 		bidi-type.tab.i \
+		bidi-types.h \
 		common.h \
 		debug.h \
 		env.h \
@@ -39,22 +41,35 @@ libfribidi_la_SOURCES =	\
 		fribidi-bidi-type.c \
 		fribidi-bidi-types.c \
 		fribidi-env.c \
+		fribidi-joining.c \
+		fribidi-joining-type.c \
+		fribidi-joining-types.c \
 		fribidi-mem.c \
 		fribidi-mirroring.c \
 		fribidi-run.c \
+		joining-type.tab.i \
+		joining-types.h \
 		mem.h \
 		mirroring.tab.i \
 		run.h
 
 BUILT_SOURCES= \
+		fribidi-unicode-version.h \
 		bidi-type.tab.i \
-		mirroring.tab.i \
-		fribidi-unicode-version.h
+		joining-type.tab.i \
+		mirroring.tab.i
 
 $(BUILT_SOURCES):
-	(cd $(top_builddir)/gen.tab && \
-	 $(MAKE) $(AM_MAKEFLAGS) $@) && \
-	mv $(top_builddir)/gen.tab/$@ .
+	@(cd $(top_builddir)/gen.tab && \
+	$(MAKE) $(AM_MAKEFLAGS) $@) && \
+	(test -f $@ || mv $(top_builddir)/gen.tab/$@ .)
+
+# re-generate all built sources:
+gen:
+	@(cd $(top_builddir)/gen.tab && \
+	$(MAKE) $(AM_MAKEFLAGS) $@) && \
+	$(RM) $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) $(BUILT_SOURCES)
 
 MAINTAINERCLEANFILES = $(BUILT_SOURCES)
 

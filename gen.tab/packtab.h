@@ -27,7 +27,7 @@ extern "C"
 {
 #endif
 
-#define packtab_version 2
+#define packtab_version 3
 
   int pack_table (
   const signed int *base,

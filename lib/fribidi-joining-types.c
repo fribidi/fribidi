@@ -1,19 +1,17 @@
 /* FriBidi
- * env.h - private state variables
+ * fribidi-joining-types.c - character joining types
  *
- * $Id: env.h,v 1.3 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining-types.c,v 1.1 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.3 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/env.h,v $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.c,v $
  *
- * Author:
+ * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
- *   Dov Grobgeld, 1999, 2000
  *
- * Copyright (C) 2004 Sharif FarsiWeb, Inc
+ * Copyright (C) 2004 Sharif FarsiWeb, Inc.
  * Copyright (C) 2001,2002 Behdad Esfahbod
- * Copyright (C) 1999,2000 Dov Grobgeld
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,34 +27,52 @@
  * along with this library, in a file named COPYING; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA
- * 
+ *
  * For licensing issues, contact <license@farsiweb.info>.
  */
-#ifndef _ENV_H
-#define _ENV_H
 
 #include "common.h"
 
-#include <fribidi-bidi-types.h>
+#include <fribidi-joining-types.h>
 
-#include "mem.h"
-#include "run.h"
+#include "joining-types.h"
 
-#include <fribidi-begindecls.h>
+#ifdef DEBUG
 
-#if !USE_SIMPLE_MALLOC
+char
+fribidi_char_from_joining_type (
+  /* input */
+  FriBidiJoiningType j
+)
+{
+  switch (j)
+    {
+#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_JOINING_TYPE_##TYPE: return SYMBOL;
+#   include "fribidi-joining-types-list.h"
+#   undef _FRIBIDI_ADD_TYPE
+    default:
+      return '?';
+    }
+}
 
-#define free_runs FRIBIDI_PRIVATESPACE(free_runs)
-extern FriBidiRun *free_runs;
+#endif
 
-#define run_mem_chunk FRIBIDI_PRIVATESPACE(run_mem_chunk)
-extern FriBidiMemChunk *run_mem_chunk;
+FRIBIDI_ENTRY const char *
+fribidi_joining_type_name (
+  /* input */
+  FriBidiJoiningType j
+)
+{
+  switch (j)
+    {
+#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_JOINING_TYPE_##TYPE: return STRINGIZE(TYPE);
+#   include "fribidi-joining-types-list.h"
+#   undef _FRIBIDI_ADD_TYPE
+    default:
+      return "?";
+    }
+}
 
-#endif /* !USE_SIMPLE_MALLOC */
-
-#include "fribidi-enddecls.h"
-
-#endif /* !_ENV_H */
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
  */

@@ -1,9 +1,12 @@
-fribidi_bidi_type_name
 fribidi_get_bidi_type
-fribidi_log2vis
-fribidi_get_par_embedding_levels
-fribidi_remove_bidi_marks
 fribidi_get_mirror_char
+fribidi_bidi_type_name
+fribidi_get_par_embedding_levels
+fribidi_reorder_line
+fribidi_shape_mirroring
+fribidi_shape
+fribidi_remove_bidi_marks
+fribidi_log2vis
 fribidi_debug_status
 fribidi_set_debug
 fribidi_mirroring_status

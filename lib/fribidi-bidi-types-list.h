@@ -2,10 +2,10 @@
 /* FriBidi
  * fribidi-bidi-types-list.h - list of bidi types
  *
- * $Id: fribidi-bidi-types-list.h,v 1.4 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-bidi-types-list.h,v 1.5 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types-list.h,v $
  *
  * Author:
@@ -54,7 +54,7 @@ _FRIBIDI_ADD_TYPE (NSM, '`')	/* Non Spacing Mark */
 _FRIBIDI_ADD_TYPE (BN, 'b')	/* Boundary Neutral */
 _FRIBIDI_ADD_TYPE (BS, 'B')	/* Block Separator */
 _FRIBIDI_ADD_TYPE (SS, 'S')	/* Segment Separator */
-_FRIBIDI_ADD_TYPE (WS, '_')	/* White-Space */
+_FRIBIDI_ADD_TYPE (WS, '_')	/* WhiteSpace */
 _FRIBIDI_ADD_TYPE (ON, 'n')	/* Other Neutral */
 _FRIBIDI_ADD_TYPE (LRE, '+')	/* Left-to-Right Embedding */
 _FRIBIDI_ADD_TYPE (RLE, '+')	/* Right-to-Left Embedding */

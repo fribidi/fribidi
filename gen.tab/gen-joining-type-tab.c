@@ -1,17 +1,17 @@
 /* FriBidi
- * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
+ * gen-joining-type-tab.c - generate joining-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.12 2004-06-13 20:11:42 behdad Exp $
+ * $Id: gen-joining-type-tab.c,v 1.1 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.12 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-joining-type-tab.c,v $
  *
  * Author:
- *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Behdad Esfahbod, 2004
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002,2004 Behdad Esfahbod
+ * Copyright (C) 2004 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -56,8 +56,8 @@
 
 #include "packtab.h"
 
-#define appname "gen-bidi-type-tab"
-#define outputname "bidi-type.tab.i"
+#define appname "gen-joining-type-tab"
+#define outputname "joining-type.tab.i"
 
 static void
 die (
@@ -83,6 +83,19 @@ die2 (
 static void
 die3 (
   const char *fmt,
+  const char *p,
+  const char *q
+)
+{
+  fprintf (stderr, appname ": ");
+  fprintf (stderr, fmt, p, q);
+  fprintf (stderr, "\n");
+  exit (1);
+}
+
+static void
+die3l (
+  const char *fmt,
   unsigned long l,
   const char *p
 )
@@ -93,12 +106,10 @@ die3 (
   exit (1);
 }
 
-enum FriBidiCharTypeLinearEnumOffsetOne
+enum FriBidiJoiningLinearEnumOffsetOne
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
-# define _FRIBIDI_ADD_ALIAS(TYPE1,TYPE2) TYPE1 = TYPE2,
-# include <fribidi-bidi-types-list.h>
-# undef _FRIBIDI_ADD_ALIAS
+# include <fribidi-joining-types-list.h>
 # undef _FRIBIDI_ADD_TYPE
   NUM_TYPES
 };
@@ -111,9 +122,7 @@ struct
 type_names[] =
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) {STRINGIZE(TYPE), TYPE},
-# define _FRIBIDI_ADD_ALIAS(TYPE1,TYPE2) _FRIBIDI_ADD_TYPE(TYPE1, SYMBOL)
-# include <fribidi-bidi-types-list.h>
-# undef _FRIBIDI_ADD_ALIAS
+# include <fribidi-joining-types-list.h>
 # undef _FRIBIDI_ADD_TYPE
 };
 
@@ -131,16 +140,54 @@ get_type (
   for (i = 0; i < type_names_count; i++)
     if (!strcmp (s, type_names[i].name))
       return type_names[i].key;
-  die2 ("bidi type name `%s' not found", s);
-  return 0;
+  die2 ("joining type name `%s' not found", s);
+  return -1;
 }
 
-#define table_name "Bid"
-#define macro_name "FRIBIDI_GET_BIDI_TYPE"
+static const char *ignored_bidi_types[] = {
+  "BN",
+  "LRE",
+  "RLE",
+  "LRO",
+  "RLO",
+  "PDF",
+  NULL
+};
+
+static const char *transparent_general_categories[] = {
+  "Mn",
+  "Cf",
+  NULL
+};
+
+static const char *
+type_is (
+  const char *s,
+  const char *type_list[]
+)
+{
+  for (; type_list[0]; type_list++)
+    if (!strcmp (s, type_list[0]))
+      return type_list[0];
+  return NULL;
+}
+
+#define table_name "Joi"
+#define macro_name "FRIBIDI_GET_JOINING_TYPE"
 
 static signed int table[FRIBIDI_UNICODE_CHARS];
 static char buf[4000];
-static char tp[sizeof (buf)];
+static char tp[sizeof (buf)], tp_gen[sizeof (buf)], tp_bidi[sizeof (buf)];
+
+static void
+clear_tab (
+)
+{
+  register FriBidiChar c;
+
+  for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
+    table[c] = U;
+}
 
 static void
 init (
@@ -152,65 +199,7 @@ init (
     names[i] = 0;
   for (i = type_names_count - 1; i >= 0; i--)
     names[type_names[i].key] = type_names[i].name;
-}
 
-static void
-clear_tab (
-)
-{
-  register FriBidiChar c;
-
-  for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
-    table[c] = LTR;
-}
-
-static void
-init_tab_unicode_data_txt (
-)
-{
-  register FriBidiChar c;
-
-  clear_tab ();
-
-  for (c = 0x0590; c < 0x0600; c++)
-    table[c] = RTL;
-  for (c = 0x07C0; c < 0x0900; c++)
-    table[c] = RTL;
-  for (c = 0xFB1D; c < 0xFB50; c++)
-    table[c] = RTL;
-
-  for (c = 0x0600; c < 0x07C0; c++)
-    table[c] = AL;
-  for (c = 0xFB50; c < 0xFDD0; c++)
-    table[c] = AL;
-  for (c = 0xFDF0; c < 0xFE00; c++)
-    table[c] = AL;
-  for (c = 0xFE70; c < 0xFF00; c++)
-    table[c] = AL;
-
-  for (c = 0x2060; c < 0x2070; c++)
-    table[c] = BN;
-  for (c = 0xFDD0; c < 0xFDF0; c++)
-    table[c] = BN;
-  for (c = 0xFFF0; c < 0xFFF9; c++)
-    table[c] = BN;
-  for (c = 0xFFFF; c < FRIBIDI_UNICODE_CHARS; c += 0x10000)
-    table[c - 1] = table[c] = BN;
-
-  if (FRIBIDI_UNICODE_CHARS > 0x10000)
-    {
-      for (c = 0x10800; c < 0x11000; c++)
-	table[c] = RTL;
-
-      for (c = 0xE0000; c < 0xE1000; c++)
-	table[c] = BN;
-    }
-}
-
-static void
-init_tab_derived_bidi_class_txt (
-)
-{
   clear_tab ();
 }
 
@@ -220,8 +209,6 @@ read_unicode_data_txt (
 )
 {
   unsigned long c, l;
-
-  init_tab_unicode_data_txt ();
 
   l = 0;
   while (fgets (buf, sizeof buf, f))
@@ -234,25 +221,26 @@ read_unicode_data_txt (
       while (*s == ' ')
 	s++;
 
-      if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
+      if (*s == '#' || *s == '\0' || *s == '\n')
 	continue;
 
-      i = sscanf (s, "%lx;%*[^;];%*[^;];%*[^;];%[^; ]", &c, tp);
-      if (i != 2 || c >= FRIBIDI_UNICODE_CHARS)
-	die3 ("invalid input at line %ld: %s", l, s);
+      i = sscanf (s, "%lx;%*[^;];%[^; ];%*[^;];%[^; ]", &c, tp_gen, tp_bidi);
+      if (i != 3 || c >= FRIBIDI_UNICODE_CHARS)
+	die3l ("UnicodeData.txt: invalid input at line %ld: %s", l, s);
 
-      table[c] = get_type (tp);
+      if (type_is (tp_bidi, ignored_bidi_types))
+	table[c] = G;
+      if (type_is (tp_gen, transparent_general_categories))
+	table[c] = T;
     }
 }
 
 static void
-read_derived_bidi_class_txt (
+read_arabic_shaping_txt (
   FILE *f
 )
 {
   unsigned long c, c2, l;
-
-  init_tab_derived_bidi_class_txt ();
 
   l = 0;
   while (fgets (buf, sizeof buf, f))
@@ -266,17 +254,17 @@ read_derived_bidi_class_txt (
       while (*s == ' ')
 	s++;
 
-      if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
+      if (*s == '#' || *s == '\0' || *s == '\n')
 	continue;
 
-      i = sscanf (s, "%lx ; %[^; ]", &c, tp);
+      i = sscanf (s, "%lx ; %*[^;]; %[^; ]", &c, tp);
       if (i == 2)
 	c2 = c;
       else
-	i = sscanf (s, "%lx..%lx ; %[^; ]", &c, &c2, tp) - 1;
+	i = sscanf (s, "%lx..%lx ; %*[^;]; %[^; ]", &c, &c2, tp) - 1;
 
       if (i != 2 || c > c2 || c2 >= FRIBIDI_UNICODE_CHARS)
-	die3 ("invalid input at line %ld: %s", l, s);
+	die3l ("ArabicShaping.txt: invalid input at line %ld: %s", l, s);
 
       typ = get_type (tp);
       for (; c <= c2; c++)
@@ -286,43 +274,49 @@ read_derived_bidi_class_txt (
 
 static void
 read_data (
-  const char *data_file_type,
-  const char *data_file_name
+  const char *data_file_type[],
+  const char *data_file_name[]
 )
 {
   FILE *f;
 
-  fprintf (stderr, "Reading `%s'\n", data_file_name);
-  if (!(f = fopen (data_file_name, "rt")))
-    die2 ("error: cannot open `%s' for reading", data_file_name);
+  for (; data_file_name[0] && data_file_type[0];
+       data_file_name++, data_file_type++)
+    {
+      fprintf (stderr, "Reading `%s'\n", data_file_name[0]);
+      if (!(f = fopen (data_file_name[0], "rt")))
+	die2 ("error: cannot open `%s' for reading", data_file_name[0]);
 
-  if (!strcmp (data_file_type, "UnicodeData.txt"))
-    read_unicode_data_txt (f);
-  else if (!strcmp (data_file_type, "DerivedBidiClass.txt"))
-    read_derived_bidi_class_txt (f);
-  else
-    die2 ("error: unknown data-file type %s", data_file_type);
+      if (!strcmp (data_file_type[0], "UnicodeData.txt"))
+	read_unicode_data_txt (f);
+      else if (!strcmp (data_file_type[0], "ArabicShaping.txt"))
+	read_arabic_shaping_txt (f);
+      else
+	die2 ("error: unknown data-file type %s", data_file_type[0]);
 
-  fclose (f);
+      fclose (f);
+    }
+
 }
 
 static void
-gen_bidi_type_tab (
+gen_joining_type_tab (
   int max_depth,
-  const char *data_file_type
+  const char *data_file_type[]
 )
 {
   fprintf (stderr, "Generating output, it may take up to a few minutes\n");
   printf ("/* " outputname "\n * generated by " appname " (" FRIBIDI_NAME " "
-	  FRIBIDI_VERSION ")\n" " * from the file %s of Unicode version "
-	  FRIBIDI_UNICODE_VERSION ". */\n\n", data_file_type);
+	  FRIBIDI_VERSION ")\n" " * from the files %s, %s of Unicode version "
+	  FRIBIDI_UNICODE_VERSION ". */\n\n", data_file_type[0],
+	  data_file_type[1]);
 
   printf ("#define PACKTAB_UINT8 fribidi_uint8\n"
 	  "#define PACKTAB_UINT16 fribidi_uint16\n"
 	  "#define PACKTAB_UINT32 fribidi_uint32\n\n");
 
   if (!pack_table
-      (table, FRIBIDI_UNICODE_CHARS, 1, LTR, max_depth, 3, names,
+      (table, FRIBIDI_UNICODE_CHARS, 1, U, max_depth, 1, names,
        "unsigned char", table_name, macro_name, stdout))
     die ("error: insufficient memory, decrease max_depth");
 
@@ -338,20 +332,23 @@ main (
   const char **argv
 )
 {
-  const char *data_file_type = "UnicodeData.txt";
-  if (argc < 3)
-    die2 ("usage:\n  " appname " max-depth /path/to/%s [junk...]",
-	  data_file_type);
+  const char *data_file_type[] =
+    { "UnicodeData.txt", "ArabicShaping.txt", NULL };
+  if (argc < 4)
+    die3 ("usage:\n  " appname " max-depth /path/to/%s /path/to/%s [junk...]",
+	  data_file_type[0], data_file_type[1]);
   {
     int max_depth = atoi (argv[1]);
-    const char *data_file_name = argv[2];
+    const char *data_file_name[] = { NULL, NULL, NULL };
+    data_file_name[0] = argv[2];
+    data_file_name[1] = argv[3];
 
     if (max_depth < 2)
       die ("invalid depth");
 
     init ();
     read_data (data_file_type, data_file_name);
-    gen_bidi_type_tab (max_depth, data_file_type);
+    gen_joining_type_tab (max_depth, data_file_type);
   }
 
   return 0;

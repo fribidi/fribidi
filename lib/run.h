@@ -1,10 +1,10 @@
 /* FriBidi
  * run.h - text run data type
  *
- * $Id: run.h,v 1.4 2004-06-04 16:43:51 behdad Exp $
+ * $Id: run.h,v 1.5 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-04 16:43:51 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/run.h,v $
  *
  * Authors:
@@ -44,7 +44,9 @@
 
 #include <fribidi-begindecls.h>
 
-struct _FriBidiRun
+typedef struct _FriBidiRunStruct FriBidiRun;
+
+struct _FriBidiRunStruct
 {
   FriBidiRun *prev;
   FriBidiRun *next;

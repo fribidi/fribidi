@@ -1,17 +1,17 @@
 /* FriBidi
- * fribidi-bidi-type.c - get character bidi type
+ * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-bidi-type.c,v 1.12 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining.h,v 1.1 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.12 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.h,v $
  *
  * Authors:
- *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Behdad Esfahbod, 2004
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002 Behdad Esfahbod
+ * Copyright (C) 2004 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,33 +30,21 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
+#ifndef _FRIBIDI_JOINING_H
+#define _FRIBIDI_JOINING_H
 
-#include "common.h"
+#include "fribidi-common.h"
 
-#include <fribidi-bidi-type.h>
+#include "fribidi-types.h"
+#include "fribidi-joining-types.h"
 
-enum FriBidiCharTypeLinearEnum
-{
-# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
-# include "fribidi-bidi-types-list.h"
-# undef _FRIBIDI_ADD_TYPE
-  _FRIBIDI_NUM_TYPES
-};
+#include "fribidi-begindecls.h"
 
-#include "bidi-type.tab.i"
 
-/* Map FriBidiCharTypeLinearEnum to FriBidiCharType. */
-static const FriBidiCharType linear_enum_to_char_type[] = {
-# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
-# include "fribidi-bidi-types-list.h"
-# undef _FRIBIDI_ADD_TYPE
-};
 
-FRIBIDI_ENTRY FriBidiCharType
-fribidi_get_bidi_type (
-  /* input */
-  FriBidiChar ch
-)
-{
-  return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (ch)];
-}
+#include "fribidi-enddecls.h"
+
+#endif /* !_FRIBIDI_JOINING_H */
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */

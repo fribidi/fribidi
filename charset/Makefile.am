@@ -22,13 +22,19 @@ libfribidi_char_sets_la_LDFLAGS += -static
 endif # !FRIBIDI_CHARSETS
 
 libfribidi_char_sets_la_SOURCES = \
+	fribidi-char-sets.c \
 	fribidi-char-sets-cap-rtl.c \
 	fribidi-char-sets-cp1255.c \
 	fribidi-char-sets-cp1256.c \
-	fribidi-char-sets.c \
 	fribidi-char-sets-iso8859-6.c \
 	fribidi-char-sets-iso8859-8.c \
-	fribidi-char-sets-utf8.c
+	fribidi-char-sets-utf8.c \
+	fribidi-char-sets-cap-rtl.h \
+	fribidi-char-sets-cp1255.h \
+	fribidi-char-sets-cp1256.h \
+	fribidi-char-sets-iso8859-6.h \
+	fribidi-char-sets-iso8859-8.h \
+	fribidi-char-sets-utf8.h
 
 $(top_builddir)/config.h: $(top_srcdir)/config.h.in
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) config.h

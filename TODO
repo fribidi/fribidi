@@ -1,23 +1,18 @@
 Implementation issues:
 
-* Better bootstrap script: steal from GNOME autogen.sh.
+* Still better bootstrap script: steal from GNOME autogen.sh.
 
 * Test ./configure without pkg-config installed.
 
 * Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]
   is always the reference.
 
-* Show BidiTypes enum in manual and gdb.
-
 * Update CapRTL with new Unicode reference code.
 
-* Revise reorder API, in fribidi_main.c reorder after line break.
+* In fribidi_main.c reorder after line break.
 
 * Add an option to fribidi_main.c to assume two consecutive returns as
   paragraph separators.
-
-* Design better apis to do reorder based on available levels, remove
-  explicit marks then calculate position maps, ....
 
 * Add more tests.  For:
   - Checking that not removing explicit marks in analyze is not changing the
@@ -30,6 +25,10 @@ Implementation issues:
 
 * indent:  support function attributes and _PARAMS like things.  Also
   FRIBIDI_BEGIN_DECLS, and LIKELY.
+
+* Cleanup gen.tab/gen-*.c files.
+
+* Override pkgincludedir and append interface version.
 
 * c2man:  parse Author and Copyright from the whole file.
 
@@ -46,11 +45,12 @@ Implementation issues:
 * Fix cvs2cl bug with spacing around author names read with -U option.  Then
   fix spacing in AUTHORS.
 
-* Use `-' before any command for installing a man page, so that make will
-  ignore any errors.
+* Generate HTML and DVI documentation.
 
 * Clean up README and NEWS, and check all files' headers.  Write
   gen.tab/README.
+
+* Rewrite fribidi.spec.in
 
 * Add make rules for lib/$(BUILT_SOURCES) to depend on gen.tab/ stuff.
 
@@ -64,6 +64,8 @@ Implementation issues:
   generators.
 
 * Replace Arabic Yeh with Persian Yeh in Hafez piece in test/*.
+
+* Replace test/run.tests with something better.
 
 From GNU Coding Standards:
 

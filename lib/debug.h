@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.6 2004-06-09 14:59:21 behdad Exp $
+ * $Id: debug.h,v 1.7 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -42,11 +42,6 @@
 #if DEBUG
 
 /* These definitions should only be used in DEBUG mode: */
-#if HAVE_STRINGIZE
-# define STRINGIZE(symbol) #symbol
-#else /* !HAVE_STRINGIZE */
-# define STRINGIZE(symbol)
-#endif /* !HAVE_STRINGIZE */
 #ifndef __LINE__
 # define __LINE__ 0
 #endif /* !__LINE__ */

@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.12 2004-06-09 14:59:21 behdad Exp $
+ * $Id: common.h,v 1.13 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.12 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -154,6 +154,12 @@
 #ifndef FRIBIDI_EMPTY_STMT
 # define FRIBIDI_EMPTY_STMT FRIBIDI_BEGIN_STMT (void) 0; FRIBIDI_END_STMT
 #endif /* !FRIBIDI_EMPTY_STMT */
+
+#if HAVE_STRINGIZE
+# define STRINGIZE(symbol) #symbol
+#else /* !HAVE_STRINGIZE */
+# define STRINGIZE(symbol) "(no stringize operator available)"
+#endif /* !HAVE_STRINGIZE */
 
 /* As per recommendation of GNU Coding Standards. */
 #define _GNU_SOURCE

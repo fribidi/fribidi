@@ -1,9 +1,11 @@
 EXTRA_PROGRAMS = \
 		gen-bidi-type-tab \
+		gen-joining-type-tab \
 		gen-mirroring-tab \
 		gen-unicode-version
 
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
+gen_joining_type_tab_SOURCES = gen-joining-type-tab.c packtab.c packtab.h
 gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
 gen_unicode_version_SOURCES = gen-unicode-version.c
 
@@ -25,91 +27,67 @@ VPATH += \
 		$(srcdir)/unidata/extracted \
 		$(top_builddir)/lib
 
+COMPRESSION = 4
+
 # generate bidi-type.tab.i
 
 gen_bidi_type_tab = gen-bidi-type-tab$(EXEEXT)
 
-COMPRESSION = 4
-
-BIDI_TYPE_TAB_VARIANTS = \
-		UnicodeData_bidi-type.tab.i \
-		DerivedBidiClass_bidi-type.tab.i
-
-UnicodeData_bidi-type.tab.i: \
-		UnicodeData.txt \
-		fribidi-unicode-version.h \
-		$(gen_bidi_type_tab_SOURCES)
-
-DerivedBidiClass_bidi-type.tab.i: \
+derived_bidi-type.tab.i: \
 		DerivedBidiClass.txt \
 		fribidi-unicode-version.h \
 		$(gen_bidi_type_tab_SOURCES)
-
-$(BIDI_TYPE_TAB_VARIANTS):
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_bidi_type_tab)
-	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./$(gen_bidi_type_tab) $(COMPRESSION) \
-	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
+	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
 
-bidi-type.tab.i:
-	@for x in $(BIDI_TYPE_TAB_VARIANTS); do \
-	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x bidi-type.tab.i; then \
-	     break; \
-	   fi; \
-	 done; \
-	 test -f bidi-type.tab.i || (echo Could not build $@; false)
+bidi-type.tab.i: \
+		UnicodeData.txt \
+		fribidi-unicode-version.h \
+		$(gen_bidi_type_tab_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_bidi_type_tab)
+	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
 
-DISTCLEANFILES += $(BIDI_TYPE_TAB_VARIANTS)
+DISTCLEANFILES += derived_bidi-type.tab.i
+
+# generate joining-type.tab.i
+
+gen_joining_type_tab = gen-joining-type-tab$(EXEEXT)
+
+joining-type.tab.i: \
+		UnicodeData.txt \
+		ArabicShaping.txt \
+		fribidi-unicode-version.h \
+		$(gen_joining_type_tab_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_joining_type_tab)
+	./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
 
 # generate mirroring.tab.i
 
 gen_mirroring_tab = gen-mirroring-tab$(EXEEXT)
 
-MIRRORING_TAB_VARIANTS = \
-		BidiMirroring_mirroring.tab.i
-
-BidiMirroring_mirroring.tab.i: \
+mirroring.tab.i: \
 		BidiMirroring.txt \
 		fribidi-unicode-version.h \
 		$(gen_mirroring_tab_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_mirroring_tab)
-	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./$(gen_mirroring_tab) $(COMPRESSION) \
-	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
-
-mirroring.tab.i:
-	@for x in $(MIRRORING_TAB_VARIANTS); do \
-	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x mirroring.tab.i; then \
-	     break; \
-	   fi; \
-	 done; \
-	 test -f mirroring.tab.i || (echo Could not build $@; false)
-
-DISTCLEANFILES += $(MIRRORING_TAB_VARIANTS)
+	./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
 
 # generate fribidi-unicode-version.h
 
 gen_unicode_version = gen-unicode-version$(EXEEXT)
 
-UNICODE_VERSION_VARIANTS = \
-		ReadMe_fribidi-unicode-version.h
-
-ReadMe_fribidi-unicode-version.h: \
+fribidi-unicode-version.h: \
 		ReadMe.txt \
 		$(gen_unicode_version_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_unicode_version)
-	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./$(gen_unicode_version) \
-	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
+	./$(gen_unicode_version) $< > $@ \
+	|| ($(RM) $@ && false)
 
-fribidi-unicode-version.h:
-	@for x in $(UNICODE_VERSION_VARIANTS); do \
-	   if $(MAKE) $(AM_MAKEFLAGS) $$x && mv $$x fribidi-unicode-version.h; then \
-	     break; \
-	   fi; \
-	 done; \
-	 test -f fribidi-unicode-version.h || (echo Could not build $@; false)
-
-DISTCLEANFILES += $(UNICODE_VERSION_VARIANTS)
+# generate all generators:
+gen: $(EXTRA_PROGRAMS)
 
 .DELETE_ON_ERROR:

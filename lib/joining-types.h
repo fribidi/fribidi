@@ -1,19 +1,17 @@
 /* FriBidi
- * env.h - private state variables
+ * joining-types.h - define internal joining types
  *
- * $Id: env.h,v 1.3 2004-06-13 20:11:42 behdad Exp $
+ * $Id: joining-types.h,v 1.1 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.3 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/env.h,v $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/joining-types.h,v $
  *
  * Author:
- *   Behdad Esfahbod, 2001, 2002, 2004
- *   Dov Grobgeld, 1999, 2000
+ *   Behdad Esfahbod, 2004
  *
- * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002 Behdad Esfahbod
- * Copyright (C) 1999,2000 Dov Grobgeld
+ * Copyright (C) 2004 Sharif FarsiWeb, Inc.
+ * Copyright (C) 2004 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,34 +27,32 @@
  * along with this library, in a file named COPYING; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307, USA
- * 
+ *
  * For licensing issues, contact <license@farsiweb.info>.
  */
-#ifndef _ENV_H
-#define _ENV_H
+#ifndef _JOINING_TYPES_H
+#define _JOINING_TYPES_H
 
 #include "common.h"
 
-#include <fribidi-bidi-types.h>
-
-#include "mem.h"
-#include "run.h"
+#include <fribidi-types.h>
+#include <fribidi-joining-types.h>
 
 #include <fribidi-begindecls.h>
 
-#if !USE_SIMPLE_MALLOC
+#if DEBUG
 
-#define free_runs FRIBIDI_PRIVATESPACE(free_runs)
-extern FriBidiRun *free_runs;
+#define fribidi_char_from_joining_type FRIBIDI_PRIVATESPACE(char_from_joining_type)
+char
+fribidi_char_from_joining_type (
+  FriBidiJoiningType j		/* input joining type */
+) FRIBIDI_GNUC_HIDDEN;
 
-#define run_mem_chunk FRIBIDI_PRIVATESPACE(run_mem_chunk)
-extern FriBidiMemChunk *run_mem_chunk;
+#endif /* DEBUG */
 
-#endif /* !USE_SIMPLE_MALLOC */
+#include <fribidi-enddecls.h>
 
-#include "fribidi-enddecls.h"
-
-#endif /* !_ENV_H */
+#endif /* !_JOINING_TYPES_H */
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
  */

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.7 2004-06-09 20:01:00 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.8 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 20:01:00 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -41,14 +41,10 @@
 
 typedef signed char FriBidiLevel;
 
-typedef struct _FriBidiRun FriBidiRun;
-
 /* 
- * Define some bit masks, that character types are based on, each one has
- * only one bit on.
+ * Define bit masks that bidi types are based on, each mask has
+ * only one bit set.
  */
-
-/* Do not use enum, because 16bit processors do not allow 32bit enum values. */
 
 #define FRIBIDI_MASK_RTL	0x00000001L	/* Is right to left */
 #define FRIBIDI_MASK_ARABIC	0x00000002L	/* Is arabic */
@@ -58,22 +54,22 @@ typedef struct _FriBidiRun FriBidiRun;
 #define FRIBIDI_MASK_WEAK	0x00000020L	/* Is weak */
 #define FRIBIDI_MASK_NEUTRAL	0x00000040L	/* Is neutral */
 #define FRIBIDI_MASK_SENTINEL	0x00000080L	/* Is sentinel */
-/* Sentinels are not valid chars, just identify the start and end of strings. */
+/* Sentinels are not valid chars, just identify the start/end of strings. */
 
 /* Each char can be only one of the five following. */
 #define FRIBIDI_MASK_LETTER	0x00000100L	/* Is letter: L, R, AL */
 #define FRIBIDI_MASK_NUMBER	0x00000200L	/* Is number: EN, AN */
-#define FRIBIDI_MASK_NUMSEPTER	0x00000400L	/* Is number separator or terminator: ES, ET, CS */
+#define FRIBIDI_MASK_NUMSEPTER	0x00000400L	/* Is separator or terminator: ES, ET, CS */
 #define FRIBIDI_MASK_SPACE	0x00000800L	/* Is space: BN, BS, SS, WS */
 #define FRIBIDI_MASK_EXPLICIT	0x00001000L	/* Is expilict mark: LRE, RLE, LRO, RLO, PDF */
 
-/* Can be on only if FRIBIDI_MASK_SPACE is also on. */
-#define FRIBIDI_MASK_SEPARATOR	0x00002000L	/* Is test separator: BS, SS */
-/* Can be on only if FRIBIDI_MASK_EXPLICIT is also on. */
+/* Can be set only if FRIBIDI_MASK_SPACE is also set. */
+#define FRIBIDI_MASK_SEPARATOR	0x00002000L	/* Is text separator: BS, SS */
+/* Can be set only if FRIBIDI_MASK_EXPLICIT is also set. */
 #define FRIBIDI_MASK_OVERRIDE	0x00004000L	/* Is explicit override: LRO, RLO */
 
-/* The following must be to make types pairwise different, some of them can
-   be removed but are here because of efficiency (make queries faster). */
+/* The following exist to make types pairwise different, some of them can
+ * be removed but are here because of efficiency (make queries faster). */
 
 #define FRIBIDI_MASK_ES		0x00010000L
 #define FRIBIDI_MASK_ET		0x00020000L
@@ -94,76 +90,75 @@ typedef struct _FriBidiRun FriBidiRun;
  * Define values for FriBidiCharType
  */
 
-/* Strong left to right */
-#define FRIBIDI_TYPE_LTR_VAL	( FRIBIDI_MASK_STRONG + FRIBIDI_MASK_LETTER )
-/* Right to left characters */
-#define FRIBIDI_TYPE_RTL_VAL	( FRIBIDI_MASK_STRONG + FRIBIDI_MASK_LETTER \
-				+ FRIBIDI_MASK_RTL)
-/* Arabic characters */
-#define FRIBIDI_TYPE_AL_VAL	( FRIBIDI_MASK_STRONG + FRIBIDI_MASK_LETTER \
-				+ FRIBIDI_MASK_RTL + FRIBIDI_MASK_ARABIC )
-/* Left-To-Right embedding */
-#define FRIBIDI_TYPE_LRE_VAL	(FRIBIDI_MASK_STRONG + FRIBIDI_MASK_EXPLICIT)
-/* Right-To-Left embedding */
-#define FRIBIDI_TYPE_RLE_VAL	( FRIBIDI_MASK_STRONG + FRIBIDI_MASK_EXPLICIT \
-				+ FRIBIDI_MASK_RTL )
-/* Left-To-Right override */
-#define FRIBIDI_TYPE_LRO_VAL	( FRIBIDI_MASK_STRONG + FRIBIDI_MASK_EXPLICIT \
-				+ FRIBIDI_MASK_OVERRIDE )
-/* Right-To-Left override */
-#define FRIBIDI_TYPE_RLO_VAL	( FRIBIDI_MASK_STRONG + FRIBIDI_MASK_EXPLICIT \
-				+ FRIBIDI_MASK_RTL + FRIBIDI_MASK_OVERRIDE )
+/* Left-To-Right letter */
+#define FRIBIDI_TYPE_LTR_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_LETTER )
+/* Right-To-Left letter */
+#define FRIBIDI_TYPE_RTL_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_LETTER \
+				| FRIBIDI_MASK_RTL)
+/* Arabic Letter */
+#define FRIBIDI_TYPE_AL_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_LETTER \
+				| FRIBIDI_MASK_RTL | FRIBIDI_MASK_ARABIC )
+/* Left-to-Right Embedding */
+#define FRIBIDI_TYPE_LRE_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_EXPLICIT)
+/* Right-to-Left Embedding */
+#define FRIBIDI_TYPE_RLE_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_EXPLICIT \
+				| FRIBIDI_MASK_RTL )
+/* Left-to-Right Override */
+#define FRIBIDI_TYPE_LRO_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_EXPLICIT \
+				| FRIBIDI_MASK_OVERRIDE )
+/* Right-to-Left Override */
+#define FRIBIDI_TYPE_RLO_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_EXPLICIT \
+				| FRIBIDI_MASK_RTL | FRIBIDI_MASK_OVERRIDE )
 
-/* Pop directional override */
-#define FRIBIDI_TYPE_PDF_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_EXPLICIT )
-/* European digit */
-#define FRIBIDI_TYPE_EN_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_NUMBER )
-/* Arabic digit */
-#define FRIBIDI_TYPE_AN_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_NUMBER \
-				+ FRIBIDI_MASK_ARABIC )
-/* European number separator */
-#define FRIBIDI_TYPE_ES_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_NUMSEPTER \
-				+ FRIBIDI_MASK_ES )
-/* European number terminator */
-#define FRIBIDI_TYPE_ET_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_NUMSEPTER \
-				+ FRIBIDI_MASK_ET )
+/* Pop Directional Flag*/
+#define FRIBIDI_TYPE_PDF_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_EXPLICIT )
+/* European Numeral */
+#define FRIBIDI_TYPE_EN_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_NUMBER )
+/* Arabic Numeral */
+#define FRIBIDI_TYPE_AN_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_NUMBER \
+				| FRIBIDI_MASK_ARABIC )
+/* European number Separator */
+#define FRIBIDI_TYPE_ES_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_NUMSEPTER \
+				| FRIBIDI_MASK_ES )
+/* European number Terminator */
+#define FRIBIDI_TYPE_ET_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_NUMSEPTER \
+				| FRIBIDI_MASK_ET )
 /* Common Separator */
-#define FRIBIDI_TYPE_CS_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_NUMSEPTER \
-				+ FRIBIDI_MASK_CS )
-/* Non spacing mark */
-#define FRIBIDI_TYPE_NSM_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_NSM )
-/* Boundary neutral */
-#define FRIBIDI_TYPE_BN_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_SPACE \
-				+ FRIBIDI_MASK_BN )
+#define FRIBIDI_TYPE_CS_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_NUMSEPTER \
+				| FRIBIDI_MASK_CS )
+/* Non Spacing Mark */
+#define FRIBIDI_TYPE_NSM_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_NSM )
+/* Boundary Neutral */
+#define FRIBIDI_TYPE_BN_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_SPACE \
+				| FRIBIDI_MASK_BN )
 
-/* Block separator */
-#define FRIBIDI_TYPE_BS_VAL	( FRIBIDI_MASK_NEUTRAL + FRIBIDI_MASK_SPACE \
-				+ FRIBIDI_MASK_SEPARATOR + FRIBIDI_MASK_BS )
-/* Segment separator */
-#define FRIBIDI_TYPE_SS_VAL	( FRIBIDI_MASK_NEUTRAL + FRIBIDI_MASK_SPACE \
-				+ FRIBIDI_MASK_SEPARATOR + FRIBIDI_MASK_SS )
-/* Whitespace */
-#define FRIBIDI_TYPE_WS_VAL	( FRIBIDI_MASK_NEUTRAL + FRIBIDI_MASK_SPACE \
-				+ FRIBIDI_MASK_WS )
+/* Block Separator */
+#define FRIBIDI_TYPE_BS_VAL	( FRIBIDI_MASK_NEUTRAL | FRIBIDI_MASK_SPACE \
+				| FRIBIDI_MASK_SEPARATOR | FRIBIDI_MASK_BS )
+/* Segment Separator */
+#define FRIBIDI_TYPE_SS_VAL	( FRIBIDI_MASK_NEUTRAL | FRIBIDI_MASK_SPACE \
+				| FRIBIDI_MASK_SEPARATOR | FRIBIDI_MASK_SS )
+/* WhiteSpace */
+#define FRIBIDI_TYPE_WS_VAL	( FRIBIDI_MASK_NEUTRAL | FRIBIDI_MASK_SPACE \
+				| FRIBIDI_MASK_WS )
 /* Other Neutral */
 #define FRIBIDI_TYPE_ON_VAL	( FRIBIDI_MASK_NEUTRAL )
 
 
 /* The following are used in specifying paragraph direction only. */
 
-/* Weak left to right */
+/* Weak Left-To-Right */
 #define FRIBIDI_TYPE_WLTR_VAL	( FRIBIDI_MASK_WEAK )
-/* Weak right to left */
-#define FRIBIDI_TYPE_WRTL_VAL	( FRIBIDI_MASK_WEAK + FRIBIDI_MASK_RTL )
+/* Weak Right-To-Left */
+#define FRIBIDI_TYPE_WRTL_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_RTL )
 
-/* Start or end of text (run list).  Only used internally */
+/* start or end of text (run list) SENTINEL.  Only used internally */
 #define FRIBIDI_TYPE_SENTINEL	( FRIBIDI_MASK_SENTINEL )
 
 /* Private types for applications.  More private types can be obtained by
  * summing up from this one. */
 #define FRIBIDI_TYPE_PRIVATE	( FRIBIDI_MASK_PRIVATE )
 
-/* Define values for FriBidiCharType. */
 
 /* Define Enums only if sizeof(int) == 4 (UTF-32), and not compiling C++.
  * The problem with C++ is that then casts between int32 and enum will fail!
@@ -333,9 +328,6 @@ typedef fribidi_uint32 FriBidiParType;
 
 
 /* Functions finally */
-
-/* fribidi_type_name is the old name of fribidi_bidi_type_name */
-#define fribidi_type_name fribidi_bidi_type_name
 
 #define fribidi_bidi_type_name FRIBIDI_NAMESPACE(bidi_type_name)
 /* fribidi_bidi_type_name - get bidi type name

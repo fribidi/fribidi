@@ -1,17 +1,17 @@
 /* FriBidi
  * gen-unicode-version.c - generate fribidi-unicode-version.h for libfribidi
  *
- * $Id: gen-unicode-version.c,v 1.5 2004-05-31 18:43:26 behdad Exp $
+ * $Id: gen-unicode-version.c,v 1.6 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-31 18:43:26 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-13 20:11:42 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-unicode-version.c,v $
  *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002,2004 Behdad Esfahbod
+ * Copyright (C) 2004 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -59,7 +59,7 @@
 
 static void
 die (
-  char *msg
+  const char *msg
 )
 {
   fprintf (stderr, appname ": %s\n", msg);
@@ -68,8 +68,8 @@ die (
 
 static void
 die2 (
-  char *fmt,
-  char *p
+  const char *fmt,
+  const char *p
 )
 {
   fprintf (stderr, appname ": ");
@@ -80,6 +80,7 @@ die2 (
 
 int version_major, version_minor, version_micro;
 char unicode_version[100];
+char buf[4000];
 
 static void
 init (
@@ -94,13 +95,12 @@ read_read_me_txt (
   FILE *f
 )
 {
-  char s[200];
-  char *p;
+  const char *s;
 
-  while (fgets (s, sizeof s, f))
-    if ((p = strstr (s, "Version")))
+  while (fgets (buf, sizeof buf, f))
+    if ((s = strstr (buf, "Version")))
       {
-	sscanf (p, "Version %d.%d.%d", &version_major, &version_minor,
+	sscanf (s, "Version %d.%d.%d", &version_major, &version_minor,
 		&version_micro);
 	sprintf (unicode_version, "%d.%d.%d", version_major, version_minor,
 		 version_micro);
@@ -111,8 +111,8 @@ read_read_me_txt (
 
 static void
 read_data (
-  char *data_file_type,
-  char *data_file_name
+  const char *data_file_type,
+  const char *data_file_name
 )
 {
   FILE *f;
@@ -131,7 +131,7 @@ read_data (
 
 static void
 gen_unicode_version (
-  char *data_file_type
+  const char *data_file_type
 )
 {
   fprintf (stderr, "Generating output\n");
@@ -158,15 +158,15 @@ gen_unicode_version (
 int
 main (
   int argc,
-  char **argv
+  const char **argv
 )
 {
-  if (argc != 3)
-    die ("usage:\n  " appname " data-file-type data-file-name\n"
-	 "where data-file-type is one of these:\n" "  * ReadMe.txt");
+  const char *data_file_type = "ReadMe.txt";
+
+  if (argc < 2)
+    die2 ("usage:\n  " appname " /path/to/%s [junk...]", data_file_type);
   {
-    char *data_file_type = argv[1];
-    char *data_file_name = argv[2];
+    const char *data_file_name = argv[1];
 
     init ();
     read_data (data_file_type, data_file_name);

@@ -136,8 +136,7 @@ compare (
   return 0;
 }
 
-static int lev, p[22], nn;
-static int best_lev, best_p[22];
+static int lev, best_lev, p[22], best_p[22], nn;
 static long c[22], best_c[22], s, best_s;
 static long t[22], best_t[22], clusters[22], best_cluster[22];
 
@@ -366,16 +365,17 @@ write_source (
   else
     fprintf (f, "%d", def_key);
   fprintf (f, " : ");
-  j = 1;
+  j = 0;
   for (i = best_lev - 1; i >= 0; i--)
     {
-      fprintf (f, " \\\n\t%sLev%d[(x)", table_name, i);
-      if (j != 1)
-	fprintf (f, "/%d", j);
+      fprintf (f, " \\\n\t%sLev%d[((x)", table_name, i);
+      if (j != 0)
+	fprintf (f, " >> %d", j);
       if (i)
-	fprintf (f, "%%%ld +", pow[best_p[best_lev - 1 - i]]);
-      j *= best_cluster[best_lev - 1 - i];
+	fprintf (f, " & 0x%02lx) +", pow[best_p[best_lev - 1 - i]] - 1);
+      j += best_p[best_lev - 1 - i];
     }
+  fprintf (f, ")");
   for (i = 0; i < best_lev; i++)
     fprintf (f, "]");
   fprintf (f, ")\n\n");

@@ -3,10 +3,11 @@
 -bfde
 -T FILE
 -T FriBidiChar
+-T FriBidiLevel
 -T FriBidiStrIndex
 -T FriBidiCharType
 -T FriBidiParType
--T FriBidiLevel
+-T FriBidiJoiningType
 -T FriBidiCharSet
 -T FriBidiCharSetHandler
 -T FriBidiMemChunk

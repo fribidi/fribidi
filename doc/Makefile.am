@@ -6,16 +6,16 @@ MAINTAINERCLEANFILES =
 
 # man3
 
-includepath = -I$(top_builddir)
-includevpath = $(top_builddir)
-headers = 
+includepath =
+includevpath =
+headers =
 inst_symbols =
 noinst_symbols =
 
 include $(top_srcdir)/lib/Headers.mk
 headers += $(libfribidi_la_headers)
-includepath += -I$(top_srcdir)/lib -I$(top_builddir)/lib
-includevpath += :$(top_srcdir)/lib:$(top_builddir)/lib
+includepath += -I$(top_builddir)/lib -I$(top_srcdir)/lib
+includevpath += :$(top_builddir)/lib:$(top_srcdir)/lib
 inst_symbols += $(libfribidi_la_symbols)
 
 include $(top_srcdir)/charset/Headers.mk

@@ -1,17 +1,17 @@
 /* FriBidi
- * fribidi-bidi-type.c - get character bidi type
+ * fribidi-joining-type.c - get character joining type
  *
- * $Id: fribidi-bidi-type.c,v 1.12 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining-type.c,v 1.1 2004-06-13 20:11:42 behdad Exp $
  * $Author: behdad $
  * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.12 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
+ * $Revision: 1.1 $
+ * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-joining-type.c,v $
  *
  * Authors:
- *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Behdad Esfahbod, 2004
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
- * Copyright (C) 2001,2002 Behdad Esfahbod
+ * Copyright (C) 2004 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,30 +33,24 @@
 
 #include "common.h"
 
-#include <fribidi-bidi-type.h>
+#include <fribidi-joining-type.h>
+#include <fribidi-joining-types.h>
 
-enum FriBidiCharTypeLinearEnum
+enum FriBidiJoiningTypeShortEnum
 {
-# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
-# include "fribidi-bidi-types-list.h"
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE = FRIBIDI_JOINING_TYPE_##TYPE,
+# include "fribidi-joining-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
   _FRIBIDI_NUM_TYPES
 };
 
-#include "bidi-type.tab.i"
+#include "joining-type.tab.i"
 
-/* Map FriBidiCharTypeLinearEnum to FriBidiCharType. */
-static const FriBidiCharType linear_enum_to_char_type[] = {
-# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
-# include "fribidi-bidi-types-list.h"
-# undef _FRIBIDI_ADD_TYPE
-};
-
-FRIBIDI_ENTRY FriBidiCharType
-fribidi_get_bidi_type (
+FRIBIDI_ENTRY FriBidiJoiningType
+fribidi_get_joining_type (
   /* input */
   FriBidiChar ch
 )
 {
-  return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (ch)];
+  return FRIBIDI_GET_JOINING_TYPE (ch);
 }
