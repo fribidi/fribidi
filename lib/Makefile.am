@@ -2,17 +2,17 @@ lib_LTLIBRARIES = libfribidi.la
 
 AM_CPPFLAGS = $(GLIB_CFLAGS)
 
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif # PLATFORM_WIN32
-
-libfribidi_la_LDFLAGS = -version-info $(LT_VERSION_INFO) $(no_undefined)
+libfribidi_la_LDFLAGS = -version-info $(LT_VERSION_INFO)
 libfribidi_la_LIBADD = $(GLIB_LIBS)
 libfribidi_la_DEPENDENCIES =
 
-if OS_WIN32
-libfribidi_la_LDFLAGS += -export-symbols
-endif # OS_WIN32
+if PLATFORM_WIN32
+libfribidi_la_LDFLAGS += -no-undefined
+endif # PLATFORM_WIN32
+
+#if OS_WIN32
+#libfribidi_la_LDFLAGS += -export-symbols $(srcdir)/fribidi.sym
+#endif # OS_WIN32
 
 if FRIBIDI_CHARSETS
 

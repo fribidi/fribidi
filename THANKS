@@ -1,17 +1,14 @@
 Thanks to:
 
-
-Members of the Linux-il and Arabeyes communities
-	* For the feedbacks.
-	* For the constant pressure on keep the wheel rolling.
-
-Mark Davis
-	* For writing the Unicode Standard Annex #9.
-
+Behnam Esfahbod <fribidi@esfahbod.info>
+	* Maintaining the mailing list and CVS repository.
 
 
 And for the previous versions of FriBidi (up to 2002), thanks to:
 
+
+Tomas Frydrych <tomas@frydrych.uklinux.net>
+	* Contirbuted patches for compiling GNU FriBidi under other OSes.
 
 Dov Grobgeld <dov@imagic.weizmann.ac.il>
 	* Initial author, and maintainer before the 0.9 releases.
@@ -19,15 +16,15 @@ Dov Grobgeld <dov@imagic.weizmann.ac.il>
 Franck Portaneri
 	* For the Mozilla BiDi languges support document;
 
-Owen Tayler <otaylor@redhat.com>
-	* Contributed very important memory leak and speed patches.
+Roozbeh Pournader <roozbeh@sharif.edu>
+	* Fixed small things here and there.
 
 Pablo Saratxaga <pablo@mandrakesoft.com>  
 	* Contributed several arabic charset converters.
 
+Owen Tayler <otaylor@redhat.com>
+	* Contributed very important memory leak and speed patches.
+
 Omer Zak <omerz@actcom.co.il>
 	* Contributed several bug fixes, and several considerations for
 	  embedded systems.
-
-Roozbeh Pournader <roozbeh@sharif.edu>
-	* Fixed small things here and there.

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-common.h,v 1.2 2004-04-28 03:20:22 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-28 03:20:22 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -47,7 +47,7 @@
 
 /* FRIBIDI_NAMESPACE is a macro used to name library symbols. */
 #ifndef FRIBIDI_NAMESPACE
-# define FRIBIDI_NAMESPACE(SYMBOL) fribidi_##SYMBOL
+# define FRIBIDI_NAMESPACE(SYMBOL) fribidi##_##SYMBOL
 #endif /* !FRIBIDI_NAMESPACE */
 
 /* FRIBIDI_ENTRY is a macro used to declare library entry points. */

@@ -8,20 +8,9 @@ AM_CPPFLAGS = \
 pkginclude_HEADERS =
 
 libfribidi_char_sets_la_LDFLAGS = 
-libfribidi_char_sets_la_LIBADD = 
+libfribidi_char_sets_la_LIBADD = $(GLIB_LIBS)
 
 if FRIBIDI_CHARSETS
-
-if PLATFORM_WIN32
-no_undefined = -no-undefined
-endif # PLATFORM_WIN32
-
-libfribidi_char_sets_la_LDFLAGS += $(no_undefined)
-libfribidi_char_sets_la_LIBADD += $(GLIB_LIBS)
-
-if OS_WIN32
-libfribidi_char_sets_la_LDFLAGS += -export-symbols
-endif # OS_WIN32
 
 include Headers.mk
 pkginclude_HEADERS += $(libfribidi_char_sets_la_headers)

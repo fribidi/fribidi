@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi-main.c,v 1.2 2004-04-28 03:20:22 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-28 03:20:22 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -200,17 +200,17 @@ main (
   FILE *IN;
 
   text_width = 80;
-  do_break = TRUE;
-  do_pad = TRUE;
-  do_mirror = TRUE;
-  do_clean = FALSE;
-  do_reorder_nsm = FALSE;
-  show_input = FALSE;
-  show_visual = TRUE;
-  show_basedir = FALSE;
-  show_ltov = FALSE;
-  show_vtol = FALSE;
-  show_levels = FALSE;
+  do_break = true;
+  do_pad = true;
+  do_mirror = true;
+  do_clean = false;
+  do_reorder_nsm = false;
+  show_input = false;
+  show_visual = true;
+  show_basedir = false;
+  show_ltov = false;
+  show_vtol = false;
+  show_levels = false;
   char_set = "UTF-8";
   bol_text = NULL;
   eol_text = NULL;
@@ -245,24 +245,24 @@ main (
 	{"charsetdesc", 1, 0, CHARSETDESC},
 	{"caprtl", 0, 0, CAPRTL},
 #endif /* FRIBIDI_MAIN_USE_ICONV_H */
-	{"showinput", 0, &show_input, TRUE},
-	{"nopad", 0, &do_pad, FALSE},
-	{"nobreak", 0, &do_break, FALSE},
+	{"showinput", 0, &show_input, true},
+	{"nopad", 0, &do_pad, false},
+	{"nobreak", 0, &do_break, false},
 	{"width", 1, 0, 'w'},
 	{"bol", 1, 0, 'B'},
 	{"eol", 1, 0, 'E'},
-	{"nomirror", 0, &do_mirror, FALSE},
-	{"reordernsm", 0, &do_reorder_nsm, TRUE},
-	{"clean", 0, &do_clean, TRUE},
+	{"nomirror", 0, &do_mirror, false},
+	{"reordernsm", 0, &do_reorder_nsm, true},
+	{"clean", 0, &do_clean, true},
 	{"ltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_L},
 	{"rtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_R},
 	{"wltr", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WL},
 	{"wrtl", 0, (int *) (void *) &input_base_direction, FRIBIDI_TYPE_WR},
-	{"basedir", 0, &show_basedir, TRUE},
-	{"ltov", 0, &show_ltov, TRUE},
-	{"vtol", 0, &show_vtol, TRUE},
-	{"levels", 0, &show_levels, TRUE},
-	{"novisual", 0, &show_visual, FALSE},
+	{"basedir", 0, &show_basedir, true},
+	{"ltov", 0, &show_ltov, true},
+	{"vtol", 0, &show_vtol, true},
+	{"levels", 0, &show_levels, true},
+	{"novisual", 0, &show_visual, false},
 	{0, 0, 0, 0}
       };
 
@@ -283,7 +283,7 @@ main (
 	  version ();
 	  break;
 	case 'v':
-	  show_basedir = show_ltov = show_vtol = show_levels = TRUE;
+	  show_basedir = show_ltov = show_vtol = show_levels = true;
 	  break;
 	case 'w':
 	  text_width = atoi (optarg);
@@ -297,14 +297,14 @@ main (
 	  eol_text = optarg;
 	  break;
 	case 'd':
-	  if (!fribidi_set_debug (TRUE))
+	  if (!fribidi_set_debug (true))
 	    die1
 	      ("lib" FRIBIDI
 	       " must be compiled with DEBUG option to enable\nturn debug info on.\n");
 	  break;
 	case 't':
-	  do_clean = show_input = do_reorder_nsm = TRUE;
-	  do_break = FALSE;
+	  do_clean = show_input = do_reorder_nsm = true;
+	  do_break = false;
 	  break;
 	case 'c':
 	  char_set = strdup (optarg);
@@ -354,13 +354,13 @@ main (
   fribidi_set_mirroring (do_mirror);
   fribidi_set_reorder_nsm (do_reorder_nsm);
   exit_val = 0;
-  file_found = FALSE;
+  file_found = false;
   while (optind < argc || !file_found)
     {
       char *S_;
 
       S_ = optind < argc ? argv[optind++] : "-";
-      file_found = TRUE;
+      file_found = true;
 
       /* Open the infile for reading */
       if (S_[0] == '-' && !S_[1])
