@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining algorithms
  *
- * $Id: fribidi.c,v 1.1 2004-04-25 18:47:57 behdad Exp $
+ * $Id: fribidi.c,v 1.2 2004-04-25 19:12:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:47:57 $
- * $Revision: 1.1 $
+ * $Date: 2004-04-25 19:12:42 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -61,7 +61,7 @@ const char *fribidi_version_info =
   "You may redistribute copies of " FRIBIDI_NAME " under the terms of\n"
   "the GNU Lesser General Public License.\n"
   "For more information about these matters, see the file named COPYING.\n"
-  "Written by Behdad Esfahbod.\n";
+  "Written by Behdad Esfahbod and Dov Grobgeld.\n";
 
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent

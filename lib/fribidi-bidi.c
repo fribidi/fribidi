@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.2 2004-04-25 18:58:25 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.3 2004-04-25 19:12:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-25 18:58:25 $
- * $Revision: 1.2 $
+ * $Date: 2004-04-25 19:12:42 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -40,6 +40,7 @@
 #include <fribidi-env.h>
 
 #include "mem.h"
+#include "bidi-types.h"
 
 #include "common.h"
 
