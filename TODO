@@ -1,6 +1,11 @@
 Implementation issues:
 
-* BidiTypes enum in manual.
+* Test ./configure without pkg-config installed.
+
+* Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]
+  is always the reference.
+
+* Show BidiTypes enum in manual.
 
 * Update CapRTL with new Unicode reference code.
 
