@@ -30,15 +30,16 @@ extern "C"
 #define packtab_version 2
 
   int pack_table (
-  int *base,
-  int key_num,
+  const signed int *base,
+  long key_num,
   int key_size,
+  signed int default_key,
   int max_depth,
   int tab_width,
-  char **name,
-  char *key_type_name,
-  char *table_name,
-  char *macro_name,
+  const char *const *name,
+  const char *key_type_name,
+  const char *table_name,
+  const char *macro_name,
   FILE *out
   );
 

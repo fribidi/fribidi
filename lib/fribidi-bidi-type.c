@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.10 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.11 2004-06-09 20:01:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-09 20:01:00 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -58,12 +58,8 @@ static const FriBidiCharType linear_enum_to_char_type[] = {
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_bidi_type (
   /* input */
-  FriBidiChar uch
+  FriBidiChar ch
 )
 {
-  if (uch < FRIBIDI_UNICODE_CHARS)
-    return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (uch)];
-  else
-    return FRIBIDI_TYPE_LTR;
-  /* Non-Unicode chars */
+  return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (ch)];
 }

@@ -4,7 +4,7 @@ EXTRA_PROGRAMS = \
 		gen-unicode-version
 
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
-gen_mirroring_tab_SOURCES = gen-mirroring-tab.c
+gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
 gen_unicode_version_SOURCES = gen-unicode-version.c
 
 CLEANFILES = $(EXTRA_PROGRAMS)
@@ -74,7 +74,7 @@ BidiMirroring_mirroring.tab.i: \
 		$(gen_mirroring_tab_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_mirroring_tab)
 	(DATA_FILE_TYPE=`echo $< | sed s,.*/,,`; \
-	./$(gen_mirroring_tab) \
+	./$(gen_mirroring_tab) $(COMPRESSION) \
 	 $$DATA_FILE_TYPE $< > $@ || ($(RM) $@ && false))
 
 mirroring.tab.i:

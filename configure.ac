@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.13 2004-06-09 14:59:21 behdad Exp $
+## $Id: configure.ac,v 1.14 2004-06-09 20:01:00 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-06-09 14:59:21 $
-## $Revision: 1.13 $
+## $Date: 2004-06-09 20:01:00 $
+## $Revision: 1.14 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -44,7 +44,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.13 2004-06-09 14:59:21 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.14 2004-06-09 20:01:00 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -107,7 +107,6 @@ AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h stdbool.h wchar.h sys/t
 
 # Checks for typedefs and structures.
 AC_C_CONST
-AC_C_INLINE
 AC_C_STRINGIZE
 AC_CHECK_SIZEOF(int)
 SIZEOF_INT=$ac_cv_sizeof_int

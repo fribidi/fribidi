@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.h - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.h,v 1.4 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi.h,v 1.5 2004-06-09 20:01:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-09 20:01:00 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.h,v $
  *
  * Author:
@@ -135,7 +135,7 @@ fribidi_remove_bidi_marks (
 
 #define fribidi_version_info FRIBIDI_NAMESPACE(version_info)
 /* An string containing the version information of the library. */
-extern const char *fribidi_version_info;
+     extern const char *fribidi_version_info;
 
 #include "fribidi-enddecls.h"
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.9 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-main.c,v 1.10 2004-06-09 20:01:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-09 20:01:00 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -185,7 +185,10 @@ version (
   exit (0);
 }
 
-char *my_fribidi_strdup (char *s)
+char *
+my_fribidi_strdup (
+  char *s
+)
 {
   char *m;
 
@@ -193,7 +196,7 @@ char *my_fribidi_strdup (char *s)
   if (!m)
     return NULL;
 
-  strcpy(m, s);
+  strcpy (m, s);
 
   return m;
 }

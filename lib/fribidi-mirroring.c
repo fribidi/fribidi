@@ -23,10 +23,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.c,v 1.9 2004-06-09 14:59:21 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.10 2004-06-09 20:01:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-09 20:01:00 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:
@@ -38,11 +38,6 @@
 
 #include <fribidi-mirroring.h>
 
-struct _FriBidiMirroredPair
-{
-  FriBidiChar ch, mirrored_ch;
-};
-
 #include "mirroring.tab.i"
 
 FRIBIDI_ENTRY fribidi_boolean
@@ -53,40 +48,11 @@ fribidi_get_mirror_char (
   FriBidiChar *mirrored_ch
 )
 {
-  register int pos;
-  int step;
-  fribidi_boolean found;
-
-  pos = step = (nFriBidiMirroredChars / 2) + 1;
-
-  while LIKELY
-    (step > 1)
-    {
-      FriBidiChar cmp_ch = FriBidiMirroredChars[pos].ch;
-      step = (step + 1) / 2;
-
-      if (cmp_ch < ch)
-	{
-	  pos += step;
-	  if UNLIKELY
-	    (pos >= nFriBidiMirroredChars) pos = nFriBidiMirroredChars - 1;
-	}
-      else if LIKELY
-	(cmp_ch > ch)
-	{
-	  pos -= step;
-	  if UNLIKELY
-	    (pos < 0) pos = 0;
-	}
-      else
-	break;
-    }
-  found = FriBidiMirroredChars[pos].ch == ch;
-
+  register FriBidiChar result;
+  result = FRIBIDI_GET_MIRRORING_DELTA (ch);
   if (mirrored_ch)
-    *mirrored_ch = found ? FriBidiMirroredChars[pos].mirrored_ch : ch;
-
-  return found;
+    *mirrored_ch = ch + result;
+  return result ? true : false;
 }
 
 /* Editor directions:

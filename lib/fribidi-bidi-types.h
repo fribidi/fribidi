@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.6 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.7 2004-06-09 20:01:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-09 20:01:00 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -176,7 +176,7 @@ typedef enum
 	FRIBIDI_TYPE_##TYPE = FRIBIDI_TYPE_##TYPE##_VAL,
 # include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
-  _FRIBIDI_TYPE_SENTINEL = FRIBIDI_TYPE_SENTINEL /* Don't use this */
+  _FRIBIDI_TYPE_SENTINEL = FRIBIDI_TYPE_SENTINEL	/* Don't use this */
 } FriBidiCharType;
 
 typedef enum
@@ -187,7 +187,7 @@ typedef enum
 # include "fribidi-bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
 # undef _FRIBIDI_PAR_TYPES
-  _FRIBIDI_PAR_SENTINEL = FRIBIDI_TYPE_SENTINEL /* Don't use this */
+  _FRIBIDI_PAR_SENTINEL = FRIBIDI_TYPE_SENTINEL	/* Don't use this */
 } FriBidiParType;
 
 #else

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.5 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-types.h,v 1.6 2004-06-09 20:01:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-09 20:01:00 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -39,35 +39,35 @@
 
 
 #if !FRIBIDI_USE_GLIB
-# if HAVE_INTTYPES_H
+# if defined(HAVE_INTTYPES_H) || defined(HAVE_STDINT_H)
 #  ifndef __FRIBIDI_DOC
-#   include <inttypes.h>
+#   if HAVE_INTTYPES_H
+#    include <inttypes.h>
+#   elif HAVE_STDINT_H
+#    include <stdint.h>
+#   endif /* !HAVE_STDINT_H */
 #  endif /* !__FRIBIDI_DOC */
+#  define FRIBIDI_INT8_LOCAL		int8_t
+#  define FRIBIDI_INT16_LOCAL		int16_t
+#  define FRIBIDI_INT32_LOCAL		int32_t
 #  define FRIBIDI_UINT8_LOCAL		uint8_t
 #  define FRIBIDI_UINT16_LOCAL		uint16_t
 #  define FRIBIDI_UINT32_LOCAL		uint32_t
-# else /* !HAVE_INTTYPES_H */
-#  if HAVE_STDINT_H
-#   ifndef __FRIBIDI_DOC
-#    include <stdint.h>
-#   endif /* !__FRIBIDI_DOC */
-#   define FRIBIDI_UINT8_LOCAL		uint8_t
-#   define FRIBIDI_UINT16_LOCAL		uint16_t
-#   define FRIBIDI_UINT32_LOCAL		uint32_t
-#  else	/* !HAVE_STDINT_H */
-#   define FRIBIDI_UINT8_LOCAL		unsigned char
-#   if !defined(SIZEOF_SHORT) || SIZEOF_SHORT >= 2
-#    define FRIBIDI_UINT16_LOCAL	unsigned short
-#   else /* SIZEOF_SHORT < 2 */
-#    define FRIBIDI_UINT16_LOCAL	unsigned int
-#   endif /* SIZEOF_SHORT < 2 */
-#   if !defined(SIZEOF_INT) || SIZEOF_INT >= 4
-#    define FRIBIDI_UINT32_LOCAL	unsigned int
-#   else /* SIZEOF_INT < 4 */
-#    define FRIBIDI_UINT32_LOCAL	unsigned long
-#   endif /* SIZEOF_INT < 4 */
-#  endif /* !HAVE_STDINT_H */
-# endif	/* !HAVE_INTTYPES_H */
+# else /* no int types */
+#  define FRIBIDI_INT8_LOCAL		signed char
+#  define FRIBIDI_UINT8_LOCAL		unsigned char
+#  if !defined(FRIBIDI_SIZEOF_INT) || FRIBIDI_SIZEOF_INT >= 4
+#   define FRIBIDI_INT16_LOCAL		signed short
+#   define FRIBIDI_UINT16_LOCAL		unsigned short
+#   define FRIBIDI_INT32_LOCAL		signed int
+#   define FRIBIDI_UINT32_LOCAL		unsigned int
+#  else	/* SIZEOF_INT < 4 */
+#   define FRIBIDI_INT16_LOCAL		signed int
+#   define FRIBIDI_UINT16_LOCAL		unsigned int
+#   define FRIBIDI_INT32_LOCAL		signed long
+#   define FRIBIDI_UINT32_LOCAL		unsigned long
+#  endif /* SIZEOF_INT < 4 */
+# endif	/* no int types */
 # if HAVE_STDBOOL_H
 #  ifndef __FRIBIDI_DOC
 #   include <stdbool.h>
@@ -92,10 +92,13 @@
 #  define FRIBIDI_UNICHAR_LOCAL		fribidi_uint32
 # endif	/* SIZEOF_WCHAR_T < 4 */
 #else /* FRIBIDI_USE_GLIB */
-#  ifndef __FRIBIDI_DOC
-#   include <glib/gtypes.h>
-#   include <glib/gunicode.h>
-#  endif /* !__FRIBIDI_DOC */
+# ifndef __FRIBIDI_DOC
+#  include <glib/gtypes.h>
+#  include <glib/gunicode.h>
+# endif	/* !__FRIBIDI_DOC */
+# define FRIBIDI_INT8_LOCAL		gint8
+# define FRIBIDI_INT16_LOCAL		gint16
+# define FRIBIDI_INT32_LOCAL		gint32
 # define FRIBIDI_UINT8_LOCAL		guint8
 # define FRIBIDI_UINT16_LOCAL		guint16
 # define FRIBIDI_UINT32_LOCAL		guint32
@@ -103,15 +106,14 @@
 # define FRIBIDI_UNICHAR_LOCAL		gunichar
 #endif /* FRIBIDI_USE_GLIB */
 
-#ifndef FRIBIDI_UINT8
+#if !FRIBIDI_INT_TYPES
+# define FRIBIDI_INT8	FRIBIDI_INT8_LOCAL
+# define FRIBIDI_INT16	FRIBIDI_INT16_LOCAL
+# define FRIBIDI_INT32	FRIBIDI_INT32_LOCAL
 # define FRIBIDI_UINT8	FRIBIDI_UINT8_LOCAL
-#endif /* !FRIBIDI_UINT8 */
-#ifndef FRIBIDI_UINT16
 # define FRIBIDI_UINT16	FRIBIDI_UINT16_LOCAL
-#endif /* !FRIBIDI_UINT16 */
-#ifndef FRIBIDI_UINT32
 # define FRIBIDI_UINT32	FRIBIDI_UINT32_LOCAL
-#endif /* !FRIBIDI_UINT32 */
+#endif /* !FRIBIDI_INT_TYPES */
 #ifndef FRIBIDI_BOOLEAN
 # define FRIBIDI_BOOLEAN	FRIBIDI_BOOLEAN_LOCAL
 #endif /* !FRIBIDI_BOOLEAN */
@@ -123,6 +125,9 @@
 #endif /* FRIBIDI_STR_INDEX */
 
 
+typedef FRIBIDI_UINT8 fribidi_int8;
+typedef FRIBIDI_INT16 fribidi_int16;
+typedef FRIBIDI_INT32 fribidi_int32;
 typedef FRIBIDI_UINT8 fribidi_uint8;
 typedef FRIBIDI_UINT16 fribidi_uint16;
 typedef FRIBIDI_UINT32 fribidi_uint32;
