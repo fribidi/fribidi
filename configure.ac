@@ -1,8 +1,8 @@
 ##############################################################################
-## $Id: configure.ac,v 1.2 2004-04-25 18:58:25 behdad Exp $
+## $Id: configure.ac,v 1.3 2004-04-25 19:13:04 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-04-25 18:58:25 $
-## $Revision: 1.2 $
+## $Date: 2004-04-25 19:13:04 $
+## $Revision: 1.3 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 ##                                               -*- Autoconf -*-
@@ -41,7 +41,7 @@ m4_define(fribidi_rpm_release, 1)dnl
 dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.2 2004-04-25 18:58:25 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.3 2004-04-25 19:13:04 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -198,8 +198,8 @@ AC_CONFIG_FILES([fribidi.pc
                  fribidi.spec
                  lib/fribidi-config.h
                  Makefile
-		 tablegen/Makefile
 		 charset/Makefile
+		 gentable/Makefile
                  lib/Makefile
                  bin/Makefile
 		 doc/Makefile
