@@ -16,7 +16,7 @@ the mapping are:
 Author:
   Behnam Esfahbod, 2005
 
-Copyright (C) 2005 Sharif FarsiWeb, Inc
+Copyright (C) 2005 Sharif FarsiWeb, Inc.
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -87,9 +87,7 @@ def convert2unicode (caprtl):
 def convert2utf8 (caprtl):
     """Converter from CapRTL to UTF-8"""
 
-    mytext = str(caprtl)
-    for x in escape.keys(): mytext = mytext.replace(x, escape[x])
-    return unicode(mytext).translate(mapping).encode('utf-8')
+    return convert2unicode(caprtl).encode('utf-8')
 
 
 
@@ -98,7 +96,7 @@ if __name__ == '__main__':
 
     for mytext in sys.stdin.readlines():
 	mytext = mytext[:-1]
-	sys.stdout.write(caprtl_to_utf8.convert(mytext))
+	sys.stdout.write(convert2utf8(mytext))
 	print
 
 # vi:set ai sw=4:
