@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.6 2004-05-07 06:30:38 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.7 2004-05-31 18:39:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.6 $
+ * $Date: 2004-05-31 18:39:39 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -335,7 +335,7 @@ fribidi_analyse_string (
   FriBidiRun *main_run_list = NULL, *explicits_list = NULL, *pp;
   fribidi_boolean status = false;
 
-  DBG ("Entering fribidi_analyse_string");
+  DBG ("entering fribidi_analyse_string");
 
   fribidi_assert (str);
   fribidi_assert (pbase_dir);
@@ -343,7 +343,7 @@ fribidi_analyse_string (
   fribidi_assert (pmax_level);
 
   /* Determinate character types */
-  DBG ("  Determine character types");
+  DBG ("  determine character types");
   {
     FriBidiCharType *char_types =
       (FriBidiCharType *) fribidi_malloc (len * sizeof (FriBidiCharType));
@@ -357,10 +357,10 @@ fribidi_analyse_string (
     if (!main_run_list)
       goto out;
   }
-  DBG ("  Determine character types, Done");
+  DBG ("  determine character types, done");
 
   /* Find base level */
-  DBG ("  Finding the base level");
+  DBG ("  finding the base level");
   if (FRIBIDI_IS_STRONG (*pbase_dir))
     base_level = FRIBIDI_DIR_TO_LEVEL (*pbase_dir);
   /* P2. P3. Search for first strong character and use its direction as
@@ -379,9 +379,9 @@ fribidi_analyse_string (
 	}
     }
   base_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
-  DBG2 ("  Base level : %c", fribidi_char_from_level (base_level));
-  DBG2 ("  Base dir   : %c", fribidi_char_from_bidi_type (base_dir));
-  DBG ("  Finding the base level, Done");
+  DBG2 ("  base level : %c", fribidi_char_from_level (base_level));
+  DBG2 ("  base dir   : %c", fribidi_char_from_bidi_type (base_dir));
+  DBG ("  finding the base level, done");
 
 # if DEBUG
   if UNLIKELY
@@ -392,7 +392,7 @@ fribidi_analyse_string (
 # endif	/* DEBUG */
 
   /* Explicit Levels and Directions */
-  DBG ("Explicit Levels and Directions");
+  DBG ("pxplicit Levels and Directions");
   {
     FriBidiLevel level, new_level;
     FriBidiCharType override, new_override;
@@ -516,7 +516,7 @@ fribidi_analyse_string (
 # endif	/* DEBUG */
 
   /* 4. Resolving weak types */
-  DBG ("Resolving weak types");
+  DBG ("resolving weak types");
   {
     FriBidiCharType last_strong, prev_type_orig;
     fribidi_boolean w4;
@@ -648,7 +648,7 @@ fribidi_analyse_string (
 # endif	/* DEBUG */
 
   /* 5. Resolving Neutral Types */
-  DBG ("Resolving neutral types");
+  DBG ("resolving neutral types");
   {
     /* N1. and N2.
        For each neutral, resolve it. */
@@ -681,7 +681,7 @@ fribidi_analyse_string (
 # endif	/* DEBUG */
 
   /* 6. Resolving implicit levels */
-  DBG ("Resolving implicit levels");
+  DBG ("resolving implicit levels");
   {
     max_level = base_level;
 
@@ -720,7 +720,7 @@ fribidi_analyse_string (
 
 /* Reinsert the explicit codes & BN's that are already removed, from the
    explicits_list to main_run_list. */
-  DBG ("Reinserting explicit codes");
+  DBG ("reinserting explicit codes");
   {
     register FriBidiRun *p;
     register fribidi_boolean stat =
@@ -745,7 +745,7 @@ fribidi_analyse_string (
     }
 # endif	/* DEBUG */
 
-  DBG ("Reset the embedding levels");
+  DBG ("reset the embedding levels");
   {
     register int j, k, state, pos;
     register FriBidiRun *p, *q, *list;
@@ -806,7 +806,7 @@ fribidi_analyse_string (
   *pmax_level = max_level;
   *pbase_dir = base_dir;
 
-  DBG ("Leaving fribidi_analyse_string");
+  DBG ("leaving fribidi_analyse_string");
 out:
   if UNLIKELY
     (explicits_list) free_run_list (explicits_list);
@@ -865,7 +865,7 @@ fribidi_remove_bidi_marks (
   FriBidiStrIndex i, j;
   fribidi_boolean private_from_this = false;
 
-  DBG ("Entering fribidi_remove_bidi_marks");
+  DBG ("entering fribidi_remove_bidi_marks");
 
   /* If to_this is to not null, we must have from_this as well. If it is
      not given by the caller, we have to make a private instance of it. */
@@ -893,18 +893,18 @@ fribidi_remove_bidi_marks (
   /* Convert the from_this list to to_this */
   if (position_to_this_list)
     {
-      DBG ("  Converting from_this list to to_this");
+      DBG ("  converting from_this list to to_this");
       for (i = 0; i < length; i++)
 	position_to_this_list[i] = -1;
       for (i = 0; i < length; i++)
 	position_to_this_list[position_from_this_list[i]] = i;
-      DBG ("  Converting from_this list to to_this, Done");
+      DBG ("  converting from_this list to to_this, done");
     }
 
   if (private_from_this)
     fribidi_free (position_from_this_list);
 
-  DBG ("Leaving fribidi_remove_bidi_marks");
+  DBG ("leaving fribidi_remove_bidi_marks");
   return j;
 }
 
@@ -928,7 +928,7 @@ fribidi_log2vis (
   fribidi_boolean private_V_to_L = false;
   fribidi_boolean status = true;
 
-  DBG ("Entering fribidi_log2vis()");
+  DBG ("entering fribidi_log2vis()");
 
   fribidi_assert (str);
   fribidi_assert (pbase_dir);
@@ -973,7 +973,7 @@ fribidi_log2vis (
 
 
   /* 7. Reordering resolved levels */
-  DBG ("Reordering resolved levels");
+  DBG ("reordering resolved levels");
   {
     FriBidiLevel level_idx;
     FriBidiStrIndex i;
@@ -981,25 +981,25 @@ fribidi_log2vis (
     /* Set up the ordering array to sorted order */
     if (position_V_to_L_list)
       {
-	DBG ("  Initialize position_V_to_L_list");
+	DBG ("  initialize position_V_to_L_list");
 	for (i = 0; i < len; i++)
 	  position_V_to_L_list[i] = i;
-	DBG ("  Initialize position_V_to_L_list, Done");
+	DBG ("  initialize position_V_to_L_list, done");
       }
     /* Copy the logical string to the visual */
     if (visual_str)
       {
-	DBG ("  Initialize visual_str");
+	DBG ("  initialize visual_str");
 	for (i = 0; i < len; i++)
 	  visual_str[i] = str[i];
 	visual_str[len] = 0;
-	DBG ("  Initialize visual_str, Done");
+	DBG ("  initialize visual_str, done");
       }
 
     /* Assign the embedding level array */
     if (embedding_level_list)
       {
-	DBG ("  Fill the embedding levels array");
+	DBG ("  fill the embedding levels array");
 	for_run_list (pp, main_run_list)
 	{
 	  register FriBidiStrIndex i, pos = pp->pos, len = pp->len;
@@ -1007,7 +1007,7 @@ fribidi_log2vis (
 	  for (i = 0; i < len; i++)
 	    embedding_level_list[pos + i] = level;
 	}
-	DBG ("  Fill the embedding levels array, Done");
+	DBG ("  fill the embedding levels array, done");
       }
 
     /* Reorder both the outstring and the order array */
@@ -1016,7 +1016,7 @@ fribidi_log2vis (
 	if (fribidi_mirroring_status () && visual_str)
 	  {
 	    /* L4. Mirror all characters that are in odd levels and have mirrors. */
-	    DBG ("  Mirroring");
+	    DBG ("  mirroring");
 	    for_run_list (pp, main_run_list)
 	    {
 	      if (pp->level & 1)
@@ -1031,13 +1031,13 @@ fribidi_log2vis (
 		    }
 		}
 	    }
-	    DBG ("  Mirroring, Done");
+	    DBG ("  mirroring, done");
 	  }
 
 	if (fribidi_reorder_nsm_status ())
 	  {
 	    /* L3. Reorder NSMs. */
-	    DBG ("  Reordering NSM sequences");
+	    DBG ("  reordering NSM sequences");
 	    /* We apply this rule before L2, so go backward in odd levels. */
 	    for_run_list (pp, main_run_list)
 	    {
@@ -1075,15 +1075,15 @@ fribidi_log2vis (
 		    }
 		  if (is_nsm_seq)
 		    {
-		      DBG ("Warning: NSMs at the beggining of level run.\n");
+		      DBG ("warning: NSMs at the beggining of level run.\n");
 		    }
 		}
 	    }
-	    DBG ("  Reordering NSM sequences, Done");
+	    DBG ("  reordering NSM sequences, done");
 	  }
 
 	/* L2. Reorder. */
-	DBG ("  Reordering");
+	DBG ("  reordering");
 	for (level_idx = max_level; level_idx > 0; level_idx--)
 	  {
 	    for_run_list (pp, main_run_list)
@@ -1106,21 +1106,21 @@ fribidi_log2vis (
 		}
 	    }
 	  }
-	DBG ("  Reordering, Done");
+	DBG ("  reordering, done");
       }
 
     /* Convert the v2l list to l2v */
     if (position_L_to_V_list)
       {
-	DBG ("  Converting v2l list to l2v");
+	DBG ("  converting v2l list to l2v");
 	for (i = 0; i < len; i++)
 	  position_L_to_V_list[position_V_to_L_list[i]] = i;
-	DBG ("  Converting v2l list to l2v, Done");
+	DBG ("  converting v2l list to l2v, done");
       }
   }
-  DBG ("Reordering resolved levels, Done");
+  DBG ("reordering resolved levels, done");
 
-  DBG ("Leaving fribidi_log2vis()");
+  DBG ("leaving fribidi_log2vis()");
 out:
   if (private_V_to_L)
     fribidi_free (position_V_to_L_list);
@@ -1146,7 +1146,7 @@ fribidi_log2vis_get_embedding_levels (
   FriBidiLevel max_level;
   fribidi_boolean status = true;
 
-  DBG ("Entering fribidi_log2vis_get_embedding_levels()");
+  DBG ("entering fribidi_log2vis_get_embedding_levels()");
 
   fribidi_assert (str);
   fribidi_assert (pbase_dir);
@@ -1171,7 +1171,7 @@ fribidi_log2vis_get_embedding_levels (
       embedding_level_list[pos++] = level;
   }
 
-  DBG ("Leaving fribidi_log2vis_get_embedding_levels()");
+  DBG ("leaving fribidi_log2vis_get_embedding_levels()");
 out:
   free_run_list (main_run_list);
 

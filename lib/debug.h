@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
+ * $Id: debug.h,v 1.5 2004-05-31 18:39:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-31 18:39:39 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -93,7 +93,7 @@
 # define fribidi_assert(cond) \
 	FRIBIDI_BEGIN_STMT \
 	if (!(cond)) \
-		DBG("file " __FILE__ ": line " STRINGIZE(__LINE__) ": " \
+		DBG(__FILE__ ":" STRINGIZE(__LINE__) ": " \
 		    "assertion failed (" STRINGIZE(cond) ")"); \
 	FRIBIDI_END_STMT
 #endif /* !fribidi_assert */

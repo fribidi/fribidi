@@ -30,7 +30,6 @@ pkginclude_HEADERS = $(libfribidi_la_headers)
 
 libfribidi_la_SOURCES =	\
 		bidi-types.h \
-		bidi-types-list.h \
 		bidi-type.tab.i \
 		common.h \
 		debug.h \

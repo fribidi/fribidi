@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining algorithms
  *
- * $Id: fribidi.c,v 1.5 2004-05-29 11:32:23 behdad Exp $
+ * $Id: fribidi.c,v 1.6 2004-05-31 18:39:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-29 11:32:23 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-31 18:39:39 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -41,8 +41,9 @@ const char *fribidi_unicode_version = FRIBIDI_UNICODE_VERSION;
 
 const char *fribidi_version_info =
   "(" FRIBIDI_NAME ") " FRIBIDI_VERSION "\n"
-  "Interface version " FRIBIDI_INTERFACE_VERSION_STRING ",\n"
-  "Unicode version " FRIBIDI_UNICODE_VERSION ",\n" "Configure options"
+  "interface version " FRIBIDI_INTERFACE_VERSION_STRING ",\n"
+  "Unicode Character Database version " FRIBIDI_UNICODE_VERSION ",\n"
+  "Configure options"
 #if DEBUG
   " --enable-debug"
 #endif /* DEBUG */
@@ -59,11 +60,10 @@ const char *fribidi_version_info =
 #endif /* !FRIBIDI_USE_GLIB */
   ".\n\n"
   "Copyright (C) 2004  Sharif FarsiWeb, Inc.\n"
-  "Copyright (C) 2001, 2002, 2004  Behdad Esfahbod\n"
-  "Copyright (C) 1999, 2000  Dov Grobgeld\n"
-  FRIBIDI_NAME " comes with ABSOLUTELY NO WARRANTY.\n"
-  "You may redistribute copies of " FRIBIDI_NAME " under the terms of\n"
-  "the GNU Lesser General Public License.\n"
+  "Copyright (C) 2004  Behdad Esfahbod\n"
+  FRIBIDI_NAME " comes with NO WARRANTY, to the extent permitted by law.\n"
+  "You may redistribute copies of " FRIBIDI_NAME " under\n"
+  "the terms of the GNU Lesser General Public License.\n"
   "For more information about these matters, see the file named COPYING.\n"
   "Written by Behdad Esfahbod and Dov Grobgeld.\n";
 

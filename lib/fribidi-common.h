@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.6 2004-05-25 12:00:29 behdad Exp $
+ * $Id: fribidi-common.h,v 1.7 2004-05-31 18:39:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-25 12:00:29 $
- * $Revision: 1.6 $
+ * $Date: 2004-05-31 18:39:39 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -59,23 +59,12 @@
 # endif	/* !WIN32 */
 #endif /* !FRIBIDI_ENTRY */
 
-/* FRIBIDI_BEGIN_DECLS should be used at the beginning of your declarations,
- * so that C++ compilers don't mangle their names.  Use FRIBIDI_END_DECLS at
- * the end of C declarations. */
-#ifndef FRIBIDI_BEGIN_DECLS
-# ifdef __cplusplus
-#  define FRIBIDI_BEGIN_DECLS extern "C" {
-#  define FRIBIDI_END_DECLS }
-# else /* !__cplusplus */
-#  define FRIBIDI_BEGIN_DECLS	/* empty */
-#  define FRIBIDI_END_DECLS	/* empty */
-# endif	/* !__cplusplus */
-#endif /* !FRIBIDI_BEGIN_DECLS */
-
 #if FRIBIDI_USE_GLIB
 # ifndef __C2MAN__
 #  include <glib/gmacros.h>
 # endif	/* !__C2MAN__ */
+# define FRIBIDI_BEGIN_DECLS		G_BEGIN_DECLS
+# define FRIBIDI_END_DECLS		G_END_DECLS
 # define FRIBIDI_GNUC_CONST		G_GNUC_CONST
 # define FRIBIDI_GNUC_DEPRECATED	G_GNUC_DEPRECATED
 # if __GNUC__ > 2
@@ -98,6 +87,18 @@
 # define FRIBIDI_GNUC_HIDDEN
 #endif /* !FRIBIDI_USE_GLIB */
 
+/* FRIBIDI_BEGIN_DECLS should be used at the beginning of your declarations,
+ * so that C++ compilers don't mangle their names.  Use FRIBIDI_END_DECLS at
+ * the end of C declarations. */
+#ifndef FRIBIDI_BEGIN_DECLS
+# ifdef __cplusplus
+#  define FRIBIDI_BEGIN_DECLS extern "C" {
+#  define FRIBIDI_END_DECLS }
+# else /* !__cplusplus */
+#  define FRIBIDI_BEGIN_DECLS	/* empty */
+#  define FRIBIDI_END_DECLS	/* empty */
+# endif	/* !__cplusplus */
+#endif /* !FRIBIDI_BEGIN_DECLS */
 
 #define fribidi_version_info FRIBIDI_NAMESPACE(version_info)
 /* An string containing the version information of the library. */

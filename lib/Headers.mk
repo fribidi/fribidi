@@ -3,6 +3,7 @@ libfribidi_la_headers = \
 		fribidi-bidi.h \
 		fribidi-bidi-type.h \
 		fribidi-bidi-types.h \
+		fribidi-bidi-types-list.h \
 		fribidi-common.h \
 		fribidi-config.h \
 		fribidi-enddecls.h \

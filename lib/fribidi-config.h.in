@@ -1,6 +1,7 @@
+/* @configure_input@ */
+/* Not copyrighted, in public domain. */
 #ifndef FRIBIDI_CONFIG_H
 #define FRIBIDI_CONFIG_H
-/* @configure_input@ */
 
 #define FRIBIDI "@PACKAGE@"
 #define FRIBIDI_NAME "@PACKAGE_NAME@"

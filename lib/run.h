@@ -1,10 +1,10 @@
 /* FriBidi
  * run.h - text run data type
  *
- * $Id: run.h,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: run.h,v 1.3 2004-05-31 18:39:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-31 18:39:39 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/run.h,v $
  *
  * Authors:
@@ -135,7 +135,7 @@ new_run (
 
 #if DEBUG
 
-#define fribidi_validate_run_list FRIBIDI_NAMESPACE(validate_run_list)
+#define fribidi_validate_run_list FRIBIDI_PRIVATESPACE(validate_run_list)
      void fribidi_validate_run_list (
   FriBidiRun *run_list		/* input run list */
 ) FRIBIDI_GNUC_HIDDEN;
