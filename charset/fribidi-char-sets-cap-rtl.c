@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.7 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.8 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -39,7 +39,7 @@
 
 #include <fribidi-unicode.h>
 #include <fribidi-mirroring.h>
-#include <fribidi-bidi-type.h>
+#include <fribidi-bidi-types.h>
 
 #include <bidi-types.h>
 

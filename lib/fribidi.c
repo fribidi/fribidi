@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.9 2004-06-14 17:00:33 behdad Exp $
+ * $Id: fribidi.c,v 1.10 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 17:00:33 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -186,8 +186,9 @@ fribidi_log2vis (
 
   fribidi_shape (embedding_level_list, len, visual_str);
 
-  status = fribidi_reorder_line (embedding_level_list, len, 0, NULL, visual_str,
-				 position_L_to_V_list, position_V_to_L_list);
+  status =
+    fribidi_reorder_line (embedding_level_list, len, 0, NULL, visual_str,
+			  position_L_to_V_list, position_V_to_L_list);
 
 out:
 

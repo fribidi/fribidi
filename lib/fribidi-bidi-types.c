@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.c - character bidi types
  *
- * $Id: fribidi-bidi-types.c,v 1.6 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-bidi-types.c,v 1.7 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.c,v $
  *
  * Authors:
@@ -37,6 +37,67 @@
 
 #include "bidi-types.h"
 
+enum FriBidiCharTypeLinearEnum
+{
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
+# include "fribidi-bidi-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+  _FRIBIDI_NUM_TYPES
+};
+
+#include "bidi-type.tab.i"
+
+/* Map FriBidiCharTypeLinearEnum to FriBidiCharType. */
+static const FriBidiCharType linear_enum_to_char_type[] = {
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
+# include "fribidi-bidi-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+};
+
+FRIBIDI_ENTRY FriBidiCharType
+fribidi_get_bidi_type (
+  /* input */
+  FriBidiChar ch
+)
+{
+  return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (ch)];
+}
+
+FRIBIDI_ENTRY void
+fribidi_get_bidi_types (
+  /* input */
+  const FriBidiChar *str,
+  const FriBidiStrIndex len,
+  /* output */
+  FriBidiCharType *type
+)
+{
+  register FriBidiStrIndex i = len;
+  for (; i; i--)
+    {
+      *type++ = linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (*str)];
+      str++;
+    }
+}
+
+FRIBIDI_ENTRY const char *
+fribidi_bidi_type_name (
+  /* input */
+  FriBidiCharType t
+)
+{
+  switch (t)
+    {
+#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return STRINGIZE(TYPE);
+#   define _FRIBIDI_ALL_TYPES
+#   include "fribidi-bidi-types-list.h"
+#   undef _FRIBIDI_ALL_TYPES
+#   undef _FRIBIDI_ADD_TYPE
+    default:
+      return "?";
+    }
+}
+
 #ifdef DEBUG
 
 char
@@ -57,25 +118,7 @@ fribidi_char_from_bidi_type (
     }
 }
 
-#endif
-
-FRIBIDI_ENTRY const char *
-fribidi_bidi_type_name (
-  /* input */
-  FriBidiCharType t
-)
-{
-  switch (t)
-    {
-#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return STRINGIZE(TYPE);
-#   define _FRIBIDI_ALL_TYPES
-#   include "fribidi-bidi-types-list.h"
-#   undef _FRIBIDI_ALL_TYPES
-#   undef _FRIBIDI_ADD_TYPE
-    default:
-      return "?";
-    }
-}
+#endif /* DEBUG */
 
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent

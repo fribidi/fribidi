@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.8 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.9 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.8 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -329,14 +329,38 @@ typedef fribidi_uint32 FriBidiParType;
 
 /* Functions finally */
 
+
+#define fribidi_get_bidi_type FRIBIDI_NAMESPACE(get_bidi_type)
+/* fribidi_get_bidi_type - get character bidi type
+ *
+ * This function returns the bidi type of a character.  There are a few macros
+ * defined in fribidi-bidi-types.h for querying a bidi type.
+ */
+FRIBIDI_ENTRY FriBidiCharType
+fribidi_get_bidi_type (
+  FriBidiChar ch		/* input character */
+) FRIBIDI_GNUC_CONST;
+
+#define fribidi_get_bidi_types FRIBIDI_NAMESPACE(get_bidi_types)
+/* fribidi_get_bidi_types - get bidi types for an string of characters
+ *
+ * This function finds the bidi types of an string of characters.  See
+ * fribidi_get_bidi_type for more information about the bidi types returned
+ * by this function.
+ */
+     FRIBIDI_ENTRY void fribidi_get_bidi_types (
+  const FriBidiChar *str,	/* input string */
+  const FriBidiStrIndex len,	/* input string length */
+  FriBidiCharType *type		/* output bidi types */
+);
+
 #define fribidi_bidi_type_name FRIBIDI_NAMESPACE(bidi_type_name)
 /* fribidi_bidi_type_name - get bidi type name
  *
  * This function returns the bidi type name of a character type.  The
  * returned string is a static string and should not be freed.
  */
-FRIBIDI_ENTRY const char *
-fribidi_bidi_type_name (
+     FRIBIDI_ENTRY const char *fribidi_bidi_type_name (
   FriBidiCharType t		/* input bidi type */
 ) FRIBIDI_GNUC_CONST;
 

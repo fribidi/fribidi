@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.h - character joining types
  *
- * $Id: fribidi-joining-types.h,v 1.1 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining-types.h,v 1.2 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.1 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.h,v $
  *
  * Author:
@@ -124,14 +124,40 @@ typedef fribidi_uint8 FriBidiJoiningType;
 	((p) & (FRIBIDI_MASK_TRANSPARENT | FRIBIDI_MASK_IGNORED))
 
 
+/* Functions finally */
+
+
+#define fribidi_get_joining_type FRIBIDI_NAMESPACE(get_joining_type)
+/* fribidi_get_joining_type - get character joining type
+ *
+ * This function returns the joining type of a character.  There are a few
+ * macros defined in fribidi-joining-types.h for querying a joining type.
+ */
+FRIBIDI_ENTRY FriBidiJoiningType
+fribidi_get_joining_type (
+  FriBidiChar ch		/* input character */
+) FRIBIDI_GNUC_CONST;
+
+#define fribidi_get_joining_types FRIBIDI_NAMESPACE(get_joining_types)
+/* fribidi_get_joining_types - get joining types for an string of characters
+ *
+ * This function finds the joining types of an string of characters.  See
+ * fribidi_get_joining_type for more information about the joining types
+ * returned by this function.
+ */
+     FRIBIDI_ENTRY void fribidi_get_joining_types (
+  const FriBidiChar *str,	/* input string */
+  const FriBidiStrIndex len,	/* input string length */
+  FriBidiJoiningType *type	/* output bidi types */
+);
+
 #define fribidi_joining_type_name FRIBIDI_NAMESPACE(joining_type_name)
 /* fribidi_joining_type_name - get joining type name
  *
  * This function returns the joining type name of a joining type.  The
  * returned string is a static string and should not be freed.
  */
-FRIBIDI_ENTRY const char *
-fribidi_joining_type_name (
+     FRIBIDI_ENTRY const char *fribidi_joining_type_name (
   FriBidiJoiningType j		/* input joining type */
 ) FRIBIDI_GNUC_CONST;
 

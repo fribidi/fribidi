@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-run.c - text run data type
  *
- * $Id: fribidi-run.c,v 1.4 2004-06-14 17:00:33 behdad Exp $
+ * $Id: fribidi-run.c,v 1.5 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 17:00:33 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-run.c,v $
  *
  * Authors:
@@ -35,7 +35,7 @@
 
 #include "common.h"
 
-#include <fribidi-bidi-type.h>
+#include <fribidi-bidi-types.h>
 
 #include "run.h"
 #include "env.h"

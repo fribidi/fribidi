@@ -12,12 +12,6 @@ headers =
 inst_symbols =
 noinst_symbols =
 
-include $(top_srcdir)/lib/Headers.mk
-headers += $(libfribidi_la_headers)
-includepath += -I$(top_builddir)/lib -I$(top_srcdir)/lib
-includevpath += :$(top_builddir)/lib:$(top_srcdir)/lib
-inst_symbols += $(libfribidi_la_symbols)
-
 include $(top_srcdir)/charset/Headers.mk
 headers += $(libfribidi_char_sets_la_headers)
 includepath += -I$(top_srcdir)/charset
@@ -28,8 +22,12 @@ else # !FRIBIDI_CHARSETS
 noinst_symbols += $(libfribidi_char_sets_la_symbols)
 endif # !FRIBIDI_CHARSETS
 
-# name of the header to include in the manual
-headers += fribidi.h
+# The lib/Headers.mk stuff should come after all optional stuff.
+include $(top_srcdir)/lib/Headers.mk
+headers += $(libfribidi_la_headers)
+includepath += -I$(top_builddir)/lib -I$(top_srcdir)/lib
+includevpath += :$(top_builddir)/lib:$(top_srcdir)/lib
+inst_symbols += $(libfribidi_la_symbols)
 
 dist_man_MANS += $(inst_symbols:=.3)
 dist_noinst_MANS += $(noinst_symbols:=.3)

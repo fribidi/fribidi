@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.8 2004-06-14 17:00:33 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.9 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 17:00:33 $
- * $Revision: 1.8 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -61,26 +61,11 @@ FRIBIDI_ENTRY FriBidiLevel
 fribidi_get_par_embedding_levels (
   const FriBidiChar *str,	/* input paragraph string */
   const FriBidiStrIndex len,	/* input string length of the paragraph */
-  const FriBidiCharType *bidi_types, /* input bidi types */
+  const FriBidiCharType *bidi_types,	/* input bidi types */
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_level_list	/* output list of embedding levels */
 ) FRIBIDI_GNUC_WARN_UNUSED;
-
-#define fribidi_shape_mirroring FRIBIDI_NAMESPACE(shape_mirroring)
-/* fribidi_shape - do mirroring shaping
- *
- * This functions replaces mirroring characters on right-to-left embeddings in
- * string str with their mirrored equivalent as returned by
- * fribidi_get_mirror_char().
- */
-     FRIBIDI_ENTRY void fribidi_shape_mirroring (
-  const FriBidiLevel *embedding_level_list,	/* input list of embedding
-						   levels, as returned by
-						   fribidi_get_par_embedding_levels */
-  const FriBidiStrIndex len,	/* input string length */
-  FriBidiChar *str		/* string to shape */
-);
 
 #define fribidi_reorder_line FRIBIDI_NAMESPACE(reorder_line)
 /* fribidi_reorder_line - reorder a line of logical string to visual
@@ -106,8 +91,8 @@ fribidi_get_par_embedding_levels (
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
   const FriBidiLevel *embedding_level_list,	/* input list of embedding levels,
-					   as returned by
-					   fribidi_get_par_embedding_levels */
+						   as returned by
+						   fribidi_get_par_embedding_levels */
   const FriBidiStrIndex len,	/* input length of the line */
   const FriBidiStrIndex off,	/* input offset of the beginning of the line
 				   in the paragraph */

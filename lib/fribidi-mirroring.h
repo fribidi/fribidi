@@ -23,10 +23,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.h,v 1.7 2004-06-09 14:59:21 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.8 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
  * Authors:
@@ -39,6 +39,7 @@
 #include "fribidi-common.h"
 
 #include "fribidi-types.h"
+#include "fribidi-bidi-types.h"
 
 #include "fribidi-begindecls.h"
 
@@ -55,6 +56,21 @@
 FRIBIDI_ENTRY fribidi_boolean fribidi_get_mirror_char (
   FriBidiChar ch,		/* input character */
   FriBidiChar *mirrored_ch	/* output mirrored character */
+);
+
+#define fribidi_shape_mirroring FRIBIDI_NAMESPACE(shape_mirroring)
+/* fribidi_shape_mirroring - do mirroring shaping
+ *
+ * This functions replaces mirroring characters on right-to-left embeddings in
+ * string with their mirrored equivalent as returned by
+ * fribidi_get_mirror_char().
+ */
+FRIBIDI_ENTRY void fribidi_shape_mirroring (
+  const FriBidiLevel *embedding_level_list,	/* input list of embedding
+						   levels, as returned by
+						   fribidi_get_par_embedding_levels */
+  const FriBidiStrIndex len,	/* input string length */
+  FriBidiChar *str		/* string to shape */
 );
 
 #include "fribidi-enddecls.h"

@@ -38,11 +38,9 @@ libfribidi_la_SOURCES =	\
 		env.h \
 		fribidi.c \
 		fribidi-bidi.c \
-		fribidi-bidi-type.c \
 		fribidi-bidi-types.c \
 		fribidi-env.c \
 		fribidi-joining.c \
-		fribidi-joining-type.c \
 		fribidi-joining-types.c \
 		fribidi-mem.c \
 		fribidi-mirroring.c \

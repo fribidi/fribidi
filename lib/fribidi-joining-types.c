@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.c - character joining types
  *
- * $Id: fribidi-joining-types.c,v 1.1 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining-types.c,v 1.2 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.1 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.c,v $
  *
  * Authors:
@@ -33,9 +33,63 @@
 
 #include "common.h"
 
+#if !FRIBIDI_NO_ARABIC
+
 #include <fribidi-joining-types.h>
 
 #include "joining-types.h"
+
+enum FriBidiJoiningTypeShortEnum
+{
+# define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE = FRIBIDI_JOINING_TYPE_##TYPE,
+# include "fribidi-joining-types-list.h"
+# undef _FRIBIDI_ADD_TYPE
+  _FRIBIDI_NUM_TYPES
+};
+
+#include "joining-type.tab.i"
+
+FRIBIDI_ENTRY FriBidiJoiningType
+fribidi_get_joining_type (
+  /* input */
+  FriBidiChar ch
+)
+{
+  return FRIBIDI_GET_JOINING_TYPE (ch);
+}
+
+FRIBIDI_ENTRY void
+fribidi_get_joining_types (
+  /* input */
+  const FriBidiChar *str,
+  const FriBidiStrIndex len,
+  /* output */
+  FriBidiJoiningType *type
+)
+{
+  register FriBidiStrIndex i = len;
+  for (; i; i--)
+    {
+      *type++ = FRIBIDI_GET_JOINING_TYPE (*str);
+      str++;
+    }
+}
+
+FRIBIDI_ENTRY const char *
+fribidi_joining_type_name (
+  /* input */
+  FriBidiJoiningType j
+)
+{
+  switch (j)
+    {
+#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_JOINING_TYPE_##TYPE: return STRINGIZE(TYPE);
+#   include "fribidi-joining-types-list.h"
+#   undef _FRIBIDI_ADD_TYPE
+    default:
+      return "?";
+    }
+}
 
 #ifdef DEBUG
 
@@ -55,23 +109,9 @@ fribidi_char_from_joining_type (
     }
 }
 
-#endif
+#endif /* DEBUG */
 
-FRIBIDI_ENTRY const char *
-fribidi_joining_type_name (
-  /* input */
-  FriBidiJoiningType j
-)
-{
-  switch (j)
-    {
-#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_JOINING_TYPE_##TYPE: return STRINGIZE(TYPE);
-#   include "fribidi-joining-types-list.h"
-#   undef _FRIBIDI_ADD_TYPE
-    default:
-      return "?";
-    }
-}
+#endif /* !FRIBIDI_NO_ARABIC */
 
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent

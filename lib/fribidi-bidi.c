@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.11 2004-06-14 17:00:33 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.12 2004-06-14 18:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 17:00:33 $
- * $Revision: 1.11 $
+ * $Date: 2004-06-14 18:43:53 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -36,7 +36,7 @@
 #include "common.h"
 
 #include <fribidi-bidi.h>
-#include <fribidi-bidi-type.h>
+#include <fribidi-bidi-types.h>
 #include <fribidi-mirroring.h>
 #include <fribidi-unicode.h>
 #include <fribidi-env.h>
@@ -206,8 +206,8 @@ print_bidi_string (
 
   MSG ("  Org. types : ");
   if (bidi_types)
-  for (i = 0; i < len; i++)
-    MSG2 ("%c", fribidi_char_from_bidi_type (BIDI_TYPE(i)));
+    for (i = 0; i < len; i++)
+      MSG2 ("%c", fribidi_char_from_bidi_type (BIDI_TYPE (i)));
   MSG ("\n");
 }
 #endif /* DEBUG */
@@ -742,9 +742,9 @@ fribidi_get_par_embedding_levels (
       {
 	/* if state is on at the very first of the string, do this too. */
 	if (j >= 0)
-	{
-	  char_type = BIDI_TYPE(j);
-	}
+	  {
+	    char_type = BIDI_TYPE (j);
+	  }
 	else
 	  char_type = FRIBIDI_TYPE_ON;
 	if (!state && FRIBIDI_IS_SEPARATOR (char_type))
@@ -807,34 +807,6 @@ out:
     (explicits_list) free_run_list (explicits_list);
 
   return status ? max_level + 1 : 0;
-}
-
-
-FRIBIDI_ENTRY void
-fribidi_shape_mirroring (
-  /* input */
-  const FriBidiLevel *embedding_level_list,
-  const FriBidiStrIndex len,
-  /* input and output */
-  FriBidiChar *str
-)
-{
-  register FriBidiStrIndex i;
-
-  fribidi_assert (embedding_level_list);
-
-  if UNLIKELY
-    (len == 0 || !str) return;
-
-  /* L4. Mirror all characters that are in odd levels and have mirrors. */
-  for (i = len - 1; i >= 0; i--)
-    if (FRIBIDI_LEVEL_IS_RTL (embedding_level_list[i]))
-      {
-	FriBidiChar mirrored_ch;
-
-	if (fribidi_get_mirror_char (str[i], &mirrored_ch))
-	  str[i] = mirrored_ch;
-      }
 }
 
 
@@ -945,7 +917,7 @@ fribidi_reorder_line (
 	  /* L3. Reorder NSMs. */
 	  for (i = off + len - 1; i >= off; i--)
 	    if (FRIBIDI_LEVEL_IS_RTL (embedding_level_list[i])
-		&& BIDI_TYPE(i) == FRIBIDI_TYPE_NSM)
+		&& BIDI_TYPE (i) == FRIBIDI_TYPE_NSM)
 	      {
 		register FriBidiStrIndex seq_end = i;
 		level = embedding_level_list[i];
