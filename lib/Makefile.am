@@ -6,13 +6,13 @@ libfribidi_la_LDFLAGS = -version-info $(LT_VERSION_INFO)
 libfribidi_la_LIBADD = $(MISC_LIBS)
 libfribidi_la_DEPENDENCIES =
 
-if PLATFORM_WIN32
-libfribidi_la_LDFLAGS += -no-undefined
-endif # PLATFORM_WIN32
-
 if OS_WIN32
 libfribidi_la_LDFLAGS += -export-symbols $(srcdir)/fribidi.def
 endif # OS_WIN32
+
+if PLATFORM_WIN32
+libfribidi_la_LDFLAGS += -no-undefined
+endif # PLATFORM_WIN32
 
 if FRIBIDI_CHARSETS
 
