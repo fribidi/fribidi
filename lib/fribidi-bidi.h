@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.13 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.14 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.13 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -63,7 +63,8 @@
  * only LTR, RTL, or ON.
  */
 FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
-  const FriBidiCharType *bidi_types,	/* input bidi types */
+  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
+					   fribidi_get_bidi_types() */
   const FriBidiStrIndex len	/* input string length */
 );
 
@@ -85,7 +86,8 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
  */
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_get_par_embedding_levels (
-  const FriBidiCharType *bidi_types,	/* input bidi types */
+  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
+					   fribidi_get_bidi_types() */
   const FriBidiStrIndex len,	/* input string length of the paragraph */
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
@@ -118,12 +120,13 @@ fribidi_get_par_embedding_levels (
  * occured (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
-  const FriBidiCharType *bidi_types,	/* input bidi types */
+  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
+					   fribidi_get_bidi_types() */
   const FriBidiStrIndex len,	/* input length of the line */
   const FriBidiStrIndex off,	/* input offset of the beginning of the line
 				   in the paragraph */
   const FriBidiParType base_dir,	/* resolved paragraph base direction */
-  FriBidiLevel *embedding_levels,	/* list of embedding levels,
+  FriBidiLevel *embedding_levels,	/* input list of embedding levels,
 					   as returned by
 					   fribidi_get_par_embedding_levels */
   FriBidiChar *visual_str,	/* visual string to reorder */

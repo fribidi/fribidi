@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.h - character joining types
  *
- * $Id: fribidi-joining-types.h,v 1.3 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-joining-types.h,v 1.4 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.h,v $
  *
  * Author:
@@ -98,12 +98,12 @@ typedef enum _FriBidiJoiningTypeEnum FriBidiJoiningType;
 typedef fribidi_uint8 FriBidiJoiningType;
 #endif /* !__FRIBIDI_DOC */
 
-/* FriBidiArabicProps is essentially the same type as FriBidiJoiningType, but
+/* FriBidiArabicProp is essentially the same type as FriBidiJoiningType, but
  * not limited to the few values returned by fribidi_get_joining_type. */
-typedef fribidi_uint8 FriBidiArabicProps;
+typedef fribidi_uint8 FriBidiArabicProp;
 
 /*
- * The equivalent of JoiningType values for ArabicProps
+ * The equivalent of JoiningType values for ArabicProp
  */
 
 /* Primary Arabic Joining Classes (Table 8-2) */
@@ -183,6 +183,12 @@ typedef fribidi_uint8 FriBidiArabicProps;
 /* Is skipped in joining: T, G? */
 #define FRIBIDI_IS_JOIN_SKIPPED(p)	\
 	((p) & (FRIBIDI_MASK_TRANSPARENT | FRIBIDI_MASK_IGNORED))
+
+/* Is base that will be shaped: R, D, L? */
+#define FRIBIDI_IS_JOIN_BASE_SHAPES(p)	\
+	( FRIBIDI_MASK_ARAB_SHAPES == ( (p) &	\
+		( FRIBIDI_MASK_TRANSPARENT | FRIBIDI_MASK_IGNORED	\
+		| FRIBIDI_MASK_ARAB_SHAPES ) ) )
 
 #define FRIBIDI_JOINS_PRECEDING_MASK(level)	\
 	(FRIBIDI_LEVEL_IS_RTL (level) ? FRIBIDI_MASK_JOINS_RIGHT	\

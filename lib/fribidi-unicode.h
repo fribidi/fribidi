@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.4 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.5 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.4 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:
@@ -66,13 +66,7 @@ extern const char *fribidi_unicode_version;
 #define FRIBIDI_BIDI_MAX_RESOLVED_LEVELS	63
 
 
-/* Unicode Arabic joining/shaping definitions: */
-
-/* Unicode 4.0.1: join within "directional run", not "level run". */
-#undef FRIBIDI_JOIN_WITHIN_RUN_LEVEL
-
-
-/* A few Unicode characters */
+/* A few Unicode characters: */
 
 /* Bidirectional marks */
 #define FRIBIDI_CHAR_LRM		0x200E

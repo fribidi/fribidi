@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.14 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi.c,v 1.15 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.14 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.15 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -145,7 +145,7 @@ fribidi_log2vis (
   fribidi_boolean private_V_to_L = false;
   fribidi_boolean private_embedding_levels = false;
   fribidi_boolean status = false;
-  FriBidiArabicProps *ar_props = NULL;
+  FriBidiArabicProp *ar_props = NULL;
   FriBidiCharType *bidi_types = NULL;
 
   if UNLIKELY
@@ -190,7 +190,7 @@ fribidi_log2vis (
       /* Arabic joining */
       ar_props = fribidi_malloc (len * sizeof ar_props[0]);
       fribidi_get_joining_types (str, len, ar_props);
-      fribidi_join_arabic (embedding_levels, len, ar_props);
+      fribidi_join_arabic (bidi_types, len, embedding_levels, ar_props);
 #endif /* !FRIBIDI_NO_ARABIC */
 
       fribidi_shape (embedding_levels, len, visual_str);

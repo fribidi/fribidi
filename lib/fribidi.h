@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.h - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.h,v 1.7 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi.h,v 1.8 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.h,v $
  *
  * Author:
@@ -42,7 +42,7 @@
 #include "fribidi-joining-types.h"
 #include "fribidi-joining.h"
 #else
-typedef void FriBidiJoiningType typedef void FriBidiArabicProps
+typedef void FriBidiJoiningType typedef void FriBidiArabicProp
 #endif				/* !FRIBIDI_NO_ARABIC */
 #if FRIBIDI_CHARSETS
 # include "fribidi-char-sets.h"

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.c,v 1.3 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi-joining.c,v 1.4 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.c,v $
  *
  * Authors:
@@ -40,6 +40,7 @@
 
 #include "mem.h"
 #include "env.h"
+#include "bidi-types.h"
 #include "joining-types.h"
 
 #if DEBUG
@@ -69,23 +70,22 @@ print_joining_types (
 }
 #endif /* DEBUG */
 
+#define FRIBIDI_CONSISTENT_LEVEL(i)	\
+	(FRIBIDI_IS_EXPLICIT_OR_BN (bidi_types[(i)])	\
+	 ? FRIBIDI_SENTINEL	\
+	 : embedding_levels[(i)])
 
-#if FRIBIDI_JOIN_WITHIN_RUN_LEVEL
-/* Join within same level run (to be proposed for inclusion in Unicode 4.1) */
-# define FRIBIDI_JOINING_RUN(l) (l)
-#else /* !FRIBIDI_JOIN_WITHIN_RUN_LEVEL */
-/* Join within same directional run (current rule in Unicode 4.0.1) */
-# define FRIBIDI_JOINING_RUN(l) FRIBIDI_LEVEL_IS_RTL(l)
-#endif /* !FRIBIDI_JOIN_WITHIN_RUN_LEVEL */
-
+#define FRIBIDI_LEVELS_MATCH(i, j)	\
+	((i) == (j) || (i) == FRIBIDI_SENTINEL || (j) == FRIBIDI_SENTINEL)
 
 FRIBIDI_ENTRY void
 fribidi_join_arabic (
   /* input */
-  const FriBidiLevel *embedding_levels,
+  const FriBidiCharType *bidi_types,
   const FriBidiStrIndex len,
+  const FriBidiLevel *embedding_levels,
   /* input and output */
-  FriBidiArabicProps *ar_props
+  FriBidiArabicProp *ar_props
 )
 {
   if UNLIKELY
@@ -93,6 +93,7 @@ fribidi_join_arabic (
 
   DBG ("in fribidi_join_arabic");
 
+  fribidi_assert (bidi_types);
   fribidi_assert (embedding_levels);
   fribidi_assert (ar_props);
 
@@ -104,52 +105,76 @@ fribidi_join_arabic (
     }
 # endif	/* DEBUG */
 
+  /* The joining algorithm turned out very very dirty :(.  That's what happens
+   * when you follow the standard which has never been implemented closely
+   * before.  We assume "level run" instead of "directional run", which is a
+   * proposed update to be considered for Unicode 4.1. */
+
   /* 8.2 Arabic - Cursive Joining */
   DBG ("Arabic cursive joining");
   {
-    register FriBidiStrIndex i = 0;
+    /* The following do not need to be initialized as long as joins is
+     * initialized to false.  We just do to turn off compiler warnings. */
+    register FriBidiStrIndex saved = 0;
+    register FriBidiLevel saved_level = FRIBIDI_SENTINEL;
+    register fribidi_boolean saved_shapes = false;
+    register FriBidiArabicProp saved_joins_following_mask = 0;
+
+    register fribidi_boolean joins = false;
+    register FriBidiStrIndex i;
 
     for (i = 0; i < len; i++)
-      {
-	register FriBidiStrIndex saved = i;
-	register const FriBidiLevel direction =
-	  FRIBIDI_LEVEL_IS_RTL (embedding_levels[i]);
-	register const FriBidiArabicProps joins_preceding_mask =
-	  FRIBIDI_JOINS_PRECEDING_MASK (direction);
-	register const FriBidiArabicProps joins_following_mask =
-	  FRIBIDI_JOINS_FOLLOWING_MASK (direction);
-	register fribidi_boolean joins = false;
+      if (!FRIBIDI_IS_JOINING_TYPE_G (ar_props[i]))
+	{
+	  register fribidi_boolean disjoin = false;
+	  register fribidi_boolean shapes = FRIBIDI_ARAB_SHAPES (ar_props[i]);
+	  register FriBidiLevel level = FRIBIDI_CONSISTENT_LEVEL (i);
 
-	/* Sweep over directional runs */
-	for (;
-	     i < len
-	     && FRIBIDI_LEVEL_IS_RTL (embedding_levels[i]) == direction; i++)
-	  {
-	    /* R1. Transparent chars are skipped (and so do iGnored chars) */
-	    if (FRIBIDI_IS_JOIN_SKIPPED (ar_props[i]))
-	      continue;
+	  if (joins && !FRIBIDI_LEVELS_MATCH (saved_level, level))
+	    {
+	      disjoin = true;
+	      joins = false;
+	    }
 
-	    /* R2..R7. */
-	    if (!joins)
-	      FRIBIDI_UNSET_BITS (ar_props[i], joins_preceding_mask);
-	    else if (!FRIBIDI_TEST_BITS (ar_props[i], joins_preceding_mask))
-	      FRIBIDI_UNSET_BITS (ar_props[saved], joins_following_mask);
-	    else
-	      {
-		/* This is a FriBidi extension:  we set joining properties
-		 * for skipped characters in between. */
-		for (saved++; saved < i; saved++)
-		  FRIBIDI_SET_BITS (ar_props[saved],
-				    joins_preceding_mask |
-				    joins_following_mask);
-	      }
+	  if (!FRIBIDI_IS_JOIN_SKIPPED (ar_props[i]))
+	    {
+	      register const FriBidiArabicProp joins_preceding_mask =
+		FRIBIDI_JOINS_PRECEDING_MASK (level);
 
-	    joins = FRIBIDI_TEST_BITS (ar_props[i], joins_following_mask);
-	    saved = i;
-	  }
-	FRIBIDI_UNSET_BITS (ar_props[saved], joins_following_mask);
-	i--;
-      }
+	      if (!joins)
+		{
+		  if (shapes)
+		    FRIBIDI_UNSET_BITS (ar_props[i], joins_preceding_mask);
+		}
+	      else if (!FRIBIDI_TEST_BITS (ar_props[i], joins_preceding_mask))
+		disjoin = true;
+	    }
+
+	  if (disjoin && saved_shapes)
+	    FRIBIDI_UNSET_BITS (ar_props[saved], saved_joins_following_mask);
+
+	  if (!FRIBIDI_IS_JOIN_SKIPPED (ar_props[i]))
+	    {
+	      saved = i;
+	      saved_level = level;
+	      saved_shapes = shapes;
+	      saved_joins_following_mask =
+		FRIBIDI_JOINS_FOLLOWING_MASK (level);
+	      joins =
+		FRIBIDI_TEST_BITS (ar_props[i], saved_joins_following_mask);
+	    }
+	}
+    if (joins && saved_shapes)
+      FRIBIDI_UNSET_BITS (ar_props[saved], saved_joins_following_mask);
+
+    /* if joining on transparents then... */
+    /* This is a FriBidi extension:  we set joining properties
+     * for skipped characters in between. 
+     for (saved++; saved < i; saved++)
+     FRIBIDI_SET_BITS (ar_props[saved],
+     joins_preceding_mask |
+     joins_following_mask);
+     */
   }
 
 # if DEBUG

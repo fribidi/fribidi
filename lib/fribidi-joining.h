@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.h,v 1.2 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-joining.h,v 1.3 2004-06-21 21:15:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-21 21:15:31 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.h,v $
  *
  * Authors:
@@ -46,7 +46,7 @@
  *
  * This function does the Arabic joining algorithm.  Means, given Arabic
  * joining types of the characters in ar_props (don't worry,
- * FriBidiJoiningType can be casted to FriBidiArabicProps automagically), this
+ * FriBidiJoiningType can be casted to FriBidiArabicProp automagically), this
  * function modifies this properties to grasp the effect of neighboring
  * characters.  You probably need this information later to do Arabic shaping.
  *
@@ -61,11 +61,14 @@
  * Arabic properties computed by this function.
  */
 FRIBIDI_ENTRY void fribidi_join_arabic (
+  const FriBidiCharType *bidi_types,	/* input list of bidi types as
+					   returned by
+					   fribidi_get_bidi_types() */
+  const FriBidiStrIndex len,	/* input string length */
   const FriBidiLevel *embedding_levels,	/* input list of embedding
 					   levels, as returned by
 					   fribidi_get_par_embedding_levels */
-  const FriBidiStrIndex len,	/* input string length */
-  FriBidiArabicProps *ar_props	/* Arabic properties to analyze, initilized by
+  FriBidiArabicProp *ar_props	/* Arabic properties to analyze, initilized by
 				   joining types, as returned by
 				   fribidi_get_joining_types */
 );
