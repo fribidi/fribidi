@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-run.c - text run data type
  *
- * $Id: fribidi-run.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-run.c,v 1.3 2004-06-04 16:43:51 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-04 16:43:51 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-run.c,v $
  *
  * Authors:
@@ -34,6 +34,8 @@
  */
 
 #include "common.h"
+
+#include <fribidi-bidi-type.h>
 
 #include "run.h"
 #include "env.h"
@@ -154,7 +156,7 @@ free_run_list (
 FriBidiRun *
 run_list_encode_bidi_types (
   /* input */
-  FriBidiCharType *char_type,
+  const FriBidiChar *str,
   FriBidiStrIndex len
 )
 {
@@ -162,7 +164,7 @@ run_list_encode_bidi_types (
   register FriBidiRun *run = NULL;
   FriBidiStrIndex i;
 
-  fribidi_assert (char_type);
+  fribidi_assert (str);
 
   /* Create the list sentinel */
   list = new_run_list ();
@@ -172,18 +174,21 @@ run_list_encode_bidi_types (
 
   /* Scan over the character types */
   for (i = 0; i < len; i++)
-    if (char_type[i] != last->type)
-      {
-	run = new_run ();
-	if UNLIKELY
-	  (!run) break;
-	run->type = char_type[i];
-	run->pos = i;
-	last->len = run->pos - last->pos;
-	last->next = run;
-	run->prev = last;
-	last = run;
-      }
+    {
+      register FriBidiCharType char_type = fribidi_get_bidi_type (str[i]);
+      if (char_type != last->type)
+	{
+	  run = new_run ();
+	  if UNLIKELY
+	    (!run) break;
+	  run->type = char_type;
+	  run->pos = i;
+	  last->len = run->pos - last->pos;
+	  last->next = run;
+	  run->prev = last;
+	  last = run;
+	}
+    }
 
   /* Close the circle */
   last->len = len - last->pos;
