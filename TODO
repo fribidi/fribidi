@@ -77,3 +77,5 @@ From GNU Coding Standards:
   to explain the purpose of each of the first-level subdirectories in the
   package, if there are any. The `README' file should either state the version
   number of the package, or refer to where in the package it can be found.
+
+* Add ^L to all sources.
