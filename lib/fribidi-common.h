@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.9 2004-06-09 14:59:21 behdad Exp $
+ * $Id: fribidi-common.h,v 1.10 2004-06-23 22:26:06 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-23 22:26:06 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -38,6 +38,7 @@
 # define FRIBIDI "fribidi"
 # define FRIBIDI_NAME "fribidi"
 # define FRIBIDI_VERSION "unknown"
+# define FRIBIDI_BUGREPORT "unknown"
 # define FRIBIDI_INTERFACE_VERSION_STRING "unknown"
 #endif /* DONT_HAVE_FRIBIDI_CONFIG_H */
 

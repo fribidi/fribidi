@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.10 2004-06-09 20:01:00 behdad Exp $
+ * $Id: fribidi-main.c,v 1.11 2004-06-23 22:26:06 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 20:01:00 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-23 22:26:06 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -229,7 +229,7 @@ main (
   eol_text = NULL;
   input_base_direction = FRIBIDI_TYPE_ON;
 
-  if ((s = getenv ("COLUMNS")))
+  if ((s = (char *) getenv ("COLUMNS")))
     {
       int i;
 
