@@ -1,5 +1,9 @@
 Implementation issues:
 
+* Better FRIBIDI_NAMESPACE.
+
+* Define symbols to be included in library.
+
 * Still better bootstrap script: steal from GNOME autogen.sh.
 
 * Test ./configure without pkg-config installed.
@@ -11,6 +15,9 @@ Implementation issues:
 
 * In fribidi_main.c reorder after line break.
 
+* Change fribidi-main cmd-line parameters: --mirror --no-mirror...  change the
+  defaults too.
+
 * Add an option to fribidi_main.c to assume two consecutive returns as
   paragraph separators.
 
@@ -19,9 +26,6 @@ Implementation issues:
     output in anyway.
   - Tests with BN.  Right now ^ is BN in CapRTL scheme.
   - Test tables.
-
-* Change fribidi-main cmd-line parameters: --mirror --no-mirror...  change the
-  defaults too.
 
 * indent:  support function attributes and _PARAMS like things.  Also
   FRIBIDI_BEGIN_DECLS, and LIKELY.
@@ -35,7 +39,7 @@ Implementation issues:
 
 * Write texinfo documentation.
 
-* Set up gnu.org web pages, and the entry in Free Software Directory.
+* Set up gnu.org web pages, and update the entry in Free Software Directory.
 
 * Use gengetopt.
 
@@ -47,9 +51,6 @@ Implementation issues:
   fix spacing in AUTHORS.
 
 * Generate HTML and DVI documentation.
-
-* Clean up README and NEWS, and check all files' headers.  Write
-  gen.tab/README.  Also add UniData license file.
 
 * Rewrite fribidi.spec.in
 
@@ -65,6 +66,9 @@ Implementation issues:
   generators.
 
 * Replace test/run.tests with something better.
+
+* Clean up README and NEWS, and check all files' headers.  Write
+  gen.tab/README.  Also add UniData license file.
 
 From GNU Coding Standards:
 
