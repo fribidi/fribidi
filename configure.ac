@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.16 2004-06-15 11:52:02 behdad Exp $
+## $Id: configure.ac,v 1.17 2004-07-03 11:36:15 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2004-06-15 11:52:02 $
-## $Revision: 1.16 $
+## $Date: 2004-07-03 11:36:15 $
+## $Revision: 1.17 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -44,7 +44,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://freedesktop.org/cgi-bin/bugzilla/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.16 2004-06-15 11:52:02 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.17 2004-07-03 11:36:15 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -103,7 +103,7 @@ AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_TIME
-AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h stdbool.h wchar.h sys/times.h asm/page.h])
+AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h wchar.h sys/times.h asm/page.h])
 
 # Checks for typedefs and structures.
 AC_C_CONST
@@ -178,16 +178,17 @@ AC_ARG_WITH(glib,
               AC_HELP_STRING([--with-glib=@<:@no/auto/yes@:>@],
                              [use Glib @<:@default=auto@:>@]))
 GLIB_PACKAGE=glib-2.0
+GLIB_MINVERSION=2.4
 GLIB_LIBS=
 GLIB_CFLAGS=
 if test x$with_glib = xyes; then
-	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE)
+	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE >= $GLIB_MINVERSION)
 	FRIBIDI_USE_GLIB=1
 else
 if test x$with_glib = xno; then
 	FRIBIDI_USE_GLIB=0
 else
-	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE,
+	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE >= $GLIB_MINVERSION,
 		FRIBIDI_USE_GLIB=1,
 		FRIBIDI_USE_GLIB=0)
 fi
@@ -201,7 +202,7 @@ AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
 
 MISC_CFLAGS="$GLIB_CFLAGS"
 MISC_LIBS="$GLIB_LIBS"
-MISC_PACKAGES="$GLIB_PACKAGES"
+MISC_PACKAGES="$GLIB_PACKAGE"
 AC_SUBST(MISC_CFLAGS)
 AC_SUBST(MISC_LIBS)
 AC_SUBST(MISC_PACKAGES)

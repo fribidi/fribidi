@@ -47,9 +47,6 @@ Implementation issues:
   cleanup stuff if asked to fail on memory allocation failure (xmalloc).  When
   this is done, FRIBIDI_GNUC_WARN_UNUSEDS can be turned off conditionally.
 
-* Fix cvs2cl bug with spacing around author names read with -U option.  Then
-  fix spacing in AUTHORS.
-
 * Generate HTML and DVI documentation.
 
 * Rewrite fribidi.spec.in

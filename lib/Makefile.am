@@ -28,7 +28,8 @@ $(top_builddir)/charset/libfribidi-char-sets.la:
 endif # FRIBIDI_CHARSETS
 
 include Headers.mk
-pkginclude_HEADERS = $(libfribidi_la_headers) fribidi-config.h
+pkginclude_HEADERS = $(libfribidi_la_headers)
+nodist_pkginclude_HEADERS = fribidi-config.h
 
 libfribidi_la_SOURCES =	\
 		bidi-type.tab.i \
@@ -51,13 +52,17 @@ libfribidi_la_SOURCES =	\
 		mirroring.tab.i \
 		run.h
 
-BUILT_SOURCES= \
+GENERATEDSOURCES = \
 		fribidi-unicode-version.h \
 		bidi-type.tab.i \
 		joining-type.tab.i \
 		mirroring.tab.i
 
-$(BUILT_SOURCES):
+BUILT_SOURCES = \
+		$(GENERATEDSOURCES) \
+		fribidi-config.h
+
+$(GENERATEDSOURCES):
 	@(cd $(top_builddir)/gen.tab && \
 	$(MAKE) $(AM_MAKEFLAGS) $@) && \
 	(test -f $@ || mv $(top_builddir)/gen.tab/$@ .)
@@ -73,3 +78,5 @@ MAINTAINERCLEANFILES = $(BUILT_SOURCES)
 
 $(top_builddir)/config.h: $(top_srcdir)/config.h.in
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) config.h
+
+.PHONY: gen

@@ -1,4 +1,4 @@
-behdad:Behdad Esfahbod  <behdad@gnu.org>
+behdad: Behdad Esfahbod <behdad@gnu.org>
 #
 # Behdad Esfahbod is the only one that actually codes these days.  He
 # maintains it himself too.  He has revised all code written by anyone else,
@@ -7,7 +7,7 @@ behdad:Behdad Esfahbod  <behdad@gnu.org>
 # implements, documents, maintains, all alone... :'-(.
 #
 
-dov-g:Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+dov-g: Dov Grobgeld <dov@imagic.weizmann.ac.il>
 #
 # Dov Grobgeld originally wrote FriBidi.  The 0.1.* versions are all comletely
 # done by Dov.  After that, he almost never touched the code, but contributed
@@ -15,7 +15,7 @@ dov-g:Dov Grobgeld  <dov@imagic.weizmann.ac.il>
 # author in the header of the file.
 #
 
-#roozbeh:Roozbeh Pournader  <roozbeh@gnu.org>
+#roozbeh: Roozbeh Pournader <roozbeh@gnu.org>
 #
 # Roozbeh Pournader actually didn't contributed much code to GNU FriBidi; but
 # he has promoted and psychologically supported the project.  He has helped

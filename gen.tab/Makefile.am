@@ -27,6 +27,15 @@ VPATH += \
 		$(srcdir)/unidata/extracted \
 		$(top_builddir)/lib
 
+
+UCD_FILES = \
+		unidata/ReadMe.txt \
+		unidata/UnicodeData.txt \
+		unidata/BidiMirroring.txt \
+		unidata/ArabicShaping.txt
+
+EXTRA_DIST = $(UCD_FILES)
+
 COMPRESSION = 4
 
 # generate bidi-type.tab.i
@@ -89,5 +98,13 @@ fribidi-unicode-version.h: \
 
 # generate all generators:
 gen: $(EXTRA_PROGRAMS)
+
+$(top_builddir)/config.h: $(top_srcdir)/config.h.in
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) config.h
+
+$(top_builddir)/lib/fribidi-config.h: $(top_srcdir)/lib/fribidi-config.h.in
+	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) fribidi-config.h
+
+.PHONY: gen
 
 .DELETE_ON_ERROR:

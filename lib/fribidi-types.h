@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.8 2004-06-18 19:21:33 behdad Exp $
+ * $Id: fribidi-types.h,v 1.9 2004-07-03 11:36:15 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-18 19:21:33 $
- * $Revision: 1.8 $
+ * $Date: 2004-07-03 11:36:15 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -68,14 +68,7 @@
 #   define FRIBIDI_UINT32_LOCAL		unsigned long
 #  endif /* SIZEOF_INT < 4 */
 # endif	/* no int types */
-# if HAVE_STDBOOL_H
-#  ifndef __FRIBIDI_DOC
-#   include <stdbool.h>
-#  endif /* !__FRIBIDI_DOC */
-#  define FRIBIDI_BOOLEAN_LOCAL		bool
-# else /* !HAVE_STDBOOL_H */
-#  define FRIBIDI_BOOLEAN_LOCAL		int
-# endif	/* !HAVE_STDBOOL_H */
+# define FRIBIDI_BOOLEAN_LOCAL		int
 # if SIZEOF_WCHAR_T >= 4
 #  ifndef __FRIBIDI_DOC
 #   if STDC_HEADERS
