@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.3 2004-05-12 08:17:19 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.4 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 08:17:19 $
- * $Revision: 1.3 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:
@@ -55,7 +55,7 @@
 extern const char *fribidi_unicode_version;
 
 
-/* The Unicode Bidirectional Algorithm constants */
+/* Unicode Bidirectional Algorithm definitions: */
 
 /* Number of types defined in the bidi algorithm */
 #define FRIBIDI_BIDI_NUM_TYPES			19
@@ -64,6 +64,12 @@ extern const char *fribidi_unicode_version;
 #define FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL		61
 /* The maximum *number* of different resolved embedding levels: 0-62 */
 #define FRIBIDI_BIDI_MAX_RESOLVED_LEVELS	63
+
+
+/* Unicode Arabic joining/shaping definitions: */
+
+/* Unicode 4.0.1: join within "directional run", not "level run". */
+#undef FRIBIDI_JOIN_WITHIN_RUN_LEVEL
 
 
 /* A few Unicode characters */
@@ -91,7 +97,8 @@ extern const char *fribidi_unicode_version;
 #define FRIBIDI_CHAR_ARABIC_ZERO	0x0660
 #define FRIBIDI_CHAR_PERSIAN_ZERO	0x06F0
 
-/* These are here just for compatibility. */
+/* These are here just for lazy people. */
+#if !FRIBIDI_STRICT
 #define UNI_MAX_BIDI_LEVEL	FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
 #define UNI_LRM			FRIBIDI_CHAR_LRM
 #define UNI_RLM			FRIBIDI_CHAR_RLM
@@ -107,6 +114,7 @@ extern const char *fribidi_unicode_version;
 #define UNI_ARABIC_ALEF		FRIBIDI_CHAR_ARABIC_ALEF
 #define UNI_ARABIC_ZERO		FRIBIDI_CHAR_ARABIC_ZERO
 #define UNI_FARSI_ZERO		FRIBIDI_CHAR_PERSIAN_ZERO
+#endif /* !FRIBIDI_STRICT */
 
 #include "fribidi-enddecls.h"
 

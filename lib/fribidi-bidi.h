@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.12 2004-06-21 16:15:27 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.13 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 16:15:27 $
- * $Revision: 1.12 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -49,12 +49,6 @@
  * as defined by rule P2 of the Unicode Bidirectional Algorithm available at
  * http://www.unicode.org/reports/tr9/#P2.
  *
- * You can provide either the string, or the bidi types; or both.
- * If bidi_types are provided, they are used as the bidi types of characters
- * in the string, otherwise the types are computed from the characters in str.
- * Providing bidi types if available at your side, saves you a few cycles.
- * Bidi types can be obtained by calling fribidi_get_bidi_types().
- *
  * You typically do not need this function as
  * fribidi_get_par_embedding_levels() knows how to compute base direction
  * itself, but you may need this to implement a more sophisticated paragraph
@@ -69,9 +63,8 @@
  * only LTR, RTL, or ON.
  */
 FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
-  const FriBidiChar *str,	/* input paragraph string */
-  const FriBidiStrIndex len,	/* input string length */
-  const FriBidiCharType *bidi_types	/* input bidi types */
+  const FriBidiCharType *bidi_types,	/* input bidi types */
+  const FriBidiStrIndex len	/* input string length */
 );
 
 #define fribidi_get_par_embedding_levels FRIBIDI_NAMESPACE(get_par_embedding_levels)
@@ -84,12 +77,6 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
  *  implemented in fribidi_remove_bidi_marks().  Part 4 of L1 is implemented
  *  in fribidi_reorder_line().
  *
- * You can provide either the string, or the bidi types; or both.
- * If bidi_types are provided, they are used as the bidi types of characters
- * in the string, otherwise the types are computed from the characters in str.
- * Providing bidi types if available at your side, saves you a few cycles.
- * Bidi types can be obtained by calling fribidi_get_bidi_types().
- *
  * There are a few macros defined in fribidi-bidi-types.h to work with this
  * embedding levels.
  *
@@ -98,9 +85,8 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
  */
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_get_par_embedding_levels (
-  const FriBidiChar *str,	/* input paragraph string */
-  const FriBidiStrIndex len,	/* input string length of the paragraph */
   const FriBidiCharType *bidi_types,	/* input bidi types */
+  const FriBidiStrIndex len,	/* input string length of the paragraph */
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_levels	/* output list of embedding levels */
@@ -115,20 +101,6 @@ fribidi_get_par_embedding_levels (
  * http://www.unicode.org/reports/tr9/#Reordering_Resolved_Levels.
  *
  * As a side effect it also sets position maps if not NULL.
- *
- * You can provide either the string str, or the bidi types; or both.  If
- * bidi_types are provided, they are used as the bidi types of characters in
- * the string, otherwise the types are computed from the characters in str.
- * If neither str nor bidi types are provided, visual_str is used instead.
- * Feel free to pass the same string as both str and visual_str, but if you
- * done extensive complicated shaping in visual_str, you better provide
- * logical string as str.  There is no known differences yet between providing
- * logical or visual string as str.
- *
- * If you have obtained the embedding levels using custom bidi types, you
- * should provide the same types to this function for valid resutls.
- * Providing bidi types if available at your side, saves you a few cycles, and
- * you don't need to provide str anymore.
  *
  * You should provide the resolved paragraph direction and embedding levels as
  * set by fribidi_get_par_embedding_levels().  Also note that the embedding
@@ -146,11 +118,10 @@ fribidi_get_par_embedding_levels (
  * occured (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
-  const FriBidiChar *str,	/* input string */
+  const FriBidiCharType *bidi_types,	/* input bidi types */
   const FriBidiStrIndex len,	/* input length of the line */
   const FriBidiStrIndex off,	/* input offset of the beginning of the line
 				   in the paragraph */
-  const FriBidiCharType *bidi_types,	/* input bidi types */
   const FriBidiParType base_dir,	/* resolved paragraph base direction */
   FriBidiLevel *embedding_levels,	/* list of embedding levels,
 					   as returned by

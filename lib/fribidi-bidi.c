@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.16 2004-06-21 16:15:27 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.17 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 16:15:27 $
- * $Revision: 1.16 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.17 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -198,18 +198,17 @@ print_resolved_types (
 static void
 print_bidi_string (
   /* input */
-  const FriBidiChar *str,
-  const FriBidiStrIndex len,
-  const FriBidiCharType *bidi_types
+  const FriBidiCharType *bidi_types,
+  const FriBidiStrIndex len
 )
 {
   register FriBidiStrIndex i;
 
-  fribidi_assert (str || bidi_types);
+  fribidi_assert (bidi_types);
 
   MSG ("  Org. types : ");
   for (i = 0; i < len; i++)
-    MSG2 ("%c", fribidi_char_from_bidi_type (BIDI_TYPE (i)));
+    MSG2 ("%c", fribidi_char_from_bidi_type (bidi_types[i]));
   MSG ("\n");
 }
 #endif /* DEBUG */
@@ -308,18 +307,17 @@ print_bidi_string (
 FRIBIDI_ENTRY FriBidiParType
 fribidi_get_par_direction (
   /* input */
-  const FriBidiChar *str,
-  const FriBidiStrIndex len,
-  const FriBidiCharType *bidi_types
+  const FriBidiCharType *bidi_types,
+  const FriBidiStrIndex len
 )
 {
   register FriBidiStrIndex i;
 
-  fribidi_assert (str || bidi_types);
+  fribidi_assert (bidi_types);
 
   for (i = 0; i < len; i++)
-    if (FRIBIDI_IS_LETTER (BIDI_TYPE (i)))
-      return FRIBIDI_IS_RTL (BIDI_TYPE (i)) ? FRIBIDI_PAR_RTL :
+    if (FRIBIDI_IS_LETTER (bidi_types[i]))
+      return FRIBIDI_IS_RTL (bidi_types[i]) ? FRIBIDI_PAR_RTL :
 	FRIBIDI_PAR_LTR;
 
   return FRIBIDI_PAR_ON;
@@ -328,9 +326,8 @@ fribidi_get_par_direction (
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_get_par_embedding_levels (
   /* input */
-  const FriBidiChar *str,
-  const FriBidiStrIndex len,
   const FriBidiCharType *bidi_types,
+  const FriBidiStrIndex len,
   /* input and output */
   FriBidiParType *pbase_dir,
   /* output */
@@ -349,16 +346,16 @@ fribidi_get_par_embedding_levels (
       goto out;
     }
 
-  DBG ("entering fribidi_get_par_embedding_levels");
+  DBG ("in fribidi_get_par_embedding_levels");
 
-  fribidi_assert (str || bidi_types);
+  fribidi_assert (bidi_types);
   fribidi_assert (pbase_dir);
   fribidi_assert (embedding_levels);
 
   /* Determinate character types */
   {
     /* Get run-length encoded character types */
-    main_run_list = run_list_encode_bidi_types (str, len, bidi_types);
+    main_run_list = run_list_encode_bidi_types (bidi_types, len);
     if UNLIKELY
       (!main_run_list) goto out;
   }
@@ -512,7 +509,7 @@ fribidi_get_par_embedding_levels (
     (fribidi_debug_status ())
     {
       print_types_re (main_run_list);
-      print_bidi_string (str, len, bidi_types);
+      print_bidi_string (bidi_types, len);
       print_resolved_levels (main_run_list);
       print_resolved_types (main_run_list);
     }
@@ -716,7 +713,7 @@ fribidi_get_par_embedding_levels (
   if UNLIKELY
     (fribidi_debug_status ())
     {
-      print_bidi_string (str, len, bidi_types);
+      print_bidi_string (bidi_types, len);
       print_resolved_levels (main_run_list);
       print_resolved_types (main_run_list);
     }
@@ -772,7 +769,7 @@ fribidi_get_par_embedding_levels (
       {
 	/* close up the open link at the end */
 	if (j >= 0)
-	  char_type = BIDI_TYPE (j);
+	  char_type = bidi_types[j];
 	else
 	  char_type = FRIBIDI_TYPE_ON;
 	if (!state && FRIBIDI_IS_SEPARATOR (char_type))
@@ -877,11 +874,10 @@ index_array_reverse (
 
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_reorder_line (
-  const FriBidiChar *str,
   /* input */
+  const FriBidiCharType *bidi_types,
   const FriBidiStrIndex len,
   const FriBidiStrIndex off,
-  const FriBidiCharType *bidi_types,
   const FriBidiParType base_dir,
   /* input and output */
   FriBidiLevel *embedding_levels,
@@ -915,11 +911,8 @@ fribidi_reorder_line (
 
   DBG ("in fribidi_reorder_line");
 
-  fribidi_assert (str || visual_str || bidi_types);
+  fribidi_assert (bidi_types);
   fribidi_assert (embedding_levels);
-
-  if (!str)
-    str = visual_str;
 
   DBG ("reset the embedding levels, 4. whitespace at the end of line");
   {
@@ -928,7 +921,7 @@ fribidi_reorder_line (
     /* L1. Reset the embedding levels of some chars:
        4. any sequence of white space characters at the end of the line. */
     for (i = off + len - 1; i >= off &&
-	 FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (BIDI_TYPE (i)); i--)
+	 FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (bidi_types[i]); i--)
       embedding_levels[i] = FRIBIDI_DIR_TO_LEVEL (base_dir);
   }
 
@@ -962,13 +955,13 @@ fribidi_reorder_line (
 	  /* L3. Reorder NSMs. */
 	  for (i = off + len - 1; i >= off; i--)
 	    if (FRIBIDI_LEVEL_IS_RTL (embedding_levels[i])
-		&& BIDI_TYPE (i) == FRIBIDI_TYPE_NSM)
+		&& bidi_types[i] == FRIBIDI_TYPE_NSM)
 	      {
 		register FriBidiStrIndex seq_end = i;
 		level = embedding_levels[i];
 
 		for (i--; i >= off &&
-		     FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM (BIDI_TYPE (i))
+		     FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM (bidi_types[i])
 		     && embedding_levels[i] == level; i--)
 		  ;
 

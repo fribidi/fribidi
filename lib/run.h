@@ -1,10 +1,10 @@
 /* FriBidi
  * run.h - text run data type
  *
- * $Id: run.h,v 1.6 2004-06-14 17:00:33 behdad Exp $
+ * $Id: run.h,v 1.7 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 17:00:33 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/run.h,v $
  *
  * Authors:
@@ -82,9 +82,8 @@ new_run (
 
 #define run_list_encode_bidi_types FRIBIDI_PRIVATESPACE(run_list_encode_bidi_types)
      FriBidiRun *run_list_encode_bidi_types (
-  const FriBidiChar *str,
-  const FriBidiStrIndex len,
-  const FriBidiCharType *bidi_types
+  const FriBidiCharType *bidi_types,
+  const FriBidiStrIndex len
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 

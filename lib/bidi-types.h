@@ -1,10 +1,10 @@
 /* FriBidi
  * bidi-types.h - define internal bidi types
  *
- * $Id: bidi-types.h,v 1.5 2004-06-14 17:00:33 behdad Exp $
+ * $Id: bidi-types.h,v 1.6 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 17:00:33 $
- * $Revision: 1.5 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/bidi-types.h,v $
  *
  * Author:
@@ -52,8 +52,6 @@ fribidi_char_from_bidi_type (
 ) FRIBIDI_GNUC_HIDDEN;
 
 #endif /* DEBUG */
-
-#define BIDI_TYPE(i) (bidi_types ? bidi_types[(i)] : fribidi_get_bidi_type(str[(i)]))
 
 #include <fribidi-enddecls.h>
 

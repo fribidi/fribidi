@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.13 2004-06-21 16:15:27 behdad Exp $
+ * $Id: fribidi.c,v 1.14 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 16:15:27 $
- * $Revision: 1.13 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -146,6 +146,7 @@ fribidi_log2vis (
   fribidi_boolean private_embedding_levels = false;
   fribidi_boolean status = false;
   FriBidiArabicProps *ar_props = NULL;
+  FriBidiCharType *bidi_types = NULL;
 
   if UNLIKELY
     (len == 0)
@@ -159,6 +160,12 @@ fribidi_log2vis (
   fribidi_assert (str);
   fribidi_assert (pbase_dir);
 
+  bidi_types = fribidi_malloc (len * sizeof bidi_types[0]);
+  if (!bidi_types)
+    goto out;
+
+  fribidi_get_bidi_types (str, len, bidi_types);
+
   if (!embedding_levels)
     {
       embedding_levels = fribidi_malloc (len * sizeof embedding_levels[0]);
@@ -167,7 +174,7 @@ fribidi_log2vis (
       private_embedding_levels = true;
     }
 
-  max_level = fribidi_get_par_embedding_levels (str, len, NULL, pbase_dir,
+  max_level = fribidi_get_par_embedding_levels (bidi_types, len, pbase_dir,
 						embedding_levels) - 1;
   if UNLIKELY
     (max_level < 0) goto out;
@@ -201,7 +208,7 @@ fribidi_log2vis (
     }
 
   status =
-    fribidi_reorder_line (str, len, 0, NULL, *pbase_dir,
+    fribidi_reorder_line (bidi_types, len, 0, *pbase_dir,
 			  embedding_levels, visual_str,
 			  positions_L_to_V, positions_V_to_L);
 
@@ -215,6 +222,9 @@ out:
 
   if (ar_props)
     fribidi_free (ar_props);
+
+  if (bidi_types)
+    fribidi_free (bidi_types);
 
   return status ? max_level + 1 : 0;
 }

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.c,v 1.2 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-joining.c,v 1.3 2004-06-21 18:49:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-21 18:49:23 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.c,v $
  *
  * Authors:
@@ -70,6 +70,15 @@ print_joining_types (
 #endif /* DEBUG */
 
 
+#if FRIBIDI_JOIN_WITHIN_RUN_LEVEL
+/* Join within same level run (to be proposed for inclusion in Unicode 4.1) */
+# define FRIBIDI_JOINING_RUN(l) (l)
+#else /* !FRIBIDI_JOIN_WITHIN_RUN_LEVEL */
+/* Join within same directional run (current rule in Unicode 4.0.1) */
+# define FRIBIDI_JOINING_RUN(l) FRIBIDI_LEVEL_IS_RTL(l)
+#endif /* !FRIBIDI_JOIN_WITHIN_RUN_LEVEL */
+
+
 FRIBIDI_ENTRY void
 fribidi_join_arabic (
   /* input */
@@ -82,7 +91,7 @@ fribidi_join_arabic (
   if UNLIKELY
     (len == 0) return;
 
-  DBG ("entering fribidi_join_arabic");
+  DBG ("in fribidi_join_arabic");
 
   fribidi_assert (embedding_levels);
   fribidi_assert (ar_props);
