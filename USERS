@@ -1,0 +1,6 @@
+# List of known projects to use GNU FriBidi
+AbiWord: http://www.abisource.com/
+Pango: http://www.pango.org/ # statically links
+mlterm: http://mlterm.sourceforge.net/
+MPlayer: http://www.mplayerhq.hu/
+BiCon: http://www.arabeyes.org/project.php?proj=BiCon
