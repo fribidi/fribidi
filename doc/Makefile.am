@@ -1,3 +1,8 @@
+dist_man_MANS =
+dist_noinst_MANS =
+EXTRA_DIST =
+MOSTLYCLEANFILES =
+MAINTAINERCLEANFILES =
 
 # man3
 
@@ -26,17 +31,16 @@ endif # !FRIBIDI_CHARSETS
 # name of the header to include in the manual
 headers += fribidi.h
 
-dist_man_MANS = $(inst_symbols:=.3)
-dist_noinst_MANS = $(noinst_symbols:=.3)
+dist_man_MANS += $(inst_symbols:=.3)
+dist_noinst_MANS += $(noinst_symbols:=.3)
+EXTRA_DIST += c2man.stamp
+MOSTLYCLEANFILES += c2man.stamp.tmp
+MAINTAINERCLEANFILES += $(man3) c2man.stamp
 
 man3 = $(dist_man_MANS) $(dist_noinst_MANS)
 
-EXTRA_DIST = c2man.stamp
-
-MAINTAINERCLEANFILES = $(man3)
-
 C2MANFLAGS = $(includepath) \
-		-DDONT_HAVE_FRIBIDI_CONFIG_H
+		-DDONT_HAVE_FRIBIDI_CONFIG_H \
 		-M "Programmer's Manual" \
 		-m "$(PACKAGE_NAME) $(PACKAGE_VERSION)"
 
@@ -45,7 +49,10 @@ VPATH += $(includevpath)
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp
 	@touch $@.tmp
-	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $^ || true
+	$(LN_S) $^ .
+	$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) \
+	|| true
+	$(RM) $(headers)
 	@mv $@.tmp $@
 
 $(man3): c2man.stamp

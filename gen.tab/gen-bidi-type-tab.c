@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.7 2004-05-22 12:17:10 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.8 2004-05-24 06:45:42 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 12:17:10 $
- * $Revision: 1.7 $
+ * $Date: 2004-05-24 06:45:42 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -181,7 +181,9 @@ init_tab_unicode_data_txt (
 
   for (c = 0x0600; c < 0x07C0; c++)
     table[c] = AL;
-  for (c = 0xFB50; c < 0xFE00; c++)
+  for (c = 0xFB50; c < 0xFDD0; c++)
+    table[c] = AL;
+  for (c = 0xFDF0; c < 0xFE00; c++)
     table[c] = AL;
   for (c = 0xFE70; c < 0xFF00; c++)
     table[c] = AL;
@@ -200,9 +202,7 @@ init_tab_unicode_data_txt (
       for (c = 0x10800; c < 0x11000; c++)
 	table[c] = RTL;
 
-      for (c = 0xE0000; c < 0xE0100; c++)
-	table[c] = BN;
-      for (c = 0xE01F0; c < 0xE1000; c++)
+      for (c = 0xE0000; c < 0xE1000; c++)
 	table[c] = BN;
     }
 }
