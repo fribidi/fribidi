@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.10 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.11 2004-06-15 20:54:00 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-15 20:54:00 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -384,17 +384,6 @@ fribidi_get_bidi_type (
      FRIBIDI_ENTRY const char *fribidi_get_bidi_type_name (
   FriBidiCharType t		/* input bidi type */
 ) FRIBIDI_GNUC_CONST;
-
-#define fribidi_is_cf_minus_bn_and_nsm FRIBIDI_NAMESPACE(is_cf_minus_bn_and_nsm)
-/* fribidi_is_cf_minus_bn_and_nsm - is other format control character?
- *
- * This function finds the bidi types of an string of characters.  See
- * fribidi_get_bidi_type() for more information about the bidi types returned
- * by this function.
- */
-     FRIBIDI_ENTRY fribidi_boolean fribidi_get_bidi_types (
-  const FriBidiChar ch		/* input character */
-);
 
 #include "fribidi-enddecls.h"
 

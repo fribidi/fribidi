@@ -2,13 +2,11 @@ EXTRA_PROGRAMS = \
 		gen-unicode-version \
 		gen-bidi-type-tab \
 		gen-joining-type-tab \
-		gen-mirroring-tab \
-		gen-cf-bn-nsm-tab
+		gen-mirroring-tab
 
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
 gen_joining_type_tab_SOURCES = gen-joining-type-tab.c packtab.c packtab.h
 gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
-gen_cf_bn_nsm_tab_SOURCES = gen-cf-bn-nsm-tab.c packtab.c packtab.h
 gen_unicode_version_SOURCES = gen-unicode-version.c
 
 CLEANFILES = $(EXTRA_PROGRAMS)
@@ -76,18 +74,6 @@ mirroring.tab.i: \
 		$(gen_mirroring_tab_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_mirroring_tab)
 	./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
-	|| ($(RM) $@ && false)
-
-# generate cf-bn-nsm.tab.i
-
-gen_cf_bn_nsm_tab = gen-cf-bn-nsm-tab$(EXEEXT)
-
-cf-bn-nsm.tab.i: \
-		UnicodeData.txt \
-		fribidi-unicode-version.h \
-		$(gen_cf_bn_nsm_tab_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) $(gen_cf_bn_nsm_tab)
-	./$(gen_cf_bn_nsm_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate fribidi-unicode-version.h
