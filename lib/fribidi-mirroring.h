@@ -21,10 +21,10 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.h,v 1.2 2004-04-27 15:23:25 behdad Exp $
+/* $Id: fribidi-mirroring.h,v 1.3 2004-05-12 07:06:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 15:23:25 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-12 07:06:21 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.h,v $
  *
  * Author:
@@ -42,9 +42,10 @@
 #define fribidi_get_mirror_char FRIBIDI_NAMESPACE(get_mirror_char)
 /* fribidi_get_mirror_char - get mirrored character
  *
- * This function finds the mirrored of a character.  If input character is a
- * mirroring character, the matching mirrored character is put in the output,
- * otherwise the input character itself is put.
+ * This function finds the mirrored equivalent of a character.  If  the input
+ * character is a declared as a mirroring character in the Unicode standard
+ * and has a mirrored equivalent.  The matching mirrored character is put in
+ * the output, otherwise the input character itself is put.
  *
  * Returns: if the character has a mirror or not.
  */

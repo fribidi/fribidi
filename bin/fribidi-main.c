@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.4 2004-05-07 06:30:37 behdad Exp $
+ * $Id: fribidi-main.c,v 1.5 2004-05-12 07:06:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:37 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-12 07:06:21 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -62,9 +62,6 @@
 #if HAVE_STRINGS_H
 # include <strings.h>
 #endif
-#if HAVE_SYS_TIMES_H
-# include <sys/times.h>
-#endif
 
 #include "getopt.h"
 
@@ -73,7 +70,7 @@
 #define MAX_STR_LEN 65000
 
 
-#define ALLOCATE(tp,ln) ((tp *) malloc (sizeof (tp) * (ln)))
+#define ALLOCATE(tp,ln) ((tp *) fribidi_malloc (sizeof (tp) * (ln)))
 
 static void
 die2 (

@@ -2,10 +2,10 @@
 /* FriBidi
  * bidi-types-list.h - list of bidi types
  *
- * $Id: bidi-types-list.h,v 1.4 2004-05-07 06:30:38 behdad Exp $
+ * $Id: bidi-types-list.h,v 1.5 2004-05-12 07:06:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-12 07:06:21 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/bidi-types-list.h,v $
  *
  * Author:
@@ -36,6 +36,9 @@
 #ifndef _FRIBIDI_ADD_TYPE
 # define _FRIBIDI_ADD_TYPE(x,y)
 #endif
+#ifndef _FRIBIDI_ADD_ALIAS
+# define _FRIBIDI_ADD_ALIAS(x1,x2)
+#endif
 
 /* Bidi types from the standard. */
 _FRIBIDI_ADD_TYPE (LTR, 'L')	/* Left-To-Right letter */
@@ -57,6 +60,15 @@ _FRIBIDI_ADD_TYPE (RLE, '+')	/* Right-to-Left Embedding */
 _FRIBIDI_ADD_TYPE (LRO, '+')	/* Left-to-Right Override */
 _FRIBIDI_ADD_TYPE (RLO, '+')	/* Right-to-Left Override */
 _FRIBIDI_ADD_TYPE (PDF, '-')	/* Pop Directional Flag */
+
+#ifdef _FRIBIDI_ADD_ALIAS
+/* The followings are just aliases to types, but with the name that appears in
+ * the Unicode database. */
+_FRIBIDI_ADD_ALIAS (L, LTR)
+_FRIBIDI_ADD_ALIAS (R, RTL)
+_FRIBIDI_ADD_ALIAS (B, BS)
+_FRIBIDI_ADD_ALIAS (S, SS)
+#endif /* _FRIBIDI_ADD_ALIAS */
 
 #ifdef _FRIBIDI_PSEUDO_TYPES
 /* The following two types are not official Unicode bidi types, but used for

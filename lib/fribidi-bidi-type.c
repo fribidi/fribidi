@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.4 2004-05-07 06:30:38 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.5 2004-05-12 07:06:21 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.4 $
+ * $Date: 2004-05-12 07:06:21 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -68,7 +68,7 @@ get_bidi_type (
 )
 {
   if (uch < 0x110000)
-    return prop_to_type[FRIBIDI_GET_TYPE (uch)];
+    return prop_to_type[FRIBIDI_GET_BIDI_TYPE (uch)];
   else
     return FRIBIDI_TYPE_LTR;
   /* Non-Unicode chars */

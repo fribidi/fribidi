@@ -1,5 +1,7 @@
 Implementation issues:
 
+* Better bootstrap script: steal from GNOME autogen.sh.
+
 * Test ./configure without pkg-config installed.
 
 * Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]

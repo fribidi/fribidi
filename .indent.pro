@@ -1,6 +1,7 @@
 -gnu
 -bfda
 -bfde
+-T FILE
 -T LevelInfo
 -T FriBidiChar
 -T FriBidiStrIndex

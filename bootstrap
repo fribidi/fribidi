@@ -1,9 +1,9 @@
 #! /bin/sh
 ##############################################################################
-# $Id: bootstrap,v 1.1 2004-04-25 18:47:56 behdad Exp $
+# $Id: bootstrap,v 1.2 2004-05-12 07:06:21 behdad Exp $
 # $Author: behdad
-# $Date: 2004-04-25 18:47:56 $
-# $Revision: 1.1 $
+# $Date: 2004-05-12 07:06:21 $
+# $Revision: 1.2 $
 # $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bootstrap,v $
 ##############################################################################
 #                                               -*- Bootstrap -*-
@@ -102,7 +102,8 @@ fi
 
 if test -n "$MAKE"; then
 	if test -f ./configure; then
-		$DRYRUN ./configure $HELP $VERSION || exit 1
+		$DRYRUN ./configure $HELP $VERSION \
+		--enable-maintainer-mode --enable-compile-warnings || exit 1
 	fi
 	if test -f Makefile; then
 		$DRYRUN make || exit 1
