@@ -1,2 +1,3 @@
-fribidi-gen-bidi-type-table
-fribidi-gen-mirroring-table
+gen-bidi-type-table
+gen-mirroring-table
+gen-unicode-version
