@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.14 2004-06-18 19:21:33 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.15 2004-06-18 22:41:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-18 19:21:33 $
- * $Revision: 1.14 $
+ * $Date: 2004-06-18 22:41:39 $
+ * $Revision: 1.15 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -451,26 +451,19 @@ fribidi_get_par_embedding_levels (
 		    FRIBIDI_DIR_TO_LEVEL (this_type);
 		  PUSH_STATUS;
 		}
-
-	      /* Set level to the higher level */
-	      RL_LEVEL (pp) = level;
 	    }
 	  else if (this_type == FRIBIDI_TYPE_PDF)
 	    {
-	      /* Set level to the higher level */
-	      RL_LEVEL (pp) = level;
-
 	      /* 3. Terminating Embeddings and overrides */
 	      /*   X7. With each PDF, determine the matching embedding or
 	         override code. */
 	      for (i = RL_LEN (pp); i; i--)
 		POP_STATUS;
 	    }
-	  else
-	    RL_LEVEL (pp) = level;
 
 	  /* X9. Remove all RLE, LRE, RLO, LRO, PDF, and BN codes. */
 	  /* Remove element and add it to explicits_list */
+	  RL_LEVEL (pp) = FRIBIDI_SENTINEL;
 	  temp_link.next = pp->next;
 	  move_node_before (pp, explicits_list);
 	  pp = &temp_link;
@@ -739,13 +732,12 @@ fribidi_get_par_embedding_levels (
     explicits_list = NULL;
     if UNLIKELY
       (!stat) goto out;
-    /* We don't need this code since we set levels for everything we remove.
+
     p = main_run_list->next;
     if (p != main_run_list && p->level == FRIBIDI_SENTINEL)
       p->level = base_level;
     for_run_list (p, main_run_list) if (p->level == FRIBIDI_SENTINEL)
       p->level = p->prev->level;
-    */
   }
 
 # if DEBUG
@@ -932,7 +924,7 @@ fribidi_reorder_line (
 
     /* L1. Reset the embedding levels of some chars:
            4. any sequence of white space characters at the end of the line.*/
-    for (i = len - 1; i >= 0 &&
+    for (i = off + len - 1; i >= off &&
 	FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (BIDI_TYPE (i)); i--)
       embedding_levels[i] = FRIBIDI_DIR_TO_LEVEL (base_dir);
   }

@@ -19,15 +19,15 @@ EXTRA_DIST =	\
 
 test_%.reference: test_%.input
 	testcase="$@" && 	\
-	charset="`echo "$@" | $(SED) 's/_[^_]*$$//;s/.*_//'`" &&	\
-	"$(top_builddir)"/src/fribidi --test --charset "$$charset" "$<" > "$@" || \
+	charset="`echo "$@" | sed 's/_[^_]*$$//;s/.*_//'`" &&	\
+	$(top_builddir)/bin/fribidi --test --charset "$$charset" "$<" > "$@" || \
 	($(RM) "$@"; false)
 
-test.reference:
+references:
 	for testcase in "$(srcdir)"/test_*.input; do	\
-		test="`echo "$$testcase"	\
+		test="`echo $$testcase	\
 		  | $(SED) 's/\.input$$/.reference/i; s|.*/||;'`" &&	\
-		$(MAKE) "tests/$$test" ||	\
+		$(MAKE) $(AM_MAKEFLAGS) "$(srcdir)/$$test" ||	\
 		exit 1;	\
 	done
 
