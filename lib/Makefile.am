@@ -33,6 +33,7 @@ pkginclude_HEADERS = $(libfribidi_la_headers) fribidi-config.h
 libfribidi_la_SOURCES =	\
 		bidi-type.tab.i \
 		bidi-types.h \
+		cf-bn-nsm.tab.i \
 		common.h \
 		debug.h \
 		env.h \
@@ -55,7 +56,8 @@ BUILT_SOURCES= \
 		fribidi-unicode-version.h \
 		bidi-type.tab.i \
 		joining-type.tab.i \
-		mirroring.tab.i
+		mirroring.tab.i \
+		cf-bn-nsm.tab.i
 
 $(BUILT_SOURCES):
 	@(cd $(top_builddir)/gen.tab && \

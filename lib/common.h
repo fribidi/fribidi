@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.13 2004-06-13 20:11:42 behdad Exp $
+ * $Id: common.h,v 1.14 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.13 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -162,7 +162,9 @@
 #endif /* !HAVE_STRINGIZE */
 
 /* As per recommendation of GNU Coding Standards. */
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif /* !_GNU_SOURCE */
 
 #include "debug.h"
 

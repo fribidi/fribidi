@@ -8,6 +8,7 @@
 -T FriBidiCharType
 -T FriBidiParType
 -T FriBidiJoiningType
+-T FriBidiArabicProps
 -T FriBidiCharSet
 -T FriBidiCharSetHandler
 -T FriBidiMemChunk

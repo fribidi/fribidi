@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.6 2004-06-09 20:01:00 behdad Exp $
+ * $Id: fribidi-types.h,v 1.7 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 20:01:00 $
- * $Revision: 1.6 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -142,6 +142,24 @@ typedef FRIBIDI_STR_INDEX FriBidiStrIndex;
 		0x7FFE : (sizeof (FriBidiStrIndex) == 1 ? \
 		0x7E : 0x8FFFFFFEL))
 #endif
+
+/* A few macros for working with bits */
+
+#define FRIBIDI_TEST_BITS(x, mask) ((x) & (mask))
+
+#define FRIBIDI_INCLUDE_BITS(x, mask) ((x) | (mask))
+
+#define FRIBIDI_EXCLUDE_BITS(x, mask) ((x) & ~(mask))
+
+#define FRIBIDI_SET_BITS(x, mask)	\
+	FRIBIDI_BEGIN_STMT	\
+	(x) |= (mask);	\
+	FRIBIDI_END_STMT
+
+#define FRIBIDI_UNSET_BITS(x, mask)	\
+	FRIBIDI_BEGIN_STMT	\
+	(x) &= ~(mask);	\
+	FRIBIDI_END_STMT
 
 #include "fribidi-enddecls.h"
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.c - character joining types
  *
- * $Id: fribidi-joining-types.c,v 1.2 2004-06-14 18:43:53 behdad Exp $
+ * $Id: fribidi-joining-types.c,v 1.3 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 18:43:53 $
- * $Revision: 1.2 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.c,v $
  *
  * Authors:
@@ -64,19 +64,19 @@ fribidi_get_joining_types (
   const FriBidiChar *str,
   const FriBidiStrIndex len,
   /* output */
-  FriBidiJoiningType *type
+  FriBidiJoiningType *jtypes
 )
 {
   register FriBidiStrIndex i = len;
   for (; i; i--)
     {
-      *type++ = FRIBIDI_GET_JOINING_TYPE (*str);
+      *jtypes++ = FRIBIDI_GET_JOINING_TYPE (*str);
       str++;
     }
 }
 
 FRIBIDI_ENTRY const char *
-fribidi_joining_type_name (
+fribidi_get_joining_type_name (
   /* input */
   FriBidiJoiningType j
 )
@@ -96,17 +96,21 @@ fribidi_joining_type_name (
 char
 fribidi_char_from_joining_type (
   /* input */
-  FriBidiJoiningType j
+  FriBidiJoiningType j,
+  fribidi_boolean visual
 )
 {
-  switch (j)
-    {
-#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_JOINING_TYPE_##TYPE: return SYMBOL;
+  /* switch left and right if on visual run */
+  if (visual & ((FRIBIDI_JOINS_RIGHT (j) && !FRIBIDI_JOINS_LEFT (j)) |
+		(!FRIBIDI_JOINS_RIGHT (j) && FRIBIDI_JOINS_LEFT (j))))
+    j ^= FRIBIDI_MASK_JOINS_RIGHT | FRIBIDI_MASK_JOINS_LEFT;
+
+#   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL)	\
+	if (FRIBIDI_IS_JOINING_TYPE_##TYPE(j)) return SYMBOL;
 #   include "fribidi-joining-types-list.h"
 #   undef _FRIBIDI_ADD_TYPE
-    default:
-      return '?';
-    }
+
+  return '?';
 }
 
 #endif /* DEBUG */

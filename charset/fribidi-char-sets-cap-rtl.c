@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.8 2004-06-14 18:43:53 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.9 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 18:43:53 $
- * $Revision: 1.8 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -291,7 +291,7 @@ fribidi_char_set_desc_cap_rtl (
       i += sprintf (s + i, /*l - i, */ "  * 0x%02x %c%c %-3s ", j,
 		    j < 0x20 ? '^' : ' ',
 		    j < 0x20 ? j + '@' : j < 0x7f ? j : ' ',
-		    fribidi_bidi_type_name (CapRTLCharTypes[j]));
+		    fribidi_get_bidi_type_name (CapRTLCharTypes[j]));
     }
   i += sprintf (s + i,		/*l - i, */
 		"\n\n"

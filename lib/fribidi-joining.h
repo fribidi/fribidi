@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.h,v 1.1 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining.h,v 1.2 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.1 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.h,v $
  *
  * Authors:
@@ -36,11 +36,39 @@
 #include "fribidi-common.h"
 
 #include "fribidi-types.h"
+#include "fribidi-bidi-types.h"
 #include "fribidi-joining-types.h"
 
 #include "fribidi-begindecls.h"
 
-
+#define fribidi_join_arabic FRIBIDI_NAMESPACE(join_arabic)
+/* fribidi_join_arabic - do Arabic joining
+ *
+ * This function does the Arabic joining algorithm.  Means, given Arabic
+ * joining types of the characters in ar_props (don't worry,
+ * FriBidiJoiningType can be casted to FriBidiArabicProps automagically), this
+ * function modifies this properties to grasp the effect of neighboring
+ * characters.  You probably need this information later to do Arabic shaping.
+ *
+ * This function implements rules R1 to R7 inclusive (all rules) of the Arabic
+ * Cursive Joining algorithm of the Unicode standard as available at 
+ * http://www.unicode.org/versions/Unicode4.0.0/ch08.pdf#G7462.  It also
+ * interacts correctly with the bidirection algorithm as defined in Section
+ * 3.5 Shaping of the Unicode Bidirectional Algorithm available at
+ * http://www.unicode.org/reports/tr9/#Shaping.
+ *
+ * There are a few macros defined in fribidi-joining-types.h for querying the
+ * Arabic properties computed by this function.
+ */
+FRIBIDI_ENTRY void fribidi_join_arabic (
+  const FriBidiLevel *embedding_levels,	/* input list of embedding
+					   levels, as returned by
+					   fribidi_get_par_embedding_levels */
+  const FriBidiStrIndex len,	/* input string length */
+  FriBidiArabicProps *ar_props	/* Arabic properties to analyze, initilized by
+				   joining types, as returned by
+				   fribidi_get_joining_types */
+);
 
 #include "fribidi-enddecls.h"
 

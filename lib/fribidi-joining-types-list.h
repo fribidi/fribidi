@@ -2,10 +2,10 @@
 /* FriBidi
  * fribidi-joining-types-list.h - list of joining types
  *
- * $Id: fribidi-joining-types-list.h,v 1.1 2004-06-13 20:11:42 behdad Exp $
+ * $Id: fribidi-joining-types-list.h,v 1.2 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.1 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types-list.h,v $
  *
  * Author:
@@ -38,11 +38,11 @@
 #endif
 
 _FRIBIDI_ADD_TYPE (U, '|')	/* nUn-joining, e.g. Full Stop */
-_FRIBIDI_ADD_TYPE (R, '>')	/* Right-joining, e.g. Arabic Letter Dal */
+_FRIBIDI_ADD_TYPE (R, '<')	/* Right-joining, e.g. Arabic Letter Dal */
 _FRIBIDI_ADD_TYPE (D, '+')	/* Dual-joining, e.g. Arabic Letter Ain */
 _FRIBIDI_ADD_TYPE (C, '-')	/* join-Causing, e.g. Tatweel, ZWJ */
 _FRIBIDI_ADD_TYPE (T, '^')	/* Transparent, e.g. Arabic Fatha */
-_FRIBIDI_ADD_TYPE (L, '<')	/* Left-joining, i.e. fictional */
+_FRIBIDI_ADD_TYPE (L, '>')	/* Left-joining, i.e. fictional */
 _FRIBIDI_ADD_TYPE (G, '~')	/* iGnored, e.g. LRE, RLE, ZWNBSP */
 
 #ifndef __FRIBIDI_DOC

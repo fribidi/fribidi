@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.c - character bidi types
  *
- * $Id: fribidi-bidi-types.c,v 1.7 2004-06-14 18:43:53 behdad Exp $
+ * $Id: fribidi-bidi-types.c,v 1.8 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 18:43:53 $
- * $Revision: 1.7 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.c,v $
  *
  * Authors:
@@ -69,19 +69,19 @@ fribidi_get_bidi_types (
   const FriBidiChar *str,
   const FriBidiStrIndex len,
   /* output */
-  FriBidiCharType *type
+  FriBidiCharType *btypes
 )
 {
   register FriBidiStrIndex i = len;
   for (; i; i--)
     {
-      *type++ = linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (*str)];
+      *btypes++ = linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (*str)];
       str++;
     }
 }
 
 FRIBIDI_ENTRY const char *
-fribidi_bidi_type_name (
+fribidi_get_bidi_type_name (
   /* input */
   FriBidiCharType t
 )

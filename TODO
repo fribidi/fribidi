@@ -7,7 +7,7 @@ Implementation issues:
 * Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]
   is always the reference.
 
-* Update CapRTL with new Unicode reference code.
+* Update CapRTL with new Unicode reference code / new Unicode data types.
 
 * In fribidi_main.c reorder after line break.
 
@@ -28,7 +28,8 @@ Implementation issues:
 
 * Cleanup gen.tab/gen-*.c files.
 
-* Override pkgincludedir and append interface version.
+* Override pkgincludedir and append interface version.  Should we go the GNOME
+  parallel install way?
 
 * c2man:  parse Author and Copyright from the whole file.
 
@@ -48,11 +49,11 @@ Implementation issues:
 * Generate HTML and DVI documentation.
 
 * Clean up README and NEWS, and check all files' headers.  Write
-  gen.tab/README.
+  gen.tab/README.  Also add UniData license file.
 
 * Rewrite fribidi.spec.in
 
-* Add make rules for lib/$(BUILT_SOURCES) to depend on gen.tab/ stuff.
+* Add make rules for lib/$(BUILT_SOURCES) to depend on gen.tab/ stuff?
 
 * When called in interactive mode, fribidi cmd-line should greet, write
   about copyrtight stuff, and shared-libs' version and Unicode version.
@@ -62,8 +63,6 @@ Implementation issues:
 
 * Configure gen.tab/ with host=build to avoid cross-compiling table
   generators.
-
-* Replace Arabic Yeh with Persian Yeh in Hafez piece in test/*.
 
 * Replace test/run.tests with something better.
 

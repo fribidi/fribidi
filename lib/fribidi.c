@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.10 2004-06-14 18:43:53 behdad Exp $
+ * $Id: fribidi.c,v 1.11 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 18:43:53 $
- * $Revision: 1.10 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -40,18 +40,20 @@
 FRIBIDI_ENTRY void
 fribidi_shape (
   /* input */
-  const FriBidiLevel *embedding_level_list,
+  const FriBidiLevel *embedding_levels,
   const FriBidiStrIndex len,
   /* input and output */
   FriBidiChar *str
 )
 {
-  fribidi_assert (embedding_level_list);
-
   if UNLIKELY
     (len == 0 || !str) return;
 
-  fribidi_shape_mirroring (embedding_level_list, len, str);
+  DBG ("in fribidi_shape");
+
+  fribidi_assert (embedding_levels);
+
+  fribidi_shape_mirroring (embedding_levels, len, str);
 }
 
 
@@ -59,16 +61,14 @@ FRIBIDI_ENTRY FriBidiStrIndex
 fribidi_remove_bidi_marks (
   FriBidiChar *str,
   const FriBidiStrIndex len,
-  FriBidiStrIndex *position_to_this_list,
+  FriBidiStrIndex *positions_to_this,
   FriBidiStrIndex *position_from_this_list,
-  FriBidiLevel *embedding_level_list
+  FriBidiLevel *embedding_levels
 )
 {
   register FriBidiStrIndex i, j = 0;
   fribidi_boolean private_from_this = false;
   fribidi_boolean status = false;
-
-  fribidi_assert (str);
 
   if UNLIKELY
     (len == 0)
@@ -77,9 +77,13 @@ fribidi_remove_bidi_marks (
       goto out;
     }
 
+  DBG ("in fribidi_remove_bidi_marks");
+
+  fribidi_assert (str);
+
   /* If to_this is to not NULL, we must have from_this as well. If it is
      not given by the caller, we have to make a private instance of it. */
-  if (position_to_this_list && !position_from_this_list)
+  if (positions_to_this && !position_from_this_list)
     {
       position_from_this_list = fribidi_malloc (sizeof
 						(position_from_this_list[0]) *
@@ -88,7 +92,7 @@ fribidi_remove_bidi_marks (
 	(!position_from_this_list) goto out;
       private_from_this = true;
       for (i = len - 1; i >= 0; i--)
-	position_from_this_list[position_to_this_list[i]] = i;
+	position_from_this_list[positions_to_this[i]] = i;
     }
 
   for (i = 0; i < len; i++)
@@ -96,20 +100,20 @@ fribidi_remove_bidi_marks (
 	&& str[i] != FRIBIDI_CHAR_LRM && str[i] != FRIBIDI_CHAR_RLM)
       {
 	str[j] = str[i];
-	if (embedding_level_list)
-	  embedding_level_list[j] = embedding_level_list[i];
+	if (embedding_levels)
+	  embedding_levels[j] = embedding_levels[i];
 	if (position_from_this_list)
 	  position_from_this_list[j] = position_from_this_list[i];
 	j++;
       }
 
   /* Convert the from_this list to to_this */
-  if (position_to_this_list)
+  if (positions_to_this)
     {
       for (i = 0; i < len; i++)
-	position_to_this_list[i] = -1;
+	positions_to_this[i] = -1;
       for (i = 0; i < len; i++)
-	position_to_this_list[position_from_this_list[i]] = i;
+	positions_to_this[position_from_this_list[i]] = i;
     }
 
   status = true;
@@ -132,18 +136,16 @@ fribidi_log2vis (
   FriBidiParType *pbase_dir,
   /* output */
   FriBidiChar *visual_str,
-  FriBidiStrIndex *position_L_to_V_list,
-  FriBidiStrIndex *position_V_to_L_list,
-  FriBidiLevel *embedding_level_list
+  FriBidiStrIndex *positions_L_to_V,
+  FriBidiStrIndex *positions_V_to_L,
+  FriBidiLevel *embedding_levels
 )
 {
   FriBidiLevel max_level = 0;
   fribidi_boolean private_V_to_L = false;
-  fribidi_boolean private_embedding_level_list = false;
+  fribidi_boolean private_embedding_levels = false;
   fribidi_boolean status = false;
-
-  fribidi_assert (str);
-  fribidi_assert (pbase_dir);
+  FriBidiArabicProps *ar_props = NULL;
 
   if UNLIKELY
     (len == 0)
@@ -152,26 +154,40 @@ fribidi_log2vis (
       goto out;
     }
 
-  if (!embedding_level_list)
+  DBG ("in fribidi_log2vis");
+
+  fribidi_assert (str);
+  fribidi_assert (pbase_dir);
+
+  if (!embedding_levels)
     {
-      embedding_level_list = fribidi_malloc (len);
-      if (!embedding_level_list)
+      embedding_levels = fribidi_malloc (len * sizeof embedding_levels[0]);
+      if (!embedding_levels)
 	goto out;
-      private_embedding_level_list = true;
+      private_embedding_levels = true;
     }
 
   max_level = fribidi_get_par_embedding_levels (str, len, NULL, pbase_dir,
-						embedding_level_list) - 1;
+						embedding_levels) - 1;
   if UNLIKELY
     (max_level < 0) goto out;
 
+#if !FRIBIDI_NO_ARABIC
+  /* Arabic joining */
+  {
+    ar_props = fribidi_malloc (len * sizeof ar_props[0]);
+    fribidi_get_joining_types (str, len, ar_props);
+    fribidi_join_arabic (embedding_levels, len, ar_props);
+  }
+#endif /* !FRIBIDI_NO_ARABIC */
+
   /* If l2v is to be calculated we must have v2l as well. If it is not
      given by the caller, we have to make a private instance of it. */
-  if (position_L_to_V_list && !position_V_to_L_list)
+  if (positions_L_to_V && !positions_V_to_L)
     {
-      position_V_to_L_list =
+      positions_V_to_L =
 	(FriBidiStrIndex *) fribidi_malloc (sizeof (FriBidiStrIndex) * len);
-      if (!position_V_to_L_list)
+      if (!positions_V_to_L)
 	goto out;
       private_V_to_L = true;
     }
@@ -184,19 +200,22 @@ fribidi_log2vis (
 	visual_str[i] = str[i];
     }
 
-  fribidi_shape (embedding_level_list, len, visual_str);
+  fribidi_shape (embedding_levels, len, visual_str);
 
   status =
-    fribidi_reorder_line (embedding_level_list, len, 0, NULL, visual_str,
-			  position_L_to_V_list, position_V_to_L_list);
+    fribidi_reorder_line (embedding_levels, len, 0, NULL, visual_str,
+			  positions_L_to_V, positions_V_to_L);
 
 out:
 
   if (private_V_to_L)
-    fribidi_free (position_V_to_L_list);
+    fribidi_free (positions_V_to_L);
 
-  if (private_embedding_level_list)
-    fribidi_free (embedding_level_list);
+  if (private_embedding_levels)
+    fribidi_free (embedding_levels);
+
+  if (ar_props)
+    fribidi_free (ar_props);
 
   return status ? max_level + 1 : 0;
 }

@@ -23,10 +23,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.c,v 1.12 2004-06-14 18:43:53 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.13 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 18:43:53 $
- * $Revision: 1.12 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:
@@ -59,7 +59,7 @@ fribidi_get_mirror_char (
 FRIBIDI_ENTRY void
 fribidi_shape_mirroring (
   /* input */
-  const FriBidiLevel *embedding_level_list,
+  const FriBidiLevel *embedding_levels,
   const FriBidiStrIndex len,
   /* input and output */
   FriBidiChar *str
@@ -67,14 +67,16 @@ fribidi_shape_mirroring (
 {
   register FriBidiStrIndex i;
 
-  fribidi_assert (embedding_level_list);
+  DBG ("in fribidi_shape_mirroring");
+
+  fribidi_assert (embedding_levels);
 
   if UNLIKELY
     (len == 0 || !str) return;
 
   /* L4. Mirror all characters that are in odd levels and have mirrors. */
   for (i = len - 1; i >= 0; i--)
-    if (FRIBIDI_LEVEL_IS_RTL (embedding_level_list[i]))
+    if (FRIBIDI_LEVEL_IS_RTL (embedding_levels[i]))
       {
 	FriBidiChar mirrored_ch;
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.9 2004-06-14 18:43:53 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.10 2004-06-15 11:52:02 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-14 18:43:53 $
- * $Revision: 1.9 $
+ * $Date: 2004-06-15 11:52:02 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -46,6 +46,7 @@ typedef signed char FriBidiLevel;
  * only one bit set.
  */
 
+/* RTL mask better be the least significant bit. */
 #define FRIBIDI_MASK_RTL	0x00000001L	/* Is right to left */
 #define FRIBIDI_MASK_ARABIC	0x00000002L	/* Is arabic */
 
@@ -90,6 +91,8 @@ typedef signed char FriBidiLevel;
  * Define values for FriBidiCharType
  */
 
+/* Strong types */
+
 /* Left-To-Right letter */
 #define FRIBIDI_TYPE_LTR_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_LETTER )
 /* Right-To-Left letter */
@@ -109,6 +112,8 @@ typedef signed char FriBidiLevel;
 /* Right-to-Left Override */
 #define FRIBIDI_TYPE_RLO_VAL	( FRIBIDI_MASK_STRONG | FRIBIDI_MASK_EXPLICIT \
 				| FRIBIDI_MASK_RTL | FRIBIDI_MASK_OVERRIDE )
+
+/* Weak types */
 
 /* Pop Directional Flag*/
 #define FRIBIDI_TYPE_PDF_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_EXPLICIT )
@@ -131,6 +136,8 @@ typedef signed char FriBidiLevel;
 /* Boundary Neutral */
 #define FRIBIDI_TYPE_BN_VAL	( FRIBIDI_MASK_WEAK | FRIBIDI_MASK_SPACE \
 				| FRIBIDI_MASK_BN )
+
+/* Neutral types */
 
 /* Block Separator */
 #define FRIBIDI_TYPE_BS_VAL	( FRIBIDI_MASK_NEUTRAL | FRIBIDI_MASK_SPACE \
@@ -238,17 +245,19 @@ typedef fribidi_uint32 FriBidiParType;
 /* Is right-to-left level? */
 #define FRIBIDI_LEVEL_IS_RTL(lev) ((lev) & 1)
 
-/* Return the direction of the level number, FRIBIDI_TYPE_LTR for even and
-   FRIBIDI_TYPE_RTL for odds. */
-#define FRIBIDI_LEVEL_TO_DIR(lev) (FRIBIDI_TYPE_LTR | ((lev) & 1))
+/* Return the bidi type corresponding to the direction of the level number,
+   FRIBIDI_TYPE_LTR for evens and FRIBIDI_TYPE_RTL for odds. */
+#define FRIBIDI_LEVEL_TO_DIR(lev)	\
+	(FRIBIDI_LEVEL_IS_RTL (lev) ? FRIBIDI_TYPE_RTL : FRIBIDI_TYPE_LTR)
 
 /* Return the minimum level of the direction, 0 for FRIBIDI_TYPE_LTR and
    1 for FRIBIDI_TYPE_RTL and FRIBIDI_TYPE_AL. */
-#define FRIBIDI_DIR_TO_LEVEL(dir) ((FriBidiLevel)((dir) & 1))
+#define FRIBIDI_DIR_TO_LEVEL(dir)	\
+	((FriBidiLevel) (FRIBIDI_IS_RTL (dir) ? 1 : 0))
 
-/* Is right to left? */
+/* Is right to left: RTL, AL, RLE, RLO? */
 #define FRIBIDI_IS_RTL(p)      ((p) & FRIBIDI_MASK_RTL)
-/* Is arabic? */
+/* Is arabic: AL, AN? */
 #define FRIBIDI_IS_ARABIC(p)   ((p) & FRIBIDI_MASK_ARABIC)
 
 /* Is strong? */
@@ -312,7 +321,7 @@ typedef fribidi_uint32 FriBidiParType;
 
 /* Define some conversions. */
 
-/* Change numbers: EN, AN to RTL. */
+/* Change numbers to RTL: EN,AN -> RTL. */
 #define FRIBIDI_CHANGE_NUMBER_TO_RTL(p) \
 	(FRIBIDI_IS_NUMBER(p) ? FRIBIDI_TYPE_RTL : (p))
 
@@ -324,7 +333,7 @@ typedef fribidi_uint32 FriBidiParType;
 
 /* Weaken type for paragraph fallback purposes:
  * LTR->WLTR, RTL->WRTL. */
-#define FRIBIDI_WEAK_PARAGRAPH(p) (FRIBIDI_TYPE_WLTR | ((p) & 1))
+#define FRIBIDI_WEAK_PARAGRAPH(p) (FRIBIDI_PAR_WLTR | ((p) & FRIBIDI_MASK_RTL))
 
 
 /* Functions finally */
@@ -333,8 +342,15 @@ typedef fribidi_uint32 FriBidiParType;
 #define fribidi_get_bidi_type FRIBIDI_NAMESPACE(get_bidi_type)
 /* fribidi_get_bidi_type - get character bidi type
  *
- * This function returns the bidi type of a character.  There are a few macros
- * defined in fribidi-bidi-types.h for querying a bidi type.
+ * This function returns the bidi type of a character as defined in Table 3.7
+ * Bidirectional Character Types of the Unicode Bidirectional Algorithm
+ * available at
+ * http://www.unicode.org/reports/tr9/#Bidirectional_Character_Types, using
+ * data provided in file UnicodeData.txt of the Unicode Character Database
+ * available at http://www.unicode.org/Public/UNIDATA/UnicodeData.txt.
+ *
+ * There are a few macros defined in fribidi-bidi-types.h for querying a bidi
+ * type.
  */
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_bidi_type (
@@ -345,24 +361,40 @@ fribidi_get_bidi_type (
 /* fribidi_get_bidi_types - get bidi types for an string of characters
  *
  * This function finds the bidi types of an string of characters.  See
- * fribidi_get_bidi_type for more information about the bidi types returned
+ * fribidi_get_bidi_type() for more information about the bidi types returned
  * by this function.
  */
      FRIBIDI_ENTRY void fribidi_get_bidi_types (
   const FriBidiChar *str,	/* input string */
   const FriBidiStrIndex len,	/* input string length */
-  FriBidiCharType *type		/* output bidi types */
+  FriBidiCharType *btypes	/* output bidi types */
 );
 
-#define fribidi_bidi_type_name FRIBIDI_NAMESPACE(bidi_type_name)
-/* fribidi_bidi_type_name - get bidi type name
+#define fribidi_get_bidi_type_name FRIBIDI_NAMESPACE(get_bidi_type_name)
+/* fribidi_get_bidi_type_name - get bidi type name
  *
  * This function returns the bidi type name of a character type.  The
  * returned string is a static string and should not be freed.
+ *
+ * The type names are the same as ones defined in Table 3.7 Bidirectional
+ * Character Types of the Unicode Bidirectional Algorithm available at
+ * http://www.unicode.org/reports/tr9/#Bidirectional_Character_Types, with a
+ * few modifications: L->LTR, R->RTL, B->BS, S->SS.
  */
-     FRIBIDI_ENTRY const char *fribidi_bidi_type_name (
+     FRIBIDI_ENTRY const char *fribidi_get_bidi_type_name (
   FriBidiCharType t		/* input bidi type */
 ) FRIBIDI_GNUC_CONST;
+
+#define fribidi_is_cf_minus_bn_and_nsm FRIBIDI_NAMESPACE(is_cf_minus_bn_and_nsm)
+/* fribidi_is_cf_minus_bn_and_nsm - is other format control character?
+ *
+ * This function finds the bidi types of an string of characters.  See
+ * fribidi_get_bidi_type() for more information about the bidi types returned
+ * by this function.
+ */
+     FRIBIDI_ENTRY fribidi_boolean fribidi_get_bidi_types (
+  const FriBidiChar ch		/* input character */
+);
 
 #include "fribidi-enddecls.h"
 
