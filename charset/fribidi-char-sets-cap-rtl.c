@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.9 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.10 2005-01-10 06:43:53 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.9 $
+ * $Date: 2005-01-10 06:43:53 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -80,15 +80,24 @@ init_cap_rtl (
   FriBidiCharType to_type[_FRIBIDI_NUM_TYPES];
   int num_types = 0, j, count = 0;
   FriBidiCharType i;
+  char mark[CAPRTL_CHARS];
 
   caprtl_to_unicode =
     (FriBidiChar *) fribidi_malloc (CAPRTL_CHARS *
 				    sizeof caprtl_to_unicode[0]);
   for (i = 0; i < CAPRTL_CHARS; i++)
-    if (fribidi_get_mirror_char (i, NULL))
+    if (CapRTLCharTypes[i] == fribidi_get_bidi_type(i))
+    {
       caprtl_to_unicode[i] = i;
+      mark[i] = 1;
+    }
     else
       {
+	caprtl_to_unicode[i] = FRIBIDI_UNICODE_CHARS;
+	mark[i] = 0;
+        if (fribidi_get_mirror_char (i, NULL))
+	  DBG ("warning: I could not map mirroring character map to itself in CapRTL");
+
 	for (j = 0; j < num_types; j++)
 	  if (to_type[j] == CapRTLCharTypes[i])
 	    break;
@@ -101,25 +110,36 @@ init_cap_rtl (
 	request[j]++;
 	count++;
       }
-  for (i = 1; i < 0x10000 && count; i++)	/* Assign BMP chars to CapRTL entries */
-    if (!fribidi_get_mirror_char (i, NULL))
+  for (i = 0; i < 0x10000 && count; i++)	/* Assign BMP chars to CapRTL entries */
+    if (!fribidi_get_mirror_char (i, NULL) && !(i < CAPRTL_CHARS && mark[i]))
       {
 	int j, k;
+	FriBidiCharType t = fribidi_get_bidi_type (i);
 	for (j = 0; j < num_types; j++)
-	  if (to_type[j] == fribidi_get_bidi_type (i))
+	  if (to_type[j] == t)
 	    break;
 	if (!request[j])	/* Do not need this type */
 	  continue;
 	for (k = 0; k < CAPRTL_CHARS; k++)
-	  if (!caprtl_to_unicode[k] && to_type[j] == CapRTLCharTypes[k])
-	    break;
-	if (k < CAPRTL_CHARS)
+	  if (caprtl_to_unicode[k] == FRIBIDI_UNICODE_CHARS && to_type[j] == CapRTLCharTypes[k])
 	  {
 	    request[j]--;
 	    count--;
 	    caprtl_to_unicode[k] = i;
+	    break;
 	  }
       }
+  if (count)
+  {
+    int j;
+
+    DBG ("warning: could not find a mapping for CapRTL to Unicode:");
+    for (j = 0; j < num_types; j++)
+      if (request[j])
+	DBG2 ("  need this type: %s", fribidi_get_bidi_type_name
+	    (to_type[j]));
+	
+  }
 }
 
 static char
