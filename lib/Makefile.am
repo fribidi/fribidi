@@ -50,8 +50,8 @@ libfribidi_la_SOURCES =	\
 BUILT_SOURCES= \
 		bidi-type.tab.i \
 		mirroring.tab.i \
-		fribidi-config.h \
-		fribidi-unicode-version.h
+		fribidi-unicode-version.h \
+		fribidi-config.h
 
 MAINTAINERCLEANFILES = $(BUILT_SOURCES)
 

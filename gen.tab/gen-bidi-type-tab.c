@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.2 2004-05-12 07:06:21 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.3 2004-05-12 08:17:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-12 08:17:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -124,7 +124,6 @@ get_type (
 
 #define table_name "FriBidiCharTypeData"
 #define macro_name "FRIBIDI_GET_BIDI_TYPE"
-#define default_type "LTR"
 
 static int table[FRIBIDI_UNICODE_CHARS];
 
@@ -134,8 +133,6 @@ init_tab (
 {
   register int i;
   register FriBidiChar c;
-  char deftype = get_type (default_type),
-    RTL = get_type ("RTL"), AL = get_type ("AL");
 
   for (i = 0; i < type_names_count; i++)
     names[i] = 0;
@@ -144,7 +141,7 @@ init_tab (
 
   /* initialize table */
   for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
-    table[i] = deftype;
+    table[i] = LTR;
   for (c = 0x0590; c < 0x0600; c++)
     table[i] = RTL;
   for (c = 0xFB1D; c < 0xFB50; c++)
@@ -225,7 +222,7 @@ gen_bidi_type_tab (
 
   if (!pack_table
       (table, FRIBIDI_UNICODE_CHARS, 1, max_depth, 3, names,
-       "char", table_name, macro_name, stdout))
+       "unsigned char", table_name, macro_name, stdout))
     die ("error: insufficient memory, decrease max_depth");
 
   printf ("/* End of generated " outputname " */\n");

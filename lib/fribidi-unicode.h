@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.2 2004-05-07 06:30:38 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.3 2004-05-12 08:17:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-07 06:30:38 $
- * $Revision: 1.2 $
+ * $Date: 2004-05-12 08:17:19 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:
@@ -41,6 +41,7 @@
 
 /* We do not support surrogates yet */
 #define FRIBIDI_UNICODE_CHARS	(sizeof(FriBidiChar) >= 4 ? 0x110000 : 0xFFFE)
+
 /* Unicode version - FRIBIDI_UNICODE_VERSION */
 #if !DONT_HAVE_FRIBIDI_UNICODE_VERSION_H
 # include "fribidi-unicode-version.h"
@@ -48,6 +49,10 @@
 # define FRIBIDI_UNICODE_VERSION "unknown"
 #endif /* DONT_HAVE_FRIBIDI_UNICODE_VERSION_H */
 
+#define fribidi_unicode_version FRIBIDI_NAMESPACE(unicode_version)
+/* An string containing the version the Unicode standard implemented,
+ * in the form of "x.y.z", or "unknown". */
+extern const char *fribidi_unicode_version;
 
 
 /* The Unicode Bidirectional Algorithm constants */

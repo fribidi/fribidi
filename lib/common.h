@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.7 2004-05-12 07:06:21 behdad Exp $
+ * $Id: common.h,v 1.8 2004-05-12 08:17:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.7 $
+ * $Date: 2004-05-12 08:17:19 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -148,6 +148,7 @@
 #ifndef FRIBIDI_EMPTY_STMT
 # define FRIBIDI_EMPTY_STMT FRIBIDI_BEGIN_STMT (void) 0; FRIBIDI_END_STMT
 #endif /* !FRIBIDI_EMPTY_STMT */
+
 
 #include "debug.h"
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-type.c - get character bidi type
  *
- * $Id: fribidi-bidi-type.c,v 1.5 2004-05-12 07:06:21 behdad Exp $
+ * $Id: fribidi-bidi-type.c,v 1.6 2004-05-12 08:17:19 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-12 07:06:21 $
- * $Revision: 1.5 $
+ * $Date: 2004-05-12 08:17:19 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/Attic/fribidi-bidi-type.c,v $
  *
  * Authors:
@@ -34,17 +34,11 @@
 #include "common.h"
 
 #include <fribidi-bidi-type.h>
+#include <fribidi-unicode.h>
 
 #include "bidi-types.h"
 
-/*
- * Define character types that char_type_tables use.
- * define them to be 0, 1, 2, ... and then in fribidi_get_type.c map them
- * to FriBidiCharTypes.
- */
-typedef unsigned char FriBidiPropCharType;
-
-enum FriBidiPropEnum
+enum FriBidiCharTypeLinearEnum
 {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) TYPE,
 # include "bidi-types-list.h"
@@ -54,8 +48,8 @@ enum FriBidiPropEnum
 
 #include "bidi-type.tab.i"
 
-/* Map fribidi_prop_types to fribidi_types. */
-static const FriBidiCharType prop_to_type[] = {
+/* Map FriBidiCharTypeLinearEnum to FriBidiCharType. */
+static const FriBidiCharType linear_enum_to_char_type[] = {
 # define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) FRIBIDI_TYPE_##TYPE,
 # include "bidi-types-list.h"
 # undef _FRIBIDI_ADD_TYPE
@@ -67,8 +61,8 @@ get_bidi_type (
   FriBidiChar uch
 )
 {
-  if (uch < 0x110000)
-    return prop_to_type[FRIBIDI_GET_BIDI_TYPE (uch)];
+  if (uch < FRIBIDI_UNICODE_CHARS)
+    return linear_enum_to_char_type[FRIBIDI_GET_BIDI_TYPE (uch)];
   else
     return FRIBIDI_TYPE_LTR;
   /* Non-Unicode chars */
