@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i for libfribidi
  *
- * $Id: gen-bidi-type-tab.c,v 1.6 2004-05-22 11:21:40 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.7 2004-05-22 12:17:10 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-22 11:21:40 $
- * $Revision: 1.6 $
+ * $Date: 2004-05-22 12:17:10 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -142,7 +142,19 @@ static int table[FRIBIDI_UNICODE_CHARS];
 static char s[4000];
 
 static void
-init_tab (
+init (
+)
+{
+  register int i;
+
+  for (i = 0; i < type_names_count; i++)
+    names[i] = 0;
+  for (i = type_names_count - 1; i >= 0; i--)
+    names[type_names[i].key] = type_names[i].name;
+}
+
+static void
+clear_tab (
 )
 {
   register FriBidiChar c;
@@ -150,6 +162,15 @@ init_tab (
   /* default types for reserved and noncharacter code points */
   for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
     table[c] = LTR;
+}
+
+static void
+init_tab_unicode_data_txt (
+)
+{
+  register FriBidiChar c;
+
+  clear_tab();
 
   for (c = 0x0590; c < 0x0600; c++)
     table[c] = RTL;
@@ -178,6 +199,7 @@ init_tab (
     {
       for (c = 0x10800; c < 0x11000; c++)
 	table[c] = RTL;
+
       for (c = 0xE0000; c < 0xE0100; c++)
 	table[c] = BN;
       for (c = 0xE01F0; c < 0xE1000; c++)
@@ -186,17 +208,10 @@ init_tab (
 }
 
 static void
-init (
+init_tab_derived_bidi_class_txt(
 )
 {
-  register int i;
-
-  for (i = 0; i < type_names_count; i++)
-    names[i] = 0;
-  for (i = type_names_count - 1; i >= 0; i--)
-    names[type_names[i].key] = type_names[i].name;
-
-  init_tab ();
+  clear_tab();
 }
 
 static void
@@ -206,6 +221,8 @@ read_unicode_data_txt (
 {
   char tp[10];
   unsigned long c, l;
+
+  init_tab_unicode_data_txt();
 
   l = 0;
   while (fgets (s, sizeof s, f))
@@ -232,6 +249,8 @@ read_derived_bidi_class_txt (
 {
   char tp[10];
   unsigned long c, c2, l;
+
+  init_tab_derived_bidi_class_txt();
 
   l = 0;
   while (fgets (s, sizeof s, f))

@@ -11,7 +11,7 @@ Implementation issues:
 
 * Update CapRTL with new Unicode reference code.
 
-* Revise reorder API, in fribidi_main.c reorder after link break.
+* Revise reorder API, in fribidi_main.c reorder after line break.
 
 * Add an option to fribidi_main.c to assume two consecutive returns as
   paragraph separators.
@@ -23,6 +23,7 @@ Implementation issues:
   - Checking that not removing explicit marks in analyze is not changing the
     output in anyway.
   - Tests with BN.  Right now ^ is BN in CapRTL scheme.
+  - Test tables.
 
 * Change fribidi-main cmd-line parameters: --mirror --no-mirror...  change the
   defaults too.
@@ -30,4 +31,4 @@ Implementation issues:
 * indent:  support function attributes and _PARAMS like things.  Also
   FRIBIDI_BEGIN_DECLS, and LIKELY.
 
-* c2man:  parse Author and Copyright from the while file.
+* c2man:  parse Author and Copyright from the whole file.
