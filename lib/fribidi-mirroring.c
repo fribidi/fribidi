@@ -22,10 +22,10 @@
  * 
  * For licensing issues, contact <license@farsiweb.info>.
  */
-/* $Id: fribidi-mirroring.c,v 1.2 2004-04-27 15:23:25 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.3 2004-04-27 23:53:43 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 15:23:25 $
- * $Revision: 1.2 $
+ * $Date: 2004-04-27 23:53:43 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Authors:
@@ -47,7 +47,8 @@ fribidi_get_mirror_char (
   FriBidiChar *mirrored_ch
 )
 {
-  int pos, step;
+  register int pos;
+  int step;
   fribidi_boolean found;
 
   pos = step = (nFriBidiMirroredChars / 2) + 1;
@@ -73,6 +74,7 @@ fribidi_get_mirror_char (
 	break;
     }
   found = FriBidiMirroredChars[pos].ch == ch;
+
   if (mirrored_ch)
     *mirrored_ch = found ? FriBidiMirroredChars[pos].mirrored_ch : ch;
 

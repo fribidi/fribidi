@@ -34,7 +34,6 @@ man3 = $(dist_man_MANS) $(dist_noinst_MANS)
 MAINTAINERCLEANFILES = $(man3)
 
 C2MANFLAGS = $(includepath) -DDONT_HAVE_FRIBIDI_CONFIG_H -M "$(PACKAGE_NAME)"
-VPATH += $(includevpath)
 
 c2man.stamp: $(headers)
 	@$(RM) $@.tmp

@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.2 2004-04-27 16:47:22 behdad Exp $
+ * $Id: common.h,v 1.3 2004-04-27 23:53:43 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-04-27 16:47:22 $
- * $Revision: 1.2 $
+ * $Date: 2004-04-27 23:53:43 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -44,7 +44,7 @@
 
 #ifndef FALSE
 # define FALSE (0==1)
-#endif /* !FRIBIDI_FALSE */
+#endif /* !FALSE */
 
 #ifndef TRUE
 # define TRUE (!FALSE)
