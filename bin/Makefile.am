@@ -1,6 +1,6 @@
 bin_PROGRAMS = fribidi
 
-noinst_PROGRAMS = fribidi-benchmark
+noinst_PROGRAMS = fribidi-benchmark fribidi-bidi-types
 
 getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h gettext.h
 
