@@ -1,10 +1,10 @@
 Thanks to:
 
 Behnam Esfahbod <fribidi@esfahbod.info>
-	* Testing and auditing the code.
+	* Testing and auditing code.
 
 
-And for the previous versions of FriBidi (up to 2002), thanks to:
+And for the previous versions of FriBidi (pre 2002), thanks to:
 
 
 Tomas Frydrych <tomas@frydrych.uklinux.net>
@@ -17,10 +17,10 @@ Franck Portaneri
 	* For the Mozilla BiDi languges support document;
 
 Roozbeh Pournader <roozbeh@sharif.edu>
-	* Fixed small things here and there.
+	* Fixed things here and there.
 
 Pablo Saratxaga <pablo@mandrakesoft.com>  
-	* Contributed several arabic charset converters.
+	* Contributed several Arabic charset converters.
 
 Owen Tayler <otaylor@redhat.com>
 	* Contributed very important memory leak and speed patches.
