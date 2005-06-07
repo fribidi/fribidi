@@ -4,10 +4,10 @@ EXTRA_PROGRAMS = \
 		gen-joining-type-tab \
 		gen-mirroring-tab
 
+gen_unicode_version_SOURCES = gen-unicode-version.c
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
 gen_joining_type_tab_SOURCES = gen-joining-type-tab.c packtab.c packtab.h
 gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
-gen_unicode_version_SOURCES = gen-unicode-version.c
 
 CLEANFILES = $(EXTRA_PROGRAMS)
 DISTCLEANFILES =
@@ -91,9 +91,10 @@ gen_unicode_version = gen-unicode-version$(EXEEXT)
 
 fribidi-unicode-version.h: \
 		ReadMe.txt \
+		BidiMirroring.txt \
 		$(gen_unicode_version_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_unicode_version)
-	./$(gen_unicode_version) $< > $@ \
+	./$(gen_unicode_version) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate all generators:

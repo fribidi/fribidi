@@ -22,6 +22,3 @@ Otherwise the version number of the UCD is part of the path name.
 
 The file UCD.html in this directory, as well as any file 
 headers, where present, also identify the version of the UCD.
-
-=== added ===
-Unicode Standard, Version 4.1.0
