@@ -2,16 +2,8 @@ Implementation issues:
 
 * Mix __attr... with DLLIMPORT?
 
-* Better FRIBIDI_NAMESPACE.
-
-* Define symbols to be included in library.
-
-* Still better bootstrap script: steal from GNOME autogen.sh.
-
 * Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]
   is always the reference.
-
-* Update CapRTL with new Unicode reference code / new Unicode data types.
 
 * In fribidi_main.c reorder after line break.
 
@@ -55,9 +47,6 @@ Implementation issues:
 
 * When called in interactive mode, fribidi cmd-line should greet, write
   about copyrtight stuff, and shared-libs' version and Unicode version.
-
-* Add Unicode Character Database data structure, to support more than
-  one UCD version at the same time.
 
 * Configure gen.tab/ with host=build to avoid cross-compiling table
   generators.
