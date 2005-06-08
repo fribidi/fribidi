@@ -1,5 +1,7 @@
 Implementation issues:
 
+* Update README, etc...
+
 * Mix __attr... with DLLIMPORT?
 
 * Update all files headers/footers.  For c/h files, lib/fribidi-mirroring.[ch]
