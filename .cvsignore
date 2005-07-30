@@ -16,4 +16,5 @@ install-sh
 libtool
 ltmain.sh
 missing
+mkinstalldirs
 stamp-h1

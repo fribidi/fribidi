@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.4 2004-06-09 08:56:53 behdad Exp $
+ * $Id: fribidi-benchmark.c,v 1.5 2005-07-30 09:06:27 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 08:56:53 $
- * $Revision: 1.4 $
+ * $Date: 2005-07-30 09:06:27 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
  *
  * Authors:
@@ -64,6 +64,7 @@
 #define appname "fribidi_benchmark"
 
 #define MAX_STR_LEN 1000
+#define NUM_ITER 2000
 
 static void
 die2 (
@@ -92,8 +93,6 @@ die2 (
   "a _L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_L_Rbug" \
   "here_L is_o_o_o _R ab  one_o _r 123,987_LT_oHE_R t_o oNE:" \
 
-int niter;
-
 static void
 help (
   void
@@ -106,7 +105,7 @@ help (
      "  -h, --help            Display this information and exit\n"
      "  -V, --version         Display version information and exit\n"
      "  -n, --niter N         Number of iterations. Default is %d.\n"
-     "\nReport bugs online at\n<" FRIBIDI_BUGREPORT ">.\n", niter);
+     "\nReport bugs online at\n<" FRIBIDI_BUGREPORT ">.\n", NUM_ITER);
   exit (0);
 }
 
@@ -131,7 +130,7 @@ utime (
 
 static void
 benchmark (
-  char *S_,
+  const char *S_,
   int niter
 )
 {
@@ -139,7 +138,7 @@ benchmark (
   FriBidiChar us[MAX_STR_LEN], out_us[MAX_STR_LEN];
   FriBidiStrIndex positionLtoV[MAX_STR_LEN], positionVtoL[MAX_STR_LEN];
   FriBidiLevel embedding_list[MAX_STR_LEN];
-  FriBidiCharType base;
+  FriBidiParType base;
   double time0, time1;
 
   {
@@ -226,7 +225,7 @@ main (
   char *argv[]
 )
 {
-  niter = 2000;
+  int niter = NUM_ITER;
 
   /* Parse the command line */
   argv[0] = appname;

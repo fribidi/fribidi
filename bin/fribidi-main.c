@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.11 2004-06-23 22:26:06 behdad Exp $
+ * $Id: fribidi-main.c,v 1.12 2005-07-30 09:06:27 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-23 22:26:06 $
- * $Revision: 1.11 $
+ * $Date: 2005-07-30 09:06:27 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -91,9 +91,9 @@ fribidi_boolean do_break, do_pad, do_mirror, do_reorder_nsm, do_clean;
 fribidi_boolean show_input, show_visual, show_basedir;
 fribidi_boolean show_ltov, show_vtol, show_levels;
 int text_width;
-char *char_set;
-char *bol_text, *eol_text;
-FriBidiCharType input_base_direction;
+const char *char_set;
+const char *bol_text, *eol_text;
+FriBidiParType input_base_direction;
 #if FRIBIDI_MAIN_USE_ICONV_H
 iconv_t to_ucs4, from_ucs4;
 #else /* !FRIBIDI_MAIN_USE_ICONV_H */
@@ -185,7 +185,7 @@ version (
   exit (0);
 }
 
-char *
+static char *
 my_fribidi_strdup (
   char *s
 )
@@ -227,7 +227,7 @@ main (
   char_set = "UTF-8";
   bol_text = NULL;
   eol_text = NULL;
-  input_base_direction = FRIBIDI_TYPE_ON;
+  input_base_direction = FRIBIDI_PAR_ON;
 
   if ((s = (char *) getenv ("COLUMNS")))
     {
@@ -374,23 +374,23 @@ main (
   file_found = false;
   while (optind < argc || !file_found)
     {
-      char *S_;
+      const char *filename;
 
-      S_ = optind < argc ? argv[optind++] : "-";
+      filename = optind < argc ? argv[optind++] : "-";
       file_found = true;
 
       /* Open the infile for reading */
-      if (S_[0] == '-' && !S_[1])
+      if (filename[0] == '-' && !filename[1])
 	{
 	  IN = stdin;
 	}
       else
 	{
-	  IN = fopen (S_, "r");
+	  IN = fopen (filename, "r");
 	  if (!IN)
 	    {
 	      fprintf (stderr, "%s: %s: no such file or directory\n",
-		       appname, S_);
+		       appname, filename);
 	      exit_val = 1;
 	      continue;
 	    }
@@ -406,10 +406,10 @@ main (
 
 	while (fgets (S_, sizeof (S_) - 1, IN))
 	  {
-	    char *new_line, *nl_found;
+	    const char *new_line, *nl_found;
 	    FriBidiChar logical[MAX_STR_LEN];
 	    char outstring[MAX_STR_LEN];
-	    FriBidiCharType base;
+	    FriBidiParType base;
 	    FriBidiStrIndex len;
 
 	    nl_found = "";

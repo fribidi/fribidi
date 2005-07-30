@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-utf8.c - UTF-8 character set conversion routines
  *
- * $Id: fribidi-char-sets-utf8.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
+ * $Id: fribidi-char-sets-utf8.c,v 1.3 2005-07-30 09:06:28 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
+ * $Date: 2005-07-30 09:06:28 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-utf8.c,v $
  *
  * Authors:
@@ -49,11 +49,11 @@ fribidi_utf8_to_unicode (
 )
 {
   FriBidiStrIndex length;
-  const unsigned char *s = (unsigned char *) ss;
+  const unsigned char *s = (unsigned const char *) ss;
   const unsigned char *t = s;
 
   length = 0;
-  while (s - t < len)
+  while ((FriBidiStrIndex) (s - t) < len)
     {
       register unsigned char ch = *s;
       if (ch <= 0x7f)		/* one byte */
@@ -86,7 +86,7 @@ fribidi_unicode_to_utf8 (
   char *ss
 )
 {
-  int i;
+  FriBidiStrIndex i;
   unsigned char *s = (unsigned char *) ss;
   unsigned char *t = s;
 

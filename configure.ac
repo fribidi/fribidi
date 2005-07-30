@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.19 2005-06-07 08:44:23 behdad Exp $
+## $Id: configure.ac,v 1.20 2005-07-30 09:06:27 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2005-06-07 08:44:23 $
-## $Revision: 1.19 $
+## $Date: 2005-07-30 09:06:27 $
+## $Revision: 1.20 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -44,7 +44,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://bugs.freedesktop.org/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.19 2005-06-07 08:44:23 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.20 2005-07-30 09:06:27 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -209,13 +209,13 @@ AC_SUBST(MISC_PACKAGES)
 
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
-                 fribidi.spec
-                 lib/fribidi-config.h
-                 Makefile
+		 fribidi.spec
+		 lib/fribidi-config.h
+		 Makefile
 		 charset/Makefile
 		 gen.tab/Makefile
-                 lib/Makefile
-                 bin/Makefile
+		 lib/Makefile
+		 bin/Makefile
 		 doc/Makefile
-                 test/Makefile])
+		 test/Makefile])
 AC_OUTPUT

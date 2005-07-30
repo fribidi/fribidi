@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.17 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.18 2005-07-30 09:06:28 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.17 $
+ * $Date: 2005-07-30 09:06:28 $
+ * $Revision: 1.18 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -899,8 +899,8 @@ fribidi_reorder_line (
     }
 
   if UNLIKELY
-    (off + len > FRIBIDI_MAX_STRING_LENGTH && (positions_V_to_L ||
-					       positions_L_to_V))
+    ((unsigned long) off + (unsigned long) len >
+     FRIBIDI_MAX_STRING_LENGTH && (positions_V_to_L || positions_L_to_V))
     {
 #     if DEBUG
       MSG2 (FRIBIDI ": cannot handle strings > %lu characters\n",

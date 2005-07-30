@@ -1,10 +1,10 @@
 ##                                               -*- Automake -*-
 ## Process this file with automake to produce Makefile.in
 ##############################################################################
-## $Id: Makefile.am,v 1.8 2004-08-27 21:55:59 behdad Exp $
+## $Id: Makefile.am,v 1.9 2005-07-30 09:06:27 behdad Exp $
 ## $Author: behdad $
-## $Date: 2004-08-27 21:55:59 $
-## $Revision: 1.8 $
+## $Date: 2005-07-30 09:06:27 $
+## $Revision: 1.9 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
 ##############################################################################
 
@@ -33,6 +33,7 @@ MAINTAINERCLEANFILES = \
 		$(srcdir)/install-sh \
 		$(srcdir)/ltmain.sh \
 		$(srcdir)/missing \
+		$(srcdir)/mkinstalldirs \
 		`find "$(srcdir)" -type f -name Makefile.in -print` \
 		`find "$(srcdir)" -type f -name "*~" -print` \
 		`$(srcdir)/bootstrap --write-configure`

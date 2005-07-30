@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.15 2004-06-21 21:15:31 behdad Exp $
+ * $Id: fribidi.c,v 1.16 2005-07-30 09:06:28 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 21:15:31 $
- * $Revision: 1.15 $
+ * $Date: 2005-07-30 09:06:28 $
+ * $Revision: 1.16 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -91,7 +91,7 @@ fribidi_remove_bidi_marks (
       if UNLIKELY
 	(!position_from_this_list) goto out;
       private_from_this = true;
-      for (i = len - 1; i >= 0; i--)
+      for (i = 0; i < len; i++)
 	position_from_this_list[positions_to_this[i]] = i;
     }
 
