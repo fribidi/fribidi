@@ -1,5 +1,11 @@
 Implementation issues:
 
+* Explore vis2log.
+
+* Clean caprtl2utf8 to do arbitrary charset conversion?
+
+* add --output-charset.
+
 * Update README, etc...
 
 * Mix __attr... with DLLIMPORT?
@@ -53,7 +59,7 @@ Implementation issues:
 * Configure gen.tab/ with host=build to avoid cross-compiling table
   generators.
 
-* Replace test/run.tests with something better.
+* Replace test/run.tests with something better, Makefile foo, etc.
 
 * Clean up README and NEWS, and check all files' headers.  Write
   gen.tab/README.  Also add UniData license file.
