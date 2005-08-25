@@ -1,10 +1,10 @@
 ##                                               -*- Automake -*-
 ## Process this file with automake to produce Makefile.in
 ##############################################################################
-## $Id: Makefile.am,v 1.9 2005-07-30 09:06:27 behdad Exp $
+## $Id: Makefile.am,v 1.10 2005-08-25 18:35:34 behdad Exp $
 ## $Author: behdad $
-## $Date: 2005-07-30 09:06:27 $
-## $Revision: 1.9 $
+## $Date: 2005-08-25 18:35:34 $
+## $Revision: 1.10 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
 ##############################################################################
 
@@ -46,7 +46,7 @@ MAINTAINERCLEANFILES = \
 
 indent: $(srcdir)/.indent.pro
 	cd "$(srcdir)" && \
-	find . -type f -mindepth 2 -name "*.[ch]" -print | \
+	find . -mindepth 2 -type f -name "*.[ch]" -print | \
 	  xargs ./missing --run indent
 
 .PHONY: indent
@@ -63,7 +63,7 @@ $(srcdir)/ChangeLog:
 	@if test -d "$(srcdir)/CVS"; then \
 	  (cd "$(srcdir)" && \
 	  ./missing --run cvs2cl --stdout --utc --FSF -U AUTHORS) > $@.tmp \
-	  && echo "For older changes see ChangeLog.old" >> $@.tmp && mv $@.tmp $@ \
+	  && echo "For older changes see ChangeLog.old" >> $@.tmp && mv -f $@.tmp $@ \
 	  || ($(RM) $@.tmp; \
 	      echo Failed to generate ChangeLog, your ChangeLog may be outdated >&2; \
 	      (test -f $@ || echo cvs2cl is required to generate this file >> $@)); \
