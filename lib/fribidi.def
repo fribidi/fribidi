@@ -19,3 +19,4 @@ fribidi_shape_mirroring
 fribidi_shape
 fribidi_remove_bidi_marks
 fribidi_log2vis
+fribidi_version_info
