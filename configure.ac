@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.20 2005-07-30 09:06:27 behdad Exp $
+## $Id: configure.ac,v 1.21 2005-09-04 16:57:09 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2005-07-30 09:06:27 $
-## $Revision: 1.20 $
+## $Date: 2005-09-04 16:57:09 $
+## $Revision: 1.21 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -44,7 +44,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://bugs.freedesktop.org/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.20 2005-07-30 09:06:27 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.21 2005-09-04 16:57:09 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -102,8 +102,7 @@ AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_HEADER_TIME
-AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h wchar.h sys/times.h asm/page.h])
+AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h wchar.h asm/page.h sys/times.h])
 
 # Checks for typedefs and structures.
 AC_C_CONST
@@ -118,7 +117,7 @@ AC_CHECK_SIZEOF(wchar_t)
 # Checks for compiler characteristics.
 changequote(,)dnl
 if test "x$GCC" = "xyes"; then
-  CFLAGS="$CFLAGS -Wall -pedantic -ansi "
+  CFLAGS="$CFLAGS -Wall -ansi "
 fi
 changequote([,])dnl
 

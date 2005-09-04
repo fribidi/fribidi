@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.5 2005-07-30 09:06:27 behdad Exp $
+ * $Id: fribidi-benchmark.c,v 1.6 2005-09-04 16:57:09 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-07-30 09:06:27 $
- * $Revision: 1.5 $
+ * $Date: 2005-09-04 16:57:09 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
  *
  * Authors:
@@ -124,8 +124,12 @@ utime (
 )
 {
   struct tms tb;
+#if HAVE_SYS_TIMES_H
   times (&tb);
   return 0.01 * tb.tms_utime;
+#else
+#warning Please fill in here to use other functions for determining time.
+#endif
 }
 
 static void
