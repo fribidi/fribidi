@@ -1,10 +1,10 @@
 # List of known projects to use GNU FriBidi
+BiCon: http://www.arabeyes.org/project.php?proj=BiCon
 AbiWord: http://www.abisource.com/
 Pango: http://www.pango.org/ # statically links
 m17nlib: http://m17n.org/
 mlterm: http://mlterm.sourceforge.net/
 MPlayer: http://www.mplayerhq.hu/
-BiCon: http://www.arabeyes.org/project.php?proj=BiCon
 Geresh: http://www.typo.co.il/~mooffie/geresh/
 Motor: http://konst.org.ua/en/motor/
 CenterICQ: http://konst.org.ua/centericq/
