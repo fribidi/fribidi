@@ -29,7 +29,7 @@ test_%.reference: test_%.input
 references:
 	for testcase in "$(srcdir)"/test_*.input; do \
 		test="`echo $$testcase \
-		  | $(SED) 's/\.input$$/.reference/i; s|.*/||;'`" && \
+		  | sed 's/\.input$$/.reference/i; s|.*/||;'`" && \
 		$(MAKE) $(AM_MAKEFLAGS) "$(srcdir)/$$test" || \
 		exit 1; \
 	done
