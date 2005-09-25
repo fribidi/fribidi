@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.21 2005-09-04 16:57:09 behdad Exp $
+## $Id: configure.ac,v 1.22 2005-09-25 22:59:21 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2005-09-04 16:57:09 $
-## $Revision: 1.21 $
+## $Date: 2005-09-25 22:59:21 $
+## $Revision: 1.22 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -43,8 +43,8 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
-AC_INIT([GNU FriBidi],fribidi_version(),[http://bugs.freedesktop.org/enter_bug.cgi?product=FriBidi])
-AC_REVISION([$Id: configure.ac,v 1.21 2005-09-04 16:57:09 behdad Exp $])
+AC_INIT([GNU FriBidi],fribidi_version(),[http://fribidi.org/bug])
+AC_REVISION([$Id: configure.ac,v 1.22 2005-09-25 22:59:21 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
