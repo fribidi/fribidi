@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.12 2005-07-30 09:06:27 behdad Exp $
+ * $Id: fribidi-main.c,v 1.13 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-07-30 09:06:27 $
- * $Revision: 1.12 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -424,6 +424,7 @@ main (
 	      }
 	    else
 	      new_line = "";
+	    /* TODO: handle \r */
 
 #if FRIBIDI_MAIN_USE_ICONV_H
 	    {

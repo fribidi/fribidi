@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.22 2005-09-25 22:59:21 behdad Exp $
+## $Id: configure.ac,v 1.23 2005-11-03 01:39:01 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2005-09-25 22:59:21 $
-## $Revision: 1.22 $
+## $Date: 2005-11-03 01:39:01 $
+## $Revision: 1.23 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -44,7 +44,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://fribidi.org/bug])
-AC_REVISION([$Id: configure.ac,v 1.22 2005-09-25 22:59:21 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.23 2005-11-03 01:39:01 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -159,18 +159,6 @@ else
 fi
 AC_SUBST(FRIBIDI_CHARSETS)
 AM_CONDITIONAL(FRIBIDI_CHARSETS, test x$FRIBIDI_CHARSETS = x1)
-
-# --disable-arabic
-AC_ARG_ENABLE(arabic,
-              AC_HELP_STRING([--disable-arabic],
-                             [exclude Arabic joining/shaping code from library]))
-if test x$enable_arabic = xno; then
-	FRIBIDI_NO_ARABIC=1
-else
-	FRIBIDI_NO_ARABIC=0
-fi
-AC_SUBST(FRIBIDI_NO_ARABIC)
-AM_CONDITIONAL(FRIBIDI_NO_ARABIC, test x$FRIBIDI_NO_ARABIC = x1)
 
 # --with[out]-glib
 AC_ARG_WITH(glib,

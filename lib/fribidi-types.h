@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.10 2005-07-30 09:06:28 behdad Exp $
+ * $Id: fribidi-types.h,v 1.11 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-07-30 09:06:28 $
- * $Revision: 1.10 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
  *
  * Author:
@@ -138,21 +138,21 @@ typedef FRIBIDI_STR_INDEX FriBidiStrIndex;
 
 /* A few macros for working with bits */
 
-#define FRIBIDI_TEST_BITS(x, mask) ((x) & (mask))
+#define FRIBIDI_TEST_BITS(x, mask) (((x) & (mask)) ? 1 : 0)
 
 #define FRIBIDI_INCLUDE_BITS(x, mask) ((x) | (mask))
 
 #define FRIBIDI_EXCLUDE_BITS(x, mask) ((x) & ~(mask))
 
-#define FRIBIDI_SET_BITS(x, mask)	\
-	FRIBIDI_BEGIN_STMT	\
-	(x) |= (mask);	\
-	FRIBIDI_END_STMT
+#define FRIBIDI_SET_BITS(x, mask)	((x) |= (mask))
 
-#define FRIBIDI_UNSET_BITS(x, mask)	\
-	FRIBIDI_BEGIN_STMT	\
-	(x) &= ~(mask);	\
-	FRIBIDI_END_STMT
+#define FRIBIDI_UNSET_BITS(x, mask)	((x) &= ~(mask))
+
+#define FRIBIDI_ADJUST_BITS(x, mask, cond)	\
+	((x) = ((x) & ~(mask)) | ((cond) ? (mask) : 0))
+
+#define FRIBIDI_ADJUST_AND_TEST_BITS(x, mask, cond)	\
+	FRIBIDI_TEST_BITS(FRIBIDI_ADJUST_BITS((x), (mask), (cond)), (mask))
 
 #include "fribidi-enddecls.h"
 

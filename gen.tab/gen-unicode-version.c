@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-unicode-version.c - generate fribidi-unicode-version.h
  *
- * $Id: gen-unicode-version.c,v 1.10 2005-07-30 09:06:28 behdad Exp $
+ * $Id: gen-unicode-version.c,v 1.11 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-07-30 09:06:28 $
- * $Revision: 1.10 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-unicode-version.c,v $
  *
  * Author:
@@ -84,6 +84,7 @@ char buf[4000];
 
 static void
 init (
+  void
 )
 {
   version_major = version_minor = version_micro = 0;

@@ -50,7 +50,7 @@ c2man.stamp: $(headers)
 	@touch $@.tmp
 	@($(LN_S) $^ . || cp $^ .)
 	@echo Running c2man
-	@$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) \
+	@$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) 2>&1 \
 	|| true
 	@$(RM) $(headers)
 	@mv $@.tmp $@

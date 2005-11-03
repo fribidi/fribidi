@@ -32,20 +32,23 @@ pkginclude_HEADERS = $(libfribidi_la_headers)
 nodist_pkginclude_HEADERS = fribidi-config.h
 
 libfribidi_la_SOURCES =	\
+		arabic-misc.tab.i \
+		arabic-shaping.tab.i \
 		bidi-type.tab.i \
 		bidi-types.h \
 		common.h \
 		debug.h \
-		env.h \
 		fribidi.c \
+		fribidi-arabic.c \
 		fribidi-bidi.c \
 		fribidi-bidi-types.c \
-		fribidi-env.c \
+		fribidi-deprecated.c \
 		fribidi-joining.c \
 		fribidi-joining-types.c \
 		fribidi-mem.c \
 		fribidi-mirroring.c \
 		fribidi-run.c \
+		fribidi-shape.c \
 		joining-type.tab.i \
 		joining-types.h \
 		mem.h \
@@ -54,6 +57,7 @@ libfribidi_la_SOURCES =	\
 
 GENERATEDSOURCES = \
 		fribidi-unicode-version.h \
+		arabic-shaping.tab.i \
 		bidi-type.tab.i \
 		joining-type.tab.i \
 		mirroring.tab.i

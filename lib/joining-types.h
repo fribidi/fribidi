@@ -1,10 +1,10 @@
 /* FriBidi
  * joining-types.h - define internal joining types
  *
- * $Id: joining-types.h,v 1.2 2004-06-15 11:52:02 behdad Exp $
+ * $Id: joining-types.h,v 1.3 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.2 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/joining-types.h,v $
  *
  * Author:
@@ -46,7 +46,7 @@
 char
 fribidi_char_from_joining_type (
   FriBidiJoiningType j,		/* input joining type */
-  fribidi_boolean visual	/* in visual context or logincal? */
+  fribidi_boolean visual	/* in visual context or logical? */
 ) FRIBIDI_GNUC_HIDDEN;
 
 #endif /* DEBUG */

@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i
  *
- * $Id: gen-bidi-type-tab.c,v 1.15 2005-06-07 08:42:15 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.16 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-06-07 08:42:15 $
- * $Revision: 1.15 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.16 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -126,7 +126,7 @@ get_type (
   const char *s
 )
 {
-  int i;
+  unsigned int i;
 
   for (i = 0; i < type_names_count; i++)
     if (!strcmp (s, type_names[i].name))
@@ -144,6 +144,7 @@ static char tp[sizeof (buf)];
 
 static void
 init (
+  void
 )
 {
   register int i;
@@ -156,6 +157,7 @@ init (
 
 static void
 clear_tab (
+  void
 )
 {
   register FriBidiChar c;
@@ -166,6 +168,7 @@ clear_tab (
 
 static void
 init_tab_unicode_data_txt (
+  void
 )
 {
   register FriBidiChar c;
@@ -209,6 +212,7 @@ init_tab_unicode_data_txt (
 
 static void
 init_tab_derived_bidi_class_txt (
+  void
 )
 {
   clear_tab ();

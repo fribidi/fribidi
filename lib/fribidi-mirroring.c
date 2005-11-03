@@ -23,10 +23,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.c,v 1.14 2004-09-28 07:58:57 behdad Exp $
+/* $Id: fribidi-mirroring.c,v 1.15 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-09-28 07:58:57 $
- * $Revision: 1.14 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.15 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
  *
  * Author(s):
@@ -69,10 +69,10 @@ fribidi_shape_mirroring (
 
   DBG ("in fribidi_shape_mirroring");
 
-  fribidi_assert (embedding_levels);
-
   if UNLIKELY
     (len == 0 || !str) return;
+
+  fribidi_assert (embedding_levels);
 
   /* L4. Mirror all characters that are in odd levels and have mirrors. */
   for (i = len - 1; i >= 0; i--)

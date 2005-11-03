@@ -14,9 +14,6 @@
 #define FRIBIDI_INTERFACE_VERSION @FRIBIDI_INTERFACE_VERSION@
 #define FRIBIDI_INTERFACE_VERSION_STRING "@FRIBIDI_INTERFACE_VERSION@"
 
-/* Define to 1 if you don't want Arabic joining/shaping code in the library */
-#define FRIBIDI_NO_ARABIC @FRIBIDI_NO_ARABIC@
-
 /* Define to 1 if you want charset conversion codes in the library */
 #define FRIBIDI_CHARSETS @FRIBIDI_CHARSETS@
 

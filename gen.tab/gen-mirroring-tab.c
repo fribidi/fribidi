@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-mirroring-tab.c - generate mirroring.tab.i
  *
- * $Id: gen-mirroring-tab.c,v 1.12 2005-06-07 08:42:15 behdad Exp $
+ * $Id: gen-mirroring-tab.c,v 1.13 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-06-07 08:42:15 $
- * $Revision: 1.12 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-mirroring-tab.c,v $
  *
  * Author:
@@ -103,6 +103,7 @@ static signed long max_dist;
 
 static void
 init (
+  void
 )
 {
   max_dist = 0;
@@ -110,6 +111,7 @@ init (
 
 static void
 clear_tab (
+  void
 )
 {
   register FriBidiChar c;
@@ -120,6 +122,7 @@ clear_tab (
 
 static void
 init_tab_mirroring_txt (
+  void
 )
 {
   clear_tab ();
@@ -151,8 +154,7 @@ read_bidi_mirroring_txt (
 	continue;
 
       k = sscanf (s, "%lx; %lx", &i, &j);
-      if (k != 2 || i < 0 || i >= FRIBIDI_UNICODE_CHARS || j < 0
-	  || j >= FRIBIDI_UNICODE_CHARS)
+      if (k != 2 || i >= FRIBIDI_UNICODE_CHARS || j >= FRIBIDI_UNICODE_CHARS)
 	die4 ("invalid pair in input at line %ld: %04lX, %04lX", l, i, j);
       dist = ((signed long) j - (signed long) i);
       table[i] = dist;

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.10 2004-06-23 22:26:06 behdad Exp $
+ * $Id: fribidi-common.h,v 1.11 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-23 22:26:06 $
- * $Revision: 1.10 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.11 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -100,6 +100,29 @@
 #  define FRIBIDI_END_DECLS	/* empty */
 # endif	/* !__cplusplus */
 #endif /* !FRIBIDI_BEGIN_DECLS */
+
+
+
+
+#define fribidi_debug_status FRIBIDI_NAMESPACE(debug_status)
+FRIBIDI_ENTRY int fribidi_debug_status (
+  void
+);
+#define fribidi_set_debug FRIBIDI_NAMESPACE(set_debug)
+FRIBIDI_ENTRY int
+fribidi_set_debug (
+  int state		/* new state to set */
+);
+
+
+
+
+
+
+
+
+
+
 
 #endif /* !_FRIBIDI_COMMON_H */
 /* Editor directions:

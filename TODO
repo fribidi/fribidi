@@ -1,5 +1,8 @@
 Implementation issues:
 
+* Add API to get and pass on TypeLink*, to not allocate bidi levels.
+  Something like that.
+
 * Explore vis2log.
 
 * Clean caprtl2utf8 to do arbitrary charset conversion?

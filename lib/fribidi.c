@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.16 2005-07-30 09:06:28 behdad Exp $
+ * $Id: fribidi.c,v 1.17 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-07-30 09:06:28 $
- * $Revision: 1.16 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.17 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -37,197 +37,35 @@
 
 #include <fribidi.h>
 
-FRIBIDI_ENTRY void
-fribidi_shape (
+#if DEBUG
+static int flag_debug = false;
+#endif
+
+FRIBIDI_ENTRY fribidi_boolean
+fribidi_debug_status (
+  void
+)
+{
+#if DEBUG
+  return flag_debug;
+#else
+  return false;
+#endif
+}
+
+FRIBIDI_ENTRY fribidi_boolean
+fribidi_set_debug (
   /* input */
-  const FriBidiLevel *embedding_levels,
-  const FriBidiStrIndex len,
-  /* input and output */
-  FriBidiChar *str
+  fribidi_boolean state
 )
 {
-  if UNLIKELY
-    (len == 0 || !str) return;
-
-  DBG ("in fribidi_shape");
-
-  fribidi_assert (embedding_levels);
-
-  fribidi_shape_mirroring (embedding_levels, len, str);
+#if DEBUG
+  return flag_debug = state;
+#else
+  return false;
+#endif
 }
 
-
-FRIBIDI_ENTRY FriBidiStrIndex
-fribidi_remove_bidi_marks (
-  FriBidiChar *str,
-  const FriBidiStrIndex len,
-  FriBidiStrIndex *positions_to_this,
-  FriBidiStrIndex *position_from_this_list,
-  FriBidiLevel *embedding_levels
-)
-{
-  register FriBidiStrIndex i, j = 0;
-  fribidi_boolean private_from_this = false;
-  fribidi_boolean status = false;
-
-  if UNLIKELY
-    (len == 0)
-    {
-      status = true;
-      goto out;
-    }
-
-  DBG ("in fribidi_remove_bidi_marks");
-
-  fribidi_assert (str);
-
-  /* If to_this is to not NULL, we must have from_this as well. If it is
-     not given by the caller, we have to make a private instance of it. */
-  if (positions_to_this && !position_from_this_list)
-    {
-      position_from_this_list = fribidi_malloc (sizeof
-						(position_from_this_list[0]) *
-						len);
-      if UNLIKELY
-	(!position_from_this_list) goto out;
-      private_from_this = true;
-      for (i = 0; i < len; i++)
-	position_from_this_list[positions_to_this[i]] = i;
-    }
-
-  for (i = 0; i < len; i++)
-    if (!FRIBIDI_IS_EXPLICIT_OR_BN (fribidi_get_bidi_type (str[i]))
-	&& str[i] != FRIBIDI_CHAR_LRM && str[i] != FRIBIDI_CHAR_RLM)
-      {
-	str[j] = str[i];
-	if (embedding_levels)
-	  embedding_levels[j] = embedding_levels[i];
-	if (position_from_this_list)
-	  position_from_this_list[j] = position_from_this_list[i];
-	j++;
-      }
-
-  /* Convert the from_this list to to_this */
-  if (positions_to_this)
-    {
-      for (i = 0; i < len; i++)
-	positions_to_this[i] = -1;
-      for (i = 0; i < len; i++)
-	positions_to_this[position_from_this_list[i]] = i;
-    }
-
-  status = true;
-
-out:
-
-  if (private_from_this)
-    fribidi_free (position_from_this_list);
-
-  return status ? j : -1;
-}
-
-
-FRIBIDI_ENTRY FriBidiLevel
-fribidi_log2vis (
-  /* input */
-  const FriBidiChar *str,
-  FriBidiStrIndex len,
-  /* input and output */
-  FriBidiParType *pbase_dir,
-  /* output */
-  FriBidiChar *visual_str,
-  FriBidiStrIndex *positions_L_to_V,
-  FriBidiStrIndex *positions_V_to_L,
-  FriBidiLevel *embedding_levels
-)
-{
-  FriBidiLevel max_level = 0;
-  fribidi_boolean private_V_to_L = false;
-  fribidi_boolean private_embedding_levels = false;
-  fribidi_boolean status = false;
-  FriBidiArabicProp *ar_props = NULL;
-  FriBidiCharType *bidi_types = NULL;
-
-  if UNLIKELY
-    (len == 0)
-    {
-      status = true;
-      goto out;
-    }
-
-  DBG ("in fribidi_log2vis");
-
-  fribidi_assert (str);
-  fribidi_assert (pbase_dir);
-
-  bidi_types = fribidi_malloc (len * sizeof bidi_types[0]);
-  if (!bidi_types)
-    goto out;
-
-  fribidi_get_bidi_types (str, len, bidi_types);
-
-  if (!embedding_levels)
-    {
-      embedding_levels = fribidi_malloc (len * sizeof embedding_levels[0]);
-      if (!embedding_levels)
-	goto out;
-      private_embedding_levels = true;
-    }
-
-  max_level = fribidi_get_par_embedding_levels (bidi_types, len, pbase_dir,
-						embedding_levels) - 1;
-  if UNLIKELY
-    (max_level < 0) goto out;
-
-  if (visual_str)
-    {
-      register FriBidiStrIndex i;
-
-      for (i = len - 1; i >= 0; i--)
-	visual_str[i] = str[i];
-
-#if !FRIBIDI_NO_ARABIC
-      /* Arabic joining */
-      ar_props = fribidi_malloc (len * sizeof ar_props[0]);
-      fribidi_get_joining_types (str, len, ar_props);
-      fribidi_join_arabic (bidi_types, len, embedding_levels, ar_props);
-#endif /* !FRIBIDI_NO_ARABIC */
-
-      fribidi_shape (embedding_levels, len, visual_str);
-    }
-
-  /* If l2v is to be calculated we must have v2l as well. If it is not
-     given by the caller, we have to make a private instance of it. */
-  if (positions_L_to_V && !positions_V_to_L)
-    {
-      positions_V_to_L =
-	(FriBidiStrIndex *) fribidi_malloc (sizeof (FriBidiStrIndex) * len);
-      if (!positions_V_to_L)
-	goto out;
-      private_V_to_L = true;
-    }
-
-  status =
-    fribidi_reorder_line (bidi_types, len, 0, *pbase_dir,
-			  embedding_levels, visual_str,
-			  positions_L_to_V, positions_V_to_L);
-
-out:
-
-  if (private_V_to_L)
-    fribidi_free (positions_V_to_L);
-
-  if (private_embedding_levels)
-    fribidi_free (embedding_levels);
-
-  if (ar_props)
-    fribidi_free (ar_props);
-
-  if (bidi_types)
-    fribidi_free (bidi_types);
-
-  return status ? max_level + 1 : 0;
-}
 
 
 const char *fribidi_unicode_version = FRIBIDI_UNICODE_VERSION;
@@ -253,11 +91,12 @@ const char *fribidi_version_info =
 #endif /* !FRIBIDI_USE_GLIB */
   ".\n\n"
   "Copyright (C) 2004  Sharif FarsiWeb, Inc.\n"
-  "Copyright (C) 2004  Behdad Esfahbod\n"
+  "Copyright (C) 2001, 2002, 2004, 2005  Behdad Esfahbod\n"
+  "Copyright (C) 1999, 2000  Dov Grobgeld\n"
   FRIBIDI_NAME " comes with NO WARRANTY, to the extent permitted by law.\n"
   "You may redistribute copies of " FRIBIDI_NAME " under\n"
   "the terms of the GNU Lesser General Public License.\n"
-  "For more information about these matters, see the file named COPYING.\n"
+  "For more information about these matters, see the file named COPYING.\n\n"
   "Written by Behdad Esfahbod and Dov Grobgeld.\n";
 
 /* Editor directions:

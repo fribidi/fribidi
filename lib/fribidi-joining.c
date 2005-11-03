@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.c,v 1.4 2004-06-21 21:15:31 behdad Exp $
+ * $Id: fribidi-joining.c,v 1.5 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 21:15:31 $
- * $Revision: 1.4 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.c,v $
  *
  * Authors:
@@ -33,13 +33,9 @@
 
 #include "common.h"
 
-#if !FRIBIDI_NO_ARABIC
-
 #include <fribidi-joining.h>
-#include <fribidi-env.h>
 
 #include "mem.h"
-#include "env.h"
 #include "bidi-types.h"
 #include "joining-types.h"
 
@@ -107,8 +103,8 @@ fribidi_join_arabic (
 
   /* The joining algorithm turned out very very dirty :(.  That's what happens
    * when you follow the standard which has never been implemented closely
-   * before.  We assume "level run" instead of "directional run", which is a
-   * proposed update to be considered for Unicode 4.1. */
+   * before.
+   */
 
   /* 8.2 Arabic - Cursive Joining */
   DBG ("Arabic cursive joining");
@@ -147,7 +143,19 @@ fribidi_join_arabic (
 		    FRIBIDI_UNSET_BITS (ar_props[i], joins_preceding_mask);
 		}
 	      else if (!FRIBIDI_TEST_BITS (ar_props[i], joins_preceding_mask))
-		disjoin = true;
+	        {
+		  disjoin = true;
+		}
+	      else
+	        {
+		  register FriBidiStrIndex j;
+		  /* This is a FriBidi extension:  we set joining properties
+		   * for skipped characters in between, so we can put NSMs on tatweel
+		   * later if we want.  Useful on console for example.
+		   */
+		  for (j = saved + 1; j < i; j++)
+		    FRIBIDI_SET_BITS (ar_props[j], joins_preceding_mask | saved_joins_following_mask);
+		}
 	    }
 
 	  if (disjoin && saved_shapes)
@@ -164,17 +172,9 @@ fribidi_join_arabic (
 		FRIBIDI_TEST_BITS (ar_props[i], saved_joins_following_mask);
 	    }
 	}
-    if (joins && saved_shapes)
+    if ((joins) && saved_shapes)
       FRIBIDI_UNSET_BITS (ar_props[saved], saved_joins_following_mask);
 
-    /* if joining on transparents then... */
-    /* This is a FriBidi extension:  we set joining properties
-     * for skipped characters in between. 
-     for (saved++; saved < i; saved++)
-     FRIBIDI_SET_BITS (ar_props[saved],
-     joins_preceding_mask |
-     joins_following_mask);
-     */
   }
 
 # if DEBUG
@@ -187,8 +187,6 @@ fribidi_join_arabic (
 
   DBG ("leaving fribidi_join_arabic");
 }
-
-#endif /* !FRIBIDI_NO_ARABIC */
 
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent

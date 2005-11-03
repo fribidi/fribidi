@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.h - bidirectional algorithm
  *
- * $Id: fribidi-bidi.h,v 1.14 2004-06-21 21:15:31 behdad Exp $
+ * $Id: fribidi-bidi.h,v 1.15 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 21:15:31 $
- * $Revision: 1.14 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.15 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.h,v $
  *
  * Authors:
@@ -38,6 +38,7 @@
 #include "fribidi-common.h"
 
 #include "fribidi-types.h"
+#include "fribidi-flags.h"
 #include "fribidi-bidi-types.h"
 
 #include "fribidi-begindecls.h"
@@ -55,9 +56,8 @@
  * direction handling.  Note that you can pass more than a paragraph to this
  * function and the direction of the first non-neutral paragraph is returned,
  * which is a very good heuristic to set direction of the neutral paragraphs
- * at the beginning of text.  For other neutral paragraphs, better you use the
- * direction of the previous paragraph.  This is today known as the best
- * auto-paragraph-direction-detection scheme!
+ * at the beginning of text.  For other neutral paragraphs, you better use the
+ * direction of the previous paragraph.
  *
  * Returns: Base pargraph direction.  No weak paragraph direction is returned,
  * only LTR, RTL, or ON.
@@ -111,15 +111,22 @@ fribidi_get_par_embedding_levels (
  * (That is part 4 of rule L1).
  *
  * Note that the bidi types and embedding levels are not reordered.  You can
- * reorder these (or any other) arrays using the position_L_to_V_map later.
+ * reorder these (or any other) arrays using the map later.  The user is
+ * responsible to initialize map to something sensible, like an identity
+ * mapping, or pass NULL if no map is needed.
  *
- * Some features of this function can be turned on/off using environmental
- * settings functions fribidi_env_*().
+ * There is an optional part to this function, which is whether non-spacing
+ * marks for right-to-left parts of the text should be reordered to come after
+ * their base characters in the visual string or not.  Most rendering engines
+ * expect this behavior, but console-based systems for example do not like it.
+ * This is controlled by the FRIBIDI_FLAG_REORDER_NSM flag.  The flag is on
+ * in FRIBIDI_FLAGS_DEFAULT.
  *
  * Returns: Maximum level found in this line plus one, or zero if any error
  * occured (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
+  FriBidiFlags flags, /* reorder flags */
   const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
 					   fribidi_get_bidi_types() */
   const FriBidiStrIndex len,	/* input length of the line */
@@ -130,10 +137,8 @@ fribidi_get_par_embedding_levels (
 					   as returned by
 					   fribidi_get_par_embedding_levels */
   FriBidiChar *visual_str,	/* visual string to reorder */
-  FriBidiStrIndex *positions_L_to_V,	/* output mapping from logical to
-					   visual string positions */
-  FriBidiStrIndex *positions_V_to_L	/* output mapping from visual string
-					   back to logical string positions */
+  FriBidiStrIndex *map		/* a map of string indices which is reordered
+				 * to reflect where each glyph ends up. */
 ) FRIBIDI_GNUC_WARN_UNUSED;
 
 #include "fribidi-enddecls.h"

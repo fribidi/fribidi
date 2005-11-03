@@ -383,6 +383,7 @@ write_source (
 
 static void
 write_out (
+  void
 )
 {
   int i;

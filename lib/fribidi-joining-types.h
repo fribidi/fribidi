@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.h - character joining types
  *
- * $Id: fribidi-joining-types.h,v 1.4 2004-06-21 21:15:31 behdad Exp $
+ * $Id: fribidi-joining-types.h,v 1.5 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 21:15:31 $
- * $Revision: 1.4 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.h,v $
  *
  * Author:
@@ -197,6 +197,9 @@ typedef fribidi_uint8 FriBidiArabicProp;
 #define FRIBIDI_JOINS_FOLLOWING_MASK(level)	\
 	(FRIBIDI_LEVEL_IS_RTL (level) ? FRIBIDI_MASK_JOINS_LEFT	\
 				      : FRIBIDI_MASK_JOINS_RIGHT)
+
+#define FRIBIDI_JOIN_SHAPE(p)	\
+	((p) & ( FRIBIDI_MASK_JOINS_RIGHT | FRIBIDI_MASK_JOINS_LEFT ))
 
 /* Functions finally */
 

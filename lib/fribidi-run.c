@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-run.c - text run data type
  *
- * $Id: fribidi-run.c,v 1.6 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi-run.c,v 1.7 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.6 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-run.c,v $
  *
  * Authors:
@@ -38,8 +38,12 @@
 #include <fribidi-bidi-types.h>
 
 #include "run.h"
-#include "env.h"
+#include "mem.h"
 #include "bidi-types.h"
+
+#if !USE_SIMPLE_MALLOC
+static FriBidiRun *free_runs = NULL;
+#endif
 
 FriBidiRun *
 new_run (
@@ -47,6 +51,7 @@ new_run (
 )
 {
   register FriBidiRun *run;
+  static FriBidiMemChunk *run_mem_chunk = NULL;
 
 #if USE_SIMPLE_MALLOC
   run = fribidi_malloc (sizeof (FriBidiRun));

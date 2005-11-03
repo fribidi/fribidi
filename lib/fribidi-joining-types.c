@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.c - character joining types
  *
- * $Id: fribidi-joining-types.c,v 1.3 2004-06-15 11:52:02 behdad Exp $
+ * $Id: fribidi-joining-types.c,v 1.4 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.3 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.c,v $
  *
  * Authors:
@@ -32,8 +32,6 @@
  */
 
 #include "common.h"
-
-#if !FRIBIDI_NO_ARABIC
 
 #include <fribidi-joining-types.h>
 
@@ -114,8 +112,6 @@ fribidi_char_from_joining_type (
 }
 
 #endif /* DEBUG */
-
-#endif /* !FRIBIDI_NO_ARABIC */
 
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent

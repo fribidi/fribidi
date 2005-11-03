@@ -2,11 +2,13 @@ EXTRA_PROGRAMS = \
 		gen-unicode-version \
 		gen-bidi-type-tab \
 		gen-joining-type-tab \
+		gen-arabic-shaping-tab \
 		gen-mirroring-tab
 
 gen_unicode_version_SOURCES = gen-unicode-version.c
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
 gen_joining_type_tab_SOURCES = gen-joining-type-tab.c packtab.c packtab.h
+gen_arabic_shaping_tab_SOURCES = gen-arabic-shaping-tab.c
 gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
 
 CLEANFILES = $(EXTRA_PROGRAMS)
@@ -36,7 +38,7 @@ UCD_FILES = \
 
 EXTRA_DIST = $(UCD_FILES)
 
-COMPRESSION = 4
+COMPRESSION = 2
 
 # generate bidi-type.tab.i
 
@@ -71,6 +73,18 @@ joining-type.tab.i: \
 		$(gen_joining_type_tab_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_joining_type_tab)
 	./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
+
+# generate arabic-shaping.tab.i
+
+gen_arabic_shaping_tab = gen-arabic-shaping-tab$(EXEEXT)
+
+arabic-shaping.tab.i: \
+		UnicodeData.txt \
+		fribidi-unicode-version.h \
+		$(gen_arabic_shaping_tab_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_arabic_shaping_tab)
+	./$(gen_arabic_shaping_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate mirroring.tab.i

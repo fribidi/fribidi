@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.5 2004-06-21 21:15:31 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.6 2005-11-03 01:39:01 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 21:15:31 $
- * $Revision: 1.5 $
+ * $Date: 2005-11-03 01:39:01 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:
@@ -90,6 +90,12 @@ extern const char *fribidi_unicode_version;
 #define FRIBIDI_CHAR_ARABIC_ALEF	0x0627
 #define FRIBIDI_CHAR_ARABIC_ZERO	0x0660
 #define FRIBIDI_CHAR_PERSIAN_ZERO	0x06F0
+
+/* Misc */
+#define FRIBIDI_CHAR_ZWNBSP		0xFEFF
+
+/* Char we place for a deleted slot, to delete later */
+#define FRIBIDI_CHAR_FILL		FRIBIDI_CHAR_ZWNBSP
 
 /* These are here just for lazy people. */
 #if !FRIBIDI_STRICT
