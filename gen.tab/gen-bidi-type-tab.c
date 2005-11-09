@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-bidi-type-tab.c - generate bidi-type.tab.i
  *
- * $Id: gen-bidi-type-tab.c,v 1.16 2005-11-03 01:39:01 behdad Exp $
+ * $Id: gen-bidi-type-tab.c,v 1.17 2005-11-09 20:02:48 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.16 $
+ * $Date: 2005-11-09 20:02:48 $
+ * $Revision: 1.17 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-bidi-type-tab.c,v $
  *
  * Author:
@@ -245,6 +245,8 @@ read_unicode_data_txt (
       if (i != 2 || c >= FRIBIDI_UNICODE_CHARS)
 	die3 ("invalid input at line %ld: %s", l, s);
 
+      /* FIXME: We don't handle First..Last parts of UnicodeData.txt,
+       * but it works, since all those are LTR. */
       table[c] = get_type (tp);
     }
 }
