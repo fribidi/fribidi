@@ -1,4 +1,6 @@
 
+TESTS_ENVIRONMENT = /bin/sh
+
 TESTS = run.tests
 
 check_SCRIPTS = run.tests
