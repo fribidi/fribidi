@@ -29,3 +29,4 @@ CenterICQ: http://konst.org.ua/centericq/ # an ICQ client, capable of showing RT
 bidiv: http://www.iglu.org.il/faq/cache/153.html # cmdline tool to display RTL text files on consoles without RTL support
 ksvg: http://svg.kde.org/ # SVG renderer capable of rendering RTL text
 fvwm: http://www.fvwm.org/ # a window manager with RTL text handling
+Nano-X: http://www.microwindows.org/ # a tiny window system 
