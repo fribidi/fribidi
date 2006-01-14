@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-deprecated.h - Deprecated interfaces
  *
- * $Id: fribidi-deprecated.h,v 1.1 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-deprecated.h,v 1.2 2006-01-14 12:09:29 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.1 $
+ * $Date: 2006-01-14 12:09:29 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.h,v $
  *
  * Author:
@@ -118,7 +118,7 @@ fribidi_log2vis_get_embedding_levels (
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */
   FriBidiLevel *embedding_levels	/* output list of embedding levels */
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
 /* fribidi_get_type - get character bidi type
  *
@@ -128,8 +128,17 @@ fribidi_log2vis_get_embedding_levels (
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_type (
   FriBidiChar ch		/* input character */
-);
+) FRIBIDI_GNUC_DEPRECATED;
 
+/* fribidi_get_type_internal - get character bidi type
+ *
+ * Deprecated. Replaced by fribidi_get_bidi_type.
+ */
+#define fribidi_get_type_internal FRIBIDI_NAMESPACE(get_type_internal)
+FRIBIDI_ENTRY FriBidiCharType
+fribidi_get_type_internal (
+  FriBidiChar ch		/* input character */
+) FRIBIDI_GNUC_DEPRECATED;
 
 #define fribidi_remove_bidi_marks FRIBIDI_NAMESPACE(remove_bidi_marks)
 /* fribidi_remove_bidi_marks - remove bidi marks out of an string

@@ -1,16 +1,17 @@
 /* FriBidi
  * fribidi-shape.h - shaping
  *
- * $Id: fribidi-shape.h,v 1.1 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-shape.h,v 1.2 2006-01-14 12:09:29 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.1 $
+ * $Date: 2006-01-14 12:09:29 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-shape.h,v $
  *
  * Author:
- *   Behdad Esfahbod, 2004
+ *   Behdad Esfahbod, 2004, 2005
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
+ * Copyright (C) 2004, 2005 Behdad Esfahbod
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

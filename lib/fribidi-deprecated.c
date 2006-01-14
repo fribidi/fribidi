@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-deprecated.c - deprecated interfaces.
  *
- * $Id: fribidi-deprecated.c,v 1.1 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-deprecated.c,v 1.2 2006-01-14 12:09:29 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.1 $
+ * $Date: 2006-01-14 12:09:29 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.c,v $
  *
  * Authors:
@@ -94,6 +94,14 @@ fribidi_log2vis_get_embedding_levels (
 
 FRIBIDI_ENTRY FriBidiCharType
 fribidi_get_type (
+  FriBidiChar ch		/* input character */
+)
+{
+  return fribidi_get_bidi_type (ch);
+}
+
+FRIBIDI_ENTRY FriBidiCharType
+fribidi_get_type_internal (
   FriBidiChar ch		/* input character */
 )
 {
