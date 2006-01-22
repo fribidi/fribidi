@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-deprecated.c - deprecated interfaces.
  *
- * $Id: fribidi-deprecated.c,v 1.2 2006-01-14 12:09:29 behdad Exp $
+ * $Id: fribidi-deprecated.c,v 1.3 2006-01-22 10:11:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-14 12:09:29 $
- * $Revision: 1.2 $
+ * $Date: 2006-01-22 10:11:23 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.c,v $
  *
  * Authors:
@@ -255,8 +255,11 @@ fribidi_log2vis (
 
   if (visual_str)
     {
+      /* Using memcpy instead
       for (i = len - 1; i >= 0; i--)
 	visual_str[i] = str[i];
+      */
+      memcpy (visual_str, str, len * sizeof (*visual_str));
 
       /* Arabic joining */
       ar_props = fribidi_malloc (len * sizeof ar_props[0]);
