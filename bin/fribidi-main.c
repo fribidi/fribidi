@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-main.c - command line program for libfribidi
  *
- * $Id: fribidi-main.c,v 1.13 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-main.c,v 1.14 2006-01-22 10:11:43 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.13 $
+ * $Date: 2006-01-22 10:11:43 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-main.c,v $
  *
  * Authors:
@@ -479,7 +479,7 @@ main (
 
 		  if (show_visual)
 		    {
-		      printf (nl_found);
+		      printf ("%s", nl_found);
 
 		      if (bol_text)
 			printf ("%s", bol_text);
@@ -553,7 +553,7 @@ main (
 		    }
 		  if (show_basedir)
 		    {
-		      printf (nl_found);
+		      printf ("%s", nl_found);
 		      printf ("Base direction: %s",
 			      (FRIBIDI_DIR_TO_LEVEL (base) ? "R" : "L"));
 		      nl_found = "\n";
@@ -562,7 +562,7 @@ main (
 		    {
 		      FriBidiStrIndex i;
 
-		      printf (nl_found);
+		      printf ("%s", nl_found);
 		      for (i = 0; i < len; i++)
 			printf ("%ld ", (long) ltov[i]);
 		      nl_found = "\n";
@@ -571,7 +571,7 @@ main (
 		    {
 		      FriBidiStrIndex i;
 
-		      printf (nl_found);
+		      printf ("%s", nl_found);
 		      for (i = 0; i < len; i++)
 			printf ("%ld ", (long) vtol[i]);
 		      nl_found = "\n";
@@ -580,7 +580,7 @@ main (
 		    {
 		      FriBidiStrIndex i;
 
-		      printf (nl_found);
+		      printf ("%s", nl_found);
 		      for (i = 0; i < len; i++)
 			printf ("%d ", (int) levels[i]);
 		      nl_found = "\n";
