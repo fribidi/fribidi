@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets-cap-rtl.c - CapRTL character set conversion routines
  *
- * $Id: fribidi-char-sets-cap-rtl.c,v 1.11 2005-07-30 09:06:28 behdad Exp $
+ * $Id: fribidi-char-sets-cap-rtl.c,v 1.12 2006-01-22 10:12:17 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-07-30 09:06:28 $
- * $Revision: 1.11 $
+ * $Date: 2006-01-22 10:12:17 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cap-rtl.c,v $
  *
  * Authors:
@@ -105,8 +105,9 @@ init_cap_rtl (
 	caprtl_to_unicode[i] = FRIBIDI_UNICODE_CHARS;
 	mark[i] = 0;
 	if (fribidi_get_mirror_char (i, NULL))
-	  DBG
-	    ("warning: I could not map mirroring character map to itself in CapRTL");
+	  {
+	    DBG ("warning: I could not map mirroring character map to itself in CapRTL");
+	  }
 
 	for (j = 0; j < num_types; j++)
 	  if (to_type[j] == CapRTLCharTypes[i])
@@ -147,9 +148,9 @@ init_cap_rtl (
       DBG ("warning: could not find a mapping for CapRTL to Unicode:");
       for (j = 0; j < num_types; j++)
 	if (request[j])
-	  DBG2 ("  need this type: %s", fribidi_get_bidi_type_name
-		(to_type[j]));
-
+	  {
+	    DBG2 ("  need this type: %s", fribidi_get_bidi_type_name (to_type[j]));
+	  }
     }
 }
 

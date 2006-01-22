@@ -1,10 +1,10 @@
 /* FriBidi
  * run.h - text run data type
  *
- * $Id: run.h,v 1.7 2004-06-21 18:49:23 behdad Exp $
+ * $Id: run.h,v 1.8 2006-01-22 10:12:17 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.7 $
+ * $Date: 2006-01-22 10:12:17 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/run.h,v $
  *
  * Authors:
@@ -126,8 +126,9 @@ new_run (
 
 #define move_node_before(x, list) \
 	FRIBIDI_BEGIN_STMT \
-	if ((x)->prev) \
+	if ((x)->prev) { \
 	  delete_node(x); \
+	} \
 	insert_node_before((x), (list)); \
 	FRIBIDI_END_STMT
 

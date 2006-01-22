@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.8 2005-11-03 01:39:01 behdad Exp $
+ * $Id: debug.h,v 1.9 2006-01-22 10:12:17 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.8 $
+ * $Date: 2006-01-22 10:12:17 $
+ * $Revision: 1.9 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -75,20 +75,21 @@
 #ifndef DBG
 # define DBG(s) \
 	FRIBIDI_BEGIN_STMT \
-	if (fribidi_debug_status()) MSG(FRIBIDI ": " s "\n"); \
+	if (fribidi_debug_status()) { MSG(FRIBIDI ": " s "\n"); } \
 	FRIBIDI_END_STMT
 # define DBG2(s, t) \
 	FRIBIDI_BEGIN_STMT \
-	if (fribidi_debug_status()) MSG2(FRIBIDI ": " s "\n", t); \
+	if (fribidi_debug_status()) { MSG2(FRIBIDI ": " s "\n", t); } \
 	FRIBIDI_END_STMT
 #endif /* !DBG */
 
 #ifndef fribidi_assert
 # define fribidi_assert(cond) \
 	FRIBIDI_BEGIN_STMT \
-	if (!(cond)) \
+	if (!(cond)) { \
 		DBG(__FILE__ ":" STRINGIZE(__LINE__) ": " \
 		    "assertion failed (" STRINGIZE(cond) ")"); \
+	} \
 	FRIBIDI_END_STMT
 #endif /* !fribidi_assert */
 
