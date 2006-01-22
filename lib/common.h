@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.15 2004-06-21 18:49:23 behdad Exp $
+ * $Id: common.h,v 1.16 2006-01-22 10:10:57 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.15 $
+ * $Date: 2006-01-22 10:10:57 $
+ * $Revision: 1.16 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -118,6 +118,16 @@
 #  error You should define fribidi_free too when you define fribidi_malloc.
 # endif	/* !fribidi_free */
 #endif /* fribidi_malloc */
+
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#endif
+#if HAVE_STRINGS_H
+# include <strings.h>
+#endif
 
 /* FRIBIDI_CHUNK_SIZE is the number of bytes in each chunk of memory being
  * allocated for data structure pools. */
