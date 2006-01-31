@@ -1,10 +1,10 @@
 /* FriBidi
  * joining-types.h - define internal joining types
  *
- * $Id: joining-types.h,v 1.3 2005-11-03 01:39:01 behdad Exp $
+ * $Id: joining-types.h,v 1.4 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.3 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/joining-types.h,v $
  *
  * Author:
@@ -40,7 +40,7 @@
 
 #include <fribidi-begindecls.h>
 
-#if DEBUG
+#if DEBUG+0
 
 #define fribidi_char_from_joining_type FRIBIDI_PRIVATESPACE(char_from_joining_type)
 char

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-char-sets.c - character set conversion routines
  *
- * $Id: fribidi-char-sets.c,v 1.6 2004-06-09 20:01:00 behdad Exp $
+ * $Id: fribidi-char-sets.c,v 1.7 2006-01-31 03:23:12 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-09 20:01:00 $
- * $Revision: 1.6 $
+ * $Date: 2006-01-31 03:23:12 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets.c,v $
  *
  * Authors:
@@ -113,7 +113,10 @@ static FriBidiCharSetHandler char_sets[FRIBIDI_CHAR_SETS_NUM + 1] = {
 # undef _FRIBIDI_ADD_CHAR_SET_ONE2ONE
 };
 
-#if !FRIBIDI_USE_GLIB
+#if FRIBIDI_USE_GLIB+0
+# include <glib/gstrfuncs.h>
+# define fribidi_strcasecmp g_ascii_strcasecmp
+#else /* !FRIBIDI_USE_GLIB */
 static char
 toupper (
   /* input */
@@ -137,10 +140,7 @@ fribidi_strcasecmp (
     }
   return toupper (*s1) - toupper (*s2);
 }
-#else /* FRIBIDI_USE_GLIB */
-# include <glib/gstrfuncs.h>
-# define fribidi_strcasecmp g_ascii_strcasecmp
-#endif /* FRIBIDI_USE_GLIB */
+#endif /* !FRIBIDI_USE_GLIB */
 
 FRIBIDI_ENTRY FriBidiCharSet
 fribidi_parse_charset (

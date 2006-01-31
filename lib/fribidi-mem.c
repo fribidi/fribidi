@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-mem.c - memory manipulation routines
  *
- * $Id: fribidi-mem.c,v 1.7 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-mem.c,v 1.8 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.7 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mem.c,v $
  *
  * Authors:
@@ -35,8 +35,10 @@
 
 #include "mem.h"
 
-#if !FRIBIDI_USE_GLIB
-#if !USE_SIMPLE_MALLOC
+#if FRIBIDI_USE_GLIB+0
+#else
+#if USE_SIMPLE_MALLOC+0
+#else
 
 struct _FriBidiMemChunk
 {

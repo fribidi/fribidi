@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-unicode.h - general Unicode definitions
  *
- * $Id: fribidi-unicode.h,v 1.6 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-unicode.h,v 1.7 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.6 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-unicode.h,v $
  *
  * Author:
@@ -43,11 +43,11 @@
 #define FRIBIDI_UNICODE_CHARS	(sizeof(FriBidiChar) >= 4 ? 0x110000 : 0xFFFE)
 
 /* Unicode version - FRIBIDI_UNICODE_VERSION */
-#if !DONT_HAVE_FRIBIDI_UNICODE_VERSION_H
-# include "fribidi-unicode-version.h"
-#else /* DONT_HAVE_FRIBIDI_UNICODE_VERSION_H */
+#if DONT_HAVE_FRIBIDI_UNICODE_VERSION_H+0
 # define FRIBIDI_UNICODE_VERSION "unknown"
-#endif /* DONT_HAVE_FRIBIDI_UNICODE_VERSION_H */
+#else /* !DONT_HAVE_FRIBIDI_UNICODE_VERSION_H */
+# include "fribidi-unicode-version.h"
+#endif /* !DONT_HAVE_FRIBIDI_UNICODE_VERSION_H */
 
 #define fribidi_unicode_version FRIBIDI_NAMESPACE(unicode_version)
 /* An string containing the version the Unicode standard implemented,
@@ -96,25 +96,6 @@ extern const char *fribidi_unicode_version;
 
 /* Char we place for a deleted slot, to delete later */
 #define FRIBIDI_CHAR_FILL		FRIBIDI_CHAR_ZWNBSP
-
-/* These are here just for lazy people. */
-#if !FRIBIDI_STRICT
-#define UNI_MAX_BIDI_LEVEL	FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
-#define UNI_LRM			FRIBIDI_CHAR_LRM
-#define UNI_RLM			FRIBIDI_CHAR_RLM
-#define UNI_LRE			FRIBIDI_CHAR_LRE
-#define UNI_RLE			FRIBIDI_CHAR_RLE
-#define UNI_LRO			FRIBIDI_CHAR_LRO
-#define UNI_RLO			FRIBIDI_CHAR_RLO
-#define UNI_LS			FRIBIDI_CHAR_LS
-#define UNI_PS			FRIBIDI_CHAR_PS
-#define UNI_ZWNJ		FRIBIDI_CHAR_ZWNJ
-#define UNI_ZWJ			FRIBIDI_CHAR_ZWJ
-#define UNI_HEBREW_ALEF		FRIBIDI_CHAR_HEBREW_ALEF
-#define UNI_ARABIC_ALEF		FRIBIDI_CHAR_ARABIC_ALEF
-#define UNI_ARABIC_ZERO		FRIBIDI_CHAR_ARABIC_ZERO
-#define UNI_FARSI_ZERO		FRIBIDI_CHAR_PERSIAN_ZERO
-#endif /* !FRIBIDI_STRICT */
 
 #include "fribidi-enddecls.h"
 

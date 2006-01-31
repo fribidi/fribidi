@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining-types.c - character joining types
  *
- * $Id: fribidi-joining-types.c,v 1.4 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-joining-types.c,v 1.5 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.4 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types.c,v $
  *
  * Authors:
@@ -89,7 +89,7 @@ fribidi_get_joining_type_name (
     }
 }
 
-#ifdef DEBUG
+#if DEBUG+0
 
 char
 fribidi_char_from_joining_type (

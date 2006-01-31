@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-run.c - text run data type
  *
- * $Id: fribidi-run.c,v 1.7 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-run.c,v 1.8 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.7 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.8 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-run.c,v $
  *
  * Authors:
@@ -41,7 +41,8 @@
 #include "mem.h"
 #include "bidi-types.h"
 
-#if !USE_SIMPLE_MALLOC
+#if USE_SIMPLE_MALLOC+0
+#else
 static FriBidiRun *free_runs = NULL;
 #endif
 
@@ -51,9 +52,8 @@ new_run (
 )
 {
   register FriBidiRun *run;
-  static FriBidiMemChunk *run_mem_chunk = NULL;
 
-#if USE_SIMPLE_MALLOC
+#if USE_SIMPLE_MALLOC+0
   run = fribidi_malloc (sizeof (FriBidiRun));
 #else /* !USE_SIMPLE_MALLOC */
   if (free_runs)
@@ -63,17 +63,15 @@ new_run (
     }
   else
     {
+      static FriBidiMemChunk *run_mem_chunk = NULL;
+
       if UNLIKELY
-	(!run_mem_chunk) run_mem_chunk = fribidi_chunk_new_for_type (FriBidiRun
-	);
+	(!run_mem_chunk)
+	 run_mem_chunk = fribidi_chunk_new_for_type (FriBidiRun);
 
       if LIKELY
 	(run_mem_chunk)
-	{
-	  run = fribidi_chunk_new (FriBidiRun,
-				   run_mem_chunk
-	  );
-	}
+	run = fribidi_chunk_new (FriBidiRun, run_mem_chunk);
       else
 	run = NULL;
     }
@@ -95,7 +93,7 @@ free_run (
 )
 {
   fribidi_assert (run);
-#if USE_SIMPLE_MALLOC
+#if USE_SIMPLE_MALLOC+0
   fribidi_free (run);
 #else /* !USE_SIMPLE_MALLOC */
   run->next = free_runs;
@@ -135,7 +133,7 @@ free_run_list (
 
   fribidi_validate_run_list (run_list);
 
-#if USE_SIMPLE_MALLOC
+#if USE_SIMPLE_MALLOC+0
   {
     register FriBidiRun *pp;
 
@@ -350,7 +348,7 @@ out:
   return status;
 }
 
-#if DEBUG
+#if DEBUG+0
 
 void
 fribidi_validate_run_list (

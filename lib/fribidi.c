@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi.c - Unicode bidirectional and Arabic joining/shaping algorithms
  *
- * $Id: fribidi.c,v 1.17 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi.c,v 1.18 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.17 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.18 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi.c,v $
  *
  * Authors:
@@ -37,7 +37,7 @@
 
 #include <fribidi.h>
 
-#if DEBUG
+#if DEBUG+0
 static int flag_debug = false;
 #endif
 
@@ -46,7 +46,7 @@ fribidi_debug_status (
   void
 )
 {
-#if DEBUG
+#if DEBUG+0
   return flag_debug;
 #else
   return false;
@@ -59,7 +59,7 @@ fribidi_set_debug (
   fribidi_boolean state
 )
 {
-#if DEBUG
+#if DEBUG+0
   return flag_debug = state;
 #else
   return false;
@@ -75,16 +75,17 @@ const char *fribidi_version_info =
   "interface version " FRIBIDI_INTERFACE_VERSION_STRING ",\n"
   "Unicode Character Database version " FRIBIDI_UNICODE_VERSION ",\n"
   "Configure options"
-#if DEBUG
+#if DEBUG+0
   " --enable-debug"
 #endif /* DEBUG */
-#if USE_SIMPLE_MALLOC
+#if USE_SIMPLE_MALLOC+0
   " --enable-malloc"
 #endif /* USE_SIMPLE_MALLOC */
-#if !FRIBIDI_CHARSETS
+#if FRIBIDI_CHARSETS+0
+#else
   " --disable-charsets"
 #endif /* !FRIBIDI_CHARSETS */
-#if FRIBIDI_USE_GLIB
+#if FRIBIDI_USE_GLIB+0
   " --with-glib"
 #else /* !FRIBIDI_USE_GLIB */
   " --without-glib"

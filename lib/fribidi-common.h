@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.11 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-common.h,v 1.12 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.11 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.12 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -32,17 +32,17 @@
 #ifndef _FRIBIDI_COMMON_H
 #define _FRIBIDI_COMMON_H
 
-#if !DONT_HAVE_FRIBIDI_CONFIG_H
-# include "fribidi-config.h"
-#else /* DONT_HAVE_FRIBIDI_CONFIG_H */
+#if DONT_HAVE_FRIBIDI_CONFIG_H+0
 # define FRIBIDI "fribidi"
 # define FRIBIDI_NAME "fribidi"
 # define FRIBIDI_VERSION "unknown"
 # define FRIBIDI_BUGREPORT "unknown"
 # define FRIBIDI_INTERFACE_VERSION_STRING "unknown"
-#endif /* DONT_HAVE_FRIBIDI_CONFIG_H */
+#else /* !DONT_HAVE_FRIBIDI_CONFIG_H */
+# include "fribidi-config.h"
+#endif /* !DONT_HAVE_FRIBIDI_CONFIG_H */
 
-#if HAVE_FRIBIDI_CUSTOM_H
+#if HAVE_FRIBIDI_CUSTOM_H+0
 # include <fribidi-custom.h>
 #endif /* HAVE_FRIBIDI_CUSTOM_H */
 
@@ -60,7 +60,7 @@
 # endif	/* !WIN32 */
 #endif /* !FRIBIDI_ENTRY */
 
-#if FRIBIDI_USE_GLIB
+#if FRIBIDI_USE_GLIB+0
 # ifndef __FRIBIDI_DOC
 #  include <glib/gmacros.h>
 # endif	/* !__FRIBIDI_DOC */

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.13 2004-06-21 18:49:23 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.14 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2004-06-21 18:49:23 $
- * $Revision: 1.13 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -227,17 +227,6 @@ typedef fribidi_uint32 FriBidiParType;
 /* Please don't use these two type names, use FRIBIDI_PAR_* form instead. */
 #define FRIBIDI_TYPE_WLTR	FRIBIDI_PAR_WLTR
 #define FRIBIDI_TYPE_WRTL	FRIBIDI_PAR_WRTL
-
-/* These are here just for lazy people. */
-#if !FRIBIDI_STRICT
-#define FRIBIDI_TYPE_WL		FRIBIDI_PAR_WLTR
-#define FRIBIDI_TYPE_WR		FRIBIDI_PAR_WRTL
-#define FRIBIDI_TYPE_L		FRIBIDI_PAR_LTR
-#define FRIBIDI_TYPE_R		FRIBIDI_PAR_RTL
-#define FRIBIDI_TYPE_N		FRIBIDI_PAR_ON
-#define FRIBIDI_TYPE_B		FRIBIDI_TYPE_BS
-#define FRIBIDI_TYPE_S		FRIBIDI_TYPE_SS
-#endif /* !FRIBIDI_STRICT */
 
 
 /*

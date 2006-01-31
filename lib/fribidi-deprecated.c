@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-deprecated.c - deprecated interfaces.
  *
- * $Id: fribidi-deprecated.c,v 1.3 2006-01-22 10:11:23 behdad Exp $
+ * $Id: fribidi-deprecated.c,v 1.4 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-22 10:11:23 $
- * $Revision: 1.3 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.4 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.c,v $
  *
  * Authors:
@@ -35,10 +35,13 @@
 
 #include "common.h"
 
+#undef FRIBIDI_NO_DEPRECATED
+
 #include <fribidi-deprecated.h>
 #include <fribidi.h>
 
-#if !FRIBIDI_NO_DEPRECATED
+#if FRIBIDI_NO_DEPRECATED+0
+#else
 
 static FriBidiFlags flags = FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC;
 

@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.23 2005-11-03 01:39:01 behdad Exp $
+## $Id: configure.ac,v 1.24 2006-01-31 03:23:12 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2005-11-03 01:39:01 $
-## $Revision: 1.23 $
+## $Date: 2006-01-31 03:23:12 $
+## $Revision: 1.24 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -44,7 +44,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://fribidi.org/bug])
-AC_REVISION([$Id: configure.ac,v 1.23 2005-11-03 01:39:01 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.24 2006-01-31 03:23:12 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -133,11 +133,22 @@ m4_define(debug_default,
 AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug],
                              [turn on debugging @<:@default=debug_default()@:>@]),,
-              enableval=debug_default())
-if test x$enableval = xyes; then
+              enable_debug=debug_default())
+if test x$enable_debug = xyes; then
 	AC_DEFINE(DEBUG,1,
                   [Define to 1 if you want to include debug code in the library])
 fi
+
+# --disable-deprecated
+AC_ARG_ENABLE(deprecated,
+              AC_HELP_STRING([--disable-deprecated],
+                             [do not build deprecated functionality]))
+if test x$enable_deprecated = xno; then
+	FRIBIDI_NO_DEPRECATED=1
+else
+	FRIBIDI_NO_DEPRECATED=0
+fi
+AC_SUBST(FRIBIDI_NO_DEPRECATED)
 
 # --enable-malloc
 AC_ARG_ENABLE(malloc,

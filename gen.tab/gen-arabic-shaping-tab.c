@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-arabic-shaping-tab.c - generate arabic-shaping.tab.i
  *
- * $Id: gen-arabic-shaping-tab.c,v 1.1 2005-11-03 01:39:01 behdad Exp $
+ * $Id: gen-arabic-shaping-tab.c,v 1.2 2006-01-31 03:23:12 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.1 $
+ * $Date: 2006-01-31 03:23:12 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-arabic-shaping-tab.c,v $
  *
  * Author:
@@ -36,7 +36,7 @@
 #include <fribidi-unicode.h>
 
 #include <stdio.h>
-#if STDC_HEADERS
+#if STDC_HEADERS+0
 # include <stdlib.h>
 # include <stddef.h>
 #else
@@ -44,13 +44,13 @@
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_STRING_H
+#if HAVE_STRING_H+0
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
 # endif
 # include <string.h>
 #endif
-#if HAVE_STRINGS_H
+#if HAVE_STRINGS_H+0
 # include <strings.h>
 #endif
 

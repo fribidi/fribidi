@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.19 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.20 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.19 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.20 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -112,7 +112,7 @@ compact_neutrals (
     }
 }
 
-#if DEBUG
+#if DEBUG+0
 /*======================================================================
  *  For debugging, define some functions for printing the types and the
  *  levels.

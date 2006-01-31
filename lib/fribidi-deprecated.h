@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-deprecated.h - Deprecated interfaces
  *
- * $Id: fribidi-deprecated.h,v 1.2 2006-01-14 12:09:29 behdad Exp $
+ * $Id: fribidi-deprecated.h,v 1.3 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-14 12:09:29 $
- * $Revision: 1.2 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.h,v $
  *
  * Author:
@@ -210,6 +210,30 @@ fribidi_remove_bidi_marks (
 )
      FRIBIDI_GNUC_WARN_UNUSED FRIBIDI_GNUC_DEPRECATED;
 
+
+#define UNI_MAX_BIDI_LEVEL	FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
+#define UNI_LRM			FRIBIDI_CHAR_LRM
+#define UNI_RLM			FRIBIDI_CHAR_RLM
+#define UNI_LRE			FRIBIDI_CHAR_LRE
+#define UNI_RLE			FRIBIDI_CHAR_RLE
+#define UNI_LRO			FRIBIDI_CHAR_LRO
+#define UNI_RLO			FRIBIDI_CHAR_RLO
+#define UNI_LS			FRIBIDI_CHAR_LS
+#define UNI_PS			FRIBIDI_CHAR_PS
+#define UNI_ZWNJ		FRIBIDI_CHAR_ZWNJ
+#define UNI_ZWJ			FRIBIDI_CHAR_ZWJ
+#define UNI_HEBREW_ALEF		FRIBIDI_CHAR_HEBREW_ALEF
+#define UNI_ARABIC_ALEF		FRIBIDI_CHAR_ARABIC_ALEF
+#define UNI_ARABIC_ZERO		FRIBIDI_CHAR_ARABIC_ZERO
+#define UNI_FARSI_ZERO		FRIBIDI_CHAR_PERSIAN_ZERO
+
+#define FRIBIDI_TYPE_WL		FRIBIDI_PAR_WLTR
+#define FRIBIDI_TYPE_WR		FRIBIDI_PAR_WRTL
+#define FRIBIDI_TYPE_L		FRIBIDI_PAR_LTR
+#define FRIBIDI_TYPE_R		FRIBIDI_PAR_RTL
+#define FRIBIDI_TYPE_N		FRIBIDI_PAR_ON
+#define FRIBIDI_TYPE_B		FRIBIDI_TYPE_BS
+#define FRIBIDI_TYPE_S		FRIBIDI_TYPE_SS
 
 #include "fribidi-enddecls.h"
 

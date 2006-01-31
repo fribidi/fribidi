@@ -1,10 +1,10 @@
 /* FriBidi
  * gen-mirroring-tab.c - generate mirroring.tab.i
  *
- * $Id: gen-mirroring-tab.c,v 1.13 2005-11-03 01:39:01 behdad Exp $
+ * $Id: gen-mirroring-tab.c,v 1.14 2006-01-31 03:23:12 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.13 $
+ * $Date: 2006-01-31 03:23:12 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-mirroring-tab.c,v $
  *
  * Author:
@@ -36,7 +36,7 @@
 #include <fribidi-unicode.h>
 
 #include <stdio.h>
-#if STDC_HEADERS
+#if STDC_HEADERS+0
 # include <stdlib.h>
 # include <stddef.h>
 #else
@@ -44,13 +44,13 @@
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_STRING_H
+#if HAVE_STRING_H+0
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
 # endif
 # include <string.h>
 #endif
-#if HAVE_STRINGS_H
+#if HAVE_STRINGS_H+0
 # include <strings.h>
 #endif
 

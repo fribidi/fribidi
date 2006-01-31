@@ -1,10 +1,10 @@
 /* FriBidi
  * debug.h - debug-only interfaces
  *
- * $Id: debug.h,v 1.9 2006-01-22 10:12:17 behdad Exp $
+ * $Id: debug.h,v 1.10 2006-01-31 03:23:12 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-22 10:12:17 $
- * $Revision: 1.9 $
+ * $Date: 2006-01-31 03:23:12 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/debug.h,v $
  *
  * Author:
@@ -39,7 +39,7 @@
 
 #include <fribidi-begindecls.h>
 
-#if DEBUG
+#if DEBUG+0
 
 /* These definitions should only be used in DEBUG mode: */
 #ifndef __LINE__

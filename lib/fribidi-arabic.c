@@ -21,10 +21,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-arabic.c,v 1.1 2005-11-03 01:39:01 behdad Exp $
+/* $Id: fribidi-arabic.c,v 1.2 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.1 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.2 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-arabic.c,v $
  *
  * Author(s):
@@ -33,7 +33,7 @@
 
 #include "common.h"
 
-#if HAVE_STDLIB_H
+#if HAVE_STDLIB_H+0
 # include <stdlib.h>
 #endif
 

@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.6 2005-09-04 16:57:09 behdad Exp $
+ * $Id: fribidi-benchmark.c,v 1.7 2006-01-31 03:23:12 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-09-04 16:57:09 $
- * $Revision: 1.6 $
+ * $Date: 2006-01-31 03:23:12 $
+ * $Revision: 1.7 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
  *
  * Authors:
@@ -38,7 +38,7 @@
 #include <fribidi.h>
 
 #include <stdio.h>
-#if STDC_HEADERS
+#if STDC_HEADERS+0
 # include <stdlib.h>
 # include <stddef.h>
 #else
@@ -46,16 +46,16 @@
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_STRING_H
+#if HAVE_STRING_H+0
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
 # endif
 # include <string.h>
 #endif
-#if HAVE_STRINGS_H
+#if HAVE_STRINGS_H+0
 # include <strings.h>
 #endif
-#if HAVE_SYS_TIMES_H
+#if HAVE_SYS_TIMES_H+0
 # include <sys/times.h>
 #endif
 
@@ -124,7 +124,7 @@ utime (
 )
 {
   struct tms tb;
-#if HAVE_SYS_TIMES_H
+#if HAVE_SYS_TIMES_H+0
   times (&tb);
   return 0.01 * tb.tms_utime;
 #else

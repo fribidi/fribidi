@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.c,v 1.5 2005-11-03 01:39:01 behdad Exp $
+ * $Id: fribidi-joining.c,v 1.6 2006-01-31 03:23:13 behdad Exp $
  * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.5 $
+ * $Date: 2006-01-31 03:23:13 $
+ * $Revision: 1.6 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.c,v $
  *
  * Authors:
@@ -39,7 +39,7 @@
 #include "bidi-types.h"
 #include "joining-types.h"
 
-#if DEBUG
+#if DEBUG+0
 /*======================================================================
  *  For debugging, define some functions for printing joining types and
  *  properties.
