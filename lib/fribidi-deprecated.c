@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-deprecated.c - deprecated interfaces.
  *
- * $Id: fribidi-deprecated.c,v 1.4 2006-01-31 03:23:13 behdad Exp $
+ * $Id: fribidi-deprecated.c,v 1.5 2006-06-01 22:52:29 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.4 $
+ * $Date: 2006-06-01 22:52:29 $
+ * $Revision: 1.5 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.c,v $
  *
  * Authors:
@@ -271,6 +271,8 @@ fribidi_log2vis (
 
       fribidi_shape (flags, embedding_levels, len, ar_props, visual_str);
     }
+
+  /* line breaking goes here, but we assume one line in this function */
 
   status =
     fribidi_reorder_line (flags, bidi_types, len, 0, *pbase_dir,
