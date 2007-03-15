@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.20 2006-01-31 03:23:13 behdad Exp $
+ * $Id: fribidi-bidi.c,v 1.21 2007-03-15 18:09:25 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.20 $
+ * $Date: 2007-03-15 18:09:25 $
+ * $Revision: 1.21 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
  *
  * Authors:
@@ -720,20 +720,24 @@ fribidi_get_par_embedding_levels (
 /* Reinsert the explicit codes & BN's that are already removed, from the
    explicits_list to main_run_list. */
   DBG ("reinserting explicit codes");
-  {
-    register FriBidiRun *p;
-    register fribidi_boolean stat =
-      shadow_run_list (main_run_list, explicits_list, true);
-    explicits_list = NULL;
-    if UNLIKELY
-      (!stat) goto out;
+  if UNLIKELY
+    (explicits_list->next != explicits_list)
+    {
+      register FriBidiRun *p;
+      register fribidi_boolean stat =
+	shadow_run_list (main_run_list, explicits_list, true);
+      explicits_list = NULL;
+      if UNLIKELY
+	(!stat) goto out;
 
-    p = main_run_list->next;
-    if (p != main_run_list && p->level == FRIBIDI_SENTINEL)
-      p->level = base_level;
-    for_run_list (p, main_run_list) if (p->level == FRIBIDI_SENTINEL)
-      p->level = p->prev->level;
-  }
+      /* Set level of inserted explicit chars to that of their previous
+       * char, such that they do not affect reordering. */
+      p = main_run_list->next;
+      if (p != main_run_list && p->level == FRIBIDI_SENTINEL)
+	p->level = base_level;
+      for_run_list (p, main_run_list) if (p->level == FRIBIDI_SENTINEL)
+	p->level = p->prev->level;
+    }
 
 # if DEBUG
   if UNLIKELY
