@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.12 2006-01-31 03:23:13 behdad Exp $
+ * $Id: fribidi-common.h,v 1.13 2007-04-05 16:13:24 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.12 $
+ * $Date: 2007-04-05 16:13:24 $
+ * $Revision: 1.13 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -53,7 +53,7 @@
 
 /* FRIBIDI_ENTRY is a macro used to declare library entry points. */
 #ifndef FRIBIDI_ENTRY
-# ifdef WIN32
+# if (defined(WIN32)) || (defined(_WIN32_WCE))
 #  define FRIBIDI_ENTRY __declspec(dllimport)
 # else /* !WIN32 */
 #  define FRIBIDI_ENTRY		/* empty */

@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.17 2006-01-31 03:23:12 behdad Exp $
+ * $Id: common.h,v 1.18 2007-04-05 16:13:24 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:12 $
- * $Revision: 1.17 $
+ * $Date: 2007-04-05 16:13:24 $
+ * $Revision: 1.18 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -43,7 +43,7 @@
 # define FRIBIDI_PRIVATESPACE(SYMBOL) FRIBIDI_NAMESPACE(_##SYMBOL##__internal__)
 #endif /* !FRIBIDI_PRIVATESPACE */
 
-#if WIN32+0
+#if (defined(WIN32)) || (defined(_WIN32_WCE))
 # define FRIBIDI_ENTRY __declspec(dllexport)
 #endif /* WIN32 */
 
