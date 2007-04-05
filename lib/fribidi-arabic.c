@@ -21,10 +21,10 @@
  * For licensing issues, contact <license@farsiweb.info> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-arabic.c,v 1.2 2006-01-31 03:23:13 behdad Exp $
+/* $Id: fribidi-arabic.c,v 1.3 2007-04-05 16:14:39 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.2 $
+ * $Date: 2007-04-05 16:14:39 $
+ * $Revision: 1.3 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-arabic.c,v $
  *
  * Author(s):
@@ -95,7 +95,10 @@ static FriBidiChar
 find_pair_match (const PairMap *table, int size, FriBidiChar first, FriBidiChar second)
 {
   PairMap *match;
-  PairMap x = {{first, second}, 0};
+  PairMap x;
+  x.pair[0] = first;
+  x.pair[1] = second;
+  x.to = 0;
   match = bsearch (&x, table, size, sizeof (table[0]), comp_PairMap);
   return match ? match->to : 0;
 }
