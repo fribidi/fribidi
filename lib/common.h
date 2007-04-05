@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.18 2007-04-05 16:13:24 behdad Exp $
+ * $Id: common.h,v 1.19 2007-04-05 16:14:14 behdad Exp $
  * $Author: behdad $
- * $Date: 2007-04-05 16:13:24 $
- * $Revision: 1.18 $
+ * $Date: 2007-04-05 16:14:14 $
+ * $Revision: 1.19 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -168,7 +168,7 @@
 #if HAVE_STRINGIZE+0
 # define STRINGIZE(symbol) #symbol
 #else /* !HAVE_STRINGIZE */
-# define STRINGIZE(symbol) "(no stringize operator available)"
+# define STRINGIZE(symbol) (no stringize operator available)
 #endif /* !HAVE_STRINGIZE */
 
 /* As per recommendation of GNU Coding Standards. */
