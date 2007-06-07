@@ -1,7 +1,17 @@
+Before release:
+
+* Use gtk-doc?
+
+* Implement fribidi_wcwidth()?
+
+* Port fribidi-main.c to new API.
+
+* help2man.
+
 Implementation issues:
 
 * Add API to get and pass on TypeLink*, to not allocate bidi levels.
-  Something like that.
+  Something like that.  Also the UTF-8 stuff from pango/mini-fribidi.
 
 * Explore vis2log.
 
