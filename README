@@ -33,7 +33,7 @@ Downloading
 
 The latest version of GNU FriBidi may be found at:
 
-   http://www.freedesktop.org/Software/FriBidi
+   http://fribidi.org/
 
 Building
 ========
@@ -151,4 +151,3 @@ And send your comments to:
 
 Behdad Esfahbod
 behdad@gnu.org
-10 April 2004

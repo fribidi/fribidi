@@ -1,8 +1,36 @@
-Overview of changes between 0.10.4 and 0.19.0
+Overview of changes between 0.10.9 and 0.19.1
 =============================================
-* Unicode 4.0.1 data files used.
-* Has been dubbed GNU FriBidi by Richard Stallman
-* Restructured.
+* This is the first release of the fribidi2 module in CVS, mostly
+  developed in 2004 and 2005.
+* Support for Arabic joining/shaping added.
+* API for correct handling of multi-line paragraphs added.
+* Restructured code base.
+* Supposed to be fully API/ABI compatible with 0.10 releases.
+  Please report if it is not.
+
+Overview of changes between 0.10.8 and 0.10.9
+=============================================
+* Minor bugfix.
+
+Overview of changes between 0.10.7 and 0.10.8
+=============================================
+* Update to Unicode Character Database 5.0.0
+
+Overview of changes between 0.10.6 and 0.10.7
+=============================================
+* Nothing really.  Just to fix my mess with 0.10.6 release (that never left
+  the door.)
+
+Overview of changes between 0.10.5 and 0.10.6
+=============================================
+* Fixed type sizes when stdint.h is not available.
+
+Overview of changes between 0.10.4 and 0.10.5
+=============================================
+* Unicode 4.1.0 character database used.
+* Fixed type sizes on 64-bit architectures.
+* We've become GNU FriBidi.  Note capitalization please.
+* We have moved to http://fribidi.org/, hosted on freedesktop.org.
 
 Overview of changes between 0.10.2 and 0.10.4
 =============================================
