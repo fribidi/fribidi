@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.25 2008-01-15 19:59:34 behdad Exp $
+## $Id: configure.ac,v 1.26 2008-01-15 22:53:06 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2008-01-15 19:59:34 $
-## $Revision: 1.25 $
+## $Date: 2008-01-15 22:53:06 $
+## $Revision: 1.26 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -17,7 +17,6 @@ dnl
 dnl Making releases:
 dnl   FRIBIDI_MICRO_VERSION++;
 dnl   FRIBIDI_INTERFACE_AGE++;
-dnl   FRIBIDI_RPM_RELEASE = 1;
 dnl
 dnl If any functions have been added:
 dnl   FRIBIDI_INTERFACE_AGE = 0;
@@ -27,16 +26,12 @@ dnl
 dnl If binary backwards compatibility has been broken:
 dnl   FRIBIDI_BINARY_AGE = FRIBIDI_INTERFACE_AGE = 0;
 dnl
-dnl Building RPMs:
-dnl   FRIBIDI_RPM_RELEASE++;
-dnl
 m4_define(fribidi_major_version, 0)dnl
 m4_define(fribidi_minor_version, 19)dnl
 m4_define(fribidi_micro_version, 0)dnl
 m4_define(fribidi_interface_version, 3)dnl
 m4_define(fribidi_interface_age, 3)dnl
 m4_define(fribidi_binary_age, 3)dnl
-m4_define(fribidi_rpm_release, 1)dnl
 dnl
 m4_define(fribidi_version,
 	  m4_if(m4_eval(fribidi_micro_version()),0,
@@ -44,7 +39,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://fribidi.org/bug])
-AC_REVISION([$Id: configure.ac,v 1.25 2008-01-15 19:59:34 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.26 2008-01-15 22:53:06 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
@@ -56,7 +51,6 @@ FRIBIDI_VERSION=fribidi_version()
 FRIBIDI_INTERFACE_VERSION=fribidi_interface_version()
 FRIBIDI_INTERFACE_AGE=fribidi_interface_age()
 FRIBIDI_BINARY_AGE=fribidi_binary_age()
-FRIBIDI_RPM_RELEASE=fribidi_rpm_release
 
 AC_SUBST(FRIBIDI_MAJOR_VERSION)
 AC_SUBST(FRIBIDI_MINOR_VERSION)
@@ -65,7 +59,6 @@ AC_SUBST(FRIBIDI_VERSION)
 AC_SUBST(FRIBIDI_INTERFACE_VERSION)
 AC_SUBST(FRIBIDI_INTERFACE_AGE)
 AC_SUBST(FRIBIDI_BINARY_AGE)
-AC_SUBST(FRIBIDI_RPM_RELEASE)
 
 dnl libtool versioning.
 m4_define(lt_current, fribidi_interface_version())dnl
