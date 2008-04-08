@@ -1,10 +1,10 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.19 2007-04-05 16:14:14 behdad Exp $
+ * $Id: common.h,v 1.20 2008-04-08 21:38:23 behdad Exp $
  * $Author: behdad $
- * $Date: 2007-04-05 16:14:14 $
- * $Revision: 1.19 $
+ * $Date: 2008-04-08 21:38:23 $
+ * $Revision: 1.20 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
  *
  * Author:
@@ -40,7 +40,9 @@
 
 /* FRIBIDI_PRIVATESPACE is a macro used to name library internal symbols. */
 #ifndef FRIBIDI_PRIVATESPACE
-# define FRIBIDI_PRIVATESPACE(SYMBOL) FRIBIDI_NAMESPACE(_##SYMBOL##__internal__)
+# define FRIBIDI_PRIVATESPACE1(A,B) A##B
+# define FRIBIDI_PRIVATESPACE0(A,B) FRIBIDI_PRIVATESPACE1(A,B)
+# define FRIBIDI_PRIVATESPACE(SYMBOL) FRIBIDI_PRIVATESPACE0(_,FRIBIDI_NAMESPACE(_##SYMBOL##__internal__))
 #endif /* !FRIBIDI_PRIVATESPACE */
 
 #if (defined(WIN32)) || (defined(_WIN32_WCE))
