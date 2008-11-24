@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-bidi-types.h - character bidi types
  *
- * $Id: fribidi-bidi-types.h,v 1.14 2006-01-31 03:23:13 behdad Exp $
+ * $Id: fribidi-bidi-types.h,v 1.15 2008-11-24 17:48:31 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.14 $
+ * $Date: 2008-11-24 17:48:31 $
+ * $Revision: 1.15 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types.h,v $
  *
  * Author:
@@ -274,7 +274,7 @@ typedef fribidi_uint32 FriBidiParType;
 /* Is explicit mark: LRE, RLE, LRO, RLO, PDF? */
 #define FRIBIDI_IS_EXPLICIT(p) ((p) & FRIBIDI_MASK_EXPLICIT)
 
-/* Is test separator: BS, SS? */
+/* Is text separator: BS, SS? */
 #define FRIBIDI_IS_SEPARATOR(p) ((p) & FRIBIDI_MASK_SEPARATOR)
 
 /* Is explicit override: LRO, RLO? */
