@@ -5,6 +5,7 @@
 #
 BiCon: http://www.arabeyes.org/project.php?proj=BiCon # a bidirectional terminal emulation layer
 mlterm: http://mlterm.sourceforge.net/ # a bidirectional terminal emulator
+AbsoluteTelnet: http://www.celestialsoftware.net/support/online-help/8-terminalfeatures/27-bidirectional-text-support-rtl # a terminal emulator
 #
 # text rendering systems:
 #
