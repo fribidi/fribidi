@@ -3,10 +3,10 @@
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
 ##############################################################################
-## $Id: configure.ac,v 1.27 2008-01-15 23:15:46 behdad Exp $
+## $Id: configure.ac,v 1.28 2009-03-26 22:37:29 behdad Exp $
 ## $Auther: behdad $
-## $Date: 2008-01-15 23:15:46 $
-## $Revision: 1.27 $
+## $Date: 2009-03-26 22:37:29 $
+## $Revision: 1.28 $
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
@@ -28,9 +28,9 @@ dnl   FRIBIDI_BINARY_AGE = FRIBIDI_INTERFACE_AGE = 0;
 dnl
 m4_define(fribidi_major_version, 0)dnl
 m4_define(fribidi_minor_version, 19)dnl
-m4_define(fribidi_micro_version, 1)dnl
+m4_define(fribidi_micro_version, 2)dnl
 m4_define(fribidi_interface_version, 3)dnl
-m4_define(fribidi_interface_age, 0)dnl
+m4_define(fribidi_interface_age, 1)dnl
 m4_define(fribidi_binary_age, 3)dnl
 dnl
 m4_define(fribidi_version,
@@ -39,7 +39,7 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
 AC_INIT([GNU FriBidi],fribidi_version(),[http://fribidi.org/bug])
-AC_REVISION([$Id: configure.ac,v 1.27 2008-01-15 23:15:46 behdad Exp $])
+AC_REVISION([$Id: configure.ac,v 1.28 2009-03-26 22:37:29 behdad Exp $])
 AC_CONFIG_SRCDIR(lib/fribidi.h)
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE([gnits])
