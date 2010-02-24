@@ -1,10 +1,10 @@
 /* FriBidi
  * fribidi-common.h - common include for library headers
  *
- * $Id: fribidi-common.h,v 1.13 2007-04-05 16:13:24 behdad Exp $
+ * $Id: fribidi-common.h,v 1.14 2010-02-24 19:40:04 behdad Exp $
  * $Author: behdad $
- * $Date: 2007-04-05 16:13:24 $
- * $Revision: 1.13 $
+ * $Date: 2010-02-24 19:40:04 $
+ * $Revision: 1.14 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-common.h,v $
  *
  * Author:
@@ -62,7 +62,7 @@
 
 #if FRIBIDI_USE_GLIB+0
 # ifndef __FRIBIDI_DOC
-#  include <glib/gmacros.h>
+#  include <glib.h>
 # endif	/* !__FRIBIDI_DOC */
 # define FRIBIDI_BEGIN_DECLS		G_BEGIN_DECLS
 # define FRIBIDI_END_DECLS		G_END_DECLS
