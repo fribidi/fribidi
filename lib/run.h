@@ -1,10 +1,10 @@
 /* FriBidi
  * run.h - text run data type
  *
- * $Id: run.h,v 1.9 2006-01-31 03:23:13 behdad Exp $
+ * $Id: run.h,v 1.10 2011-05-04 18:04:29 behdad Exp $
  * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.9 $
+ * $Date: 2011-05-04 18:04:29 $
+ * $Revision: 1.10 $
  * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/run.h,v $
  *
  * Authors:
@@ -51,8 +51,8 @@ struct _FriBidiRunStruct
   FriBidiRun *prev;
   FriBidiRun *next;
 
-  FriBidiCharType type;
   FriBidiStrIndex pos, len;
+  FriBidiCharType type;
   FriBidiLevel level;
 };
 
