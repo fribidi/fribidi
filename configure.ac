@@ -10,7 +10,7 @@
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
 ##############################################################################
 
-AC_PREREQ(2.56)
+AC_PREREQ([2.64])
 
 dnl Define different version variables.
 dnl
@@ -38,11 +38,21 @@ m4_define(fribidi_version,
 	    fribidi_major_version.fribidi_minor_version,
 	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
 
-AC_INIT([GNU FriBidi],fribidi_version(),[http://fribidi.org/bug])
-AC_REVISION([$Id: configure.ac,v 1.29 2011-01-21 22:49:59 behdad Exp $])
-AC_CONFIG_SRCDIR(lib/fribidi.h)
-AC_CONFIG_HEADERS(config.h)
-AM_INIT_AUTOMAKE([gnits])
+AC_INIT([GNU FriBidi],
+	fribidi_version(),
+        [http://bugs.freedesktop.org/enter_bug.cgi?product=fribidi],
+	[fribidi],
+	[http://fribidi.org/])
+
+AC_CONFIG_SRCDIR([fribidi.pc.in])
+AC_CONFIG_HEADERS([config.h])
+
+AM_INIT_AUTOMAKE([1.11.1 gnits dist-bzip2 no-dist-gzip -Wall no-define])
+AM_SILENT_RULES([yes])
+
+# Initialize libtool
+LT_PREREQ([2.2])
+LT_INIT([disable-static])
 
 FRIBIDI_MAJOR_VERSION=fribidi_major_version()
 FRIBIDI_MINOR_VERSION=fribidi_minor_version()
@@ -75,8 +85,6 @@ dnl ==========================================================================
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_INSTALL
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
 AC_MSG_CHECKING([for native Win32])
   case $build_os in
     mingw*) os_win32=yes ;;
