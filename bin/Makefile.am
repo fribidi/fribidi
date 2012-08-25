@@ -26,3 +26,5 @@ endif # !FRIBIDI_CHARSETS
 
 $(top_builddir)/lib/libfribidi.la:
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) libfribidi.la
+
+-include $(top_srcdir)/git.mk

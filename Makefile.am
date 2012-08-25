@@ -69,3 +69,5 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> "$(srcdir)/$@"); \
 	fi
 .PHONY: $(srcdir)/ChangeLog
+
+-include $(top_srcdir)/git.mk
