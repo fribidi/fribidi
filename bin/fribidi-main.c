@@ -134,7 +134,7 @@ help (
 	  "      --nopad           Do not right justify RTL lines\n"
 	  "      --nobreak         Do not break long lines\n"
 	  "  -w, --width W         Screen width for padding, default is %d, but if\n"
-	  "                        enviroment variable COLUMNS is defined, its value\n"
+	  "                        environment variable COLUMNS is defined, its value\n"
 	  "                        will be used, --width overrides both of them.\n",
 	  text_width);
   printf
