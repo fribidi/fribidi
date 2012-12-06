@@ -519,7 +519,7 @@ main (
 				  idx++;
 				}
 #endif /* !FRIBIDI_MAIN_USE_ICONV_H */
-			    if (wid < 0 && idx > st + 1)
+			    if (wid < 0 && idx - st > 1)
 			      idx--;
 			    inlen = idx - st;
 
