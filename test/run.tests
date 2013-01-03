@@ -36,7 +36,7 @@ if test -z "$VERBOSE"; then
    exec > /dev/null 2>&1
 fi
 
-if ! test -f "$top_builddir/bin/fribidi"; then
+if ! test -f "$top_builddir/bin/fribidi$EXEEXT"; then
   echo "run.tests: you must make fribidi first"
   exit 1
 fi
@@ -48,11 +48,11 @@ TEST () {
   charset="${testcase#*_}"
   charset="${charset%%_*}"
   echo -n "=== $test === "
-  if ! "$top_builddir/bin/fribidi" --charset "$charset" </dev/null >/dev/null 2>&1; then
+  if ! "$top_builddir/bin/fribidi$EXEEXT" --charset "$charset" </dev/null >/dev/null 2>&1; then
     echo " [Character set not supported]"
     return 0
   fi
-  "$top_builddir/bin/fribidi" --test --charset "$charset" "$testcase" > "$test.output"
+  "$top_builddir/bin/fribidi$EXEEXT" --test --charset "$charset" "$testcase" > "$test.output"
 
   reference="${testcase%.input}.reference";
   test -f "$reference" || reference="tests/${reference##*/}"

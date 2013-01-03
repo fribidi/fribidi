@@ -1,5 +1,5 @@
 
-TESTS_ENVIRONMENT = /bin/sh
+TESTS_ENVIRONMENT=srcdir=${srcdir} top_builddir=${top_builddir} EXEEXT=${EXEEXT} sh
 
 TESTS = run.tests
 
