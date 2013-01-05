@@ -546,6 +546,10 @@ fribidi_get_par_embedding_levels (
 	    pp = merge_with_prev (pp);
 	  else
 	    RL_TYPE (pp) = prev_type;
+	  if (prev_type == next_type && RL_LEVEL (pp) == RL_LEVEL (pp->next))
+	    {
+	      pp = merge_with_prev (pp->next);
+	    }
 	  continue;		/* As we know the next condition cannot be true. */
 	}
 
@@ -564,7 +568,7 @@ fribidi_get_par_embedding_levels (
 
     last_strong = base_dir;
     /* Resolving dependency of loops for rules W4 and W5, W5 may
-       want to prevent W4 to take effect in the next turn, do this 
+       want to prevent W4 to take effect in the next turn, do this
        through "w4". */
     w4 = true;
     /* Resolving dependency of loops for rules W4 and W5 with W7,
