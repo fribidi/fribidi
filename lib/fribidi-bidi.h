@@ -43,7 +43,7 @@
 
 #include "fribidi-begindecls.h"
 
-#define fribidi_get_par_embedding_levels FRIBIDI_NAMESPACE(get_par_embedding_levels)
+#define fribidi_get_par_direction FRIBIDI_NAMESPACE(get_par_direction)
 /* fribidi_get_par_direction - get base paragraph direction
  *
  * This function finds the base direction of a single paragraph,
