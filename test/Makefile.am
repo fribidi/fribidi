@@ -1,5 +1,10 @@
 
-TESTS_ENVIRONMENT=srcdir=${srcdir} top_builddir=${top_builddir} EXEEXT=${EXEEXT} sh
+TESTS_ENVIRONMENT = \
+	srcdir=${srcdir}; export srcdir; \
+	top_builddir=${top_builddir}; export top_builddir; \
+	EXEEXT=${EXEEXT}; export EXEEXT;
+
+AM_TESTS_ENVIRONMENT = $(TESTS_ENVIRONMENT)
 
 TESTS = run.tests
 
