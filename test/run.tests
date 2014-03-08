@@ -18,7 +18,7 @@
 # Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA
 # 
-# For licensing issues, contact <dov@imagic.weizmann.ac.il> and
+# For licensing issues, contact <dov.grobgeld@gmail.com> and
 # <fwpg@sharif.edu>.
 
 if test -z "$top_builddir"; then
