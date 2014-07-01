@@ -152,14 +152,8 @@ else
 fi
 AC_SUBST(FRIBIDI_NO_DEPRECATED)
 
-# --enable-malloc
-AC_ARG_ENABLE(malloc,
-              AC_HELP_STRING([--enable-malloc],
-                             [use simple malloc instead of memory chunks]))
-if test x$enable_malloc = xyes; then
-	AC_DEFINE(USE_SIMPLE_MALLOC,1,
-                  [Define to 1 if you want to use simple mallocs instead of memory chunks])
-fi
+AC_DEFINE(USE_SIMPLE_MALLOC,1,
+	  [Define to 1 if you want to use simple mallocs instead of memory chunks])
 
 # --disable-charsets
 AC_ARG_ENABLE(charsets,
