@@ -65,13 +65,22 @@ fribidi_utf8_to_unicode (
 	  *us++ = ((*s & 0x1f) << 6) + (*(s + 1) & 0x3f);
 	  s += 2;
 	}
-      else			/* 3 byte */
+      else if (ch <= 0xef)	/* 3 byte */
 	{
 	  *us++ =
 	    ((int) (*s & 0x0f) << 12) +
 	    ((*(s + 1) & 0x3f) << 6) + (*(s + 2) & 0x3f);
 	  s += 3;
 	}
+      else                     /* 4 byte */
+      {
+	  *us++ =
+	    ((int) (*s & 0x07) << 18) +
+	    ((*(s + 1) & 0x3f) << 12) +
+	    ((*(s + 2) & 0x3f) << 6) +
+	    ((*(s + 3) & 0x3f) << 0);
+	  s += 4;
+      }
       length++;
     }
   return (length);
