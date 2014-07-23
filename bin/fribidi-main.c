@@ -609,7 +609,7 @@ main (
 	    }
 
 	    if (*nl_found)
-	      printf (new_line);
+	      printf ("%s", new_line);
 	  }
       }
     }
