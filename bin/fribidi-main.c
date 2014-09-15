@@ -92,6 +92,7 @@ die2 (
 fribidi_boolean do_break, do_pad, do_mirror, do_reorder_nsm, do_clean;
 fribidi_boolean show_input, show_visual, show_basedir;
 fribidi_boolean show_ltov, show_vtol, show_levels;
+const int default_text_width = 80;
 int text_width;
 const char *char_set;
 const char *bol_text, *eol_text;
@@ -119,7 +120,8 @@ help (
   printf ("  -d, --debug           Output debug information\n"
 	  "  -t, --test            Test " FRIBIDI_NAME
 	  ", same as --clean --nobreak\n"
-	  "                        --showinput --reordernsm\n");
+	  "                        --showinput --reordernsm --width %d\n",
+	  default_text_width);
 #if FRIBIDI_MAIN_USE_ICONV_H+0
   printf ("  -c, --charset CS      Specify character set, default is %s.\n"
 	  "                        CS should be a valid iconv character set name\n",
@@ -136,7 +138,7 @@ help (
 	  "  -w, --width W         Screen width for padding, default is %d, but if\n"
 	  "                        environment variable COLUMNS is defined, its value\n"
 	  "                        will be used, --width overrides both of them.\n",
-	  text_width);
+	  default_text_width);
   printf
     ("  -B, --bol BOL         Output string BOL before the visual string\n"
      "  -E, --eol EOL         Output string EOL after the visual string\n"
@@ -215,7 +217,7 @@ main (
   char *s;
   FILE *IN;
 
-  text_width = 80;
+  text_width = default_text_width;
   do_break = true;
   do_pad = true;
   do_mirror = true;
@@ -324,6 +326,7 @@ main (
 	case 't':
 	  do_clean = show_input = do_reorder_nsm = true;
 	  do_break = false;
+	  text_width = default_text_width;
 	  break;
 	case 'c':
 	  char_set = my_fribidi_strdup (optarg);
