@@ -42,7 +42,7 @@
 #if FRIBIDI_USE_GLIB+0
 
 #ifndef __FRIBIDI_DOC
-# include <glib/gmem.h>
+# include <glib.h>
 #endif /* !__FRIBIDI_DOC */
 
 #define FriBidiMemChunk GMemChunk
