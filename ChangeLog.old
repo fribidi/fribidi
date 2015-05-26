@@ -522,7 +522,7 @@
 	* CreateGetType.pl: changed to use BidiMirroring.txt instead
 	of UnicodeData.txt.
 
-2000-11-12  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-11-12  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released fribidi-0.1.15.
 	* fribidi.c: [OZ] Applied Owen Taylor's patch from 2000-07-19 to
 	fribidi.c.  The patch affects pp->prev rules for the last element
@@ -552,7 +552,7 @@
 	detailed above.
 	
 
-2000-10-14  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-10-14  Dov Grobgeld  <dov.grobgeld@gmail.com>
 
 	* Released fribidi-0.1.14.
 
@@ -563,14 +563,14 @@
 
 	* fribidi_char_sets.c: Cleaned up the mess and made it compile!
 
-2000-10-09  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-10-09  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released fribidi-0.1.13 .
 	* acinclude.m4: Added file including a m4 macro for glib-2.0
 	as suggested by Owen Taylor.
 	* Makefile.am: Added acinclude.m4 to extra sources.
 	* configure.in: Changed it to use new macro.
 
-2000-05-19  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-05-19  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* fribidi_char_sets.c: Added support for the LRM and RLM 
 	characters for the iso-8859-8 converts at unused positions 
 	0xFE and 0xFF . 
@@ -591,37 +591,37 @@
  	links in the character properties linked list in order to minimize
  	mallocs.
 
-2000-05-02  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-05-02  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released fribidi-0.1.11 .
 	* Fixed one remaining bug in Makefile.am.
 
-2000-04-27  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-04-27  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released fribidi-0.1.10 .
 	* Added libtool configuration added by Manish Singh.
 	* Added sevaral arabic charset converts contributed by Pablo
  	Saratxaga.
 
-2000-03-20  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-03-20  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released fribidi-0.1.9 .
 
-2000-02-22  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-02-22  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* fribidi_types.h: Changed basic type FriBidiChar to guint32
 	  which corresponds to UCS4, which is more reasonable to use.
 
-2000-02-21  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-02-21  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* tests/test-capital-rtl: Added new tests to check percentage
 	  signs and updated tests.reference to reflect this.
 	* fribidi.c(fribidi_analyse_string): Added the rule 
 	  EN,ET=>EN,EN which takes care of the problem of percentage
 	  signs were put in the wrong place.
 
-2000-02-20  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-02-20  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* fribidi.c: Fixed several memory leaks found by Owen Taylor.
 
-2000-01-01  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+2000-01-01  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added documentation of the utility functions to fribidi.h .
 
-1999-12-24  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-12-24  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added new function fribidi_is_char_rtl() that uses the 
 	embedding levels or the base dir to determine the resolved
 	direction of a character.
@@ -630,10 +630,10 @@
 	to the proper logical and visual positions.
 	
 
-1999-12-21  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-12-21  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added patches for UTF8 support contributed by raphael@cs.uky.edu.
 
-1999-12-05  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-12-05  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added two new types FRIBIDI_TYPE_WL and FRIBIDI_TYPE_WR that
 	indicate weak directions. These directions are used if no strong
 	direction is found in the string.
@@ -641,15 +641,15 @@
 	the base direction cannot be determined. It is then up to a higher
 	level protocol to determine the base direction.
 
-1999-11-22  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-11-22  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released version 0.1.7.
 	* Added arabic support contributed by Pablo Saratxaga.
 
-1999-06-20  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-06-20  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Created file fribidi_utils.c which will be used for common 
 	  patterns that are common in Bidi supported programs.
 
-1999-04-28  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-04-28  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Fixed bug in fribidi_log2vis which occured if only the v2l
 	  array was requested and not the l2v array.
 	* Fixed bug in test_fribidi when using option test_vtol .
@@ -657,15 +657,15 @@
 	  conservative. 
 	* Added single character translation functions to fribidi_char_sets.
 
-1999-04-10  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-04-10  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Changed building to use glib-config as glib-1.2 is now released.
 	* Added some short cut optimizations.
 	* Cleaned up the TYPE_RULE_C macro and used in in lots of places.
 
-1999-02-09  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-02-09  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added ./ to the execution of test_fribidi in run.tests.
 
-1999-02-08  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-02-08  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released 0.1.3 to match the perl module FriBidi.
 	* Added length paramater to fribidi_unicode_to_iso8859_8().
 	* Fixed bug in fribidi.c related to zero length strings.
@@ -682,15 +682,15 @@
 	* Added function fribidi_find_string_changes() which finds the
 	  bounding box of the changes between two FriBidiStrings.
 
-1999-01-19  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-01-19  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added the option -bol to fribidi_main.c to print out stuff
 	  in the beginning of a line.
 
-1999-01-14  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-01-14  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released version 0.1.1
 	* Added program fribidi as a command line interface to the library.
 
-1999-01-13  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-01-13  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Added flag -nopad to test_fribidi to make it not insert spaces.
 	* Make P1 rules (ES and CS) work only if the span of the ES or
 	  the CS is 1. This is the same as in Hebrew Windoze.
@@ -699,5 +699,5 @@
 	* Made test_fribidi read from stdin if no file given.
 	* Added options -outputonly to test_fribidi.
 
-1999-01-11  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
+1999-01-11  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* First Release!
