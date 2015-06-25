@@ -1,0 +1,43 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Define to 1 if you want to include debug code in the library */
+#cmakedefine01 DEBUG
+
+/* Define to 1 if you have the <asm/page.h> header file. */
+#cmakedefine01 HAVE_ASM_PAGE_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#cmakedefine01 HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#cmakedefine01 HAVE_MEMORY_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#cmakedefine01 HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#cmakedefine01 HAVE_STDLIB_H
+
+/* Define to 1 if cpp supports the ANSI # stringizing operator. */
+#cmakedefine01 HAVE_STRINGIZE
+
+/* Define to 1 if you have the <strings.h> header file. */
+#cmakedefine01 HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#cmakedefine01 HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/times.h> header file. */
+#cmakedefine01 HAVE_SYS_TIMES_H
+
+/* The size of `int', as computed by sizeof. */
+#cmakedefine01 SIZEOF_INT
+
+/* The size of `wchar_t', as computed by sizeof. */
+#cmakedefine01 SIZEOF_WCHAR_T
+
+/* Define to 1 if you have the ANSI C header files. */
+#cmakedefine01 STDC_HEADERS
+
+/* Define to 1 if you want to use simple mallocs instead of memory chunks */
+#cmakedefine01 USE_SIMPLE_MALLOC
