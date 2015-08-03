@@ -27,12 +27,10 @@ set(depends
     ${CMAKE_CURRENT_SOURCE_DIR}/unidata/UnicodeData.txt)
 add_custom_command(
     OUTPUT ${output}
-    COMMAND ${CMAKE_COMMAND}
-        -DOUTPUT_FILE=${output}
-        -P ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ExecuteProcessWrapper.cmake
-        $<TARGET_FILE:gen-bidi-type-tab>
+    COMMAND gen-bidi-type-tab 
         ${COMPRESSION}
         ${depends}
+        > ${output}
     DEPENDS ${depends}
     COMMENT "Generate bidi-type.tab.i"
     VERBATIM
@@ -46,12 +44,10 @@ set(depends
     ${CMAKE_CURRENT_SOURCE_DIR}/unidata/ArabicShaping.txt)
 add_custom_command(
     OUTPUT ${output}
-    COMMAND ${CMAKE_COMMAND}
-        -DOUTPUT_FILE=${output}
-        -P ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ExecuteProcessWrapper.cmake
-        $<TARGET_FILE:gen-joining-type-tab>
+    COMMAND gen-joining-type-tab
         ${COMPRESSION}
         ${depends}
+        > ${output}
     DEPENDS ${depends}
     COMMENT "Generate joining-type.tab.i"
     VERBATIM
@@ -64,12 +60,10 @@ set(depends
     ${CMAKE_CURRENT_SOURCE_DIR}/unidata/UnicodeData.txt)
 add_custom_command(
     OUTPUT ${output}
-    COMMAND ${CMAKE_COMMAND}
-        -DOUTPUT_FILE=${output}
-        -P ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ExecuteProcessWrapper.cmake
-        $<TARGET_FILE:gen-arabic-shaping-tab>
+    COMMAND gen-arabic-shaping-tab
         ${COMPRESSION}
         ${depends}
+        > ${output}
     DEPENDS ${depends}
     COMMENT "Generate arabic-shaping.tab.i"
     VERBATIM
@@ -82,12 +76,10 @@ set(depends
     ${CMAKE_CURRENT_SOURCE_DIR}/unidata/BidiMirroring.txt)
 add_custom_command(
     OUTPUT ${output}
-    COMMAND ${CMAKE_COMMAND}
-        -DOUTPUT_FILE=${output}
-        -P ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ExecuteProcessWrapper.cmake
-        $<TARGET_FILE:gen-mirroring-tab>
+    COMMAND gen-mirroring-tab
         ${COMPRESSION}
         ${depends}
+        > ${output}
     DEPENDS ${depends}
     COMMENT "Generate mirroring.tab.i"
     VERBATIM
@@ -101,11 +93,9 @@ set(depends
     ${CMAKE_CURRENT_SOURCE_DIR}/unidata/BidiMirroring.txt)
 add_custom_command(
     OUTPUT ${output}
-    COMMAND ${CMAKE_COMMAND}
-        -DOUTPUT_FILE=${output}
-        -P ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/ExecuteProcessWrapper.cmake
-        $<TARGET_FILE:gen-unicode-version>
+    COMMAND gen-unicode-version
         ${depends}
+        > ${output}
     DEPENDS ${depends}
     COMMENT "Running gen.tabs custom command to generate fribidi-unicode-version.h"
     VERBATIM
