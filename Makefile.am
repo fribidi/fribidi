@@ -8,6 +8,8 @@
 ## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
 ##############################################################################
 
+ACLOCAL_AMFLAGS = -I m4
+
 ## The order of subdirs is important, don't change without a reason.
 SUBDIRS = gen.tab charset lib bin doc test
 
