@@ -452,7 +452,6 @@ FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 	      FriBidiChar *visual;
 	      FriBidiStrIndex *ltov, *vtol;
 	      FriBidiLevel *levels;
-	      FriBidiStrIndex new_len;
 	      fribidi_boolean log2vis;
 
 	      visual = show_visual ? ALLOCATE (FriBidiChar,
@@ -481,8 +480,6 @@ FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 		  if (show_input)
 		    printf ("%-*s => ", padding_width, S_);
 
-		  new_len = len;
-
 		  /* Remove explicit marks, if asked for. */
 		  if (do_clean)
 FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -503,7 +500,7 @@ FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 			FriBidiStrIndex idx, st;
 			for (idx = 0; idx < len;)
 			  {
-			    FriBidiStrIndex wid, inlen;
+			    FriBidiStrIndex wid;
 
 			    wid = break_width;
 			    st = idx;
@@ -530,24 +527,17 @@ FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 #endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 			    if (wid < 0 && idx - st > 1)
 			      idx--;
-			    inlen = idx - st;
 
 #if FRIBIDI_MAIN_USE_ICONV_H+0
 			    {
 			      char *str = outstring, *ust =
 				(char *) (visual + st);
-			      int in_len = inlen * sizeof visual[0];
-			      new_len = sizeof outstring;
+			      int in_len = (idx - st) * sizeof visual[0];
+			      FriBidiStrIndex new_len = sizeof outstring;
 			      iconv (from_ucs4, &ust, &in_len, &str,
 				     (int *) &new_len);
 			      *str = '\0';
-			      new_len = str - outstring;
 			    }
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
-			    new_len =
-			      fribidi_unicode_to_charset (char_set_num,
-							  visual + st, inlen,
-							  outstring);
 #endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 			    if (FRIBIDI_IS_RTL (base))
 			      printf ("%*s",
