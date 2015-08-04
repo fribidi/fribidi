@@ -376,8 +376,10 @@ main (
 #endif /* !FRIBIDI_MAIN_USE_ICONV_H */
     die2 ("unrecognized character set `%s'\n", char_set);
 
+FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
   fribidi_set_mirroring (do_mirror);
   fribidi_set_reorder_nsm (do_reorder_nsm);
+FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
   exit_val = 0;
   file_found = false;
   while (optind < argc || !file_found)
@@ -468,9 +470,11 @@ main (
 
 	      /* Create a bidi string. */
 	      base = input_base_direction;
+FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	      log2vis = fribidi_log2vis (logical, len, &base,
 					 /* output */
 					 visual, ltov, vtol, levels);
+FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 	      if (log2vis)
 		{
 
@@ -481,9 +485,11 @@ main (
 
 		  /* Remove explicit marks, if asked for. */
 		  if (do_clean)
+FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 		    len =
 		      fribidi_remove_bidi_marks (visual, len, ltov, vtol,
 						 levels);
+FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 
 		  if (show_visual)
 		    {
