@@ -993,6 +993,118 @@ out:
   return status ? max_level + 1 : 0;
 }
 
+
+static void
+reverse_run (
+  FriBidiRun *arr,
+  const FriBidiStrIndex len
+)
+{
+  FriBidiStrIndex i;
+
+  fribidi_assert (arr);
+
+  for (i = 0; i < len/2; i++)
+    {
+      FriBidiRun temp = arr[i];
+      arr[i] = arr[len - 1 - i];
+      arr[len - 1 - i] = temp;
+    }
+}
+
+FRIBIDI_ENTRY FriBidiStrIndex
+fribidi_reorder_runs (
+  /* input */
+  const FriBidiCharType *bidi_types,
+  const FriBidiStrIndex len,
+  const FriBidiParType base_dir,
+  /* input and output */
+  FriBidiLevel *embedding_levels,
+  /* output */
+  FriBidiRun *runs
+)
+{
+  FriBidiStrIndex i;
+  FriBidiLevel level;
+  FriBidiLevel last_level = -1;
+  FriBidiLevel max_level = 0;
+  FriBidiStrIndex run_count = 0;
+  FriBidiStrIndex run_start = 0;
+  FriBidiStrIndex run_index = 0;
+
+  if UNLIKELY
+    (len == 0)
+    {
+      goto out;
+    }
+
+  DBG ("in fribidi_reorder_runs");
+
+  fribidi_assert (bidi_types);
+  fribidi_assert (embedding_levels);
+
+  DBG ("reset the embedding levels, 4. whitespace at the end of line");
+  {
+    FriBidiStrIndex i;
+
+    /* L1. Reset the embedding levels of some chars:
+       4. any sequence of white space characters at the end of the line. */
+    for (i = len - 1; i >= 0 &&
+         FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (bidi_types[i]); i--)
+      embedding_levels[i] = FRIBIDI_DIR_TO_LEVEL (base_dir);
+  }
+  /* Find max_level of the line.  We don't reuse the paragraph
+   * max_level, both for a cleaner API, and that the line max_level
+   * may be far less than paragraph max_level. */
+  for (i = len - 1; i >= 0; i--)
+    if (embedding_levels[i] > max_level)
+       max_level = embedding_levels[i];
+
+  for (i = 0; i < len; i++)
+    {
+      if (embedding_levels[i] != last_level)
+        run_count++;
+
+      last_level = embedding_levels[i];
+    }
+
+  if (runs == NULL)
+    goto out;
+
+  while (run_start < len)
+    {
+      int runLength = 0;
+      while ((run_start + runLength) < len && embedding_levels[run_start] == embedding_levels[run_start + runLength])
+        runLength++;
+
+      runs[run_index].pos = run_start;
+      runs[run_index].level = embedding_levels[run_start];
+      runs[run_index].len = runLength;
+      run_start += runLength;
+      run_index++;
+    }
+
+  /* L2. Reorder. */
+  for (level = max_level; level > 0; level--)
+    {
+      for (i = run_count - 1; i >= 0; i--)
+        {
+          if (runs[i].level >= level)
+            {
+              int end = i;
+              for (i--; (i >= 0 && runs[i].level >= level); i--)
+                ;
+              reverse_run (runs + i + 1, end - i);
+            }
+        }
+    }
+
+out:
+
+  return run_count;
+}
+
+
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
  */

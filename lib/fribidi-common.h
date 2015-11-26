@@ -99,6 +99,7 @@
 
 
 
+#include <fribidi-bidi-types.h>
 
 #define fribidi_debug_status FRIBIDI_NAMESPACE(debug_status)
 FRIBIDI_ENTRY int fribidi_debug_status (
@@ -112,11 +113,16 @@ fribidi_set_debug (
 
 
 
+typedef struct _FriBidiRunStruct FriBidiRun;
 
-
-
-
-
+struct _FriBidiRunStruct
+{
+  FriBidiRun *prev;
+  FriBidiRun *next;
+  FriBidiStrIndex pos, len;
+  FriBidiCharType type;
+  FriBidiLevel level;
+};
 
 
 
