@@ -141,6 +141,35 @@ fribidi_get_par_embedding_levels (
 				 * to reflect where each glyph ends up. */
 ) FRIBIDI_GNUC_WARN_UNUSED;
 
+#define fribidi_reorder_runs FRIBIDI_NAMESPACE(reorder_runs)
+/* fribidi_reorder_runs - reorder runs of logical string to visual
+ *
+ * This function reorders all runs from logical to final visual order.  This
+ * function implements part 4 of rule L1 and rule L2 of the Unicode
+ * Bidirectional Algorithm available at
+ * http://www.unicode.org/reports/tr9/#Reordering_Resolved_Levels.
+ *
+ * You should provide the bidi types as returned by fribidi_get_bidi_types()
+ * and the resolved embedding levels as set by
+ * fribidi_get_par_embedding_levels().  Also note that the embedding levels may
+ * change a bit.  To be exact, the embedding level of any sequence of white
+ * space at the end of line is reset to the paragraph embedding level (That is
+ * part 4 of rule L1).
+ *
+ * The runs array can be NULL and in this case no reordring will happen, only
+ * the count of the runs will be returned.
+ *
+ * Returns: number of the runs.
+ */
+FRIBIDI_ENTRY FriBidiStrIndex
+fribidi_reorder_runs (
+  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by fribidi_get_bidi_types() */
+  const FriBidiStrIndex len,	/* input length of the line */
+  const FriBidiParType base_dir,	/* resolved paragraph base direction */
+  FriBidiLevel *embedding_levels,	/* input list of embedding levels, as returned by fribidi_get_par_embedding_levels */
+  FriBidiRun *runs	/*  Fribidi run information ( pos of run, the length of the run ,level of the run) */
+) FRIBIDI_GNUC_WARN_UNUSED;
+
 #include "fribidi-enddecls.h"
 
 #endif /* !_FRIBIDI_BIDI_H */
