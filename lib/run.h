@@ -53,11 +53,6 @@ new_run (
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
 
-#define free_run FRIBIDI_PRIVATESPACE(free_run)
-     void free_run (
-  FriBidiRun *run
-) FRIBIDI_GNUC_HIDDEN;
-
 #define new_run_list FRIBIDI_PRIVATESPACE(new_run_list)
      FriBidiRun *new_run_list (
   void

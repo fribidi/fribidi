@@ -58,16 +58,6 @@ new_run (
   return run;
 }
 
-void
-free_run (
-  /* input */
-  FriBidiRun *run
-)
-{
-  fribidi_assert (run);
-  fribidi_free (run);
-}
-
 FriBidiRun *
 new_run_list (
   void
@@ -112,7 +102,7 @@ free_run_list (
 
 	p = pp;
 	pp = pp->next;
-	free_run (p);
+	fribidi_free (p);
       };
   }
 }
@@ -254,7 +244,7 @@ shadow_run_list (
 	      {
 		t = p;
 		p = p->prev;
-		free_run (t);
+		fribidi_free (t);
 	      }
 	  }
       }
@@ -286,7 +276,7 @@ shadow_run_list (
 	  {
 	    t = s;
 	    s = s->next;
-	    free_run (t);
+	    fribidi_free (t);
 	  }
       }
     /* before updating the next and prev runs to point to the inserted q,
