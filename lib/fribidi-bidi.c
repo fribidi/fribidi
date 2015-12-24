@@ -39,7 +39,6 @@
 #include <fribidi-mirroring.h>
 #include <fribidi-unicode.h>
 
-#include "mem.h"
 #include "bidi-types.h"
 #include "run.h"
 
