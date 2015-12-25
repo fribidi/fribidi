@@ -38,13 +38,7 @@
 #include <fribidi-bidi-types.h>
 
 #include "run.h"
-#include "mem.h"
 #include "bidi-types.h"
-
-#if USE_SIMPLE_MALLOC+0
-#else
-static FriBidiRun *free_runs = NULL;
-#endif
 
 FriBidiRun *
 new_run (
@@ -53,29 +47,7 @@ new_run (
 {
   register FriBidiRun *run;
 
-#if USE_SIMPLE_MALLOC+0
   run = fribidi_malloc (sizeof (FriBidiRun));
-#else /* !USE_SIMPLE_MALLOC */
-  if (free_runs)
-    {
-      run = free_runs;
-      free_runs = run->next;
-    }
-  else
-    {
-      static FriBidiMemChunk *run_mem_chunk = NULL;
-
-      if UNLIKELY
-	(!run_mem_chunk)
-	 run_mem_chunk = fribidi_chunk_new_for_type (FriBidiRun);
-
-      if LIKELY
-	(run_mem_chunk)
-	run = fribidi_chunk_new (FriBidiRun, run_mem_chunk);
-      else
-	run = NULL;
-    }
-#endif /* !USE_SIMPLE_MALLOC */
 
   if LIKELY
     (run)
@@ -84,21 +56,6 @@ new_run (
       run->next = run->prev = NULL;
     }
   return run;
-}
-
-void
-free_run (
-  /* input */
-  FriBidiRun *run
-)
-{
-  fribidi_assert (run);
-#if USE_SIMPLE_MALLOC+0
-  fribidi_free (run);
-#else /* !USE_SIMPLE_MALLOC */
-  run->next = free_runs;
-  free_runs = run;
-#endif /* !USE_SIMPLE_MALLOC */
 }
 
 FriBidiRun *
@@ -133,7 +90,6 @@ free_run_list (
 
   fribidi_validate_run_list (run_list);
 
-#if USE_SIMPLE_MALLOC+0
   {
     register FriBidiRun *pp;
 
@@ -146,13 +102,9 @@ free_run_list (
 
 	p = pp;
 	pp = pp->next;
-	free_run (p);
+	fribidi_free (p);
       };
   }
-#else /* !USE_SIMPLE_MALLOC */
-  run_list->prev->next = free_runs;
-  free_runs = run_list;
-#endif /* !USE_SIMPLE_MALLOC */
 }
 
 
@@ -292,7 +244,7 @@ shadow_run_list (
 	      {
 		t = p;
 		p = p->prev;
-		free_run (t);
+		fribidi_free (t);
 	      }
 	  }
       }
@@ -324,7 +276,7 @@ shadow_run_list (
 	  {
 	    t = s;
 	    s = s->next;
-	    free_run (t);
+	    fribidi_free (t);
 	  }
       }
     /* before updating the next and prev runs to point to the inserted q,

@@ -43,13 +43,11 @@ libfribidi_la_SOURCES =	\
 		fribidi-deprecated.c \
 		fribidi-joining.c \
 		fribidi-joining-types.c \
-		fribidi-mem.c \
 		fribidi-mirroring.c \
 		fribidi-run.c \
 		fribidi-shape.c \
 		joining-type.tab.i \
 		joining-types.h \
-		mem.h \
 		mirroring.tab.i \
 		run.h
 

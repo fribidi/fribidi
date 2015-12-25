@@ -35,7 +35,6 @@
 
 #include <fribidi-joining.h>
 
-#include "mem.h"
 #include "bidi-types.h"
 #include "joining-types.h"
 

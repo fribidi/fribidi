@@ -78,9 +78,6 @@ const char *fribidi_version_info =
 #if DEBUG+0
   " --enable-debug"
 #endif /* DEBUG */
-#if USE_SIMPLE_MALLOC+0
-  " --enable-malloc"
-#endif /* USE_SIMPLE_MALLOC */
 #if FRIBIDI_CHARSETS+0
 #else
   " --disable-charsets"

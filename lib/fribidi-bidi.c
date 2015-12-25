@@ -39,7 +39,6 @@
 #include <fribidi-mirroring.h>
 #include <fribidi-unicode.h>
 
-#include "mem.h"
 #include "bidi-types.h"
 #include "run.h"
 
@@ -72,7 +71,7 @@ merge_with_prev (
   first->next = second->next;
   first->next->prev = first;
   RL_LEN (first) += RL_LEN (second);
-  free_run (second);
+  fribidi_free (second);
   return first;
 }
 

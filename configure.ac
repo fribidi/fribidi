@@ -155,9 +155,6 @@ else
 fi
 AC_SUBST(FRIBIDI_NO_DEPRECATED)
 
-AC_DEFINE(USE_SIMPLE_MALLOC,1,
-	  [Define to 1 if you want to use simple mallocs instead of memory chunks])
-
 # --disable-charsets
 AC_ARG_ENABLE(charsets,
               AC_HELP_STRING([--disable-charsets],
