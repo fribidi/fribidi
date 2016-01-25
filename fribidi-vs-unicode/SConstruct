@@ -1,0 +1,15 @@
+env = Environment(CPPFLAGS=['-Wall','-g'])
+env.ParseConfig('pkg-config --cflags --libs glib-2.0')
+
+env.Append(CPPPATH = ['../lib',
+                      '../charset'],
+           LIBPATH = ['../lib/.libs'],
+           LIBS=['fribidi'])
+
+env.Program('test',
+            ['test.c'],
+            )
+
+env.Program('test-character',
+            ['test-character.c'],
+            )
