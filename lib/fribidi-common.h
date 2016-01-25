@@ -122,6 +122,7 @@ struct _FriBidiRunStruct
   FriBidiStrIndex pos, len;
   FriBidiCharType type;
   FriBidiLevel level;
+  FriBidiLevel isolate_level;
 };
 
 

@@ -61,6 +61,10 @@ _FRIBIDI_ADD_TYPE (RLE, '+')	/* Right-to-Left Embedding */
 _FRIBIDI_ADD_TYPE (LRO, '+')	/* Left-to-Right Override */
 _FRIBIDI_ADD_TYPE (RLO, '+')	/* Right-to-Left Override */
 _FRIBIDI_ADD_TYPE (PDF, '-')	/* Pop Directional Flag */
+_FRIBIDI_ADD_TYPE (LRI, '+')	/* Left-to-Right Isolate */
+_FRIBIDI_ADD_TYPE (RLI, '+')	/* Right-to-Left Isolate */
+_FRIBIDI_ADD_TYPE (FSI, '+')	/* First-Strong Isolate */
+_FRIBIDI_ADD_TYPE (PDI, '-')	/* Pop Directional Isolate */
 
 #if defined(_FRIBIDI_ADD_ALIAS)
 _FRIBIDI_ADD_ALIAS (L, LTR)

@@ -70,6 +70,10 @@
 	FRIBIDI_BEGIN_STMT \
 	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u, v, w); \
 	FRIBIDI_END_STMT
+#define MSG6(s, t, u, v, w, z)                    \
+	FRIBIDI_BEGIN_STMT \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u, v, w, z);        \
+	FRIBIDI_END_STMT
 #endif /* !MSG */
 
 #ifndef DBG

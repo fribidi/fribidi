@@ -52,7 +52,7 @@ new_run (
   if LIKELY
     (run)
     {
-      run->len = run->pos = run->level = 0;
+      run->len = run->pos = run->level = run->isolate_level = 0;
       run->next = run->prev = NULL;
     }
   return run;
@@ -131,7 +131,8 @@ run_list_encode_bidi_types (
   for (i = 0; i < len; i++)
     {
       register FriBidiCharType char_type = bidi_types[i];
-      if (char_type != last->type)
+      if (char_type != last->type
+          || FRIBIDI_IS_ISOLATE(char_type))
 	{
 	  run = new_run ();
 	  if UNLIKELY
@@ -226,6 +227,7 @@ shadow_run_list (
 	    p->next->prev = r;
 	    r->next = p->next;
 	    r->level = p->level;
+	    r->isolate_level = p->isolate_level;
 	    r->type = p->type;
 	    r->len = p->pos + p->len - pos2;
 	    r->pos = pos2;

@@ -153,6 +153,7 @@ fribidi_remove_bidi_marks (
 
   for (i = 0; i < len; i++)
     if (!FRIBIDI_IS_EXPLICIT_OR_BN (fribidi_get_bidi_type (str[i]))
+        && !FRIBIDI_IS_ISOLATE (fribidi_get_bidi_type (str[i]))
 	&& str[i] != FRIBIDI_CHAR_LRM && str[i] != FRIBIDI_CHAR_RLM)
       {
 	str[j] = str[i];

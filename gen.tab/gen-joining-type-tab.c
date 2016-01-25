@@ -151,6 +151,10 @@ static const char *ignored_bidi_types[] = {
   "LRO",
   "RLO",
   "PDF",
+  "LRI",
+  "RLI",
+  "FSI",
+  "PDI",
   NULL
 };
 
