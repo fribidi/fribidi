@@ -280,7 +280,8 @@ print_bidi_string (
 */
 #define PUSH_STATUS \
     FRIBIDI_BEGIN_STMT \
-      if LIKELY(new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL) \
+      if LIKELY(over_pushed == 0 \
+                && new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL)   \
         { \
           if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
             first_interval = over_pushed; \
