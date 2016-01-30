@@ -17,15 +17,13 @@
  * Boston, MA 02110-1301, USA
  */
 
+#include "fribidi.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <glib.h>
 #include <ctype.h>
 #include <errno.h>
-#include "fribidi-types.h"
-#include "fribidi-bidi-types.h"
-#include "fribidi-bidi.h"
 
 static void die(const char *fmt, ...)
 {

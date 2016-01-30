@@ -23,7 +23,7 @@ cd test
 * <2015-05-29 Fri>
 ** Comparing with the bidi ref test
 The following scenario was used for comparing with the bidi reference
- - Download and compile the bidiref test with the following SConstruct file in ~.../BidiReferenceC/6.3.0/source~:
+ - Download and compile the bidiref test with the following SConstruct file in file:../BidiReferenceC/6.3.0/source
 #+BEGIN_SRC python
 import glob
 
@@ -172,8 +172,147 @@ make install
 #+END_SRC   
    - Verified that man pages are reasonoble (after fix to invocation of c2man).
    - [ ] Wait for response from Behdad about the issues in mail I sent.
-   - [ ] Rename unicode63 branch to dov-unicode63 branch.
-   - [ ] Create new branch unicode63 out of master.
-   - [ ] Manually cherry pick from dov-unicode63 changes.
-   - [ ] Squash and rebase dov-unicode63 on top of unicode63.
+   - [X] Rename unicode63 branch to dov-unicode63 branch.
+   - [X] Create new branch unicode63 out of master.
+   - [X] Manually cherry pick from dov-unicode63 changes.
+   - [X] Squash and rebase dov-unicode63 on top of unicode63.
    - [ ] Pull request to Behdad (after got mail)
+** Testing
+#+BEGIN_SRC sh
+env LD_LIBRARY_PATH=../lib/.libs ./test BidiTest.txt 
+#+END_SRC
+  - Still 15 errors.
+* <2016-01-28 Thu>
+** Investigating failure
+   - Not clear to me the correctness of the following test:
+#+BEGIN_EXAMPLE
+@Levels:	0 0 x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 124 124 124
+@Reorder:	0 1 66 67 68
+L WS LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO RLO L L L; 2
+#+END_EXAMPLE
+  - Why doesn't the RLO raise the level to 125?
+  - Compare with Behdads file:../pybyedie . Oops! Doesn't support 6.3. :-(
+  - Found reason! There is one more LRO than Ι thought that wants to push the level to 126 which is illegal. We therefore get overflow which should prevent the RLO from increasing the level further!
+  - [ ] Figure out why this does not happen.
+* <2016-01-29 Fri>
+** Failure
+   - Added prevention of going from 124 → 125 in case of overflow. Solved 3 errors.
+   - [ ] Solve 12 remaining errors. :-)
+* <2016-01-30 Sat>
+** Compiling with debug
+#+BEGIN_SRC sh
+env CFLAGS='-fPIC -g -O0' ./configure --prefix=/usr/local --with-pic
+#+END_SRC  
+** Failures
+   - Next failure:
+#+BEGIN_EXAMPLE
+@Levels:	x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 124 x 125 x 125 x x x x 125 x 125 x 124
+@Reorder:	62 73 71 66 64 75
+LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE ON RLO L LRE RLI LRE RLE LRO RLO PDI PDF L PDF ON; 1
+#+END_EXAMPLE
+   - The resulting discrepancy is:
+#+BEGIN_EXAMPLE
+        Exp Ret
+:
+61: LRE   x   0
+62: ON  124 124
+63: RLO   x 124
+64: L   125 125
+65: LRE   x 125
+66: RLI 125 125
+67: LRE   x 125
+68: RLE   x 125
+69: LRO   x 125
+70: RLO   x 125
+71: PDI 125   1
+72: PDF   x   1
+73: L   125 125
+74: PDF   x 125
+75: ON; 124 124
+#+END_EXAMPLE   
+   - Solved by 
+#+BEGIN_EXAMPLE
+@@ -539,7 +543,11 @@ fribidi_get_par_embedding_levels (
+           for (i = RL_LEN (pp); i; i--)
+             {
+               if (isolate_overflow > 0)
+-                isolate_overflow--;
++                {
++                  isolate_overflow--;
++                  RL_LEVEL (pp) = level;
++                }
+#+END_EXAMPLE      
+  - Next bug.
+#+BEGIN_EXAMPLE
+@Levels:	x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 123 x 124 124 124 x x x x 124 124 124 x 123
+@Reorder:	75 64 65 66 71 72 73 62
+LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE RLE ON LRO R LRI R LRE RLE LRO RLO R PDI R PDF ON; 1
+#+END_EXAMPLE
+ - which yielded:
+#+BEGIN_EXAMPLE
+62: ON  123 123  
+63: LRO   x 123  
+64: R   124 124  
+65: LRI 124 124  
+66: R   124 124  
+67: LRE   x 124  
+68: RLE   x 124  
+69: LRO   x 124  
+70: RLO   x 124  
+71: R   124 125  (x)
+72: PDI 124 125  (x)
+73: R   124 125  (x)
+74: PDF   x 125  
+75: ON  123 124  (x)
+#+END_EXAMPLE
+  - The problem was that character 71 was increased even though we were in isolate mode. 
+  - Fixed!
+  - Next error:
+#+BEGIN_EXAMPLE
+failure on line 497576
+input is: LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE RLE ON LRO R RLI ON LRO RLE RLO LRE ON PDI R PDF ON; 7
+base dir: auto
+expected levels: x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 123 x 124 124 125 x x x x 125 124 124 x 123
+returned levels: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 123 123 124 124 125 125 125 125 125 125 125 125 125 125
+expected order: 75 64 65 71 66 72 73 62
+returned order: 64 65 75 73 72 71 66 62
+#+END_EXAMPLE    
+ - with output:
+#+BEGIN_EXAMPLE
+60: LRE   x   1  
+61: RLE   x   1  
+62: ON  123 123  
+63: LRO   x 123  
+64: R   124 124  
+65: RLI 124 124  
+66: ON  125 125  
+67: LRO   x 125        overflow++
+68: RLE   x 125        overflow++
+69: RLO   x 125        overflow++
+70: LRE   x 125        overflow++
+71: ON  125 125        
+72: PDI 124 125  (x)   should pop to RLI@65! -> 124
+73: R   124 125  (x)
+74: PDF   x 125        should pop to LRO@63 -> 123
+75: ON; 123 125  (x)
+#+END_EXAMPLE 
+  - The problem was that the PDI did not reset the overpushed level! Once it was inserted all tests pass.
+  - Patch that solved the problems:
+#+BEGIN_EXAMPLE
+@@ -281,6 +281,7 @@ print_bidi_string (
+ #define PUSH_STATUS \
+     FRIBIDI_BEGIN_STMT \
+       if LIKELY(over_pushed == 0 \
++                && isolate_overflow == 0 \
+                 && new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL)   \
+         { \
+           if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
+@@ -551,6 +552,7 @@ fribidi_get_par_embedding_levels (
+                      terminated by the PDI */
+                   while (stack_size && !status_stack[stack_size-1].isolate)
+                     POP_STATUS;
++                  over_pushed = 0; /* The PDI resets the overpushed! */
+                   POP_STATUS;
+                   isolate_level-- ;
+                   valid_isolate_count--;
+#+END_EXAMPLE    

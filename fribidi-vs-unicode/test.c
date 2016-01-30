@@ -175,7 +175,7 @@ main (int argc, char **argv)
     FriBidiCharType *types = NULL;
     FriBidiStrIndex types_len = 0;
     FriBidiLevel *expected_levels = NULL;
-    FriBidiStrIndex expected_levels_len = 0;
+    FriBidiLevel expected_levels_len = 0;
     FriBidiLevel *levels = NULL;
     FriBidiStrIndex levels_len = 0;
     int base_dir_flags, base_dir_mode;
