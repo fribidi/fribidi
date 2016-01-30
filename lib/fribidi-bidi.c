@@ -281,6 +281,7 @@ print_bidi_string (
 #define PUSH_STATUS \
     FRIBIDI_BEGIN_STMT \
       if LIKELY(over_pushed == 0 \
+                && isolate_overflow == 0 \
                 && new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL)   \
         { \
           if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
@@ -539,7 +540,11 @@ fribidi_get_par_embedding_levels (
           for (i = RL_LEN (pp); i; i--)
             {
               if (isolate_overflow > 0)
-                isolate_overflow--;
+                {
+                  isolate_overflow--;
+                  RL_LEVEL (pp) = level;
+                }
+                
               else if (valid_isolate_count > 0)
                 {
                   /* Pop away all LRE,RLE,LRO, RLO levels
@@ -547,6 +552,7 @@ fribidi_get_par_embedding_levels (
                      terminated by the PDI */
                   while (stack_size && !status_stack[stack_size-1].isolate)
                     POP_STATUS;
+                  over_pushed = 0; /* The PDI resets the overpushed! */
                   POP_STATUS;
                   isolate_level-- ;
                   valid_isolate_count--;
