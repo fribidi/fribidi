@@ -210,5 +210,6 @@ AC_CONFIG_FILES([fribidi.pc
 		 lib/Makefile
 		 bin/Makefile
 		 doc/Makefile
-		 test/Makefile])
+		 test/Makefile
+		 fribidi-vs-unicode/Makefile])
 AC_OUTPUT

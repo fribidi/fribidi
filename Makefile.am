@@ -11,7 +11,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 ## The order of subdirs is important, don't change without a reason.
-SUBDIRS = gen.tab charset lib bin doc test
+SUBDIRS = gen.tab charset lib bin doc test fribidi-vs-unicode
 
 EXTRA_DIST = bootstrap ChangeLog.old
 
