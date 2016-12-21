@@ -1,0 +1,318 @@
+#+STARTUP: hidestars showall
+* <2014-03-08 Sat>
+** Running a test of the new features
+#+BEGIN_SRC sh
+cd test
+../bin/fribidi --charset CapRTL test_CapRTL_isolate.input 
+#+END_SRC
+   - No link to gen-bidi-type-tab .
+* <2014-03-16 Sun>
+** Running more extensive tests
+#+BEGIN_SRC sh
+../bin/fribidi --basedir --showinput --levels --charset CapRTL test_CapRTL_isolate.input  
+#+END_SRC
+* <2015-05-24 Sun>
+** Issues not covered in my current implementation
+   - In X2 and X3. Deal with overflow isolate count.
+   - Terminology
+     | Fribidi       | Unicode document         |
+     |---------------+--------------------------|
+     |               | overflow isolate count   |
+     | ~over_pushed~ | overflow embedding count |
+     | ~isolate~     | valid isolate count      |
+* <2015-05-29 Fri>
+** Comparing with the bidi ref test
+The following scenario was used for comparing with the bidi reference
+ - Download and compile the bidiref test with the following SConstruct file in file:../BidiReferenceC/6.3.0/source
+#+BEGIN_SRC python
+import glob
+
+env = Environment(CPPFLAGS=['-Wall','-g'],
+                  CPPPATH=['../include'])
+
+env.Program('bidiref',
+            glob.glob('*.c'))
+#+END_SRC 
+ - Run test suite on fribidi with:
+#+BEGIN_SRC sh
+cd ../fribidi-vs-unicode
+./test BidiTest.txt | head -20
+#+END_SRC 
+  - Create a file ~BidiTestSmall.txt~ that only contain the failing test. E.g.:
+#+BEGIN_EXAMPLE
+@Levels:	0 x x 1
+@Reorder:	0 3
+RLI LRE PDF R; 3
+#+END_EXAMPLE  
+  - Run the bidiref test on this single test with:
+#+BEGIN_SRC sh
+./bidiref -d4 -x BidiTestSmall.txt
+#+END_SRC 
+  - Note that bidiref contains magic to recognize the unicode file format only if the input file name contains the string "BidiTest".
+  - An example failing run for fribidi is:
+#+BEGIN_EXAMPLE
+> ./test b.txt 
+failure on line 4
+input is: RLI LRE PDF R; 3
+base dir: auto
+expected levels: 0 x x 1
+returned levels: 0 0 0 3
+expected order: 0 3
+returned order: 0 3
+#+END_EXAMPLE
+  - Goal is to debug, compare, and fix all ~BidiTestSmall.txt~ until the entire file passes.
+** Errors
+   - [X] Line 63038: RLI LRE PDF R; 3
+   - [ ] Line 66856: R RLI R  . 
+*** R RLI R
+    - Expected levels vs fribidi levels: 1 0 1 vs 1 1 1
+    - Don't understand the difference between the embedding level and the paragraph embedding level. 
+    - How can a level be lower than the paragraph level?
+* <2015-05-31 Sun>
+** Regarding R RLI R
+   - The problem is that N1 and N2 are done over isolating boundaries. This needs to be fixed! Either by remembering the isolating sequence level of each run and make sure to connect only runs of the same level, or alternatively to always sweep and count. Both of these solutions are slow as they require sweeping over inner runs. A faster solution would be to have a pointer to the next run of the same sequence. Can this be done efficiently?
+* <2015-06-05 Fri>
+  - [ ] make macros ~PREV_TYPE_SKIP_ISOLATE~ and ~NEXT_TYPE_SKIP_ISOLATE~ macros based on the code in N1.
+* <2015-06-18 Thu>
+** NSI merging problems
+   - The following ~b.txt~ shows that there is a difference between an isolated NSM and one preceded by an isolating sequence.
+#+BEGIN_EXAMPLE
+@Levels:	1
+@Reorder:	0
+NSM; 4
+
+@Levels:	1 1 1
+@Reorder:	2 1 0
+LRI PDI NSM; 4
+#+END_EXAMPLE   
+   - In both these cases, because of the RTL direction, the NSM should get the type of the base direction. This currently does not happen. See TBDov
+* <2015-06-20 Sat>
+** Test progress
+   | Date           | Num fail | First line fail | First fail                                 |
+   |----------------+----------+-----------------+--------------------------------------------|
+   | 2015-06-20 Sat |      139 |          236713 |                                            |
+   |                |       22 |          497052 | R ON FSI L PDI LRI L PDI RLI L PDI ON R; 2 |
+** Thoughts
+   - The quest of finding a single strategy for finding the next and previous types seem to fail. It seems like every rule is looking for something different. 
+   - The real problem is that sequences like ~R OL LRI ... PDI OL R~ should really be interpreted as ~R OL OL OL R~ for the algorithm to work. But in contrast to ~R OL OL OL~ that is compacted as ~R OL×3 R~ and which may be matched by a simple forward and backward match, in ~LRI ... PDI~ the right hand R must be found by scanning. This is what Ι tried doing in my changes to fribidi so far, but it failed due to differen needs.
+   - My strategy is first finding a scanning strategy that works, and only afterwards optimizing it.
+* <2015-06-21 Sun>
+** Test progress
+   | Date           | Num fail | First line fail | First fail                                      |
+   |----------------+----------+-----------------+-------------------------------------------------|
+   | 2015-06-21 Sat |       18 |          236713 | AL ON FSI L PDI LRI L PDI RLI R PDI ON ET EN; 2 |
+
+   - Note: I believe this is a bug...
+* <2015-08-23 Sun>
+** Misc
+   - All the unicode files should be moved to a common place, as ~BidiTest.txt~ and ~BidiCharacterTest.txt~ are needed for testing. This means moving out the ~UnicodeData.txt~ from ~gen.tab~ e.g. to ~.../fribid/Unidata~. 
+   - Create a new branch IsoLinks that adds FriBidiRun, ~next_iso~ and ~prev_iso~ for next and previous isolate runs.
+f   - ~test.c~ should probably be renamed to ~test-bidi-test-txt.c~ and ~test-character~ should be changed to ~test-bidi-character-test-txt.c~ to reflect what they test.
+* <2016-01-24 Sun>
+** Packing stuff
+   - [ ] Should we make sure that bootstrap and dependencies is clean? Currently lots of warnings on my system:
+#+BEGIN_SRC sh
+configure.ac:201: warning: LT_INIT was called before AM_PROG_AR
+/usr/share/aclocal-1.15/ar-lib.m4:13: AM_PROG_AR is expanded from...
+configure.ac:201: the top level
+configure.ac:201: warning: LT_INIT was called before AM_PROG_AR
+aclocal.m4:9317: AM_PROG_AR is expanded from...
+configure.ac:201: the top level
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([m4])' to configure.ac,
+libtoolize: and rerunning libtoolize and aclocal.
+libtoolize: Consider adding '-I m4' to ACLOCAL_AMFLAGS in Makefile.am.
+configure.ac:201: warning: LT_INIT was called before AM_PROG_AR
+/usr/share/aclocal-1.15/ar-lib.m4:13: AM_PROG_AR is expanded from...
+configure.ac:201: the top level
+configure.ac:201: warning: LT_INIT was called before AM_PROG_AR
+aclocal.m4:9317: AM_PROG_AR is expanded from...
+configure.ac:201: the top level
+configure.ac:201: warning: LT_INIT was called before AM_PROG_AR
+aclocal.m4:9317: AM_PROG_AR is expanded from...
+configure.ac:201: the top level
+configure.ac:201: warning: LT_INIT was called before AM_PROG_AR
+aclocal.m4:9317: AM_PROG_AR is expanded from...
+configure.ac:201: the top level
+configure.ac:55: installing './compile'
+configure.ac:50: installing './missing'
+bin/Makefile.am: installing './depcomp'
+lib/Headers.mk:22: warning: shell cat $(top_srcdir: non-POSIX variable name
+lib/Headers.mk:22: (probably a GNU make extension)
+doc/Makefile.am:26:   'lib/Headers.mk' included from here
+lib/Headers.mk:22: warning: shell cat $(top_srcdir: non-POSIX variable name
+lib/Headers.mk:22: (probably a GNU make extension)
+lib/Makefile.am:28:   'lib/Headers.mk' included from here
+test/Makefile.am:30: warning: '%'-style pattern rules are a GNU make extension
+#+END_SRC   
+  - configure ok.
+  - make passes but outputs warnings about missing c2man.
+#+BEGIN_SRC sh
+WARNING: 'c2man' is missing on your system.
+         You might have modified some files without having the proper
+         tools for further handling them.  Check the 'README' file, it
+         often tells you about the needed prerequisites for installing
+         this package.  You may also peek at any GNU archive site, in
+         case some other package contains this missing 'c2man' program.
+#+END_SRC  
+  - Found c2man at http://www.ciselant.de/c2man/c2man.html , but it is not compatible with the make file usage.
+  - "make test" doesn't do anything.
+* <2016-01-25 Mon>
+** Release engineering
+   - Got "new" c2man from Ubuntu archive at https://answers.launchpad.net/ubuntu/+source/c2man/2.41-18
+   - Compiled as follows:
+#+BEGIN_SRC sh
+tar -xf ~/hd/Download/c2man_2.41.orig.tar.gz 
+mv c2man-2.41.orig c2man-2.41-18   
+cd c2man-2.41-18 
+zcat ~/hd/Download/c2man_2.41-18.diff.gz| patch -p1
+./Configure
+make install
+#+END_SRC   
+   - Verified that man pages are reasonoble (after fix to invocation of c2man).
+   - [ ] Wait for response from Behdad about the issues in mail I sent.
+   - [X] Rename unicode63 branch to dov-unicode63 branch.
+   - [X] Create new branch unicode63 out of master.
+   - [X] Manually cherry pick from dov-unicode63 changes.
+   - [X] Squash and rebase dov-unicode63 on top of unicode63.
+   - [ ] Pull request to Behdad (after got mail)
+** Testing
+#+BEGIN_SRC sh
+env LD_LIBRARY_PATH=../lib/.libs ./test BidiTest.txt 
+#+END_SRC
+  - Still 15 errors.
+* <2016-01-28 Thu>
+** Investigating failure
+   - Not clear to me the correctness of the following test:
+#+BEGIN_EXAMPLE
+@Levels:	0 0 x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 124 124 124
+@Reorder:	0 1 66 67 68
+L WS LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO LRO RLO L L L; 2
+#+END_EXAMPLE
+  - Why doesn't the RLO raise the level to 125?
+  - Compare with Behdads file:../pybyedie . Oops! Doesn't support 6.3. :-(
+  - Found reason! There is one more LRO than Ι thought that wants to push the level to 126 which is illegal. We therefore get overflow which should prevent the RLO from increasing the level further!
+  - [ ] Figure out why this does not happen.
+* <2016-01-29 Fri>
+** Failure
+   - Added prevention of going from 124 → 125 in case of overflow. Solved 3 errors.
+   - [ ] Solve 12 remaining errors. :-)
+* <2016-01-30 Sat>
+** Compiling with debug
+#+BEGIN_SRC sh
+env CFLAGS='-fPIC -g -O0' ./configure --prefix=/usr/local --with-pic
+#+END_SRC  
+** Failures
+   - Next failure:
+#+BEGIN_EXAMPLE
+@Levels:	x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 124 x 125 x 125 x x x x 125 x 125 x 124
+@Reorder:	62 73 71 66 64 75
+LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE ON RLO L LRE RLI LRE RLE LRO RLO PDI PDF L PDF ON; 1
+#+END_EXAMPLE
+   - The resulting discrepancy is:
+#+BEGIN_EXAMPLE
+        Exp Ret
+:
+61: LRE   x   0
+62: ON  124 124
+63: RLO   x 124
+64: L   125 125
+65: LRE   x 125
+66: RLI 125 125
+67: LRE   x 125
+68: RLE   x 125
+69: LRO   x 125
+70: RLO   x 125
+71: PDI 125   1
+72: PDF   x   1
+73: L   125 125
+74: PDF   x 125
+75: ON; 124 124
+#+END_EXAMPLE   
+   - Solved by 
+#+BEGIN_EXAMPLE
+@@ -539,7 +543,11 @@ fribidi_get_par_embedding_levels (
+           for (i = RL_LEN (pp); i; i--)
+             {
+               if (isolate_overflow > 0)
+-                isolate_overflow--;
++                {
++                  isolate_overflow--;
++                  RL_LEVEL (pp) = level;
++                }
+#+END_EXAMPLE      
+  - Next bug.
+#+BEGIN_EXAMPLE
+@Levels:	x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 123 x 124 124 124 x x x x 124 124 124 x 123
+@Reorder:	75 64 65 66 71 72 73 62
+LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE RLE ON LRO R LRI R LRE RLE LRO RLO R PDI R PDF ON; 1
+#+END_EXAMPLE
+ - which yielded:
+#+BEGIN_EXAMPLE
+62: ON  123 123  
+63: LRO   x 123  
+64: R   124 124  
+65: LRI 124 124  
+66: R   124 124  
+67: LRE   x 124  
+68: RLE   x 124  
+69: LRO   x 124  
+70: RLO   x 124  
+71: R   124 125  (x)
+72: PDI 124 125  (x)
+73: R   124 125  (x)
+74: PDF   x 125  
+75: ON  123 124  (x)
+#+END_EXAMPLE
+  - The problem was that character 71 was increased even though we were in isolate mode. 
+  - Fixed!
+  - Next error:
+#+BEGIN_EXAMPLE
+failure on line 497576
+input is: LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE LRE RLE ON LRO R RLI ON LRO RLE RLO LRE ON PDI R PDF ON; 7
+base dir: auto
+expected levels: x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x 123 x 124 124 125 x x x x 125 124 124 x 123
+returned levels: 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 123 123 124 124 125 125 125 125 125 125 125 125 125 125
+expected order: 75 64 65 71 66 72 73 62
+returned order: 64 65 75 73 72 71 66 62
+#+END_EXAMPLE    
+ - with output:
+#+BEGIN_EXAMPLE
+60: LRE   x   1  
+61: RLE   x   1  
+62: ON  123 123  
+63: LRO   x 123  
+64: R   124 124  
+65: RLI 124 124  
+66: ON  125 125  
+67: LRO   x 125        overflow++
+68: RLE   x 125        overflow++
+69: RLO   x 125        overflow++
+70: LRE   x 125        overflow++
+71: ON  125 125        
+72: PDI 124 125  (x)   should pop to RLI@65! -> 124
+73: R   124 125  (x)
+74: PDF   x 125        should pop to LRO@63 -> 123
+75: ON; 123 125  (x)
+#+END_EXAMPLE 
+  - The problem was that the PDI did not reset the overpushed level! Once it was inserted all tests pass.
+  - Patch that solved the problems:
+#+BEGIN_EXAMPLE
+@@ -281,6 +281,7 @@ print_bidi_string (
+ #define PUSH_STATUS \
+     FRIBIDI_BEGIN_STMT \
+       if LIKELY(over_pushed == 0 \
++                && isolate_overflow == 0 \
+                 && new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL)   \
+         { \
+           if UNLIKELY(level == FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL - 1) \
+@@ -551,6 +552,7 @@ fribidi_get_par_embedding_levels (
+                      terminated by the PDI */
+                   while (stack_size && !status_stack[stack_size-1].isolate)
+                     POP_STATUS;
++                  over_pushed = 0; /* The PDI resets the overpushed! */
+                   POP_STATUS;
+                   isolate_level-- ;
+                   valid_isolate_count--;
+#+END_EXAMPLE    

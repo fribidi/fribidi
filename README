@@ -6,17 +6,18 @@ Background
 
 One of the missing links stopping the penetration of free software in Middle
 East is the lack of support for the Arabic and Hebrew alphabets. In order to
-have proper Arabic and Hebrew support, the BiDi algorithm should have been
+have proper Arabic and Hebrew support, the BiDi algorithm needs to be
 implemented. It is our hope that this library will stimulate more free
 software in the Middle Eastern countries.
 
 Audience
 ========
 
-It is our hope that this library will stimulate the implementation of Hebrew
-and Arabic in lots of free software. Here is a small list of projects that
-would benefit from the use of the GNU FriBidi library, but of course there are
-many more: Wine, Mozilla, Qt, KDE, lynx, OpenOffice.
+It is our hope that this library will stimulate the implementation of
+Hebrew and Arabic support in lots of free software. Here is a small
+list of projects that would benefit from the use of the GNU FriBidi
+library, but of course there are many more: Wine, Mozilla, Qt, KDE,
+lynx, OpenOffice.
 
 GNU FriBidi is already being used in projects like Pango (resulting in GTK+
 and GNOME using GNU FriBidi), AbiWord, MLTerm, MPlayer, and BiCon.
@@ -151,3 +152,6 @@ And send your comments to:
 
 Behdad Esfahbod
 behdad@gnu.org
+
+Dov Grobgeld
+dov.grobgeld@gmail.com

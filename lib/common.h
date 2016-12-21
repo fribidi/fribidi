@@ -113,7 +113,7 @@
 # define fribidi_free free
 #else /* fribidi_malloc */
 # ifndef fribidi_free
-#  error "lYou should define fribidi_free too when you define fribidi_malloc."
+#  error "You should define fribidi_free too when you define fribidi_malloc."
 # endif	/* !fribidi_free */
 #endif /* fribidi_malloc */
 

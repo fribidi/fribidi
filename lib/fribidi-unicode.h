@@ -61,10 +61,10 @@ extern const char *fribidi_unicode_version;
 #define FRIBIDI_BIDI_NUM_TYPES			19
 
 /* The maximum embedding level value assigned by explicit marks */
-#define FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL		61
-/* The maximum *number* of different resolved embedding levels: 0-62 */
-#define FRIBIDI_BIDI_MAX_RESOLVED_LEVELS	63
+#define FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL		125
 
+/* The maximum *number* of different resolved embedding levels: 0-126 */
+#define FRIBIDI_BIDI_MAX_RESOLVED_LEVELS	127
 
 /* A few Unicode characters: */
 
@@ -76,6 +76,10 @@ extern const char *fribidi_unicode_version;
 #define FRIBIDI_CHAR_PDF		0x202C
 #define FRIBIDI_CHAR_LRO		0x202D
 #define FRIBIDI_CHAR_RLO		0x202E
+#define FRIBIDI_CHAR_LRI		0x2066
+#define FRIBIDI_CHAR_RLI		0x2067
+#define FRIBIDI_CHAR_FSI		0x2068
+#define FRIBIDI_CHAR_PDI		0x2069
 
 /* Line and Paragraph Separators */
 #define FRIBIDI_CHAR_LS			0x2028
