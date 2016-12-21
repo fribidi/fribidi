@@ -44,6 +44,17 @@
 
 #include <fribidi-begindecls.h>
 
+typedef struct _FriBidiRunStruct FriBidiRun;
+
+struct _FriBidiRunStruct
+{
+  FriBidiRun *prev;
+  FriBidiRun *next;
+
+  FriBidiStrIndex pos, len;
+  FriBidiCharType type;
+  FriBidiLevel level;
+};
 
 
 #define new_run FRIBIDI_PRIVATESPACE(new_run)
