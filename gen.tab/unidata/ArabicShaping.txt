@@ -1,25 +1,29 @@
-# ArabicShaping-6.2.0.txt
-# Date: 2012-05-15, 21:05:00 GMT [KW]
+# ArabicShaping-10.0.0.txt
+# Date: 2017-02-16, 00:00:00 GMT [RP, KW]
+# © 2017 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use, see http://www.unicode.org/terms_of_use.html
 #
 # This file is a normative contributory data file in the
 # Unicode Character Database.
 #
-# Copyright (c) 1991-2012 Unicode, Inc.
-# For terms of use, see http://www.unicode.org/terms_of_use.html
+# This file defines the Joining_Type and Joining_Group property
+# values for Arabic, Syriac, N'Ko, Mandaic, and Manichaean positional
+# shaping, repeating in machine readable form the information
+# exemplified in Tables 9-3, 9-8, 9-9, 9-10, 9-14, 9-15, 9-16, 9-19,
+# 9-20, 10-4, 10-5, 10-6, 10-7, and 19-5 of The Unicode Standard core
+# specification. This file also defines Joining_Type values for
+# Mongolian, Phags-pa, Psalter Pahlavi, and Adlam positional shaping,
+# which are not listed in tables in the standard.
 #
-# This file defines the Joining_Type and Joining_Group
-# property values for Arabic, Syriac, N'Ko, and Mandaic
-# positional shaping, repeating in machine readable form the
-# information exemplified in Tables 8-3, 8-8, 8-9, 8-10, 8-13, 8-14,
-# 8-15, 13-5, 14-5, and 14-6 of The Unicode Standard, Version 6.2.
-#
-# See sections 8.2, 8.3, 13.5, and 14.12 of The Unicode Standard, 
-# Version 6.2 for more information.
+# See Sections 9.2, 9.3, 9.5, 10.5, 10.6, 13.4, 14.3, 19.4, and 19.9
+# of The Unicode Standard core specification for more information.
 #
 # Each line contains four fields, separated by a semicolon.
 #
 # Field 0: the code point, in 4-digit hexadecimal
-#   form, of an Arabic, Syriac, N'Ko, or Mandaic character.
+#   form, of an Arabic, Syriac, N'Ko, Mandaic, Mongolian,
+#   Phags-pa, Manichaean, Psalter Pahlavi, or other character.
 #
 # Field 1: gives a short schematic name for that character.
 #   The schematic name is descriptive of the shape, based as
@@ -35,13 +39,19 @@
 #   C Join_Causing
 #   U Non_Joining
 #   T Transparent
-#     See Section 8.2, Arabic for more information on these types.
+#
+# See Section 9.2, Arabic for more information on these joining types.
+# Note that for cursive joining scripts which are typically rendered
+# top-to-bottom, rather than right-to-left, Joining_Type=L conventionally
+# refers to bottom joining, and Joining_Type=R conventionally refers
+# to top joining. See Section 14.3, Phags-pa for more information on the
+# interpretation of joining types in vertical layout.
 #
 # Field 3: defines the joining group (property name: Joining_Group)
 #
 # The values of the joining group are based schematically on character
-# names. Where a schematic character name consists of two or more parts separated
-# by spaces, the formal Joining_Group property value, as specified in
+# names. Where a schematic character name consists of two or more parts
+# separated by spaces, the formal Joining_Group property value, as specified in
 # PropertyValueAliases.txt, consists of the same name parts joined by
 # underscores. Hence, the entry:
 #
@@ -49,7 +59,7 @@
 #
 # corresponds to [Joining_Group = Teh_Marbuta].
 #
-# Note: The property value now designated [Joining_Group = Teh_Marbuta_Goal] 
+# Note: The property value now designated [Joining_Group = Teh_Marbuta_Goal]
 #   used to apply to both of the following characters
 #   in earlier versions of the standard:
 #
@@ -63,28 +73,28 @@
 #   no longer applies to its namesake character, U+06C2.
 #   See PropertyValueAliases.txt.
 #
-# When other cursive scripts are added to the Unicode Standard in
-# the future, the joining group value of all its letters will default
-# to jg=No_Joining_Group in this data file. Other, more specific
+# When other cursive scripts are added to the Unicode Standard in the
+# future, the joining group value of all its letters will default to
+# jg=No_Joining_Group in this data file. Other, more specific
 # joining group values will be defined only if an explicit proposal
 # to define those values exactly has been approved by the UTC. This
-# is the convention exemplified by the N'Ko and Mandaic scripts. Only the Arabic
-# and Syriac scripts currently have explicit joining group values defined.
+# is the convention exemplified by the N'Ko, Mandaic, Mongolian,
+# Phags-pa, and Psalter Pahlavi scripts. Only the Arabic,
+# Manichaean, and Syriac scripts currently have explicit joining
+# group values defined.
 #
 # Note: Code points that are not explicitly listed in this file are
 # either of joining type T or U:
 #
-# - Those that not explicitly listed that are of General Category Mn, Me, or Cf
+# - Those that are not explicitly listed and that are of General Category Mn, Me, or Cf
 #   have joining type T.
 # - All others not explicitly listed have joining type U.
 #
-# For an explicit listing of characters of joining type T, see
+# For an explicit listing of all characters of joining type T, see
 # the derived property file DerivedJoiningType.txt.
 #
-# There are currently no characters of joining type L defined in Unicode.
-#
 # #############################################################
- 
+
 # Unicode; Schematic Name; Joining Type; Joining Group
 
 # Arabic Characters
@@ -94,6 +104,7 @@
 0602; ARABIC FOOTNOTE MARKER; U; No_Joining_Group
 0603; ARABIC SIGN SAFHA; U; No_Joining_Group
 0604; ARABIC SIGN SAMVAT; U; No_Joining_Group
+0605; ARABIC NUMBER MARK ABOVE; U; No_Joining_Group
 0608; ARABIC RAY; U; No_Joining_Group
 060B; AFGHANI SIGN; U; No_Joining_Group
 0620; DOTLESS YEH WITH SEPARATE RING BELOW; D; YEH
@@ -383,7 +394,7 @@
 0844; MANDAIC AH; D; No_Joining_Group
 0845; MANDAIC USHENNA; D; No_Joining_Group
 0846; MANDAIC AZ; R; No_Joining_Group
-0847; MANDAIC IT; D; No_Joining_Group
+0847; MANDAIC IT; R; No_Joining_Group
 0848; MANDAIC ATT; D; No_Joining_Group
 0849; MANDAIC AKSA; R; No_Joining_Group
 084A; MANDAIC AK; D; No_Joining_Group
@@ -391,7 +402,7 @@
 084C; MANDAIC AM; D; No_Joining_Group
 084D; MANDAIC AN; D; No_Joining_Group
 084E; MANDAIC AS; D; No_Joining_Group
-084F; MANDAIC IN; R; No_Joining_Group
+084F; MANDAIC IN; D; No_Joining_Group
 0850; MANDAIC AP; D; No_Joining_Group
 0851; MANDAIC ASZ; D; No_Joining_Group
 0852; MANDAIC AQ; D; No_Joining_Group
@@ -402,9 +413,24 @@
 0857; MANDAIC KAD; U; No_Joining_Group
 0858; MANDAIC AIN; U; No_Joining_Group
 
+# Syriac Supplement Characters
+
+0860; MALAYALAM NGA; D; MALAYALAM NGA
+0861; MALAYALAM JA; U; MALAYALAM JA
+0862; MALAYALAM NYA; D; MALAYALAM NYA
+0863; MALAYALAM TTA; D; MALAYALAM TTA
+0864; MALAYALAM NNA; D; MALAYALAM NNA
+0865; MALAYALAM NNNA; D; MALAYALAM NNNA
+0866; MALAYALAM BHA; U; MALAYALAM BHA
+0867; MALAYALAM RA; R; MALAYALAM RA
+0868; MALAYALAM LLA; D; MALAYALAM LLA
+0869; MALAYALAM LLLA; R; MALAYALAM LLLA
+086A; MALAYALAM SSA; R; MALAYALAM SSA
+
 # Arabic Extended-A Characters
 
 08A0; DOTLESS BEH WITH V BELOW; D; BEH
+08A1; BEH WITH HAMZA ABOVE; D; BEH
 08A2; HAH WITH DOT BELOW AND 2 DOTS ABOVE; D; HAH
 08A3; TAH WITH 2 DOTS ABOVE; D; TAH
 08A4; DOTLESS FEH WITH DOT BELOW AND 3 DOTS ABOVE; D; FEH
@@ -416,10 +442,368 @@
 08AA; REH WITH LOOP; R; REH
 08AB; WAW WITH DOT WITHIN; R; WAW
 08AC; ROHINGYA YEH; R; ROHINGYA YEH
+08AD; LOW ALEF; U; No_Joining_Group
+08AE; DAL WITH 3 DOTS BELOW; R; DAL
+08AF; SAD WITH 3 DOTS BELOW; D; SAD
+08B0; KEHEH WITH STROKE BELOW; D; GAF
+08B1; STRAIGHT WAW; R; STRAIGHT WAW
+08B2; REH WITH DOT AND INVERTED V ABOVE; R; REH
+08B3; AIN WITH 3 DOTS BELOW; D; AIN
+08B4; KAF WITH DOT BELOW; D; KAF
+08B6; BEH WITH MEEM ABOVE; D; BEH
+08B7; DOTLESS BEH WITH 3 DOTS BELOW AND MEEM ABOVE; D; BEH
+08B8; DOTLESS BEH WITH TEH ABOVE; D; BEH
+08B9; REH WITH NOON ABOVE; R; REH
+08BA; YEH WITH NOON ABOVE; D; YEH
+08BB; AFRICAN FEH; D; AFRICAN FEH
+08BC; AFRICAN QAF; D; AFRICAN QAF
+08BD; AFRICAN NOON; D; AFRICAN NOON
+08E2; ARABIC DISPUTED END OF AYAH; U; No_Joining_Group
+
+# Mongolian Characters
+
+1806; MONGOLIAN TODO SOFT HYPHEN; U; No_Joining_Group
+1807; MONGOLIAN SIBE SYLLABLE BOUNDARY MARKER; D; No_Joining_Group
+180A; MONGOLIAN NIRUGU; C; No_Joining_Group
+180E; MONGOLIAN VOWEL SEPARATOR; U; No_Joining_Group
+1820; MONGOLIAN A; D; No_Joining_Group
+1821; MONGOLIAN E; D; No_Joining_Group
+1822; MONGOLIAN I; D; No_Joining_Group
+1823; MONGOLIAN O; D; No_Joining_Group
+1824; MONGOLIAN U; D; No_Joining_Group
+1825; MONGOLIAN OE; D; No_Joining_Group
+1826; MONGOLIAN UE; D; No_Joining_Group
+1827; MONGOLIAN EE; D; No_Joining_Group
+1828; MONGOLIAN NA; D; No_Joining_Group
+1829; MONGOLIAN ANG; D; No_Joining_Group
+182A; MONGOLIAN BA; D; No_Joining_Group
+182B; MONGOLIAN PA; D; No_Joining_Group
+182C; MONGOLIAN QA; D; No_Joining_Group
+182D; MONGOLIAN GA; D; No_Joining_Group
+182E; MONGOLIAN MA; D; No_Joining_Group
+182F; MONGOLIAN LA; D; No_Joining_Group
+1830; MONGOLIAN SA; D; No_Joining_Group
+1831; MONGOLIAN SHA; D; No_Joining_Group
+1832; MONGOLIAN TA; D; No_Joining_Group
+1833; MONGOLIAN DA; D; No_Joining_Group
+1834; MONGOLIAN CHA; D; No_Joining_Group
+1835; MONGOLIAN JA; D; No_Joining_Group
+1836; MONGOLIAN YA; D; No_Joining_Group
+1837; MONGOLIAN RA; D; No_Joining_Group
+1838; MONGOLIAN WA; D; No_Joining_Group
+1839; MONGOLIAN FA; D; No_Joining_Group
+183A; MONGOLIAN KA; D; No_Joining_Group
+183B; MONGOLIAN KHA; D; No_Joining_Group
+183C; MONGOLIAN TSA; D; No_Joining_Group
+183D; MONGOLIAN ZA; D; No_Joining_Group
+183E; MONGOLIAN HAA; D; No_Joining_Group
+183F; MONGOLIAN ZRA; D; No_Joining_Group
+1840; MONGOLIAN LHA; D; No_Joining_Group
+1841; MONGOLIAN ZHI; D; No_Joining_Group
+1842; MONGOLIAN CHI; D; No_Joining_Group
+1843; MONGOLIAN TODO LONG VOWEL SIGN; D; No_Joining_Group
+1844; MONGOLIAN TODO E; D; No_Joining_Group
+1845; MONGOLIAN TODO I; D; No_Joining_Group
+1846; MONGOLIAN TODO O; D; No_Joining_Group
+1847; MONGOLIAN TODO U; D; No_Joining_Group
+1848; MONGOLIAN TODO OE; D; No_Joining_Group
+1849; MONGOLIAN TODO UE; D; No_Joining_Group
+184A; MONGOLIAN TODO ANG; D; No_Joining_Group
+184B; MONGOLIAN TODO BA; D; No_Joining_Group
+184C; MONGOLIAN TODO PA; D; No_Joining_Group
+184D; MONGOLIAN TODO QA; D; No_Joining_Group
+184E; MONGOLIAN TODO GA; D; No_Joining_Group
+184F; MONGOLIAN TODO MA; D; No_Joining_Group
+1850; MONGOLIAN TODO TA; D; No_Joining_Group
+1851; MONGOLIAN TODO DA; D; No_Joining_Group
+1852; MONGOLIAN TODO CHA; D; No_Joining_Group
+1853; MONGOLIAN TODO JA; D; No_Joining_Group
+1854; MONGOLIAN TODO TSA; D; No_Joining_Group
+1855; MONGOLIAN TODO YA; D; No_Joining_Group
+1856; MONGOLIAN TODO WA; D; No_Joining_Group
+1857; MONGOLIAN TODO KA; D; No_Joining_Group
+1858; MONGOLIAN TODO GAA; D; No_Joining_Group
+1859; MONGOLIAN TODO HAA; D; No_Joining_Group
+185A; MONGOLIAN TODO JIA; D; No_Joining_Group
+185B; MONGOLIAN TODO NIA; D; No_Joining_Group
+185C; MONGOLIAN TODO DZA; D; No_Joining_Group
+185D; MONGOLIAN SIBE E; D; No_Joining_Group
+185E; MONGOLIAN SIBE I; D; No_Joining_Group
+185F; MONGOLIAN SIBE IY; D; No_Joining_Group
+1860; MONGOLIAN SIBE UE; D; No_Joining_Group
+1861; MONGOLIAN SIBE U; D; No_Joining_Group
+1862; MONGOLIAN SIBE ANG; D; No_Joining_Group
+1863; MONGOLIAN SIBE KA; D; No_Joining_Group
+1864; MONGOLIAN SIBE GA; D; No_Joining_Group
+1865; MONGOLIAN SIBE HA; D; No_Joining_Group
+1866; MONGOLIAN SIBE PA; D; No_Joining_Group
+1867; MONGOLIAN SIBE SHA; D; No_Joining_Group
+1868; MONGOLIAN SIBE TA; D; No_Joining_Group
+1869; MONGOLIAN SIBE DA; D; No_Joining_Group
+186A; MONGOLIAN SIBE JA; D; No_Joining_Group
+186B; MONGOLIAN SIBE FA; D; No_Joining_Group
+186C; MONGOLIAN SIBE GAA; D; No_Joining_Group
+186D; MONGOLIAN SIBE HAA; D; No_Joining_Group
+186E; MONGOLIAN SIBE TSA; D; No_Joining_Group
+186F; MONGOLIAN SIBE ZA; D; No_Joining_Group
+1870; MONGOLIAN SIBE RAA; D; No_Joining_Group
+1871; MONGOLIAN SIBE CHA; D; No_Joining_Group
+1872; MONGOLIAN SIBE ZHA; D; No_Joining_Group
+1873; MONGOLIAN MANCHU I; D; No_Joining_Group
+1874; MONGOLIAN MANCHU KA; D; No_Joining_Group
+1875; MONGOLIAN MANCHU RA; D; No_Joining_Group
+1876; MONGOLIAN MANCHU FA; D; No_Joining_Group
+1877; MONGOLIAN MANCHU ZHA; D; No_Joining_Group
+1880; MONGOLIAN ALI GALI ANUSVARA ONE; U; No_Joining_Group
+1881; MONGOLIAN ALI GALI VISARGA ONE; U; No_Joining_Group
+1882; MONGOLIAN ALI GALI DAMARU; U; No_Joining_Group
+1883; MONGOLIAN ALI GALI UBADAMA; U; No_Joining_Group
+1884; MONGOLIAN ALI GALI INVERTED UBADAMA; U; No_Joining_Group
+1885; MONGOLIAN ALI GALI BALUDA; T; No_Joining_Group
+1886; MONGOLIAN ALI GALI THREE BALUDA; T; No_Joining_Group
+1887; MONGOLIAN ALI GALI A; D; No_Joining_Group
+1888; MONGOLIAN ALI GALI I; D; No_Joining_Group
+1889; MONGOLIAN ALI GALI KA; D; No_Joining_Group
+188A; MONGOLIAN ALI GALI NGA; D; No_Joining_Group
+188B; MONGOLIAN ALI GALI CA; D; No_Joining_Group
+188C; MONGOLIAN ALI GALI TTA; D; No_Joining_Group
+188D; MONGOLIAN ALI GALI TTHA; D; No_Joining_Group
+188E; MONGOLIAN ALI GALI DDA; D; No_Joining_Group
+188F; MONGOLIAN ALI GALI NNA; D; No_Joining_Group
+1890; MONGOLIAN ALI GALI TA; D; No_Joining_Group
+1891; MONGOLIAN ALI GALI DA; D; No_Joining_Group
+1892; MONGOLIAN ALI GALI PA; D; No_Joining_Group
+1893; MONGOLIAN ALI GALI PHA; D; No_Joining_Group
+1894; MONGOLIAN ALI GALI SSA; D; No_Joining_Group
+1895; MONGOLIAN ALI GALI ZHA; D; No_Joining_Group
+1896; MONGOLIAN ALI GALI ZA; D; No_Joining_Group
+1897; MONGOLIAN ALI GALI AH; D; No_Joining_Group
+1898; MONGOLIAN TODO ALI GALI TA; D; No_Joining_Group
+1899; MONGOLIAN TODO ALI GALI ZHA; D; No_Joining_Group
+189A; MONGOLIAN MANCHU ALI GALI GHA; D; No_Joining_Group
+189B; MONGOLIAN MANCHU ALI GALI NGA; D; No_Joining_Group
+189C; MONGOLIAN MANCHU ALI GALI CA; D; No_Joining_Group
+189D; MONGOLIAN MANCHU ALI GALI JHA; D; No_Joining_Group
+189E; MONGOLIAN MANCHU ALI GALI TTA; D; No_Joining_Group
+189F; MONGOLIAN MANCHU ALI GALI DDHA; D; No_Joining_Group
+18A0; MONGOLIAN MANCHU ALI GALI TA; D; No_Joining_Group
+18A1; MONGOLIAN MANCHU ALI GALI DHA; D; No_Joining_Group
+18A2; MONGOLIAN MANCHU ALI GALI SSA; D; No_Joining_Group
+18A3; MONGOLIAN MANCHU ALI GALI CYA; D; No_Joining_Group
+18A4; MONGOLIAN MANCHU ALI GALI ZHA; D; No_Joining_Group
+18A5; MONGOLIAN MANCHU ALI GALI ZA; D; No_Joining_Group
+18A6; MONGOLIAN ALI GALI HALF U; D; No_Joining_Group
+18A7; MONGOLIAN ALI GALI HALF YA; D; No_Joining_Group
+18A8; MONGOLIAN MANCHU ALI GALI BHA; D; No_Joining_Group
+18AA; MONGOLIAN MANCHU ALI GALI LHA; D; No_Joining_Group
 
 # Other
 
 200C; ZERO WIDTH NON-JOINER; U; No_Joining_Group
 200D; ZERO WIDTH JOINER; C; No_Joining_Group
+202F; NARROW NO-BREAK SPACE; U; No_Joining_Group
+2066; LEFT-TO-RIGHT ISOLATE; U; No_Joining_Group
+2067; RIGHT-TO-LEFT ISOLATE; U; No_Joining_Group
+2068; FIRST STRONG ISOLATE; U; No_Joining_Group
+2069; POP DIRECTIONAL ISOLATE; U; No_Joining_Group
+
+# Phags-Pa Characters
+
+A840; PHAGS-PA KA; D; No_Joining_Group
+A841; PHAGS-PA KHA; D; No_Joining_Group
+A842; PHAGS-PA GA; D; No_Joining_Group
+A843; PHAGS-PA NGA; D; No_Joining_Group
+A844; PHAGS-PA CA; D; No_Joining_Group
+A845; PHAGS-PA CHA; D; No_Joining_Group
+A846; PHAGS-PA JA; D; No_Joining_Group
+A847; PHAGS-PA NYA; D; No_Joining_Group
+A848; PHAGS-PA TA; D; No_Joining_Group
+A849; PHAGS-PA THA; D; No_Joining_Group
+A84A; PHAGS-PA DA; D; No_Joining_Group
+A84B; PHAGS-PA NA; D; No_Joining_Group
+A84C; PHAGS-PA PA; D; No_Joining_Group
+A84D; PHAGS-PA PHA; D; No_Joining_Group
+A84E; PHAGS-PA BA; D; No_Joining_Group
+A84F; PHAGS-PA MA; D; No_Joining_Group
+A850; PHAGS-PA TSA; D; No_Joining_Group
+A851; PHAGS-PA TSHA; D; No_Joining_Group
+A852; PHAGS-PA DZA; D; No_Joining_Group
+A853; PHAGS-PA WA; D; No_Joining_Group
+A854; PHAGS-PA ZHA; D; No_Joining_Group
+A855; PHAGS-PA ZA; D; No_Joining_Group
+A856; PHAGS-PA SMALL A; D; No_Joining_Group
+A857; PHAGS-PA YA; D; No_Joining_Group
+A858; PHAGS-PA RA; D; No_Joining_Group
+A859; PHAGS-PA LA; D; No_Joining_Group
+A85A; PHAGS-PA SHA; D; No_Joining_Group
+A85B; PHAGS-PA SA; D; No_Joining_Group
+A85C; PHAGS-PA HA; D; No_Joining_Group
+A85D; PHAGS-PA A; D; No_Joining_Group
+A85E; PHAGS-PA I; D; No_Joining_Group
+A85F; PHAGS-PA U; D; No_Joining_Group
+A860; PHAGS-PA E; D; No_Joining_Group
+A861; PHAGS-PA O; D; No_Joining_Group
+A862; PHAGS-PA QA; D; No_Joining_Group
+A863; PHAGS-PA XA; D; No_Joining_Group
+A864; PHAGS-PA FA; D; No_Joining_Group
+A865; PHAGS-PA GGA; D; No_Joining_Group
+A866; PHAGS-PA EE; D; No_Joining_Group
+A867; PHAGS-PA SUBJOINED WA; D; No_Joining_Group
+A868; PHAGS-PA SUBJOINED YA; D; No_Joining_Group
+A869; PHAGS-PA TTA; D; No_Joining_Group
+A86A; PHAGS-PA TTHA; D; No_Joining_Group
+A86B; PHAGS-PA DDA; D; No_Joining_Group
+A86C; PHAGS-PA NNA; D; No_Joining_Group
+A86D; PHAGS-PA ALTERNATE YA; D; No_Joining_Group
+A86E; PHAGS-PA VOICELESS SHA; D; No_Joining_Group
+A86F; PHAGS-PA VOICED HA; D; No_Joining_Group
+A870; PHAGS-PA ASPIRATED FA; D; No_Joining_Group
+A871; PHAGS-PA SUBJOINED RA; D; No_Joining_Group
+A872; PHAGS-PA SUPERFIXED RA; L; No_Joining_Group
+A873; PHAGS-PA CANDRABINDU; U; No_Joining_Group
+
+# Manichaean Characters
+
+10AC0; MANICHAEAN ALEPH; D; MANICHAEAN ALEPH
+10AC1; MANICHAEAN BETH; D; MANICHAEAN BETH
+10AC2; MANICHAEAN BETH WITH 2 DOTS ABOVE; D; MANICHAEAN BETH
+10AC3; MANICHAEAN GIMEL; D; MANICHAEAN GIMEL
+10AC4; MANICHAEAN GIMEL WITH ATTACHED RING BELOW; D; MANICHAEAN GIMEL
+10AC5; MANICHAEAN DALETH; R; MANICHAEAN DALETH
+10AC6; MANICHAEAN HE; U; No_Joining_Group
+10AC7; MANICHAEAN WAW; R; MANICHAEAN WAW
+10AC8; MANICHAEAN UD; U; No_Joining_Group
+10AC9; MANICHAEAN ZAYIN; R; MANICHAEAN ZAYIN
+10ACA; MANICHAEAN ZAYIN WITH 2 DOTS ABOVE; R; MANICHAEAN ZAYIN
+10ACB; MANICHAEAN JAYIN; U; No_Joining_Group
+10ACC; MANICHAEAN JAYIN WITH 2 DOTS ABOVE; U; No_Joining_Group
+10ACD; MANICHAEAN HETH; L; MANICHAEAN HETH
+10ACE; MANICHAEAN TETH; R; MANICHAEAN TETH
+10ACF; MANICHAEAN YODH; R; MANICHAEAN YODH
+10AD0; MANICHAEAN KAPH; R; MANICHAEAN KAPH
+10AD1; MANICHAEAN KAPH WITH DOT ABOVE; R; MANICHAEAN KAPH
+10AD2; MANICHAEAN KAPH WITH 2 DOTS ABOVE; R; MANICHAEAN KAPH
+10AD3; MANICHAEAN LAMEDH; D; MANICHAEAN LAMEDH
+10AD4; MANICHAEAN DHAMEDH; D; MANICHAEAN DHAMEDH
+10AD5; MANICHAEAN THAMEDH; D; MANICHAEAN THAMEDH
+10AD6; MANICHAEAN MEM; D; MANICHAEAN MEM
+10AD7; MANICHAEAN NUN; L; MANICHAEAN NUN
+10AD8; MANICHAEAN SAMEKH; D; MANICHAEAN SAMEKH
+10AD9; MANICHAEAN AYIN; D; MANICHAEAN AYIN
+10ADA; MANICHAEAN AYIN WITH 2 DOTS ABOVE; D; MANICHAEAN AYIN
+10ADB; MANICHAEAN PE; D; MANICHAEAN PE
+10ADC; MANICHAEAN PE WITH DOT ABOVE; D; MANICHAEAN PE
+10ADD; MANICHAEAN SADHE; R; MANICHAEAN SADHE
+10ADE; MANICHAEAN QOPH; D; MANICHAEAN QOPH
+10ADF; MANICHAEAN QOPH WITH DOT ABOVE; D; MANICHAEAN QOPH
+10AE0; MANICHAEAN QOPH WITH 2 DOTS ABOVE; D; MANICHAEAN QOPH
+10AE1; MANICHAEAN RESH; R; MANICHAEAN RESH
+10AE2; MANICHAEAN SHIN; U; No_Joining_Group
+10AE3; MANICHAEAN SHIN WITH 2 DOTS ABOVE; U; No_Joining_Group
+10AE4; MANICHAEAN TAW; R; MANICHAEAN TAW
+10AEB; MANICHAEAN ONE; D; MANICHAEAN ONE
+10AEC; MANICHAEAN FIVE; D; MANICHAEAN FIVE
+10AED; MANICHAEAN TEN; D; MANICHAEAN TEN
+10AEE; MANICHAEAN TWENTY; D; MANICHAEAN TWENTY
+10AEF; MANICHAEAN HUNDRED; R; MANICHAEAN HUNDRED
+
+# Psalter Pahlavi Characters
+
+10B80; PSALTER PAHLAVI ALEPH; D; No_Joining_Group
+10B81; PSALTER PAHLAVI BETH; R; No_Joining_Group
+10B82; PSALTER PAHLAVI GIMEL; D; No_Joining_Group
+10B83; PSALTER PAHLAVI DALETH; R; No_Joining_Group
+10B84; PSALTER PAHLAVI HE; R; No_Joining_Group
+10B85; PSALTER PAHLAVI WAW-AYIN-RESH; R; No_Joining_Group
+10B86; PSALTER PAHLAVI ZAYIN; D; No_Joining_Group
+10B87; PSALTER PAHLAVI HETH; D; No_Joining_Group
+10B88; PSALTER PAHLAVI YODH; D; No_Joining_Group
+10B89; PSALTER PAHLAVI KAPH; R; No_Joining_Group
+10B8A; PSALTER PAHLAVI LAMEDH; D; No_Joining_Group
+10B8B; PSALTER PAHLAVI MEM-QOPH; D; No_Joining_Group
+10B8C; PSALTER PAHLAVI NUN; R; No_Joining_Group
+10B8D; PSALTER PAHLAVI SAMEKH; D; No_Joining_Group
+10B8E; PSALTER PAHLAVI PE; R; No_Joining_Group
+10B8F; PSALTER PAHLAVI SADHE; R; No_Joining_Group
+10B90; PSALTER PAHLAVI SHIN; D; No_Joining_Group
+10B91; PSALTER PAHLAVI TAW; R; No_Joining_Group
+10BA9; PSALTER PAHLAVI ONE; R; No_Joining_Group
+10BAA; PSALTER PAHLAVI TWO; R; No_Joining_Group
+10BAB; PSALTER PAHLAVI THREE; R; No_Joining_Group
+10BAC; PSALTER PAHLAVI FOUR; R; No_Joining_Group
+10BAD; PSALTER PAHLAVI TEN; D; No_Joining_Group
+10BAE; PSALTER PAHLAVI TWENTY; D; No_Joining_Group
+10BAF; PSALTER PAHLAVI HUNDRED; U; No_Joining_Group
+
+# Adlam Characters
+
+1E900;ADLAM CAPITAL ALIF; D; No_Joining_Group
+1E901;ADLAM CAPITAL DAALI; D; No_Joining_Group
+1E902;ADLAM CAPITAL LAAM; D; No_Joining_Group
+1E903;ADLAM CAPITAL MIIM; D; No_Joining_Group
+1E904;ADLAM CAPITAL BA; D; No_Joining_Group
+1E905;ADLAM CAPITAL SINNYIIYHE; D; No_Joining_Group
+1E906;ADLAM CAPITAL PE; D; No_Joining_Group
+1E907;ADLAM CAPITAL BHE; D; No_Joining_Group
+1E908;ADLAM CAPITAL RA; D; No_Joining_Group
+1E909;ADLAM CAPITAL E; D; No_Joining_Group
+1E90A;ADLAM CAPITAL FA; D; No_Joining_Group
+1E90B;ADLAM CAPITAL I; D; No_Joining_Group
+1E90C;ADLAM CAPITAL O; D; No_Joining_Group
+1E90D;ADLAM CAPITAL DHA; D; No_Joining_Group
+1E90E;ADLAM CAPITAL YHE; D; No_Joining_Group
+1E90F;ADLAM CAPITAL WAW; D; No_Joining_Group
+1E910;ADLAM CAPITAL NUN; D; No_Joining_Group
+1E911;ADLAM CAPITAL KAF; D; No_Joining_Group
+1E912;ADLAM CAPITAL YA; D; No_Joining_Group
+1E913;ADLAM CAPITAL U; D; No_Joining_Group
+1E914;ADLAM CAPITAL JIIM; D; No_Joining_Group
+1E915;ADLAM CAPITAL CHI; D; No_Joining_Group
+1E916;ADLAM CAPITAL HA; D; No_Joining_Group
+1E917;ADLAM CAPITAL QAAF; D; No_Joining_Group
+1E918;ADLAM CAPITAL GA; D; No_Joining_Group
+1E919;ADLAM CAPITAL NYA; D; No_Joining_Group
+1E91A;ADLAM CAPITAL TU; D; No_Joining_Group
+1E91B;ADLAM CAPITAL NHA; D; No_Joining_Group
+1E91C;ADLAM CAPITAL VA; D; No_Joining_Group
+1E91D;ADLAM CAPITAL KHA; D; No_Joining_Group
+1E91E;ADLAM CAPITAL GBE; D; No_Joining_Group
+1E91F;ADLAM CAPITAL ZAL; D; No_Joining_Group
+1E920;ADLAM CAPITAL KPO; D; No_Joining_Group
+1E921;ADLAM CAPITAL SHA; D; No_Joining_Group
+1E922;ADLAM SMALL ALIF; D; No_Joining_Group
+1E923;ADLAM SMALL DAALI; D; No_Joining_Group
+1E924;ADLAM SMALL LAAM; D; No_Joining_Group
+1E925;ADLAM SMALL MIIM; D; No_Joining_Group
+1E926;ADLAM SMALL BA; D; No_Joining_Group
+1E927;ADLAM SMALL SINNYIIYHE; D; No_Joining_Group
+1E928;ADLAM SMALL PE; D; No_Joining_Group
+1E929;ADLAM SMALL BHE; D; No_Joining_Group
+1E92A;ADLAM SMALL RA; D; No_Joining_Group
+1E92B;ADLAM SMALL E; D; No_Joining_Group
+1E92C;ADLAM SMALL FA; D; No_Joining_Group
+1E92D;ADLAM SMALL I; D; No_Joining_Group
+1E92E;ADLAM SMALL O; D; No_Joining_Group
+1E92F;ADLAM SMALL DHA; D; No_Joining_Group
+1E930;ADLAM SMALL YHE; D; No_Joining_Group
+1E931;ADLAM SMALL WAW; D; No_Joining_Group
+1E932;ADLAM SMALL NUN; D; No_Joining_Group
+1E933;ADLAM SMALL KAF; D; No_Joining_Group
+1E934;ADLAM SMALL YA; D; No_Joining_Group
+1E935;ADLAM SMALL U; D; No_Joining_Group
+1E936;ADLAM SMALL JIIM; D; No_Joining_Group
+1E937;ADLAM SMALL CHI; D; No_Joining_Group
+1E938;ADLAM SMALL HA; D; No_Joining_Group
+1E939;ADLAM SMALL QAAF; D; No_Joining_Group
+1E93A;ADLAM SMALL GA; D; No_Joining_Group
+1E93B;ADLAM SMALL NYA; D; No_Joining_Group
+1E93C;ADLAM SMALL TU; D; No_Joining_Group
+1E93D;ADLAM SMALL NHA; D; No_Joining_Group
+1E93E;ADLAM SMALL VA; D; No_Joining_Group
+1E93F;ADLAM SMALL KHA; D; No_Joining_Group
+1E940;ADLAM SMALL GBE; D; No_Joining_Group
+1E941;ADLAM SMALL ZAL; D; No_Joining_Group
+1E942;ADLAM SMALL KPO; D; No_Joining_Group
+1E943;ADLAM SMALL SHA; D; No_Joining_Group
 
 # EOF
