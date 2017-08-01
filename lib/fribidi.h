@@ -27,7 +27,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 #ifndef _FRIBIDI_H
 #define _FRIBIDI_H
@@ -42,6 +42,7 @@
 #include "fribidi-joining-types.h"
 #include "fribidi-joining.h"
 #include "fribidi-mirroring.h"
+#include "fribidi-brackets.h"
 #include "fribidi-arabic.h"
 #include "fribidi-shape.h"
 

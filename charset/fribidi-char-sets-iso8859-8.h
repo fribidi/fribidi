@@ -30,7 +30,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 
 #ifndef _FRIBIDI_CHAR_SETS_ISO8859_8_H

@@ -9,11 +9,11 @@
  *
  * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
- *   Dov Grobgeld, 1999, 2000
+ *   Dov Grobgeld, 1999, 2000, 2017
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
  * Copyright (C) 2001,2002 Behdad Esfahbod
- * Copyright (C) 1999,2000 Dov Grobgeld
+ * Copyright (C) 1999,2000,2017 Dov Grobgeld
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 
 #include "common.h"
@@ -38,13 +38,7 @@
 #include <fribidi-bidi-types.h>
 
 #include "run.h"
-#include "mem.h"
 #include "bidi-types.h"
-
-#if USE_SIMPLE_MALLOC+0
-#else
-static FriBidiRun *free_runs = NULL;
-#endif
 
 FriBidiRun *
 new_run (
@@ -53,52 +47,15 @@ new_run (
 {
   register FriBidiRun *run;
 
-#if USE_SIMPLE_MALLOC+0
   run = fribidi_malloc (sizeof (FriBidiRun));
-#else /* !USE_SIMPLE_MALLOC */
-  if (free_runs)
-    {
-      run = free_runs;
-      free_runs = run->next;
-    }
-  else
-    {
-      static FriBidiMemChunk *run_mem_chunk = NULL;
-
-      if UNLIKELY
-	(!run_mem_chunk)
-	 run_mem_chunk = fribidi_chunk_new_for_type (FriBidiRun);
-
-      if LIKELY
-	(run_mem_chunk)
-	run = fribidi_chunk_new (FriBidiRun, run_mem_chunk);
-      else
-	run = NULL;
-    }
-#endif /* !USE_SIMPLE_MALLOC */
 
   if LIKELY
     (run)
     {
-      run->len = run->pos = run->level = 0;
-      run->next = run->prev = NULL;
+      run->len = run->pos = run->level = run->isolate_level = 0;
+      run->next = run->prev = run->prev_isolate = run->next_isolate = NULL;
     }
   return run;
-}
-
-void
-free_run (
-  /* input */
-  FriBidiRun *run
-)
-{
-  fribidi_assert (run);
-#if USE_SIMPLE_MALLOC+0
-  fribidi_free (run);
-#else /* !USE_SIMPLE_MALLOC */
-  run->next = free_runs;
-  free_runs = run;
-#endif /* !USE_SIMPLE_MALLOC */
 }
 
 FriBidiRun *
@@ -133,7 +90,6 @@ free_run_list (
 
   fribidi_validate_run_list (run_list);
 
-#if USE_SIMPLE_MALLOC+0
   {
     register FriBidiRun *pp;
 
@@ -146,13 +102,9 @@ free_run_list (
 
 	p = pp;
 	pp = pp->next;
-	free_run (p);
+	fribidi_free (p);
       };
   }
-#else /* !USE_SIMPLE_MALLOC */
-  run_list->prev->next = free_runs;
-  free_runs = run_list;
-#endif /* !USE_SIMPLE_MALLOC */
 }
 
 
@@ -160,6 +112,7 @@ FriBidiRun *
 run_list_encode_bidi_types (
   /* input */
   const FriBidiCharType *bidi_types,
+  const FriBidiBracketType *bracket_types,
   const FriBidiStrIndex len
 )
 {
@@ -179,7 +132,15 @@ run_list_encode_bidi_types (
   for (i = 0; i < len; i++)
     {
       register FriBidiCharType char_type = bidi_types[i];
-      if (char_type != last->type)
+      register FriBidiBracketType bracket_type = FRIBIDI_NO_BRACKET;
+      if (bracket_types)
+        bracket_type = bracket_types[i];
+      
+      if (char_type != last->type
+          || bracket_type.bracket_id > 0 /* Always separate bracket into single char runs! */
+          || last->bracket_type.bracket_id > 0
+          || FRIBIDI_IS_ISOLATE(char_type)
+          )
 	{
 	  run = new_run ();
 	  if UNLIKELY
@@ -189,6 +150,7 @@ run_list_encode_bidi_types (
 	  last->len = run->pos - last->pos;
 	  last->next = run;
 	  run->prev = last;
+          run->bracket_type = bracket_type;
 	  last = run;
 	}
     }
@@ -274,6 +236,7 @@ shadow_run_list (
 	    p->next->prev = r;
 	    r->next = p->next;
 	    r->level = p->level;
+	    r->isolate_level = p->isolate_level;
 	    r->type = p->type;
 	    r->len = p->pos + p->len - pos2;
 	    r->pos = pos2;
@@ -292,7 +255,7 @@ shadow_run_list (
 	      {
 		t = p;
 		p = p->prev;
-		free_run (t);
+		fribidi_free (t);
 	      }
 	  }
       }
@@ -324,7 +287,7 @@ shadow_run_list (
 	  {
 	    t = s;
 	    s = s->next;
-	    free_run (t);
+	    fribidi_free (t);
 	  }
       }
     /* before updating the next and prev runs to point to the inserted q,

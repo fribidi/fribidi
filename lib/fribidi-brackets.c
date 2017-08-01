@@ -1,4 +1,4 @@
-/* fribidi-mirroring.c - get mirrored character
+/* fribidi-brackets.c - get bracketed character
  *
  * Copyright (C) 2004  Sharif FarsiWeb, Inc
  * Copyright (C) 2001, 2002, 2004  Behdad Esfahbod
@@ -23,66 +23,76 @@
  * For licensing issues, contact <fribidi.license@gmail.com> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
-/* $Id: fribidi-mirroring.c,v 1.15 2005-11-03 01:39:01 behdad Exp $
- * $Author: behdad $
- * $Date: 2005-11-03 01:39:01 $
- * $Revision: 1.15 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-mirroring.c,v $
- *
+/* 
  * Author(s):
  *   Behdad Esfahbod, 2001, 2002, 2004
- *   Dov Grobgeld, 1999, 2000
+ *   Dov Grobgeld, 1999, 2000, 2017
  */
 
 #include "common.h"
 
-#include <fribidi-mirroring.h>
+#include <fribidi-brackets.h>
 
-#include "mirroring.tab.i"
+#include "brackets.tab.i"
+#include "brackets-type.tab.i"
+#include <stdio.h>
 
-FRIBIDI_ENTRY fribidi_boolean
-fribidi_get_mirror_char (
+#define FRIBIDI_TYPE_BRACKET_OPEN 2
+
+FRIBIDI_ENTRY FriBidiBracketType
+fribidi_get_bracket (
   /* input */
-  FriBidiChar ch,
-  /* output */
-  FriBidiChar *mirrored_ch
+  FriBidiChar ch
 )
 {
-  register FriBidiChar result;
-  result = FRIBIDI_GET_MIRRORING (ch);
-  if (mirrored_ch)
-    *mirrored_ch = result;
-  return ch != result ? true : false;
+  FriBidiBracketType bracket_type;
+  register fribidi_uint8 char_type;
+
+  /* The bracket type from the table may be:
+        0 - Not a bracket
+	1 - a bracket
+	2 - closing.
+
+     This will be recodeded into the FriBidiBracketType as having a
+     bracket_id = 0 if the character is not a bracket.
+   */
+  char_type = FRIBIDI_GET_BRACKET_TYPE (ch);
+  fribidi_boolean is_open = 0;
+
+  if (char_type == 0) 
+    bracket_type.bracket_id = 0;
+  else
+  {
+    is_open = (char_type & FRIBIDI_TYPE_BRACKET_OPEN) != 0;
+    bracket_type.bracket_id = FRIBIDI_GET_BRACKETS (ch);
+  }
+  bracket_type.is_open = is_open;
+
+  return bracket_type;
 }
 
-
 FRIBIDI_ENTRY void
-fribidi_shape_mirroring (
+fribidi_get_bracket_types (
   /* input */
-  const FriBidiLevel *embedding_levels,
+  const FriBidiChar *str,
   const FriBidiStrIndex len,
-  /* input and output */
-  FriBidiChar *str
+  const FriBidiType *types,
+  /* output */
+  FriBidiBracketType *btypes
 )
 {
-  register FriBidiStrIndex i;
+  register FriBidiStrIndex i = len;
+  for (; i; i--)
+    {
+      /* Optimization that bracket must be of types ON */
+      if (types[i] == FRIBIDI_TYPE_ON)
+	*btypes = NoBracket;
+      else
+	*btypes = fribidi_get_bracket (*str);
 
-  DBG ("in fribidi_shape_mirroring");
-
-  if UNLIKELY
-    (len == 0 || !str) return;
-
-  fribidi_assert (embedding_levels);
-
-  /* L4. Mirror all characters that are in odd levels and have mirrors. */
-  for (i = len - 1; i >= 0; i--)
-    if (FRIBIDI_LEVEL_IS_RTL (embedding_levels[i]))
-      {
-	FriBidiChar mirrored_ch;
-
-	if (fribidi_get_mirror_char (str[i], &mirrored_ch))
-	  str[i] = mirrored_ch;
-      }
+      btypes++;
+      str++;
+    }
 }
 
 /* Editor directions:

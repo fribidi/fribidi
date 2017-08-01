@@ -28,7 +28,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  *
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 #ifndef _FRIBIDI_TYPES_H
 #define _FRIBIDI_TYPES_H
@@ -118,7 +118,7 @@
 #endif /* FRIBIDI_STR_INDEX */
 
 
-typedef FRIBIDI_UINT8 fribidi_int8;
+typedef FRIBIDI_INT8 fribidi_int8;
 typedef FRIBIDI_INT16 fribidi_int16;
 typedef FRIBIDI_INT32 fribidi_int32;
 typedef FRIBIDI_UINT8 fribidi_uint8;
@@ -128,6 +128,16 @@ typedef FRIBIDI_BOOLEAN fribidi_boolean;
 
 typedef FRIBIDI_UNICHAR FriBidiChar;
 typedef FRIBIDI_STR_INDEX FriBidiStrIndex;
+
+struct _FriBracketTypeStruct {
+  FriBidiChar bracket_id;
+  fribidi_boolean is_open;
+};
+
+typedef struct _FriBracketTypeStruct FriBidiBracketType;
+
+/* Use FRIBIDI_NO_BRACKET for assigning to a non-bracket */
+#define FRIBIDI_NO_BRACKET { 0, 0 }
 
 
 #ifndef FRIBIDI_MAX_STRING_LENGTH

@@ -28,7 +28,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 #ifndef _MEM_H
 #define _MEM_H

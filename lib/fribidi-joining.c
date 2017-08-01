@@ -28,14 +28,13 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 
 #include "common.h"
 
 #include <fribidi-joining.h>
 
-#include "mem.h"
 #include "bidi-types.h"
 #include "joining-types.h"
 

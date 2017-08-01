@@ -18,7 +18,7 @@
  * along with GNU FriBidi; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  * 
- * For licensing issues, contact <license@farsiweb.info> or write to
+ * For licensing issues, contact <fribidi.license@gmail.com> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
  */
 /* $Id: fribidi-arabic.c,v 1.3 2007-04-05 16:14:39 behdad Exp $

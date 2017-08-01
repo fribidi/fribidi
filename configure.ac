@@ -28,10 +28,10 @@ dnl   FRIBIDI_BINARY_AGE = FRIBIDI_INTERFACE_AGE = 0;
 dnl
 m4_define(fribidi_major_version, 0)dnl
 m4_define(fribidi_minor_version, 19)dnl
-m4_define(fribidi_micro_version, 7)dnl
-m4_define(fribidi_interface_version, 3)dnl
-m4_define(fribidi_interface_age, 6)dnl
-m4_define(fribidi_binary_age, 3)dnl
+m4_define(fribidi_micro_version, 8)dnl
+m4_define(fribidi_interface_version, 4)dnl
+m4_define(fribidi_interface_age, 0)dnl
+m4_define(fribidi_binary_age, 0)dnl
 dnl
 m4_define(fribidi_version,
 	  m4_if(m4_eval(fribidi_micro_version()),0,
@@ -213,5 +213,6 @@ AC_CONFIG_FILES([fribidi.pc
 		 lib/Makefile
 		 bin/Makefile
 		 doc/Makefile
-		 test/Makefile])
+		 test/Makefile
+                 fribidi-vs-unicode/Makefile])
 AC_OUTPUT

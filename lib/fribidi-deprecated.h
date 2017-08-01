@@ -28,7 +28,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 #ifndef _FRIBIDI_DEPRECATED_H
 #define _FRIBIDI_DEPRECATED_H
@@ -114,6 +114,8 @@ FRIBIDI_ENTRY FriBidiLevel
 fribidi_log2vis_get_embedding_levels (
   const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
 					   fribidi_get_bidi_types() */
+  const FriBidiBracketType *bracket_types,	/* input list of bidi types as returned by
+					   fribidi_get_bracket_types() */
   const FriBidiStrIndex len,	/* input string length of the paragraph */
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
 				 * base direction */

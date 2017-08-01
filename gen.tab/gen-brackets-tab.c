@@ -1,17 +1,13 @@
 /* FriBidi
- * gen-mirroring-tab.c - generate mirroring.tab.i
- *
- * $Id: gen-mirroring-tab.c,v 1.14 2006-01-31 03:23:12 behdad Exp $
- * $Author: behdad $
- * $Date: 2006-01-31 03:23:12 $
- * $Revision: 1.14 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-mirroring-tab.c,v $
+ * gen-brackets-tab.c - generate brackets.tab.i
  *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
+ *   Dov Grobgeld 2017
  *
  * Copyright (C) 2004 Sharif FarsiWeb, Inc
  * Copyright (C) 2001,2002,2004 Behdad Esfahbod
+ * Copyright (C) 2017 Dov Grobgeld
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,7 +28,7 @@
  */
 
 #include <common.h>
-
+#include <ctype.h>
 #include <fribidi-unicode.h>
 
 #include <stdio.h>
@@ -56,8 +52,8 @@
 
 #include "packtab.h"
 
-#define appname "gen-mirroring-tab"
-#define outputname "mirroring.tab.i"
+#define appname "gen-brackets-tab"
+#define outputname "brackets.tab.i"
 
 static void
 die (
@@ -81,6 +77,19 @@ die2 (
 }
 
 static void
+die3 (
+  const char *fmt,
+  const char *p,
+  const char *q
+)
+{
+  fprintf (stderr, appname ": ");
+  fprintf (stderr, fmt, p, q);
+  fprintf (stderr, "\n");
+  exit (1);
+}
+
+static void
 die4 (
   const char *fmt,
   unsigned long l,
@@ -94,10 +103,11 @@ die4 (
   exit (1);
 }
 
-#define table_name "Mir"
-#define macro_name "FRIBIDI_GET_MIRRORING"
+#define table_name "Brk"
+#define macro_name "FRIBIDI_GET_BRACKETS"
 
 static signed int table[FRIBIDI_UNICODE_CHARS];
+static signed int equiv_table[FRIBIDI_UNICODE_CHARS];
 static char buf[4000];
 static signed long max_dist;
 
@@ -110,32 +120,88 @@ init (
 }
 
 static void
-clear_tab (
+clear_tabs (
   void
 )
 {
   register FriBidiChar c;
 
   for (c = 0; c < FRIBIDI_UNICODE_CHARS; c++)
-    table[c] = 0;
+    {
+      table[c] = 0;
+      equiv_table[c] = 0;
+    }
 }
 
+static signed int table[FRIBIDI_UNICODE_CHARS];
+static char buf[4000];
+
+/* Read the canonical mapping of unicode characters and store them in the
+   equiv_table array. */
 static void
-init_tab_mirroring_txt (
-  void
+read_unicode_data_txt_equivalence (
+  FILE *f
 )
 {
-  clear_tab ();
+  unsigned long c, l;
+
+  l = 0;
+  while (fgets (buf, sizeof buf, f))
+    {
+      int i;
+      const char *s = buf;
+      char ce_string[100]; /* For parsing the equivalence */
+
+      l++;
+
+      while (*s == ' ')
+	s++;
+
+      if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
+	continue;
+      /*  Field:       0 ; 1    ; 2    ; 3    ; 4    ; 5           */
+      i = sscanf (s, "%lx;%*[^;];%*[^;];%*[^;];%*[^;];%[^;]", &c, ce_string);
+      if (c >= FRIBIDI_UNICODE_CHARS)
+        {
+          fprintf (stderr, "invalid input at line %ld: %s", l, s);
+          exit(1);
+        }
+      if (i==1)
+        continue;
+
+      /* split and parse ce */
+      char *p = ce_string;
+      int ce = -1;
+      int in_tag = 0;
+      while(*p)
+        {
+          if (*p==';')
+            break;
+          else if (*p=='<')
+            in_tag = 1;
+          else if (*p=='>')
+            in_tag = 0;
+          else if (!in_tag && isalnum(*p))
+            {
+              /* Assume we got a hexa decimal */
+              ce = strtol(p,NULL,16);
+              break;
+            }
+          p++;
+        }
+
+      /* FIXME: We don't handle First..Last parts of UnicodeData.txt,
+       * but it works, since all those are LTR. */
+      equiv_table[c] = ce;
+    }
 }
 
 static void
-read_bidi_mirroring_txt (
+read_bidi_brackets_txt (
   FILE *f
 )
 {
   unsigned long l;
-
-  init_tab_mirroring_txt ();
 
   l = 0;
   while (fgets (buf, sizeof buf, f))
@@ -144,6 +210,7 @@ read_bidi_mirroring_txt (
       signed long dist;
       int k;
       const char *s = buf;
+      char open_close;
 
       l++;
 
@@ -153,9 +220,21 @@ read_bidi_mirroring_txt (
       if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
 	continue;
 
-      k = sscanf (s, "%lx; %lx", &i, &j);
-      if (k != 2 || i >= FRIBIDI_UNICODE_CHARS || j >= FRIBIDI_UNICODE_CHARS)
+      k = sscanf (s, "%lx; %lx; %c", &i, &j, &open_close);
+      if (k != 3 || i >= FRIBIDI_UNICODE_CHARS || j >= FRIBIDI_UNICODE_CHARS)
 	die4 ("invalid pair in input at line %ld: %04lX, %04lX", l, i, j);
+
+      /* Open braces map to themself */
+      if (open_close=='o')
+        j = i;
+      
+      /* Turn j into the unicode equivalence if it exists */
+      if (equiv_table[j])
+        {
+          /* printf("Found match for %04x->%04x\n", j, equiv_table[j]); */
+          j = equiv_table[j];
+        }
+
       dist = ((signed long) j - (signed long) i);
       table[i] = dist;
       if (dist > max_dist)
@@ -167,26 +246,39 @@ read_bidi_mirroring_txt (
 
 static void
 read_data (
-  const char *data_file_type,
-  const char *data_file_name
+  const char *bracket_datafile_type,
+  const char *bracket_datafile_name,
+  const char *uni_datafile_type,
+  const char *uni_datafile_name
 )
 {
   FILE *f;
 
-  fprintf (stderr, "Reading `%s'\n", data_file_name);
-  if (!(f = fopen (data_file_name, "rt")))
-    die2 ("error: cannot open `%s' for reading", data_file_name);
+  clear_tabs ();
 
-  if (!strcmp (data_file_type, "BidiMirroring.txt"))
-    read_bidi_mirroring_txt (f);
+  fprintf (stderr, "Reading `%s'\n", uni_datafile_name);
+  if (!(f = fopen (uni_datafile_name, "rt")))
+    die2 ("error: cannot open `%s' for reading", bracket_datafile_name);
+
+  if (!strcmp (uni_datafile_type, "UnicodeData.txt"))
+    read_unicode_data_txt_equivalence (f);
   else
-    die2 ("error: unknown data-file-type %s", data_file_type);
+    die2 ("error: unknown data-file-type %s", uni_datafile_type);
+
+  fprintf (stderr, "Reading `%s'\n", bracket_datafile_name);
+  if (!(f = fopen (bracket_datafile_name, "rt")))
+    die2 ("error: cannot open `%s' for reading", bracket_datafile_name);
+
+  if (!strcmp (bracket_datafile_type, "BidiBrackets.txt"))
+    read_bidi_brackets_txt (f);
+  else
+    die2 ("error: unknown data-file-type %s", bracket_datafile_type);
 
   fclose (f);
 }
 
 static void
-gen_mirroring_tab (
+gen_brackets_tab (
   int max_depth,
   const char *data_file_type
 )
@@ -227,22 +319,26 @@ main (
   const char **argv
 )
 {
-  const char *data_file_type = "BidiMirroring.txt";
+  const char *bracket_datafile_type = "BidiBrackets.txt";
+  const char *uni_datafile_type = "UnicodeData.txt";
 
-  if (argc < 3)
-    die2 ("usage:\n  " appname " max-depth /path/to/%s [junk...]",
-	  data_file_type);
+  if (argc < 4)
+    die3 ("usage:\n  " appname " max-depth /path/to/%s /path/to/%s [junk...]",
+	  bracket_datafile_type,
+          uni_datafile_type);
 
   {
     int max_depth = atoi (argv[1]);
-    const char *data_file_name = argv[2];
+    const char *bracket_datafile_name = argv[2];
+    const char *uni_datafile_name = argv[3];
 
     if (max_depth < 2)
       die ("invalid depth");
 
     init ();
-    read_data (data_file_type, data_file_name);
-    gen_mirroring_tab (max_depth, data_file_type);
+    read_data (bracket_datafile_type, bracket_datafile_name,
+               uni_datafile_type, uni_datafile_name);
+    gen_brackets_tab (max_depth, bracket_datafile_type);
   }
 
   return 0;

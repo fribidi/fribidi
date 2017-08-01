@@ -30,7 +30,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  * 
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 #ifndef _RUN_H
 #define _RUN_H
@@ -54,6 +54,11 @@ struct _FriBidiRunStruct
   FriBidiStrIndex pos, len;
   FriBidiCharType type;
   FriBidiLevel level;
+  FriBidiLevel isolate_level;
+  FriBidiBracketType bracket_type;
+
+  /* Additional links for connecting the isolate tree */
+  FriBidiRun *prev_isolate, *next_isolate;  
 };
 
 
@@ -63,11 +68,6 @@ new_run (
   void
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
-
-#define free_run FRIBIDI_PRIVATESPACE(free_run)
-     void free_run (
-  FriBidiRun *run
-) FRIBIDI_GNUC_HIDDEN;
 
 #define new_run_list FRIBIDI_PRIVATESPACE(new_run_list)
      FriBidiRun *new_run_list (
@@ -83,6 +83,7 @@ new_run (
 #define run_list_encode_bidi_types FRIBIDI_PRIVATESPACE(run_list_encode_bidi_types)
      FriBidiRun *run_list_encode_bidi_types (
   const FriBidiCharType *bidi_types,
+  const FriBidiBracketType *bracket_types,
   const FriBidiStrIndex len
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;

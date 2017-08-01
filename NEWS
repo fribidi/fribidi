@@ -1,3 +1,8 @@
+Overview of changes between 0.19.6 and 0.19.8
+=============================================
+* Full isolate and parenthesis support as per Unicode 6.3
+* This version is not backwards compatible.
+
 Overview of changes between 0.19.6 and 0.19.7
 =============================================
 * Disable thread-unsafe memory pool by default. (bug #79385)

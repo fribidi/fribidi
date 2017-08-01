@@ -28,7 +28,7 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA
  *
- * For licensing issues, contact <license@farsiweb.info>.
+ * For licensing issues, contact <fribidi.license@gmail.com>.
  */
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -66,9 +66,17 @@
 	FRIBIDI_BEGIN_STMT \
 	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t); \
 	FRIBIDI_END_STMT
+#define MSG3(s, t, u) \
+	FRIBIDI_BEGIN_STMT \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u); \
+	FRIBIDI_END_STMT
 #define MSG5(s, t, u, v, w) \
 	FRIBIDI_BEGIN_STMT \
 	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u, v, w); \
+	FRIBIDI_END_STMT
+#define MSG6(s, t, u, v, w, z)                    \
+	FRIBIDI_BEGIN_STMT \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u, v, w, z);        \
 	FRIBIDI_END_STMT
 #endif /* !MSG */
 

@@ -3,13 +3,17 @@ EXTRA_PROGRAMS = \
 		gen-bidi-type-tab \
 		gen-joining-type-tab \
 		gen-arabic-shaping-tab \
-		gen-mirroring-tab
+		gen-mirroring-tab \
+		gen-brackets-tab \
+                gen-brackets-type-tab 
 
 gen_unicode_version_SOURCES = gen-unicode-version.c
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
 gen_joining_type_tab_SOURCES = gen-joining-type-tab.c packtab.c packtab.h
 gen_arabic_shaping_tab_SOURCES = gen-arabic-shaping-tab.c
 gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
+gen_brackets_tab_SOURCES = gen-brackets-tab.c packtab.c packtab.h
+gen_brackets_type_tab_SOURCES = gen-brackets-type-tab.c packtab.c packtab.h
 
 CLEANFILES = $(EXTRA_PROGRAMS)
 DISTCLEANFILES =
@@ -34,6 +38,7 @@ UCD_FILES = \
 		unidata/ReadMe.txt \
 		unidata/UnicodeData.txt \
 		unidata/BidiMirroring.txt \
+		unidata/BidiBrackets.txt \
 		unidata/ArabicShaping.txt
 
 EXTRA_DIST = $(UCD_FILES)
@@ -97,6 +102,31 @@ mirroring.tab.i: \
 		$(gen_mirroring_tab_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) $(gen_mirroring_tab)
 	./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
+
+# generate brackets.tab.i
+
+gen_brackets_tab = gen-brackets-tab$(EXEEXT)
+
+brackets.tab.i: \
+		BidiBrackets.txt \
+		UnicodeData.txt \
+		fribidi-unicode-version.h \
+		$(gen_brackets_tab_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_brackets_tab)
+	./$(gen_brackets_tab) $(COMPRESSION) $^ > $@ \
+	|| ($(RM) $@ && false)
+
+# generate brackets-type.tab.i
+
+gen_brackets_type_tab = gen-brackets-type-tab$(EXEEXT)
+
+brackets-type.tab.i: \
+		BidiBrackets.txt \
+		fribidi-unicode-version.h \
+		$(gen_brackets_type_tab_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_brackets_tab)
+	./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate fribidi-unicode-version.h

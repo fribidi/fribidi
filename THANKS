@@ -3,16 +3,20 @@ Thanks to:
 Behnam Esfahbod <behnam@esfahbod.info>
 	* Testing and auditing code.
 
+Dov Grobgeld <dov.grobgeld@gmail.com>
+	* Initial author, maintainer before the 0.9 releases. Implementation
+        of the BiDi algorithms changes in Unicode 6.3.
+   
+Behdad Esfahbod <behdad@behdad.org>
+	* Maintainer. Author of the entire 0.9 release series up to Unicode 6.3
+        support.
+
 
 And for the previous versions of FriBidi (pre 2002), thanks to:
-
 
 Tomas Frydrych <tomas@frydrych.uklinux.net>
 	* Contirbuted patches for compiling GNU FriBidi under other OSes.
 
-Dov Grobgeld <dov.grobgeld@gmail.com>
-	* Initial author, and maintainer before the 0.9 releases.
-   
 Franck Portaneri
 	* For the Mozilla BiDi languges support document;
 

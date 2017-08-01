@@ -12,6 +12,7 @@ libfribidi_la_headers = \
 		fribidi-joining-types.h \
 		fribidi-joining-types-list.h \
 		fribidi-mirroring.h \
+		fribidi-brackets.h \
 		fribidi-shape.h \
 		fribidi-types.h \
 		fribidi-unicode.h \
