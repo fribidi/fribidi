@@ -68,7 +68,7 @@ fribidi_get_bracket_types (
   /* input */
   const FriBidiChar *str,
   const FriBidiStrIndex len,
-  const FriBidiType *types,
+  const FriBidiCharType *types,
   /* output */
   FriBidiBracketType *btypes
 );

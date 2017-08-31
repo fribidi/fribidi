@@ -57,9 +57,9 @@ fribidi_get_bracket (
      bracket_id = 0 if the character is not a bracket.
    */
   char_type = FRIBIDI_GET_BRACKET_TYPE (ch);
-  fribidi_boolean is_open = 0;
+  fribidi_boolean is_open = false;
 
-  if (char_type == 0) 
+  if (char_type == 0)
     bracket_type.bracket_id = 0;
   else
   {
@@ -76,7 +76,7 @@ fribidi_get_bracket_types (
   /* input */
   const FriBidiChar *str,
   const FriBidiStrIndex len,
-  const FriBidiType *types,
+  const FriBidiCharType *types,
   /* output */
   FriBidiBracketType *btypes
 )
@@ -86,7 +86,10 @@ fribidi_get_bracket_types (
     {
       /* Optimization that bracket must be of types ON */
       if (types[i] == FRIBIDI_TYPE_ON)
+      {
+        const FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
 	*btypes = NoBracket;
+      }
       else
 	*btypes = fribidi_get_bracket (*str);
 
