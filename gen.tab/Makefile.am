@@ -125,7 +125,7 @@ brackets-type.tab.i: \
 		BidiBrackets.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_type_tab_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) $(gen_brackets_tab)
+	$(MAKE) $(AM_MAKEFLAGS) $(gen_brackets_type_tab)
 	./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
