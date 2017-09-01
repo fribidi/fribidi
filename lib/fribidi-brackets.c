@@ -76,11 +76,12 @@ fribidi_get_bracket_types (
   /* input */
   const FriBidiChar *str,
   const FriBidiStrIndex len,
-  const FriBidiType *types,
+  const FriBidiCharType *types,
   /* output */
   FriBidiBracketType *btypes
 )
 {
+  const FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
   register FriBidiStrIndex i = len;
   for (; i; i--)
     {
