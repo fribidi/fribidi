@@ -858,8 +858,8 @@ fribidi_get_par_embedding_levels (
       FriBidiRun *ppp_prev, *ppp_next;
       int iso_level;
 
-      ppp_prev = get_adjacent_run(pp, FALSE, FALSE);
-      ppp_next = get_adjacent_run(pp, TRUE, FALSE);
+      ppp_prev = get_adjacent_run(pp, false, false);
+      ppp_next = get_adjacent_run(pp, true, false);
 
       this_type = RL_TYPE (pp);
       iso_level = RL_ISOLATE_LEVEL(pp);
@@ -944,8 +944,8 @@ fribidi_get_par_embedding_levels (
       this_type = RL_TYPE (pp);
       iso_level = RL_ISOLATE_LEVEL(pp);
 
-      ppp_prev = get_adjacent_run(pp, FALSE, FALSE);
-      ppp_next = get_adjacent_run(pp, TRUE, FALSE);
+      ppp_prev = get_adjacent_run(pp, false, false);
+      ppp_next = get_adjacent_run(pp, true, false);
 
       if (RL_LEVEL(ppp_prev) == RL_LEVEL(pp))
         prev_type = RL_TYPE(ppp_prev);
@@ -1205,8 +1205,8 @@ fribidi_get_par_embedding_levels (
       FriBidiCharType prev_type, this_type, next_type;
       FriBidiRun *ppp_prev, *ppp_next;
 
-      ppp_prev = get_adjacent_run(pp, FALSE, FALSE);
-      ppp_next = get_adjacent_run(pp, TRUE, FALSE);
+      ppp_prev = get_adjacent_run(pp, false, false);
+      ppp_next = get_adjacent_run(pp, true, false);
 
       /* "European and Arabic numbers are treated as though they were R"
          FRIBIDI_CHANGE_NUMBER_TO_RTL does this. */
