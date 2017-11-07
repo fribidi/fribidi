@@ -504,7 +504,7 @@ static void free_pairing_nodes(FriBidiPairingNode *nodes)
 }
 
 FRIBIDI_ENTRY FriBidiLevel
-fribidi_get_par_embedding_levels (
+fribidi_get_par_embedding_levels_ex (
   /* input */
   const FriBidiCharType *bidi_types,
   const FriBidiBracketType *bracket_types,

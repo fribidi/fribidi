@@ -68,8 +68,8 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
   const FriBidiStrIndex len	/* input string length */
 );
 
-#define fribidi_get_par_embedding_levels FRIBIDI_NAMESPACE(get_par_embedding_levels)
-/* fribidi_get_par_embedding_levels - get bidi embedding levels of a paragraph
+#define fribidi_get_par_embedding_levels_ex FRIBIDI_NAMESPACE(get_par_embedding_levels_ex)
+/* fribidi_get_par_embedding_levels_ex - get bidi embedding levels of a paragraph
  *
  * This function finds the bidi embedding levels of a single paragraph,
  * as defined by the Unicode Bidirectional Algorithm available at
@@ -85,7 +85,7 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
  * (memory allocation failure most probably).
  */
 FRIBIDI_ENTRY FriBidiLevel
-fribidi_get_par_embedding_levels (
+fribidi_get_par_embedding_levels_ex (
   const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
 					   fribidi_get_bidi_types() */
   const FriBidiBracketType *bracket_types,	/* input list of bracket types as returned by
