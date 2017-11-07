@@ -114,7 +114,7 @@ static FriBidiCharSetHandler char_sets[FRIBIDI_CHAR_SETS_NUM + 1] = {
 };
 
 #if FRIBIDI_USE_GLIB+0
-# include <glib.h>
+# include <glib/gstrfuncs.h>
 # define fribidi_strcasecmp g_ascii_strcasecmp
 #else /* !FRIBIDI_USE_GLIB */
 static char

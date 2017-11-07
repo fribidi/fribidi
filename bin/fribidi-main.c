@@ -508,7 +508,7 @@ main (
 			      while (wid > 0 && idx < len)
 				{
 				  wid -=
-				    FRIBIDI_IS_EXPLICIT_OR_BN_OR_NSM
+				    FRIBIDI_IS_EXPLICIT_OR_ISOLATE_OR_BN_OR_NSM
 				    (fribidi_get_bidi_type (visual[idx])) ? 0
 				    : 1;
 				  idx++;

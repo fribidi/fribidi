@@ -27,7 +27,9 @@ EXTRA_DIST = \
 	$(TESTS) \
 	$(TEST_DATAS)
 
-test_%.reference: test_%.input
+SUFFIXES: .reference .input
+
+.reference.input:
 	testcase="$@" && \
 	charset="`echo "$@" | sed 's/_[^_]*$$//;s/.*_//'`" && \
 	$(top_builddir)/bin/fribidi --test --charset "$$charset" "$<" > "$@" \
