@@ -81,7 +81,6 @@ fribidi_get_bracket_types (
   FriBidiBracketType *btypes
 )
 {
-  const FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
   register FriBidiStrIndex i = len;
   for (; i; i--)
     {

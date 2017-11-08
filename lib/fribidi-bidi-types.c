@@ -86,7 +86,7 @@ fribidi_get_bidi_type_name (
   FriBidiCharType t
 )
 {
-  switch (t)
+  switch ((int)t)
     {
 #   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return STRINGIZE(TYPE);
 #   define _FRIBIDI_ALL_TYPES
@@ -106,7 +106,7 @@ fribidi_char_from_bidi_type (
   FriBidiCharType t
 )
 {
-  switch (t)
+  switch ((int)t)
     {
 #   define _FRIBIDI_ADD_TYPE(TYPE,SYMBOL) case FRIBIDI_TYPE_##TYPE: return SYMBOL;
 #   define _FRIBIDI_ALL_TYPES

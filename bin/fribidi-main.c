@@ -439,8 +439,8 @@ FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 		    printf ("%-*s => ", padding_width, S_);
 
 		  /* Remove explicit marks, if asked for. */
-		  if (do_clean)
 FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
+		  if (do_clean)
 		    len =
 		      fribidi_remove_bidi_marks (visual, len, ltov, vtol,
 						 levels);
