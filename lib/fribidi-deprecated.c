@@ -92,7 +92,7 @@ fribidi_log2vis_get_embedding_levels (
   FriBidiLevel *embedding_levels	/* output list of embedding levels */
 )
 {
-  return fribidi_get_par_embedding_levels (bidi_types, len, pbase_dir, embedding_levels);
+  return fribidi_get_par_embedding_levels_ex (bidi_types, NULL, len, pbase_dir, embedding_levels);
 }
 
 FRIBIDI_ENTRY FriBidiCharType
@@ -224,13 +224,15 @@ fribidi_log2vis (
   if (!bidi_types)
     goto out;
 
+  fribidi_get_bidi_types (str, len, bidi_types);
+
   bracket_types = fribidi_malloc (len * sizeof bracket_types[0]);
   if (!bracket_types)
     goto out;
 
-  fribidi_get_bidi_types (str, len, bidi_types);
-  fribidi_get_bracket_types (str, len, bidi_types, bracket_types);
-
+  fribidi_get_bracket_types (str, len, bidi_types,
+                             /* output */
+                             bracket_types);
   if (!embedding_levels)
     {
       embedding_levels = fribidi_malloc (len * sizeof embedding_levels[0]);
@@ -239,8 +241,11 @@ fribidi_log2vis (
       private_embedding_levels = true;
     }
 
-  max_level = fribidi_get_par_embedding_levels (bidi_types, len, pbase_dir,
-						embedding_levels) - 1;
+  max_level = fribidi_get_par_embedding_levels_ex (bidi_types,
+                                                   bracket_types,
+                                                   len,
+                                                   pbase_dir,
+                                                   embedding_levels) - 1;
   if UNLIKELY
     (max_level < 0) goto out;
 
