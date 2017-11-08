@@ -38,11 +38,7 @@
 #include <fribidi.h>
 #if FRIBIDI_CHARSETS+0
 #else
-# if FRIBIDI_MAIN_USE_ICONV_H
-#  include <iconv.h>
-# else /* !FRIBIDI_MAIN_USE_ICONV_H */
-#  include <fribidi-char-sets.h>
-# endif	/* FRIBIDI_MAIN_USE_ICONV_H */
+# include <fribidi-char-sets.h>
 #endif /* !FRIBIDI_CHARSETS */
 
 #include <stdio.h>
@@ -97,11 +93,7 @@ int text_width;
 const char *char_set;
 const char *bol_text, *eol_text;
 FriBidiParType input_base_direction;
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-iconv_t to_ucs4, from_ucs4;
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
 int char_set_num;
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 
 static void
 help (
@@ -122,16 +114,10 @@ help (
 	  ", same as --clean --nobreak\n"
 	  "                        --showinput --reordernsm --width %d\n",
 	  default_text_width);
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-  printf ("  -c, --charset CS      Specify character set, default is %s.\n"
-	  "                        CS should be a valid iconv character set name\n",
-	  char_set);
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
   printf ("  -c, --charset CS      Specify character set, default is %s\n"
 	  "      --charsetdesc CS  Show descriptions for character set CS and exit\n"
 	  "      --caprtl          Old style: set character set to CapRTL\n",
 	  char_set);
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
   printf ("      --showinput       Output the input string too\n"
 	  "      --nopad           Do not right justify RTL lines\n"
 	  "      --nobreak         Do not break long lines\n"
@@ -163,8 +149,6 @@ help (
 	  "    [input-str` => '][BOL][[padding space]visual-str][EOL]\n"
 	  "    [\\n base-dir][\\n ltov-map][\\n vtol-map][\\n levels][\\n changes]\n");
 
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-#else
   {
     int i;
     printf ("\n" "Available character sets:\n");
@@ -175,7 +159,6 @@ help (
     printf
       ("  X: Character set has descriptions, use --charsetdesc to see\n");
   }
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 
   printf ("\nReport bugs online at\n<" FRIBIDI_BUGREPORT ">.\n");
   exit (0);
@@ -259,11 +242,8 @@ main (
 	{"debug", 0, 0, 'd'},
 	{"test", 0, 0, 't'},
 	{"charset", 1, 0, 'c'},
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-#else
 	{"charsetdesc", 1, 0, CHARSETDESC},
 	{"caprtl", 0, 0, CAPRTL},
-#endif /* FRIBIDI_MAIN_USE_ICONV_H */
 	{"showinput", 0, (int *) (void *) &show_input, true},
 	{"nopad", 0, (int *) (void *) &do_pad, false},
 	{"nobreak", 0, (int *) (void *) &do_break, false},
@@ -333,8 +313,6 @@ main (
 	  if (!char_set)
 	    die1 ("memory allocation failed for char_set!");
 	  break;
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-#else
 	case CAPRTL:
 	  char_set = "CapRTL";
 	  break;
@@ -352,7 +330,6 @@ main (
 		    fribidi_char_set_desc (char_set_num));
 	  exit (0);
 	  break;
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 	case ':':
 	case '?':
 	  die2 (NULL, NULL);
@@ -362,22 +339,15 @@ main (
 	}
     }
 
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-  to_ucs4 = iconv_open ("WCHAR_T", char_set);
-  from_ucs4 = iconv_open (char_set, "WCHAR_T");
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
   char_set_num = fribidi_parse_charset (char_set);
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-  if (to_ucs4 == (iconv_t) (-1) || from_ucs4 == (iconv_t) (-1))
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
   if (!char_set_num)
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
     die2 ("unrecognized character set `%s'\n", char_set);
 
+FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
   fribidi_set_mirroring (do_mirror);
   fribidi_set_reorder_nsm (do_reorder_nsm);
+FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
   exit_val = 0;
   file_found = false;
   while (optind < argc || !file_found)
@@ -434,23 +404,12 @@ main (
 	      new_line = "";
 	    /* TODO: handle \r */
 
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-	    {
-	      char *st = S_, *ust = (char *) logical;
-	      int in_len = (int) len;
-	      len = sizeof logical;
-	      iconv (to_ucs4, &st, &in_len, &ust, (int *) &len);
-	      len = (FriBidiChar *) ust - logical;
-	    }
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
 	    len = fribidi_charset_to_unicode (char_set_num, S_, len, logical);
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 
 	    {
 	      FriBidiChar *visual;
 	      FriBidiStrIndex *ltov, *vtol;
 	      FriBidiLevel *levels;
-	      FriBidiStrIndex new_len;
 	      fribidi_boolean log2vis;
 
 	      visual = show_visual ? ALLOCATE (FriBidiChar,
@@ -468,22 +427,24 @@ main (
 
 	      /* Create a bidi string. */
 	      base = input_base_direction;
+FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	      log2vis = fribidi_log2vis (logical, len, &base,
 					 /* output */
 					 visual, ltov, vtol, levels);
+FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 	      if (log2vis)
 		{
 
 		  if (show_input)
 		    printf ("%-*s => ", padding_width, S_);
 
-		  new_len = len;
-
 		  /* Remove explicit marks, if asked for. */
 		  if (do_clean)
+FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 		    len =
 		      fribidi_remove_bidi_marks (visual, len, ltov, vtol,
 						 levels);
+FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 
 		  if (show_visual)
 		    {
@@ -497,14 +458,11 @@ main (
 			FriBidiStrIndex idx, st;
 			for (idx = 0; idx < len;)
 			  {
-			    FriBidiStrIndex wid, inlen;
+			    FriBidiStrIndex wid;
 
 			    wid = break_width;
 			    st = idx;
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-#else
 			    if (char_set_num != FRIBIDI_CHAR_SET_CAP_RTL)
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 			      while (wid > 0 && idx < len)
 				{
 				  wid -=
@@ -513,36 +471,15 @@ main (
 				    : 1;
 				  idx++;
 				}
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-#else
 			    else
 			      while (wid > 0 && idx < len)
 				{
 				  wid--;
 				  idx++;
 				}
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 			    if (wid < 0 && idx - st > 1)
 			      idx--;
-			    inlen = idx - st;
 
-#if FRIBIDI_MAIN_USE_ICONV_H+0
-			    {
-			      char *str = outstring, *ust =
-				(char *) (visual + st);
-			      int in_len = inlen * sizeof visual[0];
-			      new_len = sizeof outstring;
-			      iconv (from_ucs4, &ust, &in_len, &str,
-				     (int *) &new_len);
-			      *str = '\0';
-			      new_len = str - outstring;
-			    }
-#else /* !FRIBIDI_MAIN_USE_ICONV_H */
-			    new_len =
-			      fribidi_unicode_to_charset (char_set_num,
-							  visual + st, inlen,
-							  outstring);
-#endif /* !FRIBIDI_MAIN_USE_ICONV_H */
 			    if (FRIBIDI_IS_RTL (base))
 			      printf ("%*s",
 				      (int) (do_pad ? (padding_width +
