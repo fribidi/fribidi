@@ -150,7 +150,7 @@ read_unicode_data_txt_equivalence (
     {
       int i;
       const char *s = buf;
-      char ce_string[100]; /* For parsing the equivalence */
+      char ce_string[256]; /* For parsing the equivalence */
 
       l++;
 
