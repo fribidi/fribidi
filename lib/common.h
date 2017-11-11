@@ -155,8 +155,22 @@
 /* LIKEYLY and UNLIKELY are used to give a hint on branch prediction to the
  * compiler. */
 #ifndef LIKELY
-# define LIKELY
-# define UNLIKELY
+# if defined(__GNUC__) && (__GNUC__ > 2) && defined(__OPTIMIZE__)
+#  define FRIBIDI_BOOLEAN_EXPR(expr)              \
+   __extension__ ({                               \
+     int fribidi_bool_var;                        \
+     if (expr)                                    \
+        fribidi_bool_var = 1;                     \
+     else                                         \
+        fribidi_bool_var = 0;                     \
+     fribidi_bool_var;                            \
+   })
+#  define LIKELY(expr) (__builtin_expect (FRIBIDI_BOOLEAN_EXPR(expr), 1))
+#  define UNLIKELY(expr) (__builtin_expect (FRIBIDI_BOOLEAN_EXPR(expr), 0))
+# else
+#  define LIKELY
+#  define UNLIKELY
+# endif /* _GNUC_ */
 #endif /* !LIKELY */
 
 #ifndef FRIBIDI_EMPTY_STMT
