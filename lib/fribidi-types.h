@@ -140,12 +140,6 @@ typedef struct _FriBracketTypeStruct FriBidiBracketType;
 #define FRIBIDI_NO_BRACKET { 0, 0 }
 
 
-#ifndef FRIBIDI_MAX_STRING_LENGTH
-# define FRIBIDI_MAX_STRING_LENGTH (sizeof (FriBidiStrIndex) == 2 ?	\
-		0x7FFF : (sizeof (FriBidiStrIndex) == 1 ? \
-		0x7F : 0x7FFFFFFFL))
-#endif
-
 /* A few macros for working with bits */
 
 #define FRIBIDI_TEST_BITS(x, mask) (((x) & (mask)) ? 1 : 0)
