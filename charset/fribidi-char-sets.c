@@ -113,12 +113,8 @@ static FriBidiCharSetHandler char_sets[FRIBIDI_CHAR_SETS_NUM + 1] = {
 # undef _FRIBIDI_ADD_CHAR_SET_ONE2ONE
 };
 
-#if FRIBIDI_USE_GLIB+0
-# include <glib/gstrfuncs.h>
-# define fribidi_strcasecmp g_ascii_strcasecmp
-#else /* !FRIBIDI_USE_GLIB */
 static char
-toupper (
+fribidi_toupper (
   /* input */
   char c
 )
@@ -133,14 +129,13 @@ fribidi_strcasecmp (
   const char *s2
 )
 {
-  while (*s1 && toupper (*s1) == toupper (*s2))
+  while (*s1 && fribidi_toupper (*s1) == fribidi_toupper (*s2))
     {
       s1++;
       s2++;
     }
-  return toupper (*s1) - toupper (*s2);
+  return fribidi_toupper (*s1) - fribidi_toupper (*s2);
 }
-#endif /* !FRIBIDI_USE_GLIB */
 
 FRIBIDI_ENTRY FriBidiCharSet
 fribidi_parse_charset (

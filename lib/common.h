@@ -45,45 +45,6 @@
 # define FRIBIDI_PRIVATESPACE(SYMBOL) FRIBIDI_PRIVATESPACE0(_,FRIBIDI_NAMESPACE(_##SYMBOL##__internal__))
 #endif /* !FRIBIDI_PRIVATESPACE */
 
-#if FRIBIDI_USE_GLIB+0
-# ifndef SIZEOF_LONG
-#  define SIZEOF_LONG GLIB_SIZEOF_LONG
-# endif	/* !SIZEOF_LONG */
-# ifndef SIZEOF_VOID_P
-#  define SIZEOF_VOID_P GLIB_SIZEOF_VOID_P
-# endif	/* !SIZEOF_VOID_P */
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# ifndef fribidi_malloc
-#  define fribidi_malloc g_try_malloc
-#  define fribidi_free g_free
-# endif	/* !fribidi_malloc */
-# ifndef fribidi_assert
-#  ifndef __FRIBIDI_DOC
-#   include <glib.h>
-#  endif /* !__FRIBIDI_DOC */
-#  define fribidi_assert g_assert
-# endif	/* !fribidi_assert */
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# ifndef FRIBIDI_BEGIN_STMT
-#  define FRIBIDI_BEGIN_STMT G_STMT_START {
-#  define FRIBIDI_END_STMT } G_STMT_END
-# endif	/* !FRIBIDI_BEGIN_STMT */
-# ifndef LIKELY
-#  define LIKELY G_LIKELY
-#  define UNLIKELY G_UNLIKELY
-# endif	/* !LIKELY */
-# ifndef false
-#  define false FALSE
-# endif	/* !false */
-# ifndef true
-#  define true TRUE
-# endif	/* !true */
-#endif /* FRIBIDI_USE_GLIB */
-
 #ifndef false
 # define false (0)
 # endif	/* !false */

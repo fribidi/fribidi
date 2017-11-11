@@ -56,14 +56,6 @@
 #  define FRIBIDI_ENTRY		/* empty */
 #endif /* !FRIBIDI_ENTRY */
 
-#if FRIBIDI_USE_GLIB+0
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# define FRIBIDI_BEGIN_DECLS		G_BEGIN_DECLS
-# define FRIBIDI_END_DECLS		G_END_DECLS
-#endif /* !FRIBIDI_USE_GLIB */
-
 #ifdef __ICC
 #define FRIBIDI_BEGIN_IGNORE_DEPRECATIONS               \
   _Pragma ("warning (push)")                            \
