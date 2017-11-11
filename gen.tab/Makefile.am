@@ -21,10 +21,7 @@ DISTCLEANFILES =
 AM_CPPFLAGS = \
 		-I$(top_builddir)/lib \
 		-I$(top_srcdir)/lib \
-		-I$(top_srcdir)/charset \
-		$(MISC_CFLAGS)
-
-LDADD = $(MISC_LIBS)
+		-I$(top_srcdir)/charset
 
 VPATH += \
 		$(builddir)/unidata \

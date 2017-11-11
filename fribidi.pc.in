@@ -7,7 +7,6 @@ includedir=@includedir@
 
 Name: @PACKAGE_NAME@
 Description: Unicode Bidirectional Algorithm Library
-Requires: @MISC_PACKAGES@
 Version: @VERSION@
 Libs: -L${libdir} -lfribidi
 Cflags: -I${includedir}/@PACKAGE@

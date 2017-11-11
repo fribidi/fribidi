@@ -2,8 +2,7 @@ noinst_LTLIBRARIES = libfribidi-char-sets.la
 
 AM_CPPFLAGS = \
 		-I$(top_builddir)/lib \
-		-I$(top_srcdir)/lib \
-		$(MISC_CFLAGS)
+		-I$(top_srcdir)/lib
 
 pkginclude_HEADERS =
 

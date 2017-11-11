@@ -2,10 +2,10 @@ EXTRA_DIST = fribidi.def
 
 lib_LTLIBRARIES = libfribidi.la
 
-AM_CPPFLAGS = $(MISC_CFLAGS)
+AM_CPPFLAGS =
 
 libfribidi_la_LDFLAGS = -no-undefined -version-info $(LT_VERSION_INFO)
-libfribidi_la_LIBADD = $(MISC_LIBS)
+libfribidi_la_LIBADD =
 libfribidi_la_DEPENDENCIES =
 
 if OS_WIN32
