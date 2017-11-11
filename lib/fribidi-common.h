@@ -66,27 +66,22 @@
 # define FRIBIDI_GNUC_DEPRECATED	G_GNUC_DEPRECATED
 # define FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS	G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 # define FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS	G_GNUC_END_IGNORE_DEPRECATIONS
-# if __GNUC__ > 2
-#  define FRIBIDI_GNUC_WARN_UNUSED	\
-	__attribute__((__warn_unused_result__))
-#  define FRIBIDI_GNUC_MALLOC		\
-	__attribute__((__malloc__))
-#  define FRIBIDI_GNUC_HIDDEN		\
-	__attribute__((__visibility__ ("hidden")))
-# else /* __GNUC__ <= 2 */
-#  define FRIBIDI_GNUC_WARN_UNUSED
-#  define FRIBIDI_GNUC_MALLOC
-#  define FRIBIDI_GNUC_HIDDEN
-# endif	/* __GNUC__ <= 2 */
 #else /* !FRIBIDI_USE_GLIB */
 # define FRIBIDI_GNUC_CONST
 # define FRIBIDI_GNUC_DEPRECATED
 # define FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 # define FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
+#endif /* !FRIBIDI_USE_GLIB */
+
+#if defined(__GNUC__) && (__GNUC__ > 2)
+# define FRIBIDI_GNUC_WARN_UNUSED __attribute__((__warn_unused_result__))
+# define FRIBIDI_GNUC_MALLOC      __attribute__((__malloc__))
+# define FRIBIDI_GNUC_HIDDEN      __attribute__((__visibility__ ("hidden")))
+#else /* __GNUC__ */
 # define FRIBIDI_GNUC_WARN_UNUSED
 # define FRIBIDI_GNUC_MALLOC
 # define FRIBIDI_GNUC_HIDDEN
-#endif /* !FRIBIDI_USE_GLIB */
+#endif	/* __GNUC__ */
 
 /* FRIBIDI_BEGIN_DECLS should be used at the beginning of your declarations,
  * so that C++ compilers don't mangle their names.  Use FRIBIDI_END_DECLS at
