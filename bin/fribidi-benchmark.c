@@ -218,7 +218,7 @@ benchmark (
     {
       /* Create a bidi string */
       base = FRIBIDI_PAR_ON;
-FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
+FRIBIDI_BEGIN_IGNORE_DEPRECATIONS
       if (!fribidi_log2vis (us, len, &base,
 			    /* output */
 			    out_us, positionVtoL, positionLtoV,
@@ -226,7 +226,7 @@ FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 	die2
 	  ("something failed in fribidi_log2vis.\n"
 	   "perhaps memory allocation failure.", NULL);
-FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
+FRIBIDI_END_IGNORE_DEPRECATIONS
     }
 
   /* stop timer */
