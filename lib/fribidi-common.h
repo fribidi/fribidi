@@ -62,13 +62,9 @@
 # endif	/* !__FRIBIDI_DOC */
 # define FRIBIDI_BEGIN_DECLS		G_BEGIN_DECLS
 # define FRIBIDI_END_DECLS		G_END_DECLS
-# define FRIBIDI_GNUC_CONST		G_GNUC_CONST
-# define FRIBIDI_GNUC_DEPRECATED	G_GNUC_DEPRECATED
 # define FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS	G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 # define FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS	G_GNUC_END_IGNORE_DEPRECATIONS
 #else /* !FRIBIDI_USE_GLIB */
-# define FRIBIDI_GNUC_CONST
-# define FRIBIDI_GNUC_DEPRECATED
 # define FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
 # define FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
 #endif /* !FRIBIDI_USE_GLIB */
@@ -77,10 +73,14 @@
 # define FRIBIDI_GNUC_WARN_UNUSED __attribute__((__warn_unused_result__))
 # define FRIBIDI_GNUC_MALLOC      __attribute__((__malloc__))
 # define FRIBIDI_GNUC_HIDDEN      __attribute__((__visibility__ ("hidden")))
+# define FRIBIDI_GNUC_CONST       __attribute__((__const__))
+# define FRIBIDI_GNUC_DEPRECATED  __attribute__((__unused__))
 #else /* __GNUC__ */
 # define FRIBIDI_GNUC_WARN_UNUSED
 # define FRIBIDI_GNUC_MALLOC
 # define FRIBIDI_GNUC_HIDDEN
+# define FRIBIDI_GNUC_CONST
+# define FRIBIDI_GNUC_DEPRECATED
 #endif	/* __GNUC__ */
 
 /* FRIBIDI_BEGIN_DECLS should be used at the beginning of your declarations,
