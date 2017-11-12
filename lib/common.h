@@ -45,45 +45,6 @@
 # define FRIBIDI_PRIVATESPACE(SYMBOL) FRIBIDI_PRIVATESPACE0(_,FRIBIDI_NAMESPACE(_##SYMBOL##__internal__))
 #endif /* !FRIBIDI_PRIVATESPACE */
 
-#if FRIBIDI_USE_GLIB+0
-# ifndef SIZEOF_LONG
-#  define SIZEOF_LONG GLIB_SIZEOF_LONG
-# endif	/* !SIZEOF_LONG */
-# ifndef SIZEOF_VOID_P
-#  define SIZEOF_VOID_P GLIB_SIZEOF_VOID_P
-# endif	/* !SIZEOF_VOID_P */
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# ifndef fribidi_malloc
-#  define fribidi_malloc g_try_malloc
-#  define fribidi_free g_free
-# endif	/* !fribidi_malloc */
-# ifndef fribidi_assert
-#  ifndef __FRIBIDI_DOC
-#   include <glib.h>
-#  endif /* !__FRIBIDI_DOC */
-#  define fribidi_assert g_assert
-# endif	/* !fribidi_assert */
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# ifndef FRIBIDI_BEGIN_STMT
-#  define FRIBIDI_BEGIN_STMT G_STMT_START {
-#  define FRIBIDI_END_STMT } G_STMT_END
-# endif	/* !FRIBIDI_BEGIN_STMT */
-# ifndef LIKELY
-#  define LIKELY G_LIKELY
-#  define UNLIKELY G_UNLIKELY
-# endif	/* !LIKELY */
-# ifndef false
-#  define false FALSE
-# endif	/* !false */
-# ifndef true
-#  define true TRUE
-# endif	/* !true */
-#endif /* FRIBIDI_USE_GLIB */
-
 #ifndef false
 # define false (0)
 # endif	/* !false */
@@ -155,8 +116,22 @@
 /* LIKEYLY and UNLIKELY are used to give a hint on branch prediction to the
  * compiler. */
 #ifndef LIKELY
-# define LIKELY
-# define UNLIKELY
+# if defined(__GNUC__) && (__GNUC__ > 2) && defined(__OPTIMIZE__)
+#  define FRIBIDI_BOOLEAN_EXPR(expr)              \
+   __extension__ ({                               \
+     int fribidi_bool_var;                        \
+     if (expr)                                    \
+        fribidi_bool_var = 1;                     \
+     else                                         \
+        fribidi_bool_var = 0;                     \
+     fribidi_bool_var;                            \
+   })
+#  define LIKELY(expr) (__builtin_expect (FRIBIDI_BOOLEAN_EXPR(expr), 1))
+#  define UNLIKELY(expr) (__builtin_expect (FRIBIDI_BOOLEAN_EXPR(expr), 0))
+# else
+#  define LIKELY
+#  define UNLIKELY
+# endif /* _GNUC_ */
 #endif /* !LIKELY */
 
 #ifndef FRIBIDI_EMPTY_STMT

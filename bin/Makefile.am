@@ -14,10 +14,9 @@ fribidi_benchmark_SOURCES = fribidi-benchmark.c $(getopt_SOURCES)
 AM_CPPFLAGS = \
 		-I$(top_builddir)/lib \
 		-I$(top_srcdir)/lib \
-		-I$(top_srcdir)/charset \
-		$(MISC_CFLAGS)
+		-I$(top_srcdir)/charset
 
-LDADD = $(top_builddir)/lib/libfribidi.la $(MISC_LIBS)
+LDADD = $(top_builddir)/lib/libfribidi.la
 
 if FRIBIDI_CHARSETS
 else # !FRIBIDI_CHARSETS

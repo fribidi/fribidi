@@ -38,19 +38,6 @@
 #include "fribidi-begindecls.h"
 
 
-#if FRIBIDI_USE_GLIB+0
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# define FRIBIDI_INT8_LOCAL		gint8
-# define FRIBIDI_INT16_LOCAL		gint16
-# define FRIBIDI_INT32_LOCAL		gint32
-# define FRIBIDI_UINT8_LOCAL		guint8
-# define FRIBIDI_UINT16_LOCAL		guint16
-# define FRIBIDI_UINT32_LOCAL		guint32
-# define FRIBIDI_BOOLEAN_LOCAL		gboolean
-# define FRIBIDI_UNICHAR_LOCAL		gunichar
-#else /* !FRIBIDI_USE_GLIB */
 # if defined(HAVE_INTTYPES_H) || defined(HAVE_STDINT_H)
 #  ifndef __FRIBIDI_DOC
 #   if HAVE_INTTYPES_H
@@ -96,7 +83,6 @@
 # else /* SIZEOF_WCHAR_T < 4 */
 #  define FRIBIDI_UNICHAR_LOCAL		fribidi_uint32
 # endif	/* SIZEOF_WCHAR_T < 4 */
-#endif /* !FRIBIDI_USE_GLIB */
 
 #if FRIBIDI_INT_TYPES+0
 #else
@@ -139,12 +125,6 @@ typedef struct _FriBracketTypeStruct FriBidiBracketType;
 /* Use FRIBIDI_NO_BRACKET for assigning to a non-bracket */
 #define FRIBIDI_NO_BRACKET { 0, 0 }
 
-
-#ifndef FRIBIDI_MAX_STRING_LENGTH
-# define FRIBIDI_MAX_STRING_LENGTH (sizeof (FriBidiStrIndex) == 2 ?	\
-		0x7FFF : (sizeof (FriBidiStrIndex) == 1 ? \
-		0x7F : 0x7FFFFFFFL))
-#endif
 
 /* A few macros for working with bits */
 

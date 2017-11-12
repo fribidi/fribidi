@@ -56,37 +56,48 @@
 #  define FRIBIDI_ENTRY		/* empty */
 #endif /* !FRIBIDI_ENTRY */
 
-#if FRIBIDI_USE_GLIB+0
-# ifndef __FRIBIDI_DOC
-#  include <glib.h>
-# endif	/* !__FRIBIDI_DOC */
-# define FRIBIDI_BEGIN_DECLS		G_BEGIN_DECLS
-# define FRIBIDI_END_DECLS		G_END_DECLS
-# define FRIBIDI_GNUC_CONST		G_GNUC_CONST
-# define FRIBIDI_GNUC_DEPRECATED	G_GNUC_DEPRECATED
-# define FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS	G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-# define FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS	G_GNUC_END_IGNORE_DEPRECATIONS
-# if __GNUC__ > 2
-#  define FRIBIDI_GNUC_WARN_UNUSED	\
-	__attribute__((__warn_unused_result__))
-#  define FRIBIDI_GNUC_MALLOC		\
-	__attribute__((__malloc__))
-#  define FRIBIDI_GNUC_HIDDEN		\
-	__attribute__((__visibility__ ("hidden")))
-# else /* __GNUC__ <= 2 */
-#  define FRIBIDI_GNUC_WARN_UNUSED
-#  define FRIBIDI_GNUC_MALLOC
-#  define FRIBIDI_GNUC_HIDDEN
-# endif	/* __GNUC__ <= 2 */
-#else /* !FRIBIDI_USE_GLIB */
-# define FRIBIDI_GNUC_CONST
-# define FRIBIDI_GNUC_DEPRECATED
-# define FRIBIDI_GNUC_BEGIN_IGNORE_DEPRECATIONS
-# define FRIBIDI_GNUC_END_IGNORE_DEPRECATIONS
+#ifdef __ICC
+#define FRIBIDI_BEGIN_IGNORE_DEPRECATIONS               \
+  _Pragma ("warning (push)")                            \
+  _Pragma ("warning (disable:1478)")
+#define FRIBIDI_END_IGNORE_DEPRECATIONS			\
+  _Pragma ("warning (pop)")
+#elif    __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)
+#define FRIBIDI_BEGIN_IGNORE_DEPRECATIONS		\
+  _Pragma ("GCC diagnostic push")			\
+  _Pragma ("GCC diagnostic ignored \"-Wdeprecated-declarations\"")
+#define FRIBIDI_END_IGNORE_DEPRECATIONS			\
+  _Pragma ("GCC diagnostic pop")
+#elif defined (_MSC_VER) && (_MSC_VER >= 1500)
+#define FRIBIDI_BEGIN_IGNORE_DEPRECATIONS		\
+  __pragma (warning (push))                             \
+  __pragma (warning (disable : 4996))
+#define FRIBIDI_END_IGNORE_DEPRECATIONS			\
+  __pragma (warning (pop))
+#elif defined (__clang__)
+#define FRIBIDI_BEGIN_IGNORE_DEPRECATIONS               \
+  _Pragma("clang diagnostic push")                      \
+  _Pragma("clang diagnostic ignored \"-Wdeprecated-declarations\"")
+#define FRIBIDI_END_IGNORE_DEPRECATIONS \
+  _Pragma("clang diagnostic pop")
+#else
+#define FRIBIDI_BEGIN_IGNORE_DEPRECATIONS
+#define FRIBIDI_END_IGNORE_DEPRECATIONS
+#endif
+
+#if defined(__GNUC__) && (__GNUC__ > 2)
+# define FRIBIDI_GNUC_WARN_UNUSED __attribute__((__warn_unused_result__))
+# define FRIBIDI_GNUC_MALLOC      __attribute__((__malloc__))
+# define FRIBIDI_GNUC_HIDDEN      __attribute__((__visibility__ ("hidden")))
+# define FRIBIDI_GNUC_CONST       __attribute__((__const__))
+# define FRIBIDI_GNUC_DEPRECATED  __attribute__((__unused__))
+#else /* __GNUC__ */
 # define FRIBIDI_GNUC_WARN_UNUSED
 # define FRIBIDI_GNUC_MALLOC
 # define FRIBIDI_GNUC_HIDDEN
-#endif /* !FRIBIDI_USE_GLIB */
+# define FRIBIDI_GNUC_CONST
+# define FRIBIDI_GNUC_DEPRECATED
+#endif	/* __GNUC__ */
 
 /* FRIBIDI_BEGIN_DECLS should be used at the beginning of your declarations,
  * so that C++ compilers don't mangle their names.  Use FRIBIDI_END_DECLS at
