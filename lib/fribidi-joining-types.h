@@ -95,12 +95,12 @@ enum _FriBidiJoiningTypeEnum
 #ifdef __FRIBIDI_DOC
 typedef enum _FriBidiJoiningTypeEnum FriBidiJoiningType;
 #else /* !__FRIBIDI_DOC */
-typedef fribidi_uint8 FriBidiJoiningType;
+typedef uint8_t FriBidiJoiningType;
 #endif /* !__FRIBIDI_DOC */
 
 /* FriBidiArabicProp is essentially the same type as FriBidiJoiningType, but
  * not limited to the few values returned by fribidi_get_joining_type. */
-typedef fribidi_uint8 FriBidiArabicProp;
+typedef uint8_t FriBidiArabicProp;
 
 /*
  * The equivalent of JoiningType values for ArabicProp

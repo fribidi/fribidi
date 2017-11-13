@@ -46,7 +46,7 @@ fribidi_get_bracket (
 )
 {
   FriBidiBracketType bracket_type;
-  register fribidi_uint8 char_type;
+  register uint8_t char_type;
 
   /* The bracket type from the table may be:
         0 - Not a bracket

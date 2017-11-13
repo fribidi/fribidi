@@ -209,7 +209,7 @@ typedef enum
 
 #else
 
-typedef fribidi_uint32 FriBidiCharType;
+typedef uint32_t FriBidiCharType;
 # define FRIBIDI_TYPE_LTR	FRIBIDI_TYPE_LTR_VAL
 # define FRIBIDI_TYPE_RTL	FRIBIDI_TYPE_RTL_VAL
 # define FRIBIDI_TYPE_AL	FRIBIDI_TYPE_AL_VAL
@@ -234,7 +234,7 @@ typedef fribidi_uint32 FriBidiCharType;
 # define FRIBIDI_TYPE_FSI	FRIBIDI_TYPE_PDF_FSI
 # define FRIBIDI_TYPE_PDI	FRIBIDI_TYPE_PDF_PDI
 
-typedef fribidi_uint32 FriBidiParType;
+typedef uint32_t FriBidiParType;
 # define FRIBIDI_PAR_LTR	FRIBIDI_TYPE_LTR_VAL
 # define FRIBIDI_PAR_RTL	FRIBIDI_TYPE_RTL_VAL
 # define FRIBIDI_PAR_ON		FRIBIDI_TYPE_ON_VAL

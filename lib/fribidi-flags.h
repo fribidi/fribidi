@@ -38,7 +38,7 @@
 
 #include "fribidi-begindecls.h"
 
-typedef fribidi_uint32 FriBidiFlags;
+typedef uint32_t FriBidiFlags;
 
 /* 
  * Define option flags that various functions use. Each mask has
