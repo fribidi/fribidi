@@ -40,7 +40,7 @@
 #include <fribidi-deprecated.h>
 #include <fribidi.h>
 
-#if FRIBIDI_NO_DEPRECATED+0
+#ifdef FRIBIDI_NO_DEPRECATED
 #else
 
 static FriBidiFlags flags = FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC;

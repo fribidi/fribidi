@@ -32,7 +32,7 @@
 #ifndef _FRIBIDI_COMMON_H
 #define _FRIBIDI_COMMON_H
 
-#if DONT_HAVE_FRIBIDI_CONFIG_H+0
+#ifdef DONT_HAVE_FRIBIDI_CONFIG_H
 # define FRIBIDI "fribidi"
 # define FRIBIDI_NAME "fribidi"
 # define FRIBIDI_VERSION "unknown"
@@ -42,7 +42,7 @@
 # include "fribidi-config.h"
 #endif /* !DONT_HAVE_FRIBIDI_CONFIG_H */
 
-#if HAVE_FRIBIDI_CUSTOM_H+0
+#ifdef HAVE_FRIBIDI_CUSTOM_H
 # include <fribidi-custom.h>
 #endif /* HAVE_FRIBIDI_CUSTOM_H */
 
