@@ -88,23 +88,6 @@
 # include <strings.h>
 #endif
 
-/* FRIBIDI_CHUNK_SIZE is the number of bytes in each chunk of memory being
- * allocated for data structure pools. */
-#ifndef FRIBIDI_CHUNK_SIZE
-# if HAVE_ASM_PAGE_H
-#  ifndef __FRIBIDI_DOC
-#   include <asm/page.h>
-#  endif /* __FRIBIDI_DOC */
-#  define FRIBIDI_CHUNK_SIZE (PAGE_SIZE - 16)
-# else /* !HAVE_ASM_PAGE_H */
-#  define FRIBIDI_CHUNK_SIZE (4096 - 16)
-# endif	/* !HAVE_ASM_PAGE_H */
-#else /* FRIBIDI_CHUNK_SIZE */
-# if FRIBIDI_CHUNK_SIZE < 256
-#  error "FRIBIDI_CHUNK_SIZE now should define the size of a chunk in bytes."
-# endif	/* FRIBIDI_CHUNK_SIZE < 256 */
-#endif /* FRIBIDI_CHUNK_SIZE */
-
 /* FRIBIDI_BEGIN_STMT should be used at the beginning of your macro
  * definitions that are to behave like simple statements.  Use
  * FRIBIDI_END_STMT at the end of the macro after the semicolon or brace. */
