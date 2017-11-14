@@ -115,16 +115,11 @@ typedef FRIBIDI_BOOLEAN fribidi_boolean;
 typedef FRIBIDI_UNICHAR FriBidiChar;
 typedef FRIBIDI_STR_INDEX FriBidiStrIndex;
 
-struct _FriBracketTypeStruct {
-  FriBidiChar bracket_id;
-  fribidi_boolean is_open;
-};
-
-typedef struct _FriBracketTypeStruct FriBidiBracketType;
+/* The MSB is used to indicate an opening bracket */
+typedef FriBidiChar FriBidiBracketType;
 
 /* Use FRIBIDI_NO_BRACKET for assigning to a non-bracket */
-#define FRIBIDI_NO_BRACKET { 0, 0 }
-
+#define FRIBIDI_NO_BRACKET 0
 
 /* A few macros for working with bits */
 

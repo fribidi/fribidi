@@ -60,13 +60,14 @@ fribidi_get_bracket (
   fribidi_boolean is_open = false;
 
   if (char_type == 0)
-    bracket_type.bracket_id = 0;
+    bracket_type = FRIBIDI_NO_BRACKET;
   else
   {
     is_open = (char_type & FRIBIDI_TYPE_BRACKET_OPEN) != 0;
-    bracket_type.bracket_id = FRIBIDI_GET_BRACKETS (ch);
+    bracket_type = FRIBIDI_GET_BRACKETS (ch) & FRIBIDI_BRACKET_ID_MASK;
   }
-  bracket_type.is_open = is_open;
+  if (is_open)
+    bracket_type |= FRIBIDI_BRACKET_OPEN_MASK;
 
   return bracket_type;
 }

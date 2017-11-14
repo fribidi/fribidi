@@ -73,8 +73,10 @@ fribidi_get_bracket_types (
   FriBidiBracketType *btypes
 );
 
-#define FRIBIDI_IS_BRACKET(bt) ((bt)->bracket_id>0)
-#define FRIBIDI_IS_BRACKET_OPEN(bt) ((bt)->is_open>0)
+#define FRIBIDI_BRACKET_OPEN_MASK 0x80000000
+#define FRIBIDI_BRACKET_ID_MASK   0x7fffffff
+#define FRIBIDI_IS_BRACKET_OPEN(bt) ((bt & FRIBIDI_BRACKET_OPEN_MASK)>0)
+#define FRIBIDI_BRACKET_ID(bt) ((bt & FRIBIDI_BRACKET_ID_MASK))
 
 #include "fribidi-enddecls.h"
 

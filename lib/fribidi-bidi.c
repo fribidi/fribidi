@@ -102,8 +102,8 @@ compact_list (
     for_run_list (list, list)
       if (RL_TYPE (list->prev) == RL_TYPE (list)
 	  && RL_LEVEL (list->prev) == RL_LEVEL (list)
-          && RL_BRACKET_TYPE(list).bracket_id == 0 /* Don't join brackets! */
-          && RL_BRACKET_TYPE(list->prev).bracket_id == 0
+          && RL_BRACKET_TYPE(list) == FRIBIDI_NO_BRACKET /* Don't join brackets! */
+          && RL_BRACKET_TYPE(list->prev) == FRIBIDI_NO_BRACKET
           )
       list = merge_with_prev (list);
 }
@@ -124,8 +124,8 @@ compact_neutrals (
 	    ((RL_TYPE (list->prev) == RL_TYPE (list)
 	      || (FRIBIDI_IS_NEUTRAL (RL_TYPE (list->prev))
 		  && FRIBIDI_IS_NEUTRAL (RL_TYPE (list)))))
-            && RL_BRACKET_TYPE(list).bracket_id == 0 /* Don't join brackets! */
-            && RL_BRACKET_TYPE(list->prev).bracket_id == 0
+            && RL_BRACKET_TYPE(list) == FRIBIDI_NO_BRACKET /* Don't join brackets! */
+            && RL_BRACKET_TYPE(list->prev) == FRIBIDI_NO_BRACKET
             )
 	  list = merge_with_prev (list);
       }
@@ -1060,9 +1060,9 @@ fribidi_get_par_embedding_levels_ex (
           bracket_stack[iso_level] = fribidi_malloc (sizeof (bracket_stack[0])
                                                      * FRIBIDI_BIDI_MAX_NESTED_BRACKET_PAIRS);
         FriBidiBracketType brack_prop = RL_BRACKET_TYPE(pp);
-        if (FRIBIDI_IS_BRACKET(&brack_prop))
+        if (brack_prop!= FRIBIDI_NO_BRACKET)
           {
-            if (brack_prop.is_open)
+            if (FRIBIDI_IS_BRACKET_OPEN(brack_prop))
               {
                 if (bracket_stack_size[iso_level]==FRIBIDI_BIDI_MAX_NESTED_BRACKET_PAIRS)
                   break;
@@ -1076,7 +1076,7 @@ fribidi_get_par_embedding_levels_ex (
                 while (stack_idx >= 0)
                   {
                     FriBidiBracketType se_brack_prop = RL_BRACKET_TYPE(bracket_stack[iso_level][stack_idx]);
-                    if (se_brack_prop.bracket_id == brack_prop.bracket_id)
+                    if (FRIBIDI_BRACKET_ID(se_brack_prop) == FRIBIDI_BRACKET_ID(brack_prop))
                       {
                         bracket_stack_size[iso_level] = stack_idx;
     

@@ -137,8 +137,8 @@ run_list_encode_bidi_types (
         bracket_type = bracket_types[i];
       
       if (char_type != last->type
-          || bracket_type.bracket_id > 0 /* Always separate bracket into single char runs! */
-          || last->bracket_type.bracket_id > 0
+          || bracket_type != FRIBIDI_NO_BRACKET /* Always separate bracket into single char runs! */
+          || last->bracket_type != FRIBIDI_NO_BRACKET
           || FRIBIDI_IS_ISOLATE(char_type)
           )
 	{
