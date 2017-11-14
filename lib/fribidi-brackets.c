@@ -86,12 +86,12 @@ fribidi_get_bracket_types (
     {
       /* Optimization that bracket must be of types ON */
       if (types[i] == FRIBIDI_TYPE_ON)
+	*btypes = fribidi_get_bracket (*str);
+      else
       {
         const FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
 	*btypes = NoBracket;
       }
-      else
-	*btypes = fribidi_get_bracket (*str);
 
       btypes++;
       str++;
