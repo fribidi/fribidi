@@ -458,7 +458,7 @@ FRIBIDI_END_IGNORE_DEPRECATIONS
 			FriBidiStrIndex idx, st;
 			for (idx = 0; idx < len;)
 			  {
-			    FriBidiStrIndex wid;
+			    FriBidiStrIndex wid, inlen;
 
 			    wid = break_width;
 			    st = idx;
@@ -479,7 +479,11 @@ FRIBIDI_END_IGNORE_DEPRECATIONS
 				}
 			    if (wid < 0 && idx - st > 1)
 			      idx--;
+			    inlen = idx - st;
 
+			    fribidi_unicode_to_charset (char_set_num,
+							visual + st, inlen,
+							outstring);
 			    if (FRIBIDI_IS_RTL (base))
 			      printf ("%*s",
 				      (int) (do_pad ? (padding_width +
