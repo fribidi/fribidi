@@ -82,19 +82,17 @@ fribidi_get_bracket_types (
   FriBidiBracketType *btypes
 )
 {
-  register FriBidiStrIndex i = len;
-  for (; i; i--)
+  FriBidiStrIndex i;
+  for (i=0; i<len; i++)
     {
       /* Optimization that bracket must be of types ON */
-      if (types[i] == FRIBIDI_TYPE_ON)
+      if (*types == FRIBIDI_TYPE_ON)
 	*btypes = fribidi_get_bracket (*str);
       else
-      {
-        const FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
-	*btypes = NoBracket;
-      }
+	*btypes = FRIBIDI_NO_BRACKET;
 
       btypes++;
+      types++;
       str++;
     }
 }
