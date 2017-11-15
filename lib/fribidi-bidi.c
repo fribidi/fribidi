@@ -63,11 +63,6 @@
 #define RL_BRACKET_TYPE(list) ((list)->bracket_type)
 #define RL_ISOLATE_LEVEL(list) ((list)->isolate_level)
 
-/* Compare for equality */
-#define RL_BRACKET_TYPE_EQUAL(list1,list2) ( \
-   (list1)->bracket_type.bracket_id == (list2)->bracket_type.bracket_id \
-   && (list1)->bracket_type.is_open == (list2)->bracket_type.is_open)
-
 static FriBidiRun *
 merge_with_prev (
   FriBidiRun *second
@@ -1100,7 +1095,7 @@ fribidi_get_par_embedding_levels_ex (
     if UNLIKELY
     (fribidi_debug_status ())
       {
-        print_pairing_nodes(pairing_nodes);
+        print_pairing_nodes (pairing_nodes);
       }
 # endif	/* DEBUG */
 
