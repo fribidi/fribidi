@@ -17,5 +17,5 @@ install:
 script:
   - ./configure
   - make
-  - make check
-# - make distcheck # broken currently
+  - make check || cat */test-suite.log && false
+  - make distcheck || cat */test-suite.log && false

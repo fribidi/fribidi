@@ -8,6 +8,9 @@ TESTS_ENVIRONMENT = \
 AM_TESTS_ENVIRONMENT = $(TESTS_ENVIRONMENT)
 
 TEST_EXTENSIONS = .txt
+TEST_DATAS = \
+	BidiTest.txt \
+	BidiCharacterTest.txt
 
 TXT_LOG_COMPILER = sh $(srcdir)/run.tests
 
@@ -20,13 +23,14 @@ LDADD = $(top_builddir)/lib/libfribidi.la $(GLIB_LIBS)
 
 if FRIBIDI_USE_GLIB
 check_PROGRAMS = test test-character
-bin_PROGRAMS = $(check_PROGRAMS)
-TESTS = \
-	BidiTest.txt \
-	BidiCharacterTest.txt
+TESTS = $(TEST_DATAS)
 endif
 
 test_SOURCES = test.c
 test_character_SOURCES = test-character.c
+
+EXTRA_DIST = \
+	run.tests \
+	$(TEST_DATAS)
 
 -include $(top_srcdir)/git.mk
