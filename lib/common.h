@@ -1,12 +1,6 @@
 /* FriBidi
  * common.h - common include for library sources
  *
- * $Id: common.h,v 1.21 2010-02-24 19:40:04 behdad Exp $
- * $Author: behdad $
- * $Date: 2010-02-24 19:40:04 $
- * $Revision: 1.21 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/common.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2004
  *

@@ -1,12 +1,5 @@
 ##                                               -*- Automake -*-
 ## Process this file with automake to produce Makefile.in
-##############################################################################
-## $Id: Makefile.am,v 1.10 2005-08-25 18:35:34 behdad Exp $
-## $Author: behdad $
-## $Date: 2005-08-25 18:35:34 $
-## $Revision: 1.10 $
-## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/Makefile.am,v $
-##############################################################################
 
 ACLOCAL_AMFLAGS = -I m4
 

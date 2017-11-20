@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-char-sets-cp1256.c - CP1256 character set conversion routines
  *
- * $Id: fribidi-char-sets-cp1256.c,v 1.2 2004-05-03 22:05:19 behdad Exp $
- * $Author: behdad $
- * $Date: 2004-05-03 22:05:19 $
- * $Revision: 1.2 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-cp1256.c,v $
- *
  * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *   Dov Grobgeld, 1999, 2000

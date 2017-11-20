@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-deprecated.h - Deprecated interfaces
  *
- * $Id: fribidi-deprecated.h,v 1.4 2009-03-27 16:14:33 behdad Exp $
- * $Author: behdad $
- * $Date: 2009-03-27 16:14:33 $
- * $Revision: 1.4 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-deprecated.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2004, 2005
  *

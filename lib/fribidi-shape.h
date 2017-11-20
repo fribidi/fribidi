@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-shape.h - shaping
  *
- * $Id: fribidi-shape.h,v 1.2 2006-01-14 12:09:29 behdad Exp $
- * $Author: behdad $
- * $Date: 2006-01-14 12:09:29 $
- * $Revision: 1.2 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-shape.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2004, 2005
  *

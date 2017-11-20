@@ -1,12 +1,6 @@
 /* FriBidi
  * gen-joining-type-tab.c - generate joining-type.tab.i
  *
- * $Id: gen-joining-type-tab.c,v 1.7 2010-12-07 19:44:26 behdad Exp $
- * $Author: behdad $
- * $Date: 2010-12-07 19:44:26 $
- * $Revision: 1.7 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-joining-type-tab.c,v $
- *
  * Author:
  *   Behdad Esfahbod, 2004
  *

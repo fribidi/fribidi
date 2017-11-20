@@ -2,12 +2,6 @@
 /* FriBidi
  * fribidi-char-sets-list.h - list of supported character sets
  *
- * $Id: fribidi-char-sets-list.h,v 1.3 2004-06-09 14:59:21 behdad Exp $
- * $Author: behdad $
- * $Date: 2004-06-09 14:59:21 $
- * $Revision: 1.3 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/charset/fribidi-char-sets-list.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *

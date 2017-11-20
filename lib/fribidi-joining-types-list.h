@@ -2,12 +2,6 @@
 /* FriBidi
  * fribidi-joining-types-list.h - list of joining types
  *
- * $Id: fribidi-joining-types-list.h,v 1.2 2004-06-15 11:52:02 behdad Exp $
- * $Author: behdad $
- * $Date: 2004-06-15 11:52:02 $
- * $Revision: 1.2 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining-types-list.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2004
  *

@@ -2,12 +2,6 @@
 /* FriBidi
  * fribidi-bidi-types-list.h - list of bidi types
  *
- * $Id: fribidi-bidi-types-list.h,v 1.5 2004-06-13 20:11:42 behdad Exp $
- * $Author: behdad $
- * $Date: 2004-06-13 20:11:42 $
- * $Revision: 1.5 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi-types-list.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *

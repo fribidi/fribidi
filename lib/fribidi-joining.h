@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-joining.h - Arabic joining algorithm
  *
- * $Id: fribidi-joining.h,v 1.3 2004-06-21 21:15:31 behdad Exp $
- * $Author: behdad $
- * $Date: 2004-06-21 21:15:31 $
- * $Revision: 1.3 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-joining.h,v $
- *
  * Authors:
  *   Behdad Esfahbod, 2004
  *

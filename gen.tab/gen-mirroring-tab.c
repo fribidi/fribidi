@@ -1,12 +1,6 @@
 /* FriBidi
  * gen-mirroring-tab.c - generate mirroring.tab.i
  *
- * $Id: gen-mirroring-tab.c,v 1.14 2006-01-31 03:23:12 behdad Exp $
- * $Author: behdad $
- * $Date: 2006-01-31 03:23:12 $
- * $Revision: 1.14 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-mirroring-tab.c,v $
- *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *

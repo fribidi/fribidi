@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-benchmark.c - command line benchmark tool for libfribidi
  *
- * $Id: fribidi-benchmark.c,v 1.8 2009-04-14 03:49:52 behdad Exp $
- * $Author: behdad $
- * $Date: 2009-04-14 03:49:52 $
- * $Revision: 1.8 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/bin/fribidi-benchmark.c,v $
- *
  * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *   Dov Grobgeld, 1999, 2000

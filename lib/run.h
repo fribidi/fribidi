@@ -1,12 +1,6 @@
 /* FriBidi
  * run.h - text run data type
  *
- * $Id: run.h,v 1.10 2011-05-04 18:04:29 behdad Exp $
- * $Author: behdad $
- * $Date: 2011-05-04 18:04:29 $
- * $Revision: 1.10 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/run.h,v $
- *
  * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *   Dov Grobgeld, 1999, 2000

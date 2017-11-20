@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-bidi.c - bidirectional algorithm
  *
- * $Id: fribidi-bidi.c,v 1.21 2007-03-15 18:09:25 behdad Exp $
- * $Author: behdad $
- * $Date: 2007-03-15 18:09:25 $
- * $Revision: 1.21 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-bidi.c,v $
- *
  * Authors:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *   Dov Grobgeld, 1999, 2000, 2017

@@ -1,12 +1,6 @@
 /* FriBidi
  * gen-unicode-version.c - generate fribidi-unicode-version.h
  *
- * $Id: gen-unicode-version.c,v 1.12 2006-01-31 03:23:12 behdad Exp $
- * $Author: behdad $
- * $Date: 2006-01-31 03:23:12 $
- * $Revision: 1.12 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/gen.tab/gen-unicode-version.c,v $
- *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *
