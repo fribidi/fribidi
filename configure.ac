@@ -2,13 +2,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## Use autoupdate to update this file for newer versions of autoconf.
 ## Use autoscan to check if you need to add something to this file.
-##############################################################################
-## $Id: configure.ac,v 1.29 2011-01-21 22:49:59 behdad Exp $
-## $Auther: behdad $
-## $Date: 2011-01-21 22:49:59 $
-## $Revision: 1.29 $
-## $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/configure.ac,v $
-##############################################################################
 
 AC_PREREQ([2.64])
 

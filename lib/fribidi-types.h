@@ -1,12 +1,6 @@
 /* FriBidi
  * fribidi-types.h - define data types for the rest of the library
  *
- * $Id: fribidi-types.h,v 1.13 2010-02-24 19:40:04 behdad Exp $
- * $Author: behdad $
- * $Date: 2010-02-24 19:40:04 $
- * $Revision: 1.13 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-types.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2001, 2002, 2004
  *

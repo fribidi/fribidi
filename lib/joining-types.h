@@ -1,12 +1,6 @@
 /* FriBidi
  * joining-types.h - define internal joining types
  *
- * $Id: joining-types.h,v 1.4 2006-01-31 03:23:13 behdad Exp $
- * $Author: behdad $
- * $Date: 2006-01-31 03:23:13 $
- * $Revision: 1.4 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/joining-types.h,v $
- *
  * Author:
  *   Behdad Esfahbod, 2004
  *

@@ -20,12 +20,6 @@
  * 
  * For licensing issues, contact <fribidi.license@gmail.com> or write to
  * Sharif FarsiWeb, Inc., PO Box 13445-389, Tehran, Iran.
- */
-/* $Id: fribidi-arabic.c,v 1.3 2007-04-05 16:14:39 behdad Exp $
- * $Author: behdad $
- * $Date: 2007-04-05 16:14:39 $
- * $Revision: 1.3 $
- * $Source: /home/behdad/src/fdo/fribidi/togit/git/../fribidi/fribidi2/lib/fribidi-arabic.c,v $
  *
  * Author(s):
  *   Behdad Esfahbod, 2005
