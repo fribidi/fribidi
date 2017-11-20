@@ -18,4 +18,4 @@ script:
   - ./configure
   - make
   - make check
-# - make distcheck # broken currently
+  - make distcheck
