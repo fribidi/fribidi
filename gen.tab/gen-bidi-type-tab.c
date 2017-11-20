@@ -324,9 +324,9 @@ gen_bidi_type_tab (
 	  FRIBIDI_VERSION ")\n" " * from the file %s of Unicode version "
 	  FRIBIDI_UNICODE_VERSION ". */\n\n", data_file_type);
 
-  printf ("#define PACKTAB_UINT8 fribidi_uint8\n"
-	  "#define PACKTAB_UINT16 fribidi_uint16\n"
-	  "#define PACKTAB_UINT32 fribidi_uint32\n\n");
+  printf ("#define PACKTAB_UINT8 uint8_t\n"
+	  "#define PACKTAB_UINT16 uint16_t\n"
+	  "#define PACKTAB_UINT32 uint32_t\n\n");
 
   if (!pack_table
       (table, FRIBIDI_UNICODE_CHARS, 1, LTR, max_depth, 3, names,

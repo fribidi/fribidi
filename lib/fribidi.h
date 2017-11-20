@@ -52,7 +52,7 @@
 #endif				/* FRIBIDI_CHARSETS */
 
 
-#if FRIBIDI_NO_DEPRECATED+0
+#ifdef FRIBIDI_NO_DEPRECATED
 #else
 # include "fribidi-deprecated.h"
 #endif				/* !FRIBIDI_NO_DEPRECATED */

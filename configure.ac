@@ -107,7 +107,7 @@ AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h strings.h inttypes.h wchar.h asm/page.h sys/times.h])
+AC_CHECK_HEADERS([stdlib.h string.h strings.h wchar.h asm/page.h sys/times.h])
 
 # Checks for typedefs and structures.
 AC_C_CONST

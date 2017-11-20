@@ -14,7 +14,3 @@
 -T FriBidiMemChunk
 -T FriBidiEnv
 -T FriBidiRun
--T fribidi_uint8
--T fribidi_uint16
--T fribidi_uint32
--T fribidi_boolean

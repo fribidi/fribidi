@@ -200,13 +200,13 @@ gen_mirroring_tab (
 	  FRIBIDI_VERSION ")\n" " * from the file %s of Unicode version "
 	  FRIBIDI_UNICODE_VERSION ". */\n\n", data_file_type);
 
-  printf ("#define PACKTAB_UINT8 fribidi_uint8\n"
-	  "#define PACKTAB_UINT16 fribidi_uint16\n"
-	  "#define PACKTAB_UINT32 fribidi_uint32\n\n");
+  printf ("#define PACKTAB_UINT8 uint8_t\n"
+	  "#define PACKTAB_UINT16 uint16_t\n"
+	  "#define PACKTAB_UINT32 uint32_t\n\n");
 
   key_bytes = max_dist <= 0x7f ? 1 : max_dist < 0x7fff ? 2 : 4;
-  key_type = key_bytes == 1 ? "fribidi_int8" : key_bytes == 2 ?
-    "fribidi_int16" : "fribidi_int32";
+  key_type = key_bytes == 1 ? "int8_t" : key_bytes == 2 ?
+    "int16_t" : "int32_t";
 
   if (!pack_table
       (table, FRIBIDI_UNICODE_CHARS, key_bytes, 0, max_depth, 1, NULL,
