@@ -43,8 +43,8 @@
 
 #include "fribidi-begindecls.h"
 
-#define fribidi_get_bracket_char FRIBIDI_NAMESPACE(get_bracket_char)
-/* fribidi_get_bracket_char - get bracketed character
+#define fribidi_get_bracket FRIBIDI_NAMESPACE(get_bracket)
+/* fribidi_get_bracket - get bracketed character
  *
  * This function finds the bracketed equivalent of a character as defined in
  * the file BidiBrackets.txt of the Unicode Character Database available at
@@ -63,14 +63,19 @@ FRIBIDI_ENTRY FriBidiBracketType fribidi_get_bracket (
   FriBidiChar ch		    /* input character */
 );
 
+#define fribidi_get_brackets FRIBIDI_NAMESPACE(get_brackets)
+/* fribidi_get_brackets - get bracketed characters
+ *
+ * This function finds the bracketed characters of an string of characters.
+ * See fribidi_get_bracket() for more information about the bracketed
+ * characters returned by this function.
+ */
 FRIBIDI_ENTRY void
 fribidi_get_bracket_types (
-  /* input */
-  const FriBidiChar *str,
-  const FriBidiStrIndex len,
-  const FriBidiCharType *types,
-  /* output */
-  FriBidiBracketType *btypes
+  const FriBidiChar *str,           /* input string */
+  const FriBidiStrIndex len,        /* input string length */
+  const FriBidiCharType *types,     /* input bidi types */
+  FriBidiBracketType *btypes        /* output bracketed characters */
 );
 
 #define FRIBIDI_BRACKET_OPEN_MASK 0x80000000
