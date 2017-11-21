@@ -42,7 +42,6 @@
 #include "fribidi-begindecls.h"
 
 
-#ifndef __FRIBIDI_DOC
 # if defined (_SVR4) || defined (SVR4) || defined (__OpenBSD__) || \
      defined (_sgi) || defined (__sun) || defined (sun) || \
      defined (__digital__) || defined (__HP_cc)
@@ -52,7 +51,6 @@
 # else
 #  include <stdint.h>
 # endif
-#endif
 
 typedef int fribidi_boolean;
 
