@@ -29,17 +29,19 @@
 static void die(const char *fmt, ...)
 {
   va_list ap;
-  va_start(ap,fmt); 
-    
+  va_start(ap,fmt);
+
   vfprintf(stderr, fmt, ap);
   exit(-1);
 }
 
+static
 FriBidiChar parse_uni_char(const char *start, int len)
 {
   return strtoul(start, NULL, 16);
 }
 
+static
 void parse_test_line (char *line,
                       int line_no,
                       FriBidiChar **code_points,      /* Field 0 */
@@ -55,7 +57,7 @@ void parse_test_line (char *line,
   char *end;
   int level;
 
-  
+
   code_points_array = g_array_new (FALSE, FALSE, sizeof (FriBidiChar));
   levels_array = g_array_new (FALSE, FALSE, sizeof (FriBidiLevel));
 
@@ -76,7 +78,7 @@ void parse_test_line (char *line,
 
       line = end;
     }
-  
+
   *code_points_len = code_points_array->len;
   *code_points = (FriBidiChar *) g_array_free (code_points_array, FALSE);
 
@@ -96,7 +98,7 @@ void parse_test_line (char *line,
     line++;
   else
     die("Oops! Didn't find expected ;\n");
-  
+
   /* Field 2. resolved paragraph_dir */
   end = line;
   while (isdigit (*end))
@@ -155,7 +157,7 @@ void parse_test_line (char *line,
   for(; errno = 0, level = strtol (line, &end, 10), line != end && errno != EINVAL; line = end) {
     g_array_append_val (visual_ordering_array, level);
   }
-  
+
   *visual_ordering_len = visual_ordering_array->len;
   *visual_ordering = (int*)g_array_free (visual_ordering_array, FALSE);
 }
@@ -203,7 +205,7 @@ main (int argc, char **argv)
         }
       die("Unknown option %s!\n", arg);
     }
-  
+
   filename = argv[next_arg++];
 
   error = NULL;
@@ -303,7 +305,7 @@ main (int argc, char **argv)
                                                  types_len,
                                                  &base_dir,
                                                  levels))
-            ;
+        {}
 
         for (i = 0; i < types_len; i++)
           ltor[i] = i;
@@ -314,7 +316,7 @@ main (int argc, char **argv)
                                   levels,
                                   NULL,
                                   ltor))
-            ;
+        {}
 
         j = 0;
         for (i = 0; i < types_len; i++)
@@ -389,7 +391,7 @@ main (int argc, char **argv)
                                                          types_len,
                                                          &base_dir,
                                                          levels))
-                    ;
+                {}
 
                 fribidi_set_debug (0);
               }

@@ -46,7 +46,7 @@ fribidi_get_bracket (
 )
 {
   FriBidiBracketType bracket_type;
-  register uint8_t char_type;
+  register uint8_t char_type = FRIBIDI_GET_BRACKET_TYPE (ch);
 
   /* The bracket type from the table may be:
         0 - Not a bracket
@@ -56,7 +56,6 @@ fribidi_get_bracket (
      This will be recodeded into the FriBidiBracketType as having a
      bracket_id = 0 if the character is not a bracket.
    */
-  char_type = FRIBIDI_GET_BRACKET_TYPE (ch);
   fribidi_boolean is_open = false;
 
   if (char_type == 0)

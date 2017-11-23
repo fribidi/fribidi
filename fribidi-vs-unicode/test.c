@@ -279,7 +279,7 @@ main (int argc, char **argv)
                                                      types_len,
                                                      &base_dir,
                                                      levels))
-              ;
+            {}
 
 	    for (i = 0; i < types_len; i++)
 	        ltor[i] = i;
@@ -290,7 +290,7 @@ main (int argc, char **argv)
                                       levels,
                                       NULL,
                                       ltor))
-              ;
+            {}
 
 	    j = 0;
 	    for (i = 0; i < types_len; i++)
@@ -366,7 +366,7 @@ main (int argc, char **argv)
                                                              types_len,
                                                              &base_dir,
                                                              levels))
-                      ;
+                    {}
 
 		    fribidi_set_debug (0);
 		}
