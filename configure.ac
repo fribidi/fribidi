@@ -24,7 +24,7 @@ m4_define(fribidi_minor_version, 19)dnl
 m4_define(fribidi_micro_version, 8)dnl
 m4_define(fribidi_interface_version, 4)dnl
 m4_define(fribidi_interface_age, 0)dnl
-m4_define(fribidi_binary_age, 0)dnl
+m4_define(fribidi_binary_age, 4)dnl
 dnl
 m4_define(fribidi_version,
 	  m4_if(m4_eval(fribidi_micro_version()),0,
