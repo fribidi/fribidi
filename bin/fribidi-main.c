@@ -30,6 +30,7 @@
 #include <common.h>
 
 #include <fribidi.h>
+#include <fribidi-deprecated.h>
 #if FRIBIDI_CHARSETS+0
 #else
 # include <fribidi-char-sets.h>

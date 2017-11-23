@@ -30,6 +30,7 @@
 #include <common.h>
 
 #include <fribidi.h>
+#include <fribidi-deprecated.h>
 
 #include <stdio.h>
 #if STDC_HEADERS+0
