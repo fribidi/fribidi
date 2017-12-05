@@ -30,12 +30,7 @@ MAINTAINERCLEANFILES = \
 		$(srcdir)/missing \
 		$(srcdir)/mkinstalldirs \
 		$(srcdir)/ChangeLog \
-		`find "$(srcdir)" -type f -name Makefile.in -print` \
-		`$(srcdir)/bootstrap --write-configure`
-# The last line above is a horrible hack.
-# GNU Coding Standards recommends that `make maintainer-clean' should not 
-# remove the configure script.
-# We instead make configure call bootstrap.
+		`find "$(srcdir)" -type f -name Makefile.in -print`
 
 # Indent all C source and header files, using indent(1):
 
