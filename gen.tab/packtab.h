@@ -22,6 +22,8 @@
 #ifndef PACKTAB_H
 #define PACKTAB_H
 
+#include <stdio.h>
+
 #ifdef __cplusplus
 extern "C"
 {

@@ -33,7 +33,7 @@ m4_define(fribidi_version,
 
 AC_INIT([GNU FriBidi],
 	fribidi_version(),
-        [http://bugs.freedesktop.org/enter_bug.cgi?product=fribidi],
+        [https://github.com/fribidi/fribidi/issues/new],
 	[fribidi],
 	[http://fribidi.org/])
 
@@ -179,6 +179,27 @@ else
 fi
 fi
 AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
+
+# A hack for supporting cross compilation
+if test $host != $build; then
+  BUILD_CC="gcc"
+  BUILD_CFLAGS="-O2 -g"
+  BUILD_LDFLAGS=""
+  BUILD_EXEEXT=""
+else
+  BUILD_CC="${CC}"
+  BUILD_CFLAGS="${CFLAGS}"
+  BUILD_LDFLAGS="${LDFLAGS}"
+  BUILD_EXEEXT="${EXEEXT}"
+fi
+
+# Continuation of hack to set up the proper include directories
+BUILD_CFLAGS="${BUILD_CFLAGS} -DHAVE_CONFIG_H -I.. -I../lib"
+
+AC_ARG_VAR([BUILD_CC])
+AC_ARG_VAR([BUILD_CFLAGS])
+AC_ARG_VAR([BUILD_LDFLAGS])
+AC_ARG_VAR([BUILD_EXEEXT])
 
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
