@@ -111,6 +111,7 @@ AC_SUBST(SIZEOF_INT)
 AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(void *)
 AC_CHECK_SIZEOF(wchar_t)
+AX_PROG_CC_FOR_BUILD
 
 # Checks for compiler characteristics.
 changequote(,)dnl
@@ -180,26 +181,7 @@ fi
 fi
 AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
 
-# A hack for supporting cross compilation
-if test $host != $build; then
-  BUILD_CC="gcc"
-  BUILD_CFLAGS="-O2 -g"
-  BUILD_LDFLAGS=""
-  BUILD_EXEEXT=""
-else
-  BUILD_CC="${CC}"
-  BUILD_CFLAGS="${CFLAGS}"
-  BUILD_LDFLAGS="${LDFLAGS}"
-  BUILD_EXEEXT="${EXEEXT}"
-fi
-
-# Continuation of hack to set up the proper include directories
-BUILD_CFLAGS="${BUILD_CFLAGS} -DHAVE_CONFIG_H -I.. -I../lib"
-
-AC_ARG_VAR([BUILD_CC])
-AC_ARG_VAR([BUILD_CFLAGS])
-AC_ARG_VAR([BUILD_LDFLAGS])
-AC_ARG_VAR([BUILD_EXEEXT])
+CFLAGS_FOR_BUILD="${CFLAGS_FOR_BUILD} -DHAVE_CONFIG_H -I.. -I../lib"
 
 # Generate output
 AC_CONFIG_FILES([fribidi.pc

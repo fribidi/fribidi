@@ -50,7 +50,7 @@ derived_bidi-type.tab.i: \
 		DerivedBidiClass.txt \
 		fribidi-unicode-version.h \
 		$(gen_bidi_type_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_bidi_type_tab) $(gen_bidi_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_bidi_type_tab) $(gen_bidi_type_tab_SOURCES)
 	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -58,7 +58,7 @@ bidi-type.tab.i: \
 		UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_bidi_type_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_bidi_type_tab) $(gen_bidi_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_bidi_type_tab) $(gen_bidi_type_tab_SOURCES)
 	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -73,7 +73,7 @@ joining-type.tab.i: \
 		ArabicShaping.txt \
 		fribidi-unicode-version.h \
 		$(gen_joining_type_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_joining_type_tab) $(gen_joining_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_joining_type_tab) $(gen_joining_type_tab_SOURCES)
 	./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -85,7 +85,7 @@ arabic-shaping.tab.i: \
 		UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_arabic_shaping_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_arabic_shaping_tab) $(gen_arabic_shaping_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_arabic_shaping_tab) $(gen_arabic_shaping_tab_SOURCES)
 	./$(gen_arabic_shaping_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -97,7 +97,7 @@ mirroring.tab.i: \
 		BidiMirroring.txt \
 		fribidi-unicode-version.h \
 		$(gen_mirroring_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_mirroring_tab) $(gen_mirroring_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_mirroring_tab) $(gen_mirroring_tab_SOURCES)
 	./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -110,7 +110,7 @@ brackets.tab.i: \
 		UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_brackets_tab) $(gen_brackets_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_brackets_tab) $(gen_brackets_tab_SOURCES)
 	./$(gen_brackets_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -122,7 +122,7 @@ brackets-type.tab.i: \
 		BidiBrackets.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_type_tab_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_brackets_type_tab) $(gen_brackets_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_brackets_type_tab) $(gen_brackets_type_tab_SOURCES)
 	./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -134,7 +134,7 @@ fribidi-unicode-version.h: \
 		ReadMe.txt \
 		BidiMirroring.txt \
 		$(gen_unicode_version_SOURCES)
-	$(BUILD_CC) $(BUILD_CFLAGS) -o $(gen_unicode_version) $(gen_unicode_version_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_unicode_version) $(gen_unicode_version_SOURCES)
 	./$(gen_unicode_version) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -142,10 +142,10 @@ fribidi-unicode-version.h: \
 gen: $(EXTRA_PROGRAMS)
 
 $(top_builddir)/config.h: $(top_srcdir)/config.h.in
-	cd $(top_builddir) && $(BUILD_CC) $(BUILD_CFLAGS) -o config.h
+	cd $(top_builddir) && $(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o config.h
 
 $(top_builddir)/lib/fribidi-config.h: $(top_srcdir)/lib/fribidi-config.h.in
-	cd $(top_builddir)/lib && $(BUILD_CC) $(BUILD_CFLAGS) -o fribidi-config.h
+	cd $(top_builddir)/lib && $(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o fribidi-config.h
 
 .PHONY: gen
 
