@@ -50,7 +50,7 @@ derived_bidi-type.tab.i: \
 		DerivedBidiClass.txt \
 		fribidi-unicode-version.h \
 		$(gen_bidi_type_tab_SOURCES)
-	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_bidi_type_tab) $(gen_bidi_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_bidi_type_tab) $(subst packtab.h,,$(gen_bidi_type_tab_SOURCES))
 	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -58,7 +58,7 @@ bidi-type.tab.i: \
 		UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_bidi_type_tab_SOURCES)
-	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_bidi_type_tab) $(gen_bidi_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_bidi_type_tab) $(subst packtab.h,,$(gen_bidi_type_tab_SOURCES))
 	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -73,7 +73,7 @@ joining-type.tab.i: \
 		ArabicShaping.txt \
 		fribidi-unicode-version.h \
 		$(gen_joining_type_tab_SOURCES)
-	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_joining_type_tab) $(gen_joining_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_joining_type_tab) $(subst packtab.h,,$(gen_joining_type_tab_SOURCES))
 	./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -97,7 +97,7 @@ mirroring.tab.i: \
 		BidiMirroring.txt \
 		fribidi-unicode-version.h \
 		$(gen_mirroring_tab_SOURCES)
-	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_mirroring_tab) $(gen_mirroring_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_mirroring_tab) $(subst packtab.h,,$(gen_mirroring_tab_SOURCES))
 	./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -110,7 +110,7 @@ brackets.tab.i: \
 		UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_tab_SOURCES)
-	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_brackets_tab) $(gen_brackets_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_brackets_tab) $(subst packtab.h,,$(gen_brackets_tab_SOURCES))
 	./$(gen_brackets_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
@@ -122,7 +122,7 @@ brackets-type.tab.i: \
 		BidiBrackets.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_type_tab_SOURCES)
-	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_brackets_type_tab) $(gen_brackets_type_tab_SOURCES)
+	$(CC_FOR_BUILD) $(CFLAGS_FOR_BUILD) -o $(gen_brackets_type_tab) $(subst packtab.h,,$(gen_brackets_type_tab_SOURCES))
 	./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
