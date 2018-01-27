@@ -60,7 +60,7 @@ You should have received a copy of the GNU Lesser General Public License along
 with GNU FriBidi, in a file named COPYING; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-For licensing issues, contact <license@farsiweb.info>.
+For licensing issues, contact <fribidi.license@gmail.com>.
 
 
 ## Implementation
@@ -85,13 +85,12 @@ machines.
 
 GNU Fribidi has been tested exhaustively against the [Unicode Reference Code],
 and to the best of our knowledge, it completely conforms to the specification,
-always producing the same result as the Reference Code, except for [Mirroring]
-additions, introduced in Unicode 6.3.0 of the specification.
+always producing the same result as the Reference Code.
 
 
 ### API
 
-The reordering of characters is typically done through the function:
+The simplest way of accessing the API is through the convenience function `fribibidi_log2vis` which has the following signature:
 
 ```c
 fribidi_boolean fribidi_log2vis(
@@ -127,6 +126,11 @@ Where...
 If any of the output pointers is equal to `NULL`, then that information is not
 calculated.
 
+Note that a call to `fribidi_log2vis()` is a convenience function to calling the following three functions in order:
+
+1. `fribidi_get_bidi_types()`
+2. `fribidi_get_par_embedding_levels_ex()`
+3. `fribidi_reorder_line()`
 
 ## How it looks like
 
@@ -159,8 +163,8 @@ questions: <https://lists.freedesktop.org/mailman/listinfo/fribidi>
 
 ## Maintainers and Contributors
 
-* Dov Grobgeld <dov.grobgeld@gmail.com>
-* Behdad Esfahbod <behdad@gnu.org>
+* Dov Grobgeld <dov.grobgeld@gmail.com> - Original author and current maintainer
+* Behdad Esfahbod <behdad@gnu.org> - Author of most of the code
 
 See also [`AUTHORS`](./AUTHORS) and [`THANKS`](./THANKS) for the complete list
 of contributors.

@@ -1,7 +1,13 @@
-Overview of changes between 0.19.6 and 0.19.8
+Overview of changes between 0.19.7 and 1.0
 =============================================
-* Full isolate and parenthesis support as per Unicode 6.3
-* This version is not backwards compatible.
+
+* Full isolate and parenthesis support as per Unicode 6.3 to Unicode 10.0 . 
+* To get access to the new algorithm calls to the function
+  `fribidi_get_par_embedding_levels()` must be replaced with calls to
+  `fribidi_get_par_embedding_levels_ex()`. These function are not API
+  compatible. Calling the older function will use default values for
+  the new bracket properties and will sometimes yield non-complient
+  results.
 
 Overview of changes between 0.19.6 and 0.19.7
 =============================================

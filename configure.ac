@@ -19,9 +19,9 @@ dnl
 dnl If binary backwards compatibility has been broken:
 dnl   FRIBIDI_BINARY_AGE = FRIBIDI_INTERFACE_AGE = 0;
 dnl
-m4_define(fribidi_major_version, 0)dnl
-m4_define(fribidi_minor_version, 19)dnl
-m4_define(fribidi_micro_version, 8)dnl
+m4_define(fribidi_major_version, 1)dnl
+m4_define(fribidi_minor_version, 0)dnl
+m4_define(fribidi_micro_version, 0)dnl
 m4_define(fribidi_interface_version, 4)dnl
 m4_define(fribidi_interface_age, 0)dnl
 m4_define(fribidi_binary_age, 4)dnl
