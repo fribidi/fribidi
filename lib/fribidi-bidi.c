@@ -260,6 +260,17 @@ print_bidi_string (
     MSG2 ("%c", fribidi_char_from_bidi_type (bidi_types[i]));
   MSG ("\n");
 }
+
+static void print_pairing_nodes(FriBidiPairingNode *nodes)
+{
+  MSG ("Pairs: ");
+  while (nodes)
+    {
+      MSG3 ("(%d, %d) ", nodes->open->pos, nodes->close->pos);
+      nodes = nodes->next;
+    }
+  MSG ("\n");
+}
 #endif /* DEBUG */
 
 
@@ -401,17 +412,6 @@ static FriBidiPairingNode * pairing_nodes_push(FriBidiPairingNode *nodes,
   node->next = nodes;
   nodes = node;
   return nodes;
-}
-
-static void print_pairing_nodes(FriBidiPairingNode *nodes)
-{
-  MSG ("Pairs: ");
-  while (nodes)
-    {
-      MSG3 ("(%d, %d) ", nodes->open->pos, nodes->close->pos);
-      nodes = nodes->next;
-    }
-  MSG ("\n");
 }
 
 /* Sort by merge sort */
