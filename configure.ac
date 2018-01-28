@@ -181,8 +181,6 @@ fi
 fi
 AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
 
-CFLAGS_FOR_BUILD="${CFLAGS_FOR_BUILD} -DHAVE_CONFIG_H -I.. -I../lib"
-
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
 		 lib/fribidi-config.h
