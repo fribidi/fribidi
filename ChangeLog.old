@@ -129,7 +129,7 @@
 	UNI_MAX_BIDI_LEVEL and moved to fribidi_unicode.h, should not check
 	fribidi with debug-enabled reference code anymore.  Updated
 	conformance/test to reflect this change.
-	* README: Sample input and output removed, refered to tests directory
+	* README: Sample input and output removed, referred to tests directory
 	* fribidi_config.h.in: Added, configure creates fribidi_config.h from
 	this.
 	* fribidi.spec.in: Added, configure creates fribidi.spec from this.
@@ -221,7 +221,7 @@
 	target fribidi_tab_char_type_N.i added, which N is replaced with
 	a digit between 2 and 9, and makes a table with compress level N.
 	* acinclude.m4: glib material removed.
-	* configure.in: VERISON update, INTERFACE_VERSION added. glib
+	* configure.in: VERSION update, INTERFACE_VERSION added. glib
 	material removed, fribidi_tab_char_types_N.i configuration added,
 	option --without-charsets added.  Also creates fribidi_config.h.
 	* fribidi-config.in: A small bug fixed, to set the --cflags output
@@ -305,7 +305,7 @@
 	conversion.
 
 2001-04-10  Behdad Esfahbod <behdad@bamdad.org>
-	* *.c/*.h: Changed all "guchar"s to "gchar" and neede casts done.
+	* *.c/*.h: Changed all "guchar"s to "gchar" and needed casts done.
 	* Makefile.am: Added MAINTAINERCLEANFILES to remove files
 	"configure", "config.h.in", "Makefile.in", "aclocal.m4" by
 	maintainer-clean target.
@@ -368,7 +368,7 @@
 	if successful and FALSE otherwise.
 	* fribidi_main.c, fribidi_benchmark.c: Changed to use getopt library,
 	to handle command line parameters better.
-	* fribidi_main.c: Changed to if COLUMNS enviroment variable is
+	* fribidi_main.c: Changed to if COLUMNS environment variable is
 	defined, use its value for text width.
 
 2001-03-29  Behdad Esfahbod <behdad@bamdad.org>
@@ -455,7 +455,7 @@
 	Option --test simulates the old test_fribidi (same as --fill
 	--showinput --clean)
 	Option --clean now works for all charsets.
-	Option --fill implementated.
+	Option --fill implemented.
 	Options --version, --showinput, --ltov, --vtol, --levels, --changes,
 	--novisual, --charsetdesc added.
 	Now use the charset conventions, lots of code removed.
@@ -504,7 +504,7 @@
 	* fribidi.c: Define symbol NO_STDIO changed to DEBUG, to turn on or
 	off all debug codes compile time, also a function fribidi_set_debug,
 	turns on and off the debug output generations in run time.
-	* fribidi.c: Added some more debug information, all debug informations
+	* fribidi.c: Added some more debug information, all debug information
 	revised and go to stderr now.
 	* fribidi.c: Fixed a bug in rule W5, that is when some european
 	terminators are between some arabic letters and some european
@@ -650,7 +650,7 @@
 	  patterns that are common in Bidi supported programs.
 
 1999-04-28  Dov Grobgeld  <dov.grobgeld@gmail.com>
-	* Fixed bug in fribidi_log2vis which occured if only the v2l
+	* Fixed bug in fribidi_log2vis which occurred if only the v2l
 	  array was requested and not the l2v array.
 	* Fixed bug in test_fribidi when using option test_vtol .
 	* Changed types in call to fribidi_log2vis to be more memory 
@@ -667,7 +667,7 @@
 
 1999-02-08  Dov Grobgeld  <dov.grobgeld@gmail.com>
 	* Released 0.1.3 to match the perl module FriBidi.
-	* Added length paramater to fribidi_unicode_to_iso8859_8().
+	* Added length parameter to fribidi_unicode_to_iso8859_8().
 	* Fixed bug in fribidi.c related to zero length strings.
 	* Released 0.1.2.
 	* Added options -ltr and -rtl to fribidi to force LTR and RTL 

@@ -62,7 +62,7 @@ FRIBIDI_ENTRY void fribidi_join_arabic (
   const FriBidiLevel *embedding_levels,	/* input list of embedding
 					   levels, as returned by
 					   fribidi_get_par_embedding_levels */
-  FriBidiArabicProp *ar_props	/* Arabic properties to analyze, initilized by
+  FriBidiArabicProp *ar_props	/* Arabic properties to analyze, initialized by
 				   joining types, as returned by
 				   fribidi_get_joining_types */
 );

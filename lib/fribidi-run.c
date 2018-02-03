@@ -269,7 +269,7 @@ shadow_run_list (
 	/* r needed? */
 	if (r->pos + r->len > pos2)
 	  {
-	    /* cut the begining of r. */
+	    /* cut the beginning of r. */
 	    r->len = r->pos + r->len - pos2;
 	    r->pos = pos2;
 	  }
