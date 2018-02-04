@@ -1498,7 +1498,7 @@ fribidi_reorder_line (
 		if (i < off || embedding_levels[i] != level)
 		  {
 		    i++;
-		    DBG ("warning: NSM(s) at the beggining of level run");
+		    DBG ("warning: NSM(s) at the beginning of level run");
 		  }
 
 		if (visual_str)

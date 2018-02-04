@@ -51,8 +51,8 @@
  *
  * This function is used to turn character mirroring on or off.
  * Character mirroring is the act of replacing a mirrorable glyph
- * (character), eg. left paranthesis, with the matching glyph, 
- * eg. right paranthesis, in a right-to-left resolved context.
+ * (character), eg. left parenthesis, with the matching glyph, 
+ * eg. right parenthesis, in a right-to-left resolved context.
  * If your rendering engine does mirroring itself, you may want to 
  * turn it off here.
  *
@@ -156,7 +156,7 @@ fribidi_get_type_internal (
  * lines; but feel free to do otherwise if you know what you are doing.
  * Deprecated.  Use fribidi_remove_special_chars instead.
  *
- * Returns: New length of the string, or \-1 if an error occured (memory
+ * Returns: New length of the string, or \-1 if an error occurred (memory
  * allocation failure most probably).
  */
 FRIBIDI_ENTRY FriBidiStrIndex
@@ -186,7 +186,7 @@ fribidi_remove_bidi_marks (
  * This function is obsolete because it only handles one-line paragraphs. 
  * Please consider using other functions instead.  Deprecated.
  *
- * Returns: Maximum level found plus one, or zero if any error occured
+ * Returns: Maximum level found plus one, or zero if any error occurred
  * (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_log2vis (

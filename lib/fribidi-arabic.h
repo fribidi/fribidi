@@ -54,7 +54,7 @@
  *					   rendering capabilities.
  *
  * Of the above, FRIBIDI_FLAG_SHAPE_ARAB_CONSOLE is only used in special
- * cases, but the rest are recommended in any enviroment that doesn't have
+ * cases, but the rest are recommended in any environment that doesn't have
  * other means for doing Arabic shaping.  The set of extra flags that enable
  * this level of Arabic support has a shortcut named FRIBIDI_FLAGS_ARABIC.
  */

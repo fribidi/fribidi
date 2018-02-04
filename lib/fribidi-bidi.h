@@ -75,7 +75,7 @@ FRIBIDI_ENTRY FriBidiParType fribidi_get_par_direction (
  * There are a few macros defined in fribidi-bidi-types.h to work with this
  * embedding levels.
  *
- * Returns: Maximum level found plus one, or zero if any error occured
+ * Returns: Maximum level found plus one, or zero if any error occurred
  * (memory allocation failure most probably).
  */
 FRIBIDI_ENTRY FriBidiLevel
@@ -119,7 +119,7 @@ fribidi_get_par_embedding_levels_ex (
  * in FRIBIDI_FLAGS_DEFAULT.
  *
  * Returns: Maximum level found in this line plus one, or zero if any error
- * occured (memory allocation failure most probably).
+ * occurred (memory allocation failure most probably).
  */
      FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
   FriBidiFlags flags, /* reorder flags */
