@@ -16,7 +16,6 @@ fribidi_get_type_internal
 fribidi_join_arabic
 fribidi_log2vis
 fribidi_log2vis_get_embedding_levels
-fribidi_log2vis_get_embedding_levels_ex
 fribidi_mirroring_status
 fribidi_remove_bidi_marks
 fribidi_reorder_line
