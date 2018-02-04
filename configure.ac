@@ -26,10 +26,7 @@ m4_define(fribidi_interface_version, 4)dnl
 m4_define(fribidi_interface_age, 0)dnl
 m4_define(fribidi_binary_age, 4)dnl
 dnl
-m4_define(fribidi_version,
-	  m4_if(m4_eval(fribidi_micro_version()),0,
-	    fribidi_major_version.fribidi_minor_version,
-	    fribidi_major_version.fribidi_minor_version.fribidi_micro_version))dnl
+m4_define(fribidi_version,fribidi_major_version.fribidi_minor_version.fribidi_micro_version)dnl
 
 AC_INIT([GNU FriBidi],
 	fribidi_version(),
