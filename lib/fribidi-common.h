@@ -110,10 +110,17 @@
 
 
 #define fribidi_debug_status FRIBIDI_NAMESPACE(debug_status)
+/* fribidi_debug_status - get current debug state
+ *
+ */
 FRIBIDI_ENTRY int fribidi_debug_status (
   void
 );
+
 #define fribidi_set_debug FRIBIDI_NAMESPACE(set_debug)
+/* fribidi_set_debug - set debug state
+ *
+ */
 FRIBIDI_ENTRY int
 fribidi_set_debug (
   int state		/* new state to set */
