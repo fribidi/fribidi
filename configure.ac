@@ -184,12 +184,12 @@ AC_ARG_ENABLE(docs,
 			     [disable building documentation]),
 			     [], [enable_docs=yes])
 if test x$enable_docs = xyes; then
-	AC_CHECK_PROGS([C2MAN], [c2man])
-	if test -z "$C2MAN"; then
-		AC_MSG_ERROR([c2man is required to build documentation])
+	AC_CHECK_PROGS([DOXYGEN], [doxygen])
+	if test -z "$DOXYGEN"; then
+		AC_MSG_ERROR([Doxygen is required to build documentation])
 	fi
 fi
-AM_CONDITIONAL([FRIBIDI_ENABLE_DOC], [test -n "$C2MAN"])
+AM_CONDITIONAL([FRIBIDI_ENABLE_DOC], [test -n "$DOXYGEN"])
 
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
@@ -200,6 +200,7 @@ AC_CONFIG_FILES([fribidi.pc
 		 lib/Makefile
 		 bin/Makefile
 		 doc/Makefile
+		 doc/Doxyfile
 		 test/Makefile
 		 test/unicode-conformance/Makefile])
 AC_OUTPUT
