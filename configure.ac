@@ -178,6 +178,19 @@ fi
 fi
 AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
 
+# --disable-docs
+AC_ARG_ENABLE(docs,
+	      AC_HELP_STRING([--disable-docs],
+			     [disable building documentation]),
+			     [], [enable_docs=yes])
+if test x$enable_docs = xyes; then
+	AC_CHECK_PROGS([C2MAN], [c2man])
+	if test -z "$C2MAN"; then
+		AC_MSG_ERROR([c2man is required to build documentation])
+	fi
+fi
+AM_CONDITIONAL([FRIBIDI_ENABLE_DOC], [test -n "$C2MAN"])
+
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
 		 lib/fribidi-config.h
