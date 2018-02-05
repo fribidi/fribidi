@@ -4,6 +4,7 @@ EXTRA_DIST =
 MOSTLYCLEANFILES =
 MAINTAINERCLEANFILES =
 
+if FRIBIDI_ENABLE_DOC
 # man3
 
 includepath =
@@ -50,8 +51,7 @@ c2man.stamp: $(headers)
 	@touch $@.tmp
 	@($(LN_S) $^ . || cp $^ .)
 	@echo Running c2man
-	@$(top_srcdir)/missing --run c2man -T n $(C2MANFLAGS) $(headers) 2>&1 \
-	|| true
+	@$(C2MAN) -T n $(C2MANFLAGS) $(headers) 2>&1
 	@$(RM) $(headers)
 	@mv $@.tmp $@
 
@@ -61,5 +61,7 @@ $(man3): c2man.stamp
 		$(MAKE) $(AM_MAKEFLAGS) $<;\
 	fi
 	@touch $@
+
+endif # FRIBIDI_ENABLE_DOC
 
 -include $(top_srcdir)/git.mk
