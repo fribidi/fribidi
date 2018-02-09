@@ -8,12 +8,20 @@ EXTRA_PROGRAMS = \
                 gen-brackets-type-tab 
 
 gen_unicode_version_SOURCES = gen-unicode-version.c
+gen_arabic_shaping_tab_SOURCES = gen-arabic-shaping-tab.c
 gen_bidi_type_tab_SOURCES = gen-bidi-type-tab.c packtab.c packtab.h
 gen_joining_type_tab_SOURCES = gen-joining-type-tab.c packtab.c packtab.h
-gen_arabic_shaping_tab_SOURCES = gen-arabic-shaping-tab.c
 gen_mirroring_tab_SOURCES = gen-mirroring-tab.c packtab.c packtab.h
 gen_brackets_tab_SOURCES = gen-brackets-tab.c packtab.c packtab.h
 gen_brackets_type_tab_SOURCES = gen-brackets-type-tab.c packtab.c packtab.h
+# Set CPPFLAGS explicitly for these, such that they compile packtab.c to private
+# packtab.o so they don't race during parallel build from lib.
+# https://github.com/fribidi/fribidi/issues/52
+gen_bidi_type_tab_CPPFLAGS = $(AM_CPPFLAGS)
+gen_joining_type_tab_CPPFLAGS = $(AM_CPPFLAGS)
+gen_mirroring_tab_CPPFLAGS = $(AM_CPPFLAGS)
+gen_brackets_tab_CPPFLAGS = $(AM_CPPFLAGS)
+gen_brackets_type_tab_CPPFLAGS = $(AM_CPPFLAGS)
 
 CFLAGS_FOR_BUILD += -DHAVE_CONFIG_H -I$(top_builddir) -I$(top_builddir)/lib -I$(top_srcdir)/lib
 CC = $(CC_FOR_BUILD)
