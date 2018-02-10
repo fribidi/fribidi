@@ -1,4 +1,6 @@
 
+SUBDIRS = unicode-conformance
+
 TESTS_ENVIRONMENT = \
 	srcdir=${srcdir}; export srcdir; \
 	top_builddir=${top_builddir}; export top_builddir; \

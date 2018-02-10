@@ -188,5 +188,5 @@ AC_CONFIG_FILES([fribidi.pc
 		 bin/Makefile
 		 doc/Makefile
 		 test/Makefile
-		 fribidi-vs-unicode/Makefile])
+		 test/unicode-conformance/Makefile])
 AC_OUTPUT
