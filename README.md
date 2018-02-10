@@ -41,7 +41,7 @@ The latest version of GNU FriBidi may be found at:
 
 ## Building
 
-Start with running the [`bootstrap`](./bootstrap) script and follow the
+Start with running the [`autogen.sh`](./autogen.sh) script and follow the
 instructions.
 
 

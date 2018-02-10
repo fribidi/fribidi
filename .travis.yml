@@ -11,11 +11,8 @@ matrix:
     - os: osx
       compiler: clang
 
-install:
-  - ./bootstrap
-
 script:
-  - ./configure
+  - ./autogen.sh
   - make
   - make check || (cat */test-suite.log && false)
   - make distcheck || (cat */test-suite.log && false)

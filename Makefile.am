@@ -6,7 +6,7 @@ ACLOCAL_AMFLAGS = -I m4
 ## The order of subdirs is important, don't change without a reason.
 SUBDIRS = gen.tab charset lib bin doc test
 
-EXTRA_DIST = bootstrap ChangeLog.old
+EXTRA_DIST = autogen.sh ChangeLog.old
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = @PACKAGE@.pc
