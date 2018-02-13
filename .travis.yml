@@ -20,5 +20,5 @@ before_script:
 
 script:
   - make
-  - make check || (cat */test-suite.log && false)
-  - make distcheck || (cat */test-suite.log && false)
+  - make check || (cat `find -name '*.log'` && false)
+  - make distcheck || (cat `find -name '*.log'` && false)
