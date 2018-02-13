@@ -54,7 +54,7 @@ bidi-type.tab.i: \
 		unidata/UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_bidi_type_tab)
-	./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 DISTCLEANFILES += derived_bidi-type.tab.i
@@ -68,7 +68,7 @@ joining-type.tab.i: \
 		unidata/ArabicShaping.txt \
 		fribidi-unicode-version.h \
 		$(gen_joining_type_tab)
-	./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate arabic-shaping.tab.i
@@ -79,7 +79,7 @@ arabic-shaping.tab.i: \
 		unidata/UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_arabic_shaping_tab)
-	./$(gen_arabic_shaping_tab) $(COMPRESSION) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_arabic_shaping_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate mirroring.tab.i
@@ -90,7 +90,7 @@ mirroring.tab.i: \
 		unidata/BidiMirroring.txt \
 		fribidi-unicode-version.h \
 		$(gen_mirroring_tab)
-	./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate brackets.tab.i
@@ -102,7 +102,7 @@ brackets.tab.i: \
 		unidata/UnicodeData.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_tab)
-	./$(gen_brackets_tab) $(COMPRESSION) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_brackets_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate brackets-type.tab.i
@@ -113,7 +113,7 @@ brackets-type.tab.i: \
 		unidata/BidiBrackets.txt \
 		fribidi-unicode-version.h \
 		$(gen_brackets_type_tab)
-	./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate fribidi-unicode-version.h
@@ -124,7 +124,7 @@ fribidi-unicode-version.h: \
 		unidata/ReadMe.txt \
 		unidata/BidiMirroring.txt \
 		$(gen_unicode_version)
-	./$(gen_unicode_version) $^ > $@ \
+	$(AM_V_GEN) ./$(gen_unicode_version) $^ > $@ \
 	|| ($(RM) $@ && false)
 
 # generate all generators:
