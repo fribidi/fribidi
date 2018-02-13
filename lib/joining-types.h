@@ -34,7 +34,7 @@
 
 #include <fribidi-begindecls.h>
 
-#if DEBUG+0
+#ifdef DEBUG
 
 #define fribidi_char_from_joining_type FRIBIDI_PRIVATESPACE(char_from_joining_type)
 char

@@ -161,7 +161,7 @@ static FriBidiRun *get_adjacent_run(FriBidiRun *list, fribidi_boolean forward, f
   return ppp;
 }
 
-#if DEBUG+0
+#ifdef DEBUG
 /*======================================================================
  *  For debugging, define some functions for printing the types and the
  *  levels.

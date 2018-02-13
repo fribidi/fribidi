@@ -41,7 +41,7 @@
 #include "fribidi-shape.h"
 
 
-#if FRIBIDI_CHARSETS+0
+#ifdef FRIBIDI_CHARSETS
 # include "fribidi-char-sets.h"
 #endif				/* FRIBIDI_CHARSETS */
 
