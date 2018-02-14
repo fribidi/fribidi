@@ -32,8 +32,7 @@ DISTCLEANFILES =
 
 AM_CPPFLAGS = \
 		-I$(top_builddir)/lib \
-		-I$(top_srcdir)/lib \
-		-I$(top_srcdir)/charset
+		-I$(top_srcdir)/lib
 
 UCD_FILES = \
 		unidata/ReadMe.txt \
