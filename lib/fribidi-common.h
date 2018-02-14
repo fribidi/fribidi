@@ -40,10 +40,6 @@
 # include <fribidi-custom.h>
 #endif /* HAVE_FRIBIDI_CUSTOM_H */
 
-/* FRIBIDI_NAMESPACE is a macro used to name library symbols. */
-#ifndef FRIBIDI_NAMESPACE
-# define FRIBIDI_NAMESPACE(SYMBOL) fribidi##_##SYMBOL
-#endif /* !FRIBIDI_NAMESPACE */
 
 /* FRIBIDI_ENTRY is a macro used to declare library entry points. */
 #ifndef FRIBIDI_ENTRY
@@ -109,7 +105,6 @@
 
 
 
-#define fribidi_debug_status FRIBIDI_NAMESPACE(debug_status)
 /* fribidi_debug_status - get current debug state
  *
  */
@@ -117,7 +112,6 @@ FRIBIDI_ENTRY int fribidi_debug_status (
   void
 );
 
-#define fribidi_set_debug FRIBIDI_NAMESPACE(set_debug)
 /* fribidi_set_debug - set debug state
  *
  */

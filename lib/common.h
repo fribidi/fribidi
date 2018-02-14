@@ -32,13 +32,6 @@
 
 #include <fribidi-common.h>
 
-/* FRIBIDI_PRIVATESPACE is a macro used to name library internal symbols. */
-#ifndef FRIBIDI_PRIVATESPACE
-# define FRIBIDI_PRIVATESPACE1(A,B) A##B
-# define FRIBIDI_PRIVATESPACE0(A,B) FRIBIDI_PRIVATESPACE1(A,B)
-# define FRIBIDI_PRIVATESPACE(SYMBOL) FRIBIDI_PRIVATESPACE0(_,FRIBIDI_NAMESPACE(_##SYMBOL##__internal__))
-#endif /* !FRIBIDI_PRIVATESPACE */
-
 #ifndef false
 # define false (0)
 # endif	/* !false */

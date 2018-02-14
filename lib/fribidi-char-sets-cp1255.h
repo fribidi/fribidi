@@ -40,12 +40,10 @@
 #define fribidi_char_set_title_cp1255 "CP1255 (MS Hebrew/Yiddish)"
 #define fribidi_char_set_desc_cp1255 NULL
 
-#define fribidi_cp1255_to_unicode_c FRIBIDI_NAMESPACE(cp1255_to_unicode_c)
 FriBidiChar fribidi_cp1255_to_unicode_c (
   char ch
 );
 
-#define fribidi_unicode_to_cp1255_c FRIBIDI_NAMESPACE(unicode_to_cp1255_c)
 char fribidi_unicode_to_cp1255_c (
   FriBidiChar uch
 );

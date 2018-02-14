@@ -49,7 +49,6 @@ FriBidiCharSet;
 #define FRIBIDI_CHAR_SETS_NUM (_FRIBIDI_CHAR_SETS_NUM_PLUS_ONE - 1)
 
 
-#define fribidi_charset_to_unicode FRIBIDI_NAMESPACE(charset_to_unicode)
 /* fribidi_charset_to_unicode - convert string to Unicode
  *
  * This function converts an string from a character set, to a Unicode string.
@@ -63,7 +62,6 @@ FRIBIDI_ENTRY FriBidiStrIndex fribidi_charset_to_unicode (
   FriBidiChar *us		/* output Unicode string */
 );
 
-#define fribidi_unicode_to_charset FRIBIDI_NAMESPACE(unicode_to_charset)
 /* fribidi_unicode_to_charset - convert string from Unicode
  *
  * This function converts a Unicode string to an string in another character
@@ -78,7 +76,6 @@ FRIBIDI_ENTRY FriBidiStrIndex fribidi_unicode_to_charset (
   char *s			/* output string encoded in char_set */
 );
 
-#define fribidi_parse_charset FRIBIDI_NAMESPACE(parse_charset)
 /* fribidi_parse_charset - parse character set name
  *
  * Returns: The character set named s, or FRIBIDI_CHAR_SET_NOT_FOUND if the
@@ -89,17 +86,14 @@ FRIBIDI_ENTRY FriBidiCharSet fribidi_parse_charset (
 );
 
 
-#define fribidi_char_set_name FRIBIDI_NAMESPACE(char_set_name)
 FRIBIDI_ENTRY const char *fribidi_char_set_name (
   FriBidiCharSet char_set
 );
 
-#define fribidi_char_set_title FRIBIDI_NAMESPACE(char_set_title)
 FRIBIDI_ENTRY const char *fribidi_char_set_title (
   FriBidiCharSet char_set
 );
 
-#define fribidi_char_set_desc FRIBIDI_NAMESPACE(char_set_desc)
 FRIBIDI_ENTRY const char *fribidi_char_set_desc (
   FriBidiCharSet char_set
 );

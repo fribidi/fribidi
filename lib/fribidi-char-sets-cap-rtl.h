@@ -39,19 +39,16 @@
 #define fribidi_char_set_name_cap_rtl "CapRTL"
 #define fribidi_char_set_title_cap_rtl "CapRTL (Test)"
 
-#define fribidi_char_set_desc_cap_rtl FRIBIDI_NAMESPACE(char_set_desc_cap_rtl)
 const char *fribidi_char_set_desc_cap_rtl (
   void
 );
 
-#define fribidi_cap_rtl_to_unicode FRIBIDI_NAMESPACE(cap_rtl_to_unicode)
 FriBidiStrIndex fribidi_cap_rtl_to_unicode (
   const char *s,
   FriBidiStrIndex length,
   FriBidiChar *us
 );
 
-#define fribidi_unicode_to_cap_rtl FRIBIDI_NAMESPACE(unicode_to_cap_rtl)
 FriBidiStrIndex fribidi_unicode_to_cap_rtl (
   const FriBidiChar *us,
   FriBidiStrIndex length,

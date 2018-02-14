@@ -40,12 +40,10 @@
 #define fribidi_char_set_title_cp1256 "CP1256 (MS Arabic)"
 #define fribidi_char_set_desc_cp1256 NULL
 
-#define fribidi_cp1256_to_unicode_c FRIBIDI_NAMESPACE(cp1256_to_unicode_c)
 FriBidiChar fribidi_cp1256_to_unicode_c (
   char ch
 );
 
-#define fribidi_unicode_to_cp1256_c FRIBIDI_NAMESPACE(unicode_to_cp1256_c)
 char fribidi_unicode_to_cp1256_c (
   FriBidiChar uch
 );
