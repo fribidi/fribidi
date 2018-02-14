@@ -148,14 +148,8 @@ gen_unicode_version (
 	  "#define FRIBIDI_UNICODE_MAJOR_VERSION %d\n"
 	  "#define FRIBIDI_UNICODE_MINOR_VERSION %d\n"
 	  "#define FRIBIDI_UNICODE_MICRO_VERSION %d\n"
-	  "#define FRIBIDI_UNICODE_NAMESPACE(SYMBOL) \\\n"
-	  "	FRIBIDI_NAMESPACE(SYMBOL##_unicode_%d_%d_%d)\n"
-	  "#define FRIBIDI_UNICODE_PRIVATESPACE(SYMBOL) \\\n"
-	  "	FRIBIDI_PRIVATESPACE(SYMBOL##_unicode_%d_%d_%d)\n"
 	  "\n",
 	  unicode_version,
-	  version_major, version_minor, version_micro,
-	  version_major, version_minor, version_micro,
 	  version_major, version_minor, version_micro);
 
   printf ("/* End of generated " outputname " */\n");

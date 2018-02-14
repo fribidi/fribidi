@@ -56,25 +56,21 @@ struct _FriBidiRunStruct
 };
 
 
-#define new_run FRIBIDI_PRIVATESPACE(new_run)
 FriBidiRun *
 new_run (
   void
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
 
-#define new_run_list FRIBIDI_PRIVATESPACE(new_run_list)
      FriBidiRun *new_run_list (
   void
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
 
-#define free_run_list FRIBIDI_PRIVATESPACE(free_run_list)
      void free_run_list (
   FriBidiRun *run_list
 ) FRIBIDI_GNUC_HIDDEN;
 
-#define run_list_encode_bidi_types FRIBIDI_PRIVATESPACE(run_list_encode_bidi_types)
      FriBidiRun *run_list_encode_bidi_types (
   const FriBidiCharType *bidi_types,
   const FriBidiBracketType *bracket_types,
@@ -82,7 +78,6 @@ new_run (
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 
-#define shadow_run_list FRIBIDI_PRIVATESPACE(shadow_run_list)
      fribidi_boolean shadow_run_list (
   FriBidiRun *base,
   FriBidiRun *over,
@@ -133,7 +128,6 @@ new_run (
 
 #ifdef DEBUG
 
-#define fribidi_validate_run_list FRIBIDI_PRIVATESPACE(validate_run_list)
      void fribidi_validate_run_list (
   FriBidiRun *run_list		/* input run list */
 ) FRIBIDI_GNUC_HIDDEN;

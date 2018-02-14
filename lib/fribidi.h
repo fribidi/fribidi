@@ -52,7 +52,6 @@
 
 
 
-#define fribidi_version_info FRIBIDI_NAMESPACE(version_info)
 /* An string containing the version information of the library. */
      extern const char *fribidi_version_info;
 

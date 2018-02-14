@@ -40,12 +40,10 @@
 #define fribidi_char_set_title_iso8859_6 "ISO8859-6 (Arabic)"
 #define fribidi_char_set_desc_iso8859_6 NULL
 
-#define fribidi_iso8859_6_to_unicode_c FRIBIDI_NAMESPACE(iso8859_6_to_unicode_c)
 FriBidiChar fribidi_iso8859_6_to_unicode_c (
   char ch
 );
 
-#define fribidi_unicode_to_iso8859_6_c FRIBIDI_NAMESPACE(unicode_to_iso8859_6_c)
 char fribidi_unicode_to_iso8859_6_c (
   FriBidiChar uch
 );

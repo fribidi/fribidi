@@ -39,7 +39,6 @@
 
 #ifdef DEBUG
 
-#define fribidi_char_from_bidi_type FRIBIDI_PRIVATESPACE(char_from_bidi_type)
 char
 fribidi_char_from_bidi_type (
   FriBidiCharType t		/* input bidi type */

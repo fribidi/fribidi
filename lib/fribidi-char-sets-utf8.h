@@ -40,14 +40,12 @@
 #define fribidi_char_set_title_utf8 "UTF-8 (Unicode)"
 #define fribidi_char_set_desc_utf8 NULL
 
-#define fribidi_utf8_to_unicode FRIBIDI_NAMESPACE(utf8_to_unicode)
 FriBidiStrIndex fribidi_utf8_to_unicode (
   const char *s,
   FriBidiStrIndex length,
   FriBidiChar *us
 );
 
-#define fribidi_unicode_to_utf8 FRIBIDI_NAMESPACE(unicode_to_utf8)
 FriBidiStrIndex fribidi_unicode_to_utf8 (
   const FriBidiChar *us,
   FriBidiStrIndex length,
