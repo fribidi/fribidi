@@ -17,11 +17,7 @@ include $(top_srcdir)/charset/Headers.mk
 headers += $(libfribidi_char_sets_la_headers)
 includepath += -I$(top_srcdir)/charset
 includevpath += :$(top_srcdir)/charset
-if FRIBIDI_CHARSETS
 inst_symbols += $(libfribidi_char_sets_la_symbols)
-else # !FRIBIDI_CHARSETS
-noinst_symbols += $(libfribidi_char_sets_la_symbols)
-endif # !FRIBIDI_CHARSETS
 
 # The lib/Headers.mk stuff should come after all optional stuff.
 include $(top_srcdir)/lib/Headers.mk

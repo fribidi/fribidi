@@ -1,9 +1,6 @@
 bin_PROGRAMS = fribidi
 
-noinst_PROGRAMS = fribidi-benchmark fribidi-bidi-types
-if FRIBIDI_CHARSETS
-noinst_PROGRAMS += fribidi-caprtl2utf8
-endif
+noinst_PROGRAMS = fribidi-benchmark fribidi-bidi-types fribidi-caprtl2utf8
 
 getopt_SOURCES = getopt.c getopt1.c getopt_int.h getopt.h gettext.h
 
@@ -17,11 +14,6 @@ AM_CPPFLAGS = \
 		-I$(top_srcdir)/charset
 
 LDADD = $(top_builddir)/lib/libfribidi.la
-
-if FRIBIDI_CHARSETS
-else # !FRIBIDI_CHARSETS
-LDADD += $(top_builddir)/charset/libfribidi-char-sets.la
-endif # !FRIBIDI_CHARSETS
 
 $(top_builddir)/lib/libfribidi.la:
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) libfribidi.la

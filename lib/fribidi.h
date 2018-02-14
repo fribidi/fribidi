@@ -39,11 +39,7 @@
 #include "fribidi-brackets.h"
 #include "fribidi-arabic.h"
 #include "fribidi-shape.h"
-
-
-#ifdef FRIBIDI_CHARSETS
-# include "fribidi-char-sets.h"
-#endif				/* FRIBIDI_CHARSETS */
+#include "fribidi-char-sets.h"
 
 
 #ifdef FRIBIDI_NO_DEPRECATED

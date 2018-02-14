@@ -72,10 +72,6 @@ const char *fribidi_version_info =
 #ifdef DEBUG
   " --enable-debug"
 #endif /* DEBUG */
-#ifdef FRIBIDI_CHARSETS
-#else
-  " --disable-charsets"
-#endif /* !FRIBIDI_CHARSETS */
   ".\n\n"
   "Copyright (C) 2004  Sharif FarsiWeb, Inc.\n"
   "Copyright (C) 2001, 2002, 2004, 2005  Behdad Esfahbod\n"

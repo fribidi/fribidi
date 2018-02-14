@@ -31,10 +31,6 @@
 
 #include <fribidi.h>
 #include <fribidi-deprecated.h>
-#ifdef FRIBIDI_CHARSETS
-#else
-# include <fribidi-char-sets.h>
-#endif /* !FRIBIDI_CHARSETS */
 
 #include <stdio.h>
 #ifdef STDC_HEADERS
