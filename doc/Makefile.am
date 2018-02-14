@@ -13,12 +13,6 @@ headers =
 inst_symbols =
 noinst_symbols =
 
-include $(top_srcdir)/charset/Headers.mk
-headers += $(libfribidi_char_sets_la_headers)
-includepath += -I$(top_srcdir)/charset
-includevpath += :$(top_srcdir)/charset
-inst_symbols += $(libfribidi_char_sets_la_symbols)
-
 # The lib/Headers.mk stuff should come after all optional stuff.
 include $(top_srcdir)/lib/Headers.mk
 headers += $(libfribidi_la_headers)

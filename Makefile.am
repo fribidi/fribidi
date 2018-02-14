@@ -4,7 +4,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 ## The order of subdirs is important, don't change without a reason.
-SUBDIRS = gen.tab charset lib bin doc test
+SUBDIRS = gen.tab lib bin doc test
 
 EXTRA_DIST = autogen.sh ChangeLog.old
 

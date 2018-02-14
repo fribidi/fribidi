@@ -181,7 +181,6 @@ AM_CONDITIONAL([FRIBIDI_ENABLE_DOC], [test -n "$C2MAN"])
 AC_CONFIG_FILES([fribidi.pc
 		 lib/fribidi-config.h
 		 Makefile
-		 charset/Makefile
 		 gen.tab/Makefile
 		 lib/Makefile
 		 bin/Makefile
