@@ -140,23 +140,19 @@ AC_ARG_ENABLE(deprecated,
               AC_HELP_STRING([--disable-deprecated],
                              [do not build deprecated functionality]))
 if test x$enable_deprecated = xno; then
-	FRIBIDI_NO_DEPRECATED=1
-else
-	FRIBIDI_NO_DEPRECATED=0
+	AC_DEFINE(FRIBIDI_NO_DEPRECATED, 1,
+		  [Don not build deprecated functionality])
 fi
-AC_SUBST(FRIBIDI_NO_DEPRECATED)
 
 # --disable-charsets
 AC_ARG_ENABLE(charsets,
               AC_HELP_STRING([--disable-charsets],
                              [exclude charset conversion routines from library]))
-if test x$enable_charsets = xno; then
-	FRIBIDI_CHARSETS=0
-else
-	FRIBIDI_CHARSETS=1
+if test x$enable_charsets != xno; then
+	AC_DEFINE(FRIBIDI_CHARSETS, 1,
+		  [Include charset conversion routines])
 fi
-AC_SUBST(FRIBIDI_CHARSETS)
-AM_CONDITIONAL(FRIBIDI_CHARSETS, test x$FRIBIDI_CHARSETS = x1)
+AM_CONDITIONAL(FRIBIDI_CHARSETS, test x$enable_charsets != xno)
 
 # --with[out]-glib
 AC_ARG_WITH(glib,
