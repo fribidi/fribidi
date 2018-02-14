@@ -144,16 +144,6 @@ if test x$enable_deprecated = xno; then
 		  [Don not build deprecated functionality])
 fi
 
-# --disable-charsets
-AC_ARG_ENABLE(charsets,
-              AC_HELP_STRING([--disable-charsets],
-                             [exclude charset conversion routines from library]))
-if test x$enable_charsets != xno; then
-	AC_DEFINE(FRIBIDI_CHARSETS, 1,
-		  [Include charset conversion routines])
-fi
-AM_CONDITIONAL(FRIBIDI_CHARSETS, test x$enable_charsets != xno)
-
 # --with[out]-glib
 AC_ARG_WITH(glib,
               AC_HELP_STRING([--with-glib=@<:@no/auto/yes@:>@],

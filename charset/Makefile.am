@@ -9,16 +9,8 @@ pkginclude_HEADERS =
 libfribidi_char_sets_la_LDFLAGS = 
 libfribidi_char_sets_la_LIBADD = $(GLIB_LIBS)
 
-if FRIBIDI_CHARSETS
-
 include Headers.mk
 pkginclude_HEADERS += $(libfribidi_char_sets_la_headers)
-
-else # !FRIBIDI_CHARSETS
-
-libfribidi_char_sets_la_LDFLAGS += -static
-
-endif # !FRIBIDI_CHARSETS
 
 libfribidi_char_sets_la_SOURCES = \
 	fribidi-char-sets.c \

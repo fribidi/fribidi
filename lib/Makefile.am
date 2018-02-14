@@ -14,16 +14,12 @@ else
 libfribidi_la_LDFLAGS += -export-symbols-regex "^fribidi_.*"
 endif # OS_WIN32
 
-if FRIBIDI_CHARSETS
-
 AM_CPPFLAGS += -I$(top_srcdir)/charset
 libfribidi_la_LIBADD += $(top_builddir)/charset/libfribidi-char-sets.la
 libfribidi_la_DEPENDENCIES += $(top_builddir)/charset/libfribidi-char-sets.la
 
 $(top_builddir)/charset/libfribidi-char-sets.la:
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) libfribidi-char-sets.la
-
-endif # FRIBIDI_CHARSETS
 
 include Headers.mk
 pkginclude_HEADERS = $(libfribidi_la_headers)
