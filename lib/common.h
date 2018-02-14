@@ -127,7 +127,9 @@
 #endif /* !_GNU_SOURCE */
 
 /* We respect our own rules. */
-#define FRIBIDI_NO_DEPRECATED
+#ifndef FRIBIDI_NO_DEPRECATED
+#  define FRIBIDI_NO_DEPRECATED
+#endif /* !FRIBIDI_NO_DEPRECATED */
 
 
 #include "debug.h"
