@@ -29,7 +29,7 @@ headers += $(libfribidi_la_headers)
 includepath += -I$(top_builddir)/lib -I$(top_srcdir)/lib
 includevpath += :$(top_builddir)/lib:$(top_srcdir)/lib
 # The las two lines are not functions, we don't want them here.
-inst_symbols += $(shell head -n -2 $(top_srcdir)/lib/fribidi.def)
+inst_symbols += $(shell sed '$$d' $(top_srcdir)/lib/fribidi.def | sed '$$d')
 
 dist_man_MANS += $(inst_symbols:=.3)
 dist_noinst_MANS += $(noinst_symbols:=.3)
