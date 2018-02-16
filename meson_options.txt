@@ -1,0 +1,6 @@
+option('deprecated', type : 'boolean', value : true,
+  description: 'Build deprecated functionality')
+option('docs', type : 'boolean', value : true,
+  description: 'Build documentation')
+option('glib', type : 'boolean', value : true,
+  description: 'Use GLib (in unit tests)')
