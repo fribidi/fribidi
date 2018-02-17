@@ -43,7 +43,7 @@
 
 /* FRIBIDI_ENTRY is a macro used to declare library entry points. */
 #ifndef FRIBIDI_ENTRY
-#  define FRIBIDI_ENTRY		/* empty */
+#  define FRIBIDI_ENTRY extern
 #endif /* !FRIBIDI_ENTRY */
 
 #ifdef __ICC
