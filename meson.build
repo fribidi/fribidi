@@ -35,7 +35,7 @@ endif
 if have_visibility_hidden
   visibility_args = ['-DFRIBIDI_ENTRY=extern __attribute__ ((visibility ("default")))']
 else
-  if host_machine.system() == 'windows'
+  if host_machine.system() == 'windows' and get_option('default_library') != 'static'
     visibility_args = ['-DFRIBIDI_ENTRY=__declspec(dllexport)']
   else
     visibility_args = ['-DFRIBIDI_ENTRY=extern']
