@@ -53,7 +53,7 @@
 
 
 /* An string containing the version information of the library. */
-     extern const char *fribidi_version_info;
+FRIBIDI_ENTRY const char *fribidi_version_info;
 
 #include "fribidi-enddecls.h"
 
