@@ -63,6 +63,9 @@ AC_SUBST(FRIBIDI_INTERFACE_VERSION)
 AC_SUBST(FRIBIDI_INTERFACE_AGE)
 AC_SUBST(FRIBIDI_BINARY_AGE)
 
+FRIBIDI_MSVC_BUILD_PLACEHOLDER="#undef FRIBIDI_BUILT_WITH_MSVC"
+AC_SUBST(FRIBIDI_MSVC_BUILD_PLACEHOLDER)
+
 dnl libtool versioning.
 m4_define(lt_current, fribidi_interface_version())dnl
 m4_define(lt_revision, fribidi_interface_age())dnl

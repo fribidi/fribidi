@@ -15,6 +15,12 @@ fribidi_config.set('FRIBIDI_INTERFACE_VERSION', interface_version)
 
 fribidi_config.set('SIZEOF_INT', cc.sizeof('int'))
 
+if cc.get_id() == 'msvc'
+  fribidi_config.set('FRIBIDI_MSVC_BUILD_PLACEHOLDER', '#define FRIBIDI_BUILT_WITH_MSVC')
+else
+  fribidi_config.set('FRIBIDI_MSVC_BUILD_PLACEHOLDER', '#undef FRIBIDI_BUILT_WITH_MSVC')
+endif
+
 fribidi_config_h = configure_file(input: files('fribidi-config.h.in'),
   output: 'fribidi-config.h',
   configuration: fribidi_config,
