@@ -29,7 +29,7 @@ c2man_incs += ['-I' + join_paths(meson.source_root(), 'gen.tab')]
 c2man_incs += ['-I' + join_paths(meson.build_root(), 'gen.tab')]
 
 custom_target('man pages',
-  command: [c2man, '-v', '-T', 'n', '-M', 'Programmer\'s Manual', c2man_incs,
+  command: [c2man, '-T', 'n', '-M', 'Programmer\'s Manual', c2man_incs,
             '-D__FRIBIDI_DOC', '-DDONT_HAVE_FRIBIDI_CONFIG_H',
             '-o@0@'.format(meson.current_build_dir()),
            fribidi_headers],
