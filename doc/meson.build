@@ -19,7 +19,10 @@ gen_man_pages = []
 
 syms = result.stdout().strip().split('\n')
 foreach sym : syms
-  gen_man_pages += ['@0@.3'.format(sym)]
+  # for consistency with autotools build and because we don't pass -v to c2man
+  if sym != 'fribidi_unicode_version' and sym != 'fribidi_version_info'
+    gen_man_pages += ['@0@.3'.format(sym)]
+  endif
 endforeach
 
 c2man_incs = []
