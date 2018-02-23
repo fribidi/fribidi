@@ -11,6 +11,12 @@ Dov Grobgeld <dov.grobgeld@gmail.com>
 Behnam Esfahbod <behnam@esfahbod.info>
 	* Testing and auditing code.
 
+Tim-Philipp Müller <tim@centricular.com>
+        * Provided meson compilation support.
+
+Khaled Hosny <khaledhosny@eglug.org>
+        * Provided lots of cleanup and release engineering support for recent
+        versions.
 
 And for the previous versions of FriBidi (pre 2002), thanks to:
 
