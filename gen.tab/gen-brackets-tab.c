@@ -151,6 +151,8 @@ read_unicode_data_txt_equivalence (
       int i;
       const char *s = buf;
       char ce_string[256]; /* For parsing the equivalence */
+      char *p = NULL;
+      int ce, in_tag;
 
       l++;
 
@@ -170,9 +172,9 @@ read_unicode_data_txt_equivalence (
         continue;
 
       /* split and parse ce */
-      char *p = ce_string;
-      int ce = -1;
-      int in_tag = 0;
+      p = ce_string;
+      ce = -1;
+      in_tag = 0;
       while(*p)
         {
           if (*p==';')
