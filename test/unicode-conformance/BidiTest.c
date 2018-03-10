@@ -447,6 +447,7 @@ main (int argc, char **argv)
     free (ltor);
     free (levels);
     free (expected_ltor);
+    free (expected_levels);
     free (types);
     fclose(channel);
 

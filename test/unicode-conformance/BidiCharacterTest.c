@@ -299,6 +299,14 @@ main (int argc, char **argv)
       if (line[0] == '#' || line[0] == '\n')
         continue;
 
+      free (code_points);
+      free (expected_levels);
+      free (expected_ltor);
+      free (bracket_types);
+      free (types);
+      free (levels);
+      free (ltor);
+
       parse_test_line (line,
                        line_no,
                        &code_points,      /* Field 0 */
@@ -311,16 +319,9 @@ main (int argc, char **argv)
                        );
 
       /* Test it */
-      free(bracket_types);
       bracket_types = malloc ( sizeof(FriBidiBracketType) * code_points_len);
-
-      free(types);
       types = malloc ( sizeof(FriBidiCharType) * code_points_len);
-
-      free(levels);
       levels = malloc (sizeof (FriBidiLevel) * code_points_len);
-
-      free (ltor);
       ltor = malloc (sizeof (FriBidiStrIndex) * code_points_len);
 
 
@@ -459,6 +460,14 @@ main (int argc, char **argv)
     fprintf (stderr, "%d errors\n", numerrs);
   else
     printf("No errors found! :-)\n");
+
+  free (code_points);
+  free (expected_levels);
+  free (expected_ltor);
+  free (bracket_types);
+  free (types);
+  free (levels);
+  free (ltor);
 
   return numerrs;
 }
