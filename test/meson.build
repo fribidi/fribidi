@@ -1,6 +1,7 @@
 tests = [
   ['CapRTL', 'explicit'],
   ['CapRTL', 'implicit'],
+  ['CapRTL', 'isolate'],
   ['ISO8859-8', 'hebrew'],
   ['UTF-8', 'persian'],
   ['UTF-8', 'reordernsm'],

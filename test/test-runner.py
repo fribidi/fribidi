@@ -23,9 +23,10 @@ if os.name == 'nt':
 
 try:
   output = subprocess.check_output([test_exe, '--test', '--charset', charset, input_file])
+  ref_data = open(reference_file, "rb").read()
   if os.name == 'nt':
     output = output.replace(b'\r\n', b'\n')
-  ref_data = open(reference_file, "rb").read()
+    ref_data = ref_data.replace(b'\r\n', b'\n') 
   if output != ref_data:
     print('Output:\n', output)
     print('Reference file:\n', ref_data)
