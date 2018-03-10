@@ -18,13 +18,102 @@
  */
 
 #include <fribidi.h>
-#include <glib.h>
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <errno.h>
 #include <ctype.h>
+
+#define TRUE 1
+#define FALSE 0
+
+/* Glib array types */
+typedef struct {
+  int capacity;
+  int len;
+  int *data;
+} int_array_t;
+
+typedef struct {
+  int capacity;
+  int len;
+  char *data;
+} char_array_t;
+
+#define LINE_SIZE 2048 /* Size of largest example line in BidiTest */
+#define ARRAY_CHUNK_SIZE 32
+int_array_t *new_int_array()
+{
+  int_array_t *arr = (int_array_t*)malloc(sizeof(int_array_t));
+  arr->len = 0;
+  arr->capacity = ARRAY_CHUNK_SIZE;
+  arr->data = (int*)malloc(arr->capacity * sizeof(int));
+
+  return arr;
+}
+
+void int_array_add(int_array_t *arr, int val)
+{
+  if (arr->len == arr->capacity)
+    {
+      arr->capacity += ARRAY_CHUNK_SIZE;
+      arr->data = (int*)realloc(arr->data, arr->capacity*sizeof(int));
+    }
+  arr->data[arr->len++] = val;
+}
+
+int *int_array_free(int_array_t *arr, int free_data)
+{
+  int *data = arr->data;
+  if (free_data) {
+    data = NULL;
+    free(arr->data);
+  }
+  free(arr);
+  return data;
+}
+
+char_array_t *new_char_array()
+{
+  char_array_t *arr = (char_array_t*)malloc(sizeof(char_array_t));
+  arr->len = 0;
+  arr->capacity = ARRAY_CHUNK_SIZE;
+  arr->data = (char*)malloc(arr->capacity);
+
+  return arr;
+}
+
+void char_array_add(char_array_t *arr, char val)
+{
+  if (arr->len == arr->capacity)
+    {
+      arr->capacity += ARRAY_CHUNK_SIZE;
+      arr->data = (char*)realloc(arr->data, arr->capacity * sizeof(char));
+    }
+  arr->data[arr->len++] = val;
+}
+
+char *char_array_free(char_array_t *arr, int free_data)
+{
+  char *data = arr->data;
+  if (free_data) {
+    data = NULL;
+    free(arr->data);
+  }
+  free(arr);
+  return data;
+}
+
+static void die(const char *fmt, ...)
+{
+    va_list ap;
+    va_start(ap,fmt); 
+    
+    vfprintf(stderr, fmt, ap);
+    exit(-1);
+}
 
 static FriBidiCharType
 parse_char_type (const char *s, int len)
@@ -56,19 +145,20 @@ parse_char_type (const char *s, int len)
     MATCH ("FSI", FRIBIDI_TYPE_FSI);
     MATCH ("PDI", FRIBIDI_TYPE_PDI);
 
-    g_assert_not_reached ();
+    die("Oops. I shouldn't reach here!\n");
+    return -1;
 }
 
 static FriBidiLevel *
 parse_levels_line (const char *line,
 		   FriBidiLevel *len)
 {
-    GArray *levels;
+    char_array_t *levels;
 
     if (!strncmp (line, "@Levels:", 8))
 	line += 8;
 
-    levels = g_array_new (FALSE, FALSE, sizeof (FriBidiLevel));
+    levels = new_char_array ();
 
     while (*line)
     {
@@ -79,7 +169,7 @@ parse_levels_line (const char *line,
 	l = strtol (line, &end, 10);
 	if (errno != EINVAL && line != end)
 	{
-	  g_array_append_val (levels, l);
+	  char_array_add (levels, l);
 	  line = end;
 	  continue;
 	}
@@ -89,8 +179,7 @@ parse_levels_line (const char *line,
 
 	if (*line == 'x')
 	{
-	  l = (FriBidiLevel) -1;
-	  g_array_append_val (levels, l);
+	  char_array_add (levels, -1);
 	  line++;
 	  continue;
 	}
@@ -98,32 +187,32 @@ parse_levels_line (const char *line,
 	if (!*line)
 	  break;
 
-	g_assert_not_reached ();
+	die("Oops. I shouldn't be here!\n");
     }
 
     *len = levels->len;
-    return (FriBidiLevel *) g_array_free (levels, FALSE);
+    return (FriBidiLevel *) char_array_free(levels, FALSE);
 }
 
 static FriBidiStrIndex *
 parse_reorder_line (const char *line,
 		    FriBidiStrIndex *len)
 {
-    GArray *map;
+    int_array_t *map;
     FriBidiStrIndex l;
     char *end;
 
     if (!strncmp (line, "@Reorder:", 9))
 	line += 9;
 
-    map = g_array_new (FALSE, FALSE, sizeof (FriBidiStrIndex));
+    map = new_int_array ();
 
     for(; errno = 0, l = strtol (line, &end, 10), line != end && errno != EINVAL; line = end) {
-	g_array_append_val (map, l);
+	int_array_add (map, l);
     }
 
     *len = map->len;
-    return (FriBidiStrIndex *) g_array_free (map, FALSE);
+    return (FriBidiStrIndex *) int_array_free (map, FALSE);
 }
 
 static FriBidiCharType *
@@ -131,11 +220,11 @@ parse_test_line (const char *line,
 	         FriBidiStrIndex *len,
 		 int *base_dir_flags)
 {
-    GArray *types;
+    int_array_t *types;
     FriBidiCharType c;
     const char *end;
 
-    types = g_array_new (FALSE, FALSE, sizeof (FriBidiCharType));
+    types = new_int_array();
 
     for(;;) {
 	while (isspace (*line))
@@ -147,7 +236,7 @@ parse_test_line (const char *line,
 	    break;
 
 	c = parse_char_type (line, end - line);
-	g_array_append_val (types, c);
+	int_array_add (types, c);
 
 	line = end;
     }
@@ -157,17 +246,14 @@ parse_test_line (const char *line,
     *base_dir_flags = strtol (line, NULL, 10);
 
     *len = types->len;
-    return (FriBidiCharType *) g_array_free (types, FALSE);
+    return (FriBidiCharType *) int_array_free (types, FALSE);
 }
 
 int
 main (int argc, char **argv)
 {
-    GIOChannel *channel;
-    GIOStatus status;
-    GError *error;
-    gchar *line = NULL;
-    gsize length, terminator_pos;
+    FILE *channel;
+    char line[LINE_SIZE];
     FriBidiStrIndex *expected_ltor = NULL;
     FriBidiStrIndex expected_ltor_len = 0;
     FriBidiStrIndex *ltor = NULL;
@@ -182,14 +268,12 @@ main (int argc, char **argv)
     int numerrs = 0;
     int numtests = 0;
     int line_no = 0;
-    gboolean debug = FALSE;
+    int debug = FALSE;
     const char *filename;
     int next_arg;
 
-    if (argc < 2) {
-	g_printerr ("usage: %s [--debug] test-file-name\n", argv[0]);
-	exit (1);
-    }
+    if (argc < 2) 
+	die ("usage: %s [--debug] test-file-name\n", argv[0]);
 
     next_arg = 1;
     if (!strcmp (argv[next_arg], "--debug")) {
@@ -199,47 +283,30 @@ main (int argc, char **argv)
 
     filename = argv[next_arg++];
 
-    error = NULL;
-    channel = g_io_channel_new_file (filename, "r", &error);
-    if (!channel) {
-	g_printerr ("%s\n", error->message);
-	exit (1);
-    }
+    channel = fopen(filename, "r");
+    if (!channel) 
+	die ("Failed opening %s\n", filename);
 
-    while (TRUE) {
-	error = NULL;
-	g_free (line);
-	status = g_io_channel_read_line (channel, &line, &length, &terminator_pos, &error);
-	switch (status) {
-        case G_IO_STATUS_ERROR:
-            g_printerr ("%s\n", error->message);
-            exit (1);
-
-        case G_IO_STATUS_EOF:
-	    goto done;
-
-        case G_IO_STATUS_AGAIN:
-            continue;
-
-        case G_IO_STATUS_NORMAL:
-            line[terminator_pos] = '\0';
-            break;
-	}
+    while (!feof(channel)) {
+        fgets(line, LINE_SIZE, channel);
+        int len = strlen(line);
+        if (len == LINE_SIZE-1)
+          die("LINE_SIZE too small at line %d!\n", line_no);
 
 	line_no++;
 
-	if (line[0] == '#' || line[0] == '\0')
+	if (line[0] == '#')
 	    continue;
 
 	if (line[0] == '@')
 	{
 	    if (!strncmp (line, "@Reorder:", 9)) {
-		g_free (expected_ltor);
+		free (expected_ltor);
 		expected_ltor = parse_reorder_line (line, &expected_ltor_len);
 		continue;
 	    }
 	    if (!strncmp (line, "@Levels:", 8)) {
-		g_free (expected_levels);
+		free (expected_levels);
 		expected_levels = parse_levels_line (line, &expected_levels_len);
 		continue;
 	    }
@@ -247,21 +314,21 @@ main (int argc, char **argv)
 	}
 
 	/* Test line */
-	g_free (types);
+	free (types);
 	types = parse_test_line (line, &types_len, &base_dir_flags);
 
-	g_free (levels);
-	levels = g_malloc (sizeof (FriBidiLevel) * types_len);
+	free (levels);
+	levels = malloc (sizeof (FriBidiLevel) * types_len);
 	levels_len = types_len;
 
-	g_free (ltor);
-	ltor = g_malloc (sizeof (FriBidiStrIndex) * types_len);
+	free (ltor);
+	ltor = malloc (sizeof (FriBidiStrIndex) * types_len);
 
 	/* Test it */
 	for (base_dir_mode = 0; base_dir_mode < 3; base_dir_mode++) {
 	    FriBidiParType base_dir;
 	    int i, j;
-	    gboolean matches;
+	    int matches;
 
 	    if ((base_dir_flags & (1<<base_dir_mode)) == 0)
 		continue;
@@ -323,31 +390,32 @@ main (int argc, char **argv)
 	    {
 		numerrs++;
 
-		g_printerr ("failure on line %d\n", line_no);
-		g_printerr ("input is: %s\n", line);
-		g_printerr ("base dir: %s\n", base_dir_mode==0 ? "auto"
-					    : base_dir_mode==1 ? "LTR" : "RTL");
+		fprintf (stderr, "failure on line %d\n", line_no);
+		fprintf (stderr, "input is: %s\n", line);
+		fprintf (stderr, "base dir: %s\n",
+                         base_dir_mode==0 ? "auto"
+                         : base_dir_mode==1 ? "LTR" : "RTL");
 
-		g_printerr ("expected levels:");
+		fprintf (stderr, "expected levels:");
 		for (i = 0; i < expected_levels_len; i++)
 		    if (expected_levels[i] == (FriBidiLevel) -1)
-			g_printerr (" x");
+                        fprintf (stderr," x");
 		    else
-			g_printerr (" %d", expected_levels[i]);
-		g_printerr ("\n");
-		g_printerr ("returned levels:");
+                        fprintf (stderr, " %d", expected_levels[i]);
+		fprintf (stderr, "\n");
+		fprintf (stderr, "returned levels:");
 		for (i = 0; i < levels_len; i++)
-		    g_printerr (" %d", levels[i]);
-		g_printerr ("\n");
+                    fprintf (stderr, " %d", levels[i]);
+		fprintf (stderr, "\n");
 
-		g_printerr ("expected order:");
+		fprintf (stderr, "expected order:");
 		for (i = 0; i < expected_ltor_len; i++)
-		    g_printerr (" %d", expected_ltor[i]);
-		g_printerr ("\n");
-		g_printerr ("returned order:");
+                    fprintf (stderr, " %d", expected_ltor[i]);
+		fprintf (stderr, "\n");
+		fprintf (stderr, "returned order:");
 		for (i = 0; i < ltor_len; i++)
-		    g_printerr (" %d", ltor[i]);
-		g_printerr ("\n");
+                    fprintf (stderr, " %d", ltor[i]);
+		fprintf (stderr, "\n");
 
 		if (debug)
                   {
@@ -371,23 +439,19 @@ main (int argc, char **argv)
 		    fribidi_set_debug (0);
 		}
 
-		g_printerr ("\n");
+		fprintf (stderr, "\n");
 	    }
 	}
     }
 
-done:
-    g_free (ltor);
-    g_free (levels);
-    g_free (expected_ltor);
-    g_free (types);
-    g_free (line);
-    g_io_channel_unref (channel);
-    if (error)
-	g_error_free (error);
+    free (ltor);
+    free (levels);
+    free (expected_ltor);
+    free (types);
+    fclose(channel);
 
     if (numerrs)
-	g_printerr ("%d errors out of %d total tests\n", numerrs, numtests);
+        fprintf (stderr, "%d errors out of %d total tests\n", numerrs, numtests);
     else
         printf("No errors found! :-)\n");
 

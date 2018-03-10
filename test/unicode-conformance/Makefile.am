@@ -21,10 +21,8 @@ AM_CPPFLAGS = \
 		$(GLIB_CFLAGS)
 LDADD = $(top_builddir)/lib/libfribidi.la $(GLIB_LIBS)
 
-if FRIBIDI_USE_GLIB
 check_PROGRAMS = test test-character
 TESTS = $(TEST_DATAS)
-endif
 
 test_SOURCES = test.c
 test_character_SOURCES = test-character.c

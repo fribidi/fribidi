@@ -22,9 +22,88 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <glib.h>
 #include <ctype.h>
 #include <errno.h>
+
+#define FALSE 0
+#define TRUE 1
+#define LINE_SIZE 2048 /* Size of biggest line in test file */
+
+/* Glib like arrays */
+typedef struct {
+  int capacity;
+  int len;
+  int *data;
+} int_array_t;
+
+typedef struct {
+  int capacity;
+  int len;
+  char *data;
+} char_array_t;
+
+#define ARRAY_CHUNK_SIZE 32
+int_array_t *new_int_array()
+{
+  int_array_t *arr = (int_array_t*)malloc(sizeof(int_array_t));
+  arr->len = 0;
+  arr->capacity = ARRAY_CHUNK_SIZE;
+  arr->data = (int*)malloc(arr->capacity * sizeof(int));
+
+  return arr;
+}
+
+void int_array_add(int_array_t *arr, int val)
+{
+  if (arr->len == arr->capacity)
+    {
+      arr->capacity += ARRAY_CHUNK_SIZE;
+      arr->data = (int*)realloc(arr->data, arr->capacity*sizeof(int));
+    }
+  arr->data[arr->len++] = val;
+}
+
+int *int_array_free(int_array_t *arr, int free_data)
+{
+  int *data = arr->data;
+  if (free_data) {
+    data = NULL;
+    free(arr->data);
+  }
+  free(arr);
+  return data;
+}
+
+char_array_t *new_char_array()
+{
+  char_array_t *arr = (char_array_t*)malloc(sizeof(char_array_t));
+  arr->len = 0;
+  arr->capacity = ARRAY_CHUNK_SIZE;
+  arr->data = (char*)malloc(arr->capacity);
+
+  return arr;
+}
+
+void char_array_add(char_array_t *arr, char val)
+{
+  if (arr->len == arr->capacity)
+    {
+      arr->capacity += ARRAY_CHUNK_SIZE;
+      arr->data = (char*)realloc(arr->data, arr->capacity * sizeof(char));
+    }
+  arr->data[arr->len++] = val;
+}
+
+char *char_array_free(char_array_t *arr, int free_data)
+{
+  char *data = arr->data;
+  if (free_data) {
+    data = NULL;
+    free(arr->data);
+  }
+  free(arr);
+  return data;
+}
 
 static void die(const char *fmt, ...)
 {
@@ -53,13 +132,13 @@ void parse_test_line (char *line,
                       int *visual_ordering_len
                       )
 {
-  GArray *code_points_array, *levels_array, *visual_ordering_array;
+  int_array_t *code_points_array, *visual_ordering_array;
+  char_array_t *levels_array;
   char *end;
   int level;
 
-
-  code_points_array = g_array_new (FALSE, FALSE, sizeof (FriBidiChar));
-  levels_array = g_array_new (FALSE, FALSE, sizeof (FriBidiLevel));
+  code_points_array = new_int_array ();
+  levels_array = new_char_array ();
 
   /* Field 0. Code points */
   for(;;)
@@ -74,13 +153,13 @@ void parse_test_line (char *line,
         break;
 
       c = parse_uni_char (line, end - line);
-      g_array_append_val (code_points_array, c);
+      int_array_add(code_points_array, c);
 
       line = end;
     }
 
   *code_points_len = code_points_array->len;
-  *code_points = (FriBidiChar *) g_array_free (code_points_array, FALSE);
+  *code_points = (FriBidiChar *) int_array_free (code_points_array, FALSE);
 
   if (*line == ';')
     line++;
@@ -120,7 +199,7 @@ void parse_test_line (char *line,
       level = strtol (line, &end, 10);
       if (errno != EINVAL && line != end)
         {
-          g_array_append_val (levels_array, level);
+          char_array_add (levels_array, level);
           line = end;
           continue;
         }
@@ -131,7 +210,7 @@ void parse_test_line (char *line,
       if (*line == 'x')
         {
           level = (FriBidiLevel) -1;
-          g_array_append_val (levels_array, level);
+          char_array_add (levels_array, level);
           line++;
           continue;
         }
@@ -139,13 +218,13 @@ void parse_test_line (char *line,
       if (*line == ';')
         break;
 
-      g_assert_not_reached ();
+      die("Oops! I shouldn't be here!\n");
     }
 
   if (levels_array->len != *code_points_len)
     die("Oops! Different lengths for levels and codepoints at line %d!\n", line_no);
 
-  *resolved_levels = (FriBidiLevel*)g_array_free (levels_array, FALSE);
+  *resolved_levels = (FriBidiLevel*)char_array_free (levels_array, FALSE);
 
   if (*line == ';')
     line++;
@@ -153,25 +232,22 @@ void parse_test_line (char *line,
     die("Oops! Didn't find expected ; at line %d\n", line_no);
 
   /* Field 4 - resulting visual ordering */
-  visual_ordering_array = g_array_new (FALSE, FALSE, sizeof(int));
+  visual_ordering_array = new_int_array ();
   for(; errno = 0, level = strtol (line, &end, 10), line != end && errno != EINVAL; line = end) {
-    g_array_append_val (visual_ordering_array, level);
+    int_array_add (visual_ordering_array, level);
   }
 
   *visual_ordering_len = visual_ordering_array->len;
-  *visual_ordering = (int*)g_array_free (visual_ordering_array, FALSE);
+  *visual_ordering = (int*)int_array_free (visual_ordering_array, FALSE);
 }
 
 int
 main (int argc, char **argv)
 {
-  GError *error;
   int next_arg;
-  GIOChannel *channel;
-  GIOStatus status;
+  FILE *channel;
   const char *filename;
-  gchar *line = NULL;
-  gsize length, terminator_pos;
+  char line[LINE_SIZE];
   int numerrs = 0;
   int line_no = 0;
   FriBidiChar *code_points = NULL;
@@ -186,11 +262,11 @@ main (int argc, char **argv)
   FriBidiBracketType *bracket_types = NULL;
   FriBidiStrIndex *ltor = NULL;
   int ltor_len;
-  gboolean debug = FALSE;
+  int debug = FALSE;
 
   if (argc < 2)
     {
-      g_printerr ("usage: %s [--debug] test-file-name\n", argv[0]);
+      fprintf (stderr, "usage: %s [--debug] test-file-name\n", argv[0]);
       exit (1);
     }
 
@@ -206,43 +282,21 @@ main (int argc, char **argv)
       die("Unknown option %s!\n", arg);
     }
 
-  filename = argv[next_arg++];
+    filename = argv[next_arg++];
 
-  error = NULL;
-  channel = g_io_channel_new_file (filename, "r", &error);
-  if (!channel)
-    {
-      g_printerr ("%s\n", error->message);
-      exit (1);
-    }
+    channel = fopen(filename, "r");
+    if (!channel) 
+	die ("Failed opening %s\n", filename);
 
-  fribidi_set_debug(debug);
-
-  while (TRUE)
-    {
-      error = NULL;
-      g_free (line);
-      status = g_io_channel_read_line (channel, &line, &length, &terminator_pos, &error);
-      switch (status)
-        {
-        case G_IO_STATUS_ERROR:
-          g_printerr ("%s\n", error->message);
-          exit (1);
-
-        case G_IO_STATUS_EOF:
-          goto done;
-
-        case G_IO_STATUS_AGAIN:
-          continue;
-
-        case G_IO_STATUS_NORMAL:
-          line[terminator_pos] = '\0';
-          break;
-	}
+    while (!feof(channel)) {
+      fgets(line, LINE_SIZE, channel);
+      int len = strlen(line);
+      if (len == LINE_SIZE-1)
+        die("LINE_SIZE=%d too small at line %d!\n", LINE_SIZE, line_no);
 
       line_no++;
 
-      if (line[0] == '#' || line[0] == '\0')
+      if (line[0] == '#' || line[0] == '\n')
         continue;
 
       parse_test_line (line,
@@ -257,23 +311,23 @@ main (int argc, char **argv)
                        );
 
       /* Test it */
-      g_free(bracket_types);
-      bracket_types = g_malloc ( sizeof(FriBidiBracketType) * code_points_len);
+      free(bracket_types);
+      bracket_types = malloc ( sizeof(FriBidiBracketType) * code_points_len);
 
-      g_free(types);
-      types = g_malloc ( sizeof(FriBidiCharType) * code_points_len);
+      free(types);
+      types = malloc ( sizeof(FriBidiCharType) * code_points_len);
 
-      g_free(levels);
-      levels = g_malloc (sizeof (FriBidiLevel) * code_points_len);
+      free(levels);
+      levels = malloc (sizeof (FriBidiLevel) * code_points_len);
 
-      g_free (ltor);
-      ltor = g_malloc (sizeof (FriBidiStrIndex) * code_points_len);
+      free (ltor);
+      ltor = malloc (sizeof (FriBidiStrIndex) * code_points_len);
 
 
       {
         FriBidiParType base_dir;
         int i, j;
-        gboolean matches;
+        int matches;
         int types_len = code_points_len;
         int levels_len = types_len;
         FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
@@ -347,31 +401,31 @@ main (int argc, char **argv)
           {
             numerrs++;
 
-            g_printerr ("failure on line %d\n", line_no);
-            g_printerr ("input is: %s\n", line);
-            g_printerr ("base dir: %s\n", paragraph_dir==0 ? "LTR"
+            fprintf (stderr, "failure on line %d\n", line_no);
+            fprintf (stderr, "input is: %s\n", line);
+            fprintf (stderr, "base dir: %s\n", paragraph_dir==0 ? "LTR"
                         : paragraph_dir==1 ? "RTL" : "AUTO");
 
-            g_printerr ("expected levels:");
+            fprintf (stderr, "expected levels:");
             for (i = 0; i < code_points_len; i++)
               if (expected_levels[i] == (FriBidiLevel) -1)
-                g_printerr (" x");
+                fprintf (stderr, " x");
               else
-                g_printerr (" %d", expected_levels[i]);
-            g_printerr ("\n");
-            g_printerr ("returned levels:");
+                fprintf (stderr, " %d", expected_levels[i]);
+            fprintf (stderr, "\n");
+            fprintf (stderr, "returned levels:");
             for (i = 0; i < levels_len; i++)
-              g_printerr (" %d", levels[i]);
-            g_printerr ("\n");
+              fprintf (stderr, " %d", levels[i]);
+            fprintf (stderr, "\n");
 
-            g_printerr ("expected order:");
+            fprintf (stderr, "expected order:");
             for (i = 0; i < expected_ltor_len; i++)
-              g_printerr (" %d", expected_ltor[i]);
-            g_printerr ("\n");
-            g_printerr ("returned order:");
+              fprintf (stderr, " %d", expected_ltor[i]);
+            fprintf (stderr, "\n");
+            fprintf (stderr, "returned order:");
             for (i = 0; i < ltor_len; i++)
-              g_printerr (" %d", ltor[i]);
-            g_printerr ("\n");
+              fprintf (stderr, " %d", ltor[i]);
+            fprintf (stderr, "\n");
 
             if (debug)
               {
@@ -396,17 +450,13 @@ main (int argc, char **argv)
                 fribidi_set_debug (0);
               }
 
-            g_printerr ("\n");
+            fprintf (stderr, "\n");
           }
       }
     }
 
-done:
-  if (error)
-    g_error_free (error);
-
   if (numerrs)
-    g_printerr ("%d errors\n", numerrs);
+    fprintf (stderr, "%d errors\n", numerrs);
   else
     printf("No errors found! :-)\n");
 

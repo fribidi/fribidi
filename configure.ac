@@ -147,26 +147,6 @@ if test x$enable_deprecated = xno; then
 		  [Don not build deprecated functionality])
 fi
 
-# --with[out]-glib
-AC_ARG_WITH(glib,
-              AC_HELP_STRING([--with-glib=@<:@no/auto/yes@:>@],
-                             [use Glib @<:@default=auto@:>@]))
-GLIB_PACKAGE=glib-2.0
-GLIB_MINVERSION=2.4
-if test x$with_glib = xyes; then
-	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE >= $GLIB_MINVERSION)
-	FRIBIDI_USE_GLIB=1
-else
-if test x$with_glib = xno; then
-	FRIBIDI_USE_GLIB=0
-else
-	PKG_CHECK_MODULES(GLIB,$GLIB_PACKAGE >= $GLIB_MINVERSION,
-		FRIBIDI_USE_GLIB=1,
-		FRIBIDI_USE_GLIB=0)
-fi
-fi
-AM_CONDITIONAL(FRIBIDI_USE_GLIB, test x$FRIBIDI_USE_GLIB = x1)
-
 # --disable-docs
 AC_ARG_ENABLE(docs,
 	      AC_HELP_STRING([--disable-docs],
