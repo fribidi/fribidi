@@ -1,6 +1,6 @@
 tests = [
-  ['BidiTest', 'test.c'],
-  ['BidiCharacterTest', 'test-character.c'],
+  ['BidiTest', 'BidiTest.c'],
+  ['BidiCharacterTest', 'BidiCharacterTest.c'],
 ]
 foreach t : tests
   exe = executable(t[0],

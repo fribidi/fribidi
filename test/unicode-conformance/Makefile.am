@@ -24,8 +24,8 @@ LDADD = $(top_builddir)/lib/libfribidi.la $(GLIB_LIBS)
 check_PROGRAMS = test test-character
 TESTS = $(TEST_DATAS)
 
-test_SOURCES = test.c
-test_character_SOURCES = test-character.c
+test_SOURCES = BidiTest.c
+test_character_SOURCES = BidiCharacterTest.c
 
 EXTRA_DIST = \
 	run.tests \
