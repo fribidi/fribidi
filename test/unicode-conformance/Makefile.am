@@ -21,11 +21,11 @@ AM_CPPFLAGS = \
 		$(GLIB_CFLAGS)
 LDADD = $(top_builddir)/lib/libfribidi.la $(GLIB_LIBS)
 
-check_PROGRAMS = test test-character
+check_PROGRAMS = BidiTest BidiCharacterTest
 TESTS = $(TEST_DATAS)
 
-test_SOURCES = BidiTest.c
-test_character_SOURCES = BidiCharacterTest.c
+BidiTest_SOURCES = BidiTest.c
+BidiCharacterTest_SOURCES = BidiCharacterTest.c
 
 EXTRA_DIST = \
 	run.tests \
