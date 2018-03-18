@@ -13,22 +13,17 @@ Iranian New Year celebrations on 2001-03-29 as FriBidi 0.9.0.
 
 Since then, FriBidi has been quite stable.  A few other releases were made,
 to fix bugs, code cleanup, etc which all led to the release of FriBidi
-0.10.4 on 2002-05-19.  It turned out to be quite stable, and is shipped by
-several distributions these days (~2003).
+0.10.4 on 2002-05-19.  It turned out to be quite stable, and has been shipped by several distributions since 2003.
 
-Behdad promised a major redesign of the interface and the code to code, but
-it almost never happened, at least not before Iranian New Years of March
-2004.  In the mean time, FriBidi was dubbed as a GNU package by Richard
-Stallman.  The first time was in 2002, and he mis-spelled it as "FreeBidi".
-Next time in 2003 he addressed the correct name "FriBidi", but the
-transition to gnu.org (http://www.gnu.org/) never happened, due to long
-down-times of gnu.org due to several administrative problems.
+FriBidi was dubbed as a GNU package by Richard Stallman in 2002.  The
+first time he mis-spelled it as "FreeBidi".  Next time in 2003 he
+addressed the correct name "FriBidi". The transition to gnu.org
+(http://www.gnu.org/) never happened, due to long down-times of
+gnu.org due to several administrative problems.
 
 GNU FriBidi was finally moved to the FreeDesktop project
-(http://www.freedesktop.org), which it lives a peaceful life these days
-(http://www.freedesktop.org/Software/FriBidi).  Major cleanup made to the
-build system, and was reimported from scratch in the FreeDesktop CVS.  The
-old CVS repository is still available under the "fribidi-sf.net" module.
+(http://www.freedesktop.org), which it lived at
+(http://www.freedesktop.org/Software/FriBidi) until it moved to its
+current home at GitHub (https://github.com/fribidi/fribidi).  
 
-You can find more details in the file ChangeLog.old in the GNU FriBidi CVS
-repository.
+You can find more details in the file ChangeLog.old.
