@@ -248,7 +248,7 @@ print_resolved_types (
   {
     FriBidiStrIndex i;
     for (i = RL_LEN (pp); i; i--)
-      MSG2 ("%c", fribidi_char_from_bidi_type (pp->type));
+      MSG2 ("%s ", fribidi_get_bidi_type_name (pp->type));
   }
   MSG ("\n");
 }
@@ -266,7 +266,7 @@ print_bidi_string (
 
   MSG ("  Org. types : ");
   for (i = 0; i < len; i++)
-    MSG2 ("%c", fribidi_char_from_bidi_type (bidi_types[i]));
+    MSG2 ("%s ", fribidi_get_bidi_type_name (bidi_types[i]));
   MSG ("\n");
 }
 
@@ -560,7 +560,7 @@ fribidi_get_par_embedding_levels_ex (
     }
   base_dir = FRIBIDI_LEVEL_TO_DIR (base_level);
   DBG2 ("  base level : %c", fribidi_char_from_level (base_level));
-  DBG2 ("  base dir   : %c", fribidi_char_from_bidi_type (base_dir));
+  DBG2 ("  base dir   : %s", fribidi_get_bidi_type_name (base_dir));
 
   base_level_per_iso_level = fribidi_malloc(sizeof(base_level_per_iso_level[0]) *
                                             FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL);
