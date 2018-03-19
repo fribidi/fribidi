@@ -10,13 +10,11 @@ matrix:
       env: PATH=$PATH:$TRAVIS_BUILD_DIR/c2man-install
     - os: linux
       compiler: clang
-      env: DISTCHECK_CONFIGURE_FLAGS=--disable-docs
     - os: osx
       compiler: clang
-      env: DISTCHECK_CONFIGURE_FLAGS=--disable-docs
 
 before_script:
-  - ./autogen.sh $DISTCHECK_CONFIGURE_FLAGS
+  - ./autogen.sh
 
 script:
   - make
