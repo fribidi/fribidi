@@ -123,7 +123,7 @@ init_cap_rtl (
 	for (j = 0; j < num_types; j++)
 	  if (to_type[j] == t)
 	    break;
-	if (!request[j])	/* Do not need this type */
+	if (j >= num_types || !request[j])	/* Do not need this type */
 	  continue;
 	for (k = 0; k < CAPRTL_CHARS; k++)
 	  if (caprtl_to_unicode[k] == FRIBIDI_UNICODE_CHARS
