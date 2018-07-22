@@ -1175,7 +1175,7 @@ fribidi_get_par_embedding_levels_ex (
         const FriBidiBracketType NoBracket = FRIBIDI_NO_BRACKET;
         for_run_list (pp, main_run_list)
           pp->bracket_type = NoBracket;
-        compact_list (main_run_list);
+        compact_neutrals (main_run_list);
       }
     }
 
