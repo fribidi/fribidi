@@ -1048,7 +1048,8 @@ fribidi_get_par_embedding_levels_ex (
         if (level != last_level && last_iso_level == iso_level)
           bracket_stack_size[last_iso_level] = 0;
 
-        if (brack_prop!= FRIBIDI_NO_BRACKET)
+        if (brack_prop!= FRIBIDI_NO_BRACKET
+            && RL_TYPE(pp)==FRIBIDI_TYPE_ON)
           {
             if (FRIBIDI_IS_BRACKET_OPEN(brack_prop))
               {
