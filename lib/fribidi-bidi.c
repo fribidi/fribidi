@@ -149,7 +149,7 @@ static FriBidiRun *get_adjacent_run(FriBidiRun *list, fribidi_boolean forward, f
     {
       FriBidiCharType ppp_type = RL_TYPE (ppp);
 
-      if (ppp_type == _FRIBIDI_TYPE_SENTINEL)
+      if (ppp_type == FRIBIDI_TYPE_SENTINEL)
         break;
 
       /* Note that when sweeping forward we continue one run
