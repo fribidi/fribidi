@@ -148,20 +148,21 @@ fribidi_get_par_embedding_levels_ex (
  * space at the end of line is reset to the paragraph embedding level (That is
  * part 4 of rule L1).
  *
- * The runs array can be NULL and in this case no reordring will happen, only
- * the count of the runs will be returned.
+ * The if out_len is <= zero or any of the output arrays is NULL, no reordring
+ * will happen, and the number of the runs will be returned.
  *
  * Returns: number of the runs.
  */
 FRIBIDI_ENTRY FriBidiStrIndex
 fribidi_reorder_runs (
-  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by fribidi_get_bidi_types() */
-  const FriBidiStrIndex len,	/* input length of the line */
+  const FriBidiCharType *bidi_types,	/* list of bidi types as returned by fribidi_get_bidi_types() */
+  const FriBidiStrIndex len,		/* length of input arrays */
   const FriBidiParType base_dir,	/* resolved paragraph base direction */
-  FriBidiLevel *embedding_levels,	/* input list of embedding levels, as returned by fribidi_get_par_embedding_levels */
+  FriBidiLevel *embedding_levels,	/* list of embedding levels, as returned by fribidi_get_par_embedding_levels() */
+  FriBidiStrIndex out_len,		/* length of the output arrays */
   FriBidiStrIndex *run_positions,	/* output list of run positions */
-  FriBidiStrIndex *run_lengths,	/* output list of run lengths */
-  FriBidiLevel *run_levels	/* output list of run embedding levels */
+  FriBidiStrIndex *run_lengths,		/* output list of run lengths */
+  FriBidiLevel *run_levels		/* output list of run embedding levels */
 ) FRIBIDI_GNUC_WARN_UNUSED;
 
 #include "fribidi-enddecls.h"

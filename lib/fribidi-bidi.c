@@ -1666,6 +1666,8 @@ fribidi_reorder_runs (
   const FriBidiParType base_dir,
   /* input and output */
   FriBidiLevel *embedding_levels,
+  /* input */
+  FriBidiStrIndex out_len,
   /* output */
   FriBidiStrIndex *run_positions,
   FriBidiStrIndex *run_lengths,
@@ -1722,18 +1724,20 @@ fribidi_reorder_runs (
       run = run->next;
     }
 
-  if (run_positions == NULL || run_lengths == NULL || run_levels == NULL)
+  if (out_len <= 0 || !run_positions || !run_lengths || !run_levels)
     goto out;
 
   runs = linear_reorder (runs);
 
+  i = 0;
   run = runs;
-  while (run)
+  while (run && i < out_len)
     {
-      *(run_positions++) = run->pos;
-      *(run_lengths++) = run->len;
-      *(run_levels++) = run->level;
+      run_positions[i] = run->pos;
+      run_lengths[i] = run->len;
+      run_levels[i] = run->level;
       run = run->next;
+      i++;
     }
 
 out:
