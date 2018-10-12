@@ -80,7 +80,7 @@ cdata.set('FRIBIDI_NO_DEPRECATED', no_deprecated)
 # write config.h
 config_h = configure_file(output: 'config.h', configuration: cdata)
 
-incs = include_directories('.', 'lib')
+incs = include_directories('.', 'lib', 'gen.tab')
 
 subdir('gen.tab')
 subdir('lib')
