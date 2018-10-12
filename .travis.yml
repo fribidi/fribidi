@@ -17,7 +17,9 @@ matrix:
       python: 3.5
       env: PATH=$PATH:$TRAVIS_BUILD_DIR/c2man-install
       install:
-        - pip install meson ninja
+        - pip install ninja
+          # XXX: Move back to the latest release once 0.48.1 is out
+        - pip install git+https://github.com/mesonbuild/meson@0.48
       before_script:
         - bash .ci/build-c2man.sh
       script:
