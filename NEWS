@@ -39,7 +39,7 @@ Overview of changes between 0.19.7 and 1.0
   `fribidi_get_par_embedding_levels()` must be replaced with calls to
   `fribidi_get_par_embedding_levels_ex()`. These function are not API
   compatible. Calling the older function will use default values for
-  the new bracket properties and will sometimes yield non-complient
+  the new bracket properties and will sometimes yield non-compliant
   results.
 
 Overview of changes between 0.19.6 and 0.19.7
