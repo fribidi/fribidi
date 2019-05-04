@@ -85,7 +85,7 @@ always producing the same result as the Reference Code.
 
 ### API
 
-The simplest way of accessing the API is through the convenience function `fribibidi_log2vis` which has the following signature:
+The simplest way of accessing the API is through the convenience function `fribidi_log2vis` which has the following signature:
 
 ```c
 fribidi_boolean fribidi_log2vis(
