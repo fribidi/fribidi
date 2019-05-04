@@ -1,7 +1,5 @@
 language: c
 
-sudo: false
-
 matrix:
   include:
     - os: linux
