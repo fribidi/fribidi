@@ -52,6 +52,8 @@
 
 
 
+FRIBIDI_ENTRY const char *fribidi_unicode_version;
+
 /* An string containing the version information of the library. */
 FRIBIDI_ENTRY const char *fribidi_version_info;
 
