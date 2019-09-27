@@ -1,3 +1,14 @@
+Overview of changes between 1.0.5 and 1.0.6
+=============================================
+
+* This is a minor bugfix release that fixes a list of minor issues that have turned up during the last year.
+
+* Various compilation and cross compilation issues.
+
+* Various minor header cleanups.
+
+* Removed libc's bsearch for performance and portability reasons
+
 Overview of changes between 1.0.4 and 1.0.5
 =============================================
 
