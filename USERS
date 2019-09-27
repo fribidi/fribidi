@@ -33,3 +33,4 @@ fvwm: http://www.fvwm.org/ # a window manager with RTL text handling
 Nano-X: http://www.microwindows.org/ # a tiny window system 
 HebrewService: http://mac.plonter.co.il/plonwiki/HebrewService # Mac OS X service to convert visual Hebrew (iso8859-8) to logical order
 Nokia 9110 Hebrew Support: http://www.zak.co.il/gpl/geos/9110Hebrew.html # uses to render Hebrew SMS messages
+EFL: http://www.enlightenment.org/ # a set of libraries used to write the Enlightenment windows manager
