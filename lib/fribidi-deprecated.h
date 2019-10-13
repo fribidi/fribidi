@@ -127,6 +127,22 @@ fribidi_get_type_internal (
   FriBidiChar ch		/* input character */
 ) FRIBIDI_GNUC_DEPRECATED;
 
+/* fribidi_get_par_embedding_levels - get bidi embedding levels of a paragraph
+ *
+ * Deprecated interface to fribidi_get_par_embedding_levels_ex(). Refer to
+ * it for documentation.
+ */
+FRIBIDI_ENTRY FriBidiLevel
+fribidi_get_par_embedding_levels (
+  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
+					   fribidi_get_bidi_types() */
+  const FriBidiStrIndex len,	/* input string length of the paragraph */
+  FriBidiParType *pbase_dir,	/* requested and resolved paragraph
+				 * base direction */
+  FriBidiLevel *embedding_levels	/* output list of embedding levels */
+) 
+     FRIBIDI_GNUC_WARN_UNUSED FRIBIDI_GNUC_DEPRECATED;
+
 #define UNI_MAX_BIDI_LEVEL	FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
 #define UNI_LRM			FRIBIDI_CHAR_LRM
 #define UNI_RLM			FRIBIDI_CHAR_RLM

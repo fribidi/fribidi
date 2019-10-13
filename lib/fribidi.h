@@ -73,8 +73,7 @@ fribidi_remove_bidi_marks (
   FriBidiStrIndex *position_from_this_list,	/* list mapping positions from the
 						   order used in str */
   FriBidiLevel *embedding_levels	/* list of embedding levels */
-)
-     FRIBIDI_GNUC_WARN_UNUSED FRIBIDI_GNUC_DEPRECATED;
+);
 
 
 /* fribidi_log2vis - get visual string
@@ -105,26 +104,7 @@ fribidi_remove_bidi_marks (
 					 * back to the logical string
 					 * positions */
   FriBidiLevel *embedding_levels	/* output list of embedding levels */
-)
-     FRIBIDI_GNUC_WARN_UNUSED FRIBIDI_GNUC_DEPRECATED;
-
-
-/* fribidi_get_par_embedding_levels - get bidi embedding levels of a paragraph
- *
- * Deprecated interface to fribidi_get_par_embedding_levels_ex(). Refer to
- * it for documentation.
- */
-FRIBIDI_ENTRY FriBidiLevel
-fribidi_get_par_embedding_levels (
-  const FriBidiCharType *bidi_types,	/* input list of bidi types as returned by
-					   fribidi_get_bidi_types() */
-  const FriBidiStrIndex len,	/* input string length of the paragraph */
-  FriBidiParType *pbase_dir,	/* requested and resolved paragraph
-				 * base direction */
-  FriBidiLevel *embedding_levels	/* output list of embedding levels */
-) 
-     FRIBIDI_GNUC_WARN_UNUSED FRIBIDI_GNUC_DEPRECATED;
-
+);
 
 #ifdef FRIBIDI_NO_DEPRECATED
 #else
