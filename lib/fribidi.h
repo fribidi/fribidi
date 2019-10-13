@@ -86,8 +86,10 @@ fribidi_remove_bidi_marks (
  * If NULL is passed as any of the the lists, the list is ignored and not
  * filled.
  *
- * This function is obsolete because it only handles one-line paragraphs. 
- * Please consider using other functions instead.  Deprecated.
+ * Note that this function handles one-line paragraphs. For multi-
+ * paragraph texts it is necessary to first split the text into
+ * separate paragraphs and then carry over the resolved pbase_dir
+ * between the subsequent invocations.
  *
  * Returns: Maximum level found plus one, or zero if any error occurred
  * (memory allocation failure most probably).
