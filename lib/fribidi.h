@@ -41,6 +41,8 @@
 #include "fribidi-shape.h"
 #include "fribidi-char-sets.h"
 
+#include "fribidi-begindecls.h"
+
 /* fribidi_remove_bidi_marks - remove bidi marks out of an string
  *
  * This function removes the bidi and boundary-neutral marks out of an string
@@ -94,7 +96,7 @@ fribidi_remove_bidi_marks (
  * Returns: Maximum level found plus one, or zero if any error occurred
  * (memory allocation failure most probably).
  */
-     FRIBIDI_ENTRY FriBidiLevel fribidi_log2vis (
+FRIBIDI_ENTRY FriBidiLevel fribidi_log2vis (
   const FriBidiChar *str,	/* input logical string */
   const FriBidiStrIndex len,	/* input string length */
   FriBidiParType *pbase_dir,	/* requested and resolved paragraph
@@ -112,10 +114,6 @@ fribidi_remove_bidi_marks (
 #else
 # include "fribidi-deprecated.h"
 #endif				/* !FRIBIDI_NO_DEPRECATED */
-
-
-#include "fribidi-begindecls.h"
-
 
 
 /* An string containing the version information of the library. */
