@@ -747,7 +747,9 @@ fribidi_get_par_embedding_levels_ex (
             }
 
 	  RL_LEVEL (pp) = level;
-          RL_ISOLATE_LEVEL (pp) = isolate_level++;
+          RL_ISOLATE_LEVEL (pp) = isolate_level;
+          if (isolate_level < FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1)
+              isolate_level++;
           base_level_per_iso_level[isolate_level] = new_level;
 
 	  if (!FRIBIDI_IS_NEUTRAL (override))
