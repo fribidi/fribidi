@@ -38,7 +38,7 @@ AC_CONFIG_SRCDIR([fribidi.pc.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE([1.11.1 gnits dist-bzip2 no-dist-gzip -Wall no-define])
+AM_INIT_AUTOMAKE([1.11.1 gnits dist-xz no-dist-gzip -Wall no-define])
 AM_SILENT_RULES([yes])
 
 AM_PROG_AR
