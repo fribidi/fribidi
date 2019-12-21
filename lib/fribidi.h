@@ -110,6 +110,8 @@ FRIBIDI_ENTRY FriBidiLevel fribidi_log2vis (
   FriBidiLevel *embedding_levels	/* output list of embedding levels */
 );
 
+/* End of functions */
+
 #ifdef FRIBIDI_NO_DEPRECATED
 #else
 # include "fribidi-deprecated.h"
