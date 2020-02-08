@@ -56,6 +56,8 @@ libfribidi_la_SOURCES =	\
 		brackets-type.tab.i \
 		run.h
 
+libfribidi_la_CPPFLAGS = -DFRIBIDI_BUILD
+
 GENERATEDSOURCES = \
 		fribidi-unicode-version.h \
 		arabic-shaping.tab.i \

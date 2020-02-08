@@ -43,16 +43,26 @@
 
 /* FRIBIDI_ENTRY is a macro used to declare library entry points. */
 #ifndef FRIBIDI_ENTRY
-# if (defined(_MSC_VER) || defined(FRIBIDI_BUILT_WITH_MSVC)) && !defined(FRIBIDI_STATIC)
-/* if we're building fribidi itself with MSVC, FRIBIDI_ENTRY will be defined,
- * so if we're here then this is an external user including fribidi headers.
- * The dllimport is needed here mostly for the fribidi_version_info variable,
- * for functions it's not required. Probably needs more fine-tuning if
- * someone starts building fribidi as static library with MSVC. We'll cross
- * that bridge when we get there. */
-#  define FRIBIDI_ENTRY __declspec(dllimport) extern
+# ifdef _WIN32
+#  ifdef FRIBIDI_BUILD
+#   ifdef DLL_EXPORT
+#    define FRIBIDI_ENTRY __declspec(dllexport)
+#   else
+#    define FRIBIDI_ENTRY
+#   endif
+#  else
+#   define FRIBIDI_ENTRY __declspec(dllimport)
+#  endif
 # else
-#  define FRIBIDI_ENTRY extern
+#  ifdef __GNUC__
+#   if __GNUC__ >= 4
+#    define FRIBIDI_ENTRY __attribute__ ((visibility("default")))
+#   else
+#    define FRIBIDI_ENTRY
+#   endif
+#  else
+#   define FRIBIDI_ENTRY
+#  endif
 # endif
 #endif /* !FRIBIDI_ENTRY */
 
