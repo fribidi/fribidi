@@ -84,8 +84,12 @@ incs = include_directories('.', 'lib', 'gen.tab')
 
 subdir('gen.tab')
 subdir('lib')
-subdir('bin')
-subdir('test')
+if get_option('bin')
+  subdir('bin')
+endif
+if get_option('tests')
+   subdir('test')
+endif
 if get_option('docs')
   subdir('doc')
 endif
