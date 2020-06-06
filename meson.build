@@ -1,5 +1,5 @@
 project('fribidi', 'c', version: '1.0.9',
-  meson_version : '>= 0.44')
+  meson_version : '>= 0.48')
 
 # New release:
 #   interface_age++
@@ -69,8 +69,7 @@ endif
 # This is available pretty much everywhere
 cdata.set('HAVE_STRINGIZE', 1)
 
-buildtype = get_option('buildtype')
-if buildtype == 'debug' or buildtype == 'debugoptimized'
+if get_option('debug')
   cdata.set('DEBUG', 1)
 endif
 
