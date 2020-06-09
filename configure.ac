@@ -147,6 +147,13 @@ if test x$enable_deprecated = xno; then
 		  [Don not build deprecated functionality])
 fi
 
+# define FRIBIDI_LIB_STATIC if in static mode
+if test "$enable_static" = "yes" ; then
+	FRIBIDI_CPPFLAGS="-DFRIBIDI_LIB_STATIC"
+fi
+AC_SUBST(FRIBIDI_CPPFLAGS)
+
+
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
 		 lib/fribidi-config.h

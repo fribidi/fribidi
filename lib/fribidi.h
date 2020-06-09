@@ -119,7 +119,7 @@ FRIBIDI_ENTRY FriBidiLevel fribidi_log2vis (
 
 
 /* An string containing the version information of the library. */
-FRIBIDI_ENTRY const char *fribidi_version_info;
+FRIBIDI_ENTRY FRIBIDI_EXTERN const char *fribidi_version_info;
 
 #include "fribidi-enddecls.h"
 
