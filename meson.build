@@ -38,7 +38,7 @@ endif
 visibility_args = []
 fribidi_static_cargs = []
 if have_visibility_hidden
-  visibility_args = ['-DFRIBIDI_ENTRY=extern __attribute__ ((visibility ("default")))']
+  visibility_args = ['-DFRIBIDI_ENTRY=__attribute__ ((visibility ("default")))']
 else
   if host_machine.system() == 'windows'
     if get_option('default_library') == 'static'
