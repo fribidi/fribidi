@@ -59,7 +59,9 @@
 #  endif
 # endif
 #else
-# define FRIBIDI_ENTRY
+# ifndef FRIBIDI_ENTRY
+#   define FRIBIDI_ENTRY
+# endif
 #endif
 
 #define FRIBIDI_EXTERN extern
