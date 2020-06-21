@@ -105,4 +105,5 @@ pkg.generate(name: 'GNU FriBidi',
   description: 'Unicode Bidirectional Algorithm Library',
   libraries: libfribidi, 
   subdirs: 'fribidi',
+  extra_cflags: fribidi_static_cargs,
   version: meson.project_version())
