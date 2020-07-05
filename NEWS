@@ -1,3 +1,8 @@
+Overview of changes between 1.0.9 and 1.0.10
+=============================================
+
+* Fixed various compilation problems and symbol exports necessary for proper compilation under windows.
+
 Overview of changes between 1.0.8 and 1.0.9
 =============================================
 
