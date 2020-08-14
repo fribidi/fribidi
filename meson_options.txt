@@ -6,3 +6,5 @@ option('bin', type : 'boolean', value : true,
   description: 'Build binaries')
 option('tests', type : 'boolean', value : true,
   description: 'Build tests')
+option('fuzzer_ldflags', type : 'string',
+  description: 'Extra LDFLAGS used during linking of fuzzing binaries')

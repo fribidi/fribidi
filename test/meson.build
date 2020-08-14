@@ -18,4 +18,13 @@ foreach t : tests
   test(test_name, test_runner, args: [fribidi, charset, input_file, reference_file])
 endforeach
 
+if get_option('fuzzer_ldflags') != ''
+  cases = run_command(import('python3').find_python(), '-c',
+    '''import os; print('\n'.join(os.listdir('@0@')))'''.format(join_paths(meson.current_source_dir(), 'fuzzing'))
+  ).stdout().strip().split('\n')
+  foreach case : cases
+    test('@0@'.format(case), fribidi_fuzzer, args: [join_paths(meson.current_source_dir(), 'fuzzing', case)])
+  endforeach
+endif
+
 subdir('unicode-conformance')
