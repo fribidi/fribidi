@@ -25,3 +25,13 @@ executable('fribidi-caprtl2utf8',
   include_directories: incs,
   link_with: libfribidi,
   install: false)
+
+if get_option('fuzzer_ldflags') != ''
+  fribidi_fuzzer = executable('fribidi-fuzzer',
+    'fribidi-fuzzer.c', fribidi_unicode_version_h,
+    c_args: ['-DHAVE_CONFIG_H'] + fribidi_static_cargs + visibility_args,
+    include_directories: incs,
+    link_with: libfribidi,
+    link_args: get_option('fuzzer_ldflags').split(),
+    install: false)
+endif
