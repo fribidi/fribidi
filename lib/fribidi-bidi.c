@@ -698,7 +698,7 @@ fribidi_get_par_embedding_levels_ex (
                   RL_LEVEL (pp) = level;
                 }
 
-              else if (valid_isolate_count > 0)
+              else if (valid_isolate_count > 0 && isolate_level != 0)
                 {
                   /* Pop away all LRE,RLE,LRO, RLO levels
                      from the stack, as these are implicitly
