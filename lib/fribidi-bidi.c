@@ -707,7 +707,8 @@ fribidi_get_par_embedding_levels_ex (
                     POP_STATUS;
                   over_pushed = 0; /* The PDI resets the overpushed! */
                   POP_STATUS;
-                  isolate_level-- ;
+                  if (isolate_level>0)
+                    isolate_level--;
                   valid_isolate_count--;
                   RL_LEVEL (pp) = level;
                   RL_ISOLATE_LEVEL (pp) = isolate_level;
