@@ -107,6 +107,7 @@ compact_list (
     for_run_list (list, list)
       if (RL_TYPE (list->prev) == RL_TYPE (list)
 	  && RL_LEVEL (list->prev) == RL_LEVEL (list)
+          && RL_ISOLATE_LEVEL (list->prev) == RL_ISOLATE_LEVEL (list)
           && RL_BRACKET_TYPE(list) == FRIBIDI_NO_BRACKET /* Don't join brackets! */
           && RL_BRACKET_TYPE(list->prev) == FRIBIDI_NO_BRACKET
           )
@@ -125,6 +126,7 @@ compact_neutrals (
       for_run_list (list, list)
       {
 	if (RL_LEVEL (list->prev) == RL_LEVEL (list)
+            && RL_ISOLATE_LEVEL (list->prev) == RL_ISOLATE_LEVEL (list)
 	    &&
 	    ((RL_TYPE (list->prev) == RL_TYPE (list)
 	      || (FRIBIDI_IS_NEUTRAL (RL_TYPE (list->prev))
