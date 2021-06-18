@@ -14,8 +14,8 @@ jobs:
         os: [ubuntu-latest]
         compiler: [gcc]    
 
-    env: PATH=$PATH:$(pwd)/fribidi/c2man/c2man-install
     steps:
+    - run: PATH=$PATH:$(pwd)/fribidi/c2man/c2man-install
     - uses: actions/checkout@v2
     - name: build c2man
       run: bash .ci/build-c2man.sh
