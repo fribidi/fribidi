@@ -24,10 +24,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install meson ninja
-    - name: build c2man
-      run: bash .ci/build-c2man.sh
+    # TODO: fix c2man build
+    # - name: build c2man
+    #   run: bash .ci/build-c2man.sh
     - name: configure
-      run: meson build
+      run: meson build -Ddocs=false
     - name: ninja build
       run: ninja -C build
     - name: ninja test
