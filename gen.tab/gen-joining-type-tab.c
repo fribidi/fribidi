@@ -158,7 +158,7 @@ static const char *ignored_bidi_types[] = {
 
 static const char *transparent_general_categories[] = {
   "Mn",
-  "Mn",
+  "Me",
   "Cf",
   NULL
 };
