@@ -1,0 +1,25 @@
+name: Build with make
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy: 
+      matrix:
+        os: [ubuntu-latest]
+        compiler: [gcc]
+        install: bash .ci/build-c2man.sh
+        env: PATH=$PATH:$TRAVIS_BUILD_DIR/c2man-install
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: ./autogen.sh
+    - run: make
+    - run: make check
+    - run: make distcheck
