@@ -16,13 +16,14 @@ jobs:
         python-version: [3.6]
         include:
         - os: windows-latest
-          compiler: [msvc]
+          compiler: msvc
+          python-version: 3.6
           msvc: true
 
     steps:
     - uses: actions/checkout@v2
     - name: Setup MSVC
-      if: matrix.config.os == 'windows-latest' && matrix.config.msvc == true
+      if: matrix.os == 'windows-latest' && matrix.msvc == true
       uses: ilammy/msvc-dev-cmd@v1
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
