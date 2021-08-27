@@ -5,6 +5,9 @@ set(CMAKE_DEBUG_POSTFIX _d)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
+option(FRIBIDI_BUILD_TESTS "Fribidi build tests" ON)
+option(FRIBIDI_BUILD_BIN "Fribidi build bin" ON)
+
 if(MSVC)
     add_definitions(/wd4996)
 endif()
@@ -14,7 +17,7 @@ include(CMakePrintHelpers)
 set(start_bracket "\\[")
 set(start_paren "\\(")
 set(no_end_bracket "[^]]")
-set(no_start_bracket "[^[]")
+set(no_start_bracket "[^[]") 
 file(STRINGS configure.ac configure.ac)
 string(CONCAT ac_init_regex
     "AC_INIT${start_paren}${start_bracket}(${no_end_bracket}*)]${no_start_bracket}*" # AC_INIT([GNU FriBidi],
@@ -142,7 +145,13 @@ else()
 
     enable_testing()
 
-    foreach(subdir charset lib bin test)
-        add_subdirectory(${subdir})
-    endforeach()
+    add_subdirectory(lib)
+
+     if (FRIBIDI_BUILD_TESTS)
+        add_subdirectory(test)
+    endif()
+
+    if (FRIBIDI_BUILD_BIN)
+        add_subdirectory(bin)
+    endif()
 endif()

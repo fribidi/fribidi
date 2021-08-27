@@ -22,13 +22,13 @@
 #cmakedefine01 HAVE_STRINGIZE
 
 /* Define to 1 if you have the <strings.h> header file. */
-#cmakedefine01 HAVE_STRINGS_H
+// #cmakedefine01 HAVE_STRINGS_H
 
 /* Define to 1 if you have the <string.h> header file. */
 #cmakedefine01 HAVE_STRING_H
 
 /* Define to 1 if you have the <sys/times.h> header file. */
-#cmakedefine01 HAVE_SYS_TIMES_H
+//#cmakedefine01 HAVE_SYS_TIMES_H
 
 /* The size of `int', as computed by sizeof. */
 #cmakedefine01 SIZEOF_INT

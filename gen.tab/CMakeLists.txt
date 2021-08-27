@@ -3,6 +3,9 @@ set(gen-bidi-type-tab_SOURCES gen-bidi-type-tab.c packtab.c packtab.h)
 set(gen-joining-type-tab_SOURCES gen-joining-type-tab.c packtab.c packtab.h)
 set(gen-arabic-shaping-tab_SOURCES gen-arabic-shaping-tab.c)
 set(gen-mirroring-tab_SOURCES gen-mirroring-tab.c packtab.c packtab.h)
+set(gen-brackets-tab_SOURCES gen-brackets-tab.c packtab.c packtab.h)
+set(gen-brackets-type-tab_SOURCES gen-brackets-type-tab.c packtab.c packtab.h)
+
 
 include_directories(
     ../lib
@@ -11,10 +14,10 @@ include_directories(
     # config files which correspond to the host
     ${FRIBIDI_GENERATED_INCLUDE_DIR})
 
-foreach(t gen-bidi-type-tab gen-joining-type-tab gen-arabic-shaping-tab gen-mirroring-tab)
+foreach(t gen-bidi-type-tab gen-joining-type-tab gen-arabic-shaping-tab gen-mirroring-tab gen-brackets-tab gen-brackets-type-tab)
     list(APPEND ${t}_SOURCES ${FRIBIDI_GENERATED_INCLUDE_DIR}/fribidi-unicode-version.h)
 endforeach()
-foreach(t gen-unicode-version gen-bidi-type-tab gen-joining-type-tab gen-arabic-shaping-tab gen-mirroring-tab)
+foreach(t gen-unicode-version gen-bidi-type-tab gen-joining-type-tab gen-arabic-shaping-tab gen-mirroring-tab gen-brackets-tab gen-brackets-type-tab)
     add_executable(${t} ${${t}_SOURCES})
 endforeach()
 
@@ -33,6 +36,39 @@ add_custom_command(
         > ${output}
     DEPENDS ${depends}
     COMMENT "Generate bidi-type.tab.i"
+    VERBATIM
+)
+
+# generate brackets.tab.i
+
+set(output ${FRIBIDI_GENERATED_INCLUDE_DIR}/brackets.tab.i)
+set(depends
+    ${CMAKE_CURRENT_SOURCE_DIR}/unidata/BidiBrackets.txt
+    ${CMAKE_CURRENT_SOURCE_DIR}/unidata/UnicodeData.txt)
+add_custom_command(
+    OUTPUT ${output}
+    COMMAND gen-brackets-tab 
+        ${COMPRESSION}
+        ${depends}
+        > ${output}
+    DEPENDS ${depends}
+    COMMENT "Generate brackets.tab.i"
+    VERBATIM
+)
+
+#generate gen-brackets-type-tab
+
+set(output ${FRIBIDI_GENERATED_INCLUDE_DIR}/brackets-type.tab.i)
+set(depends
+    ${CMAKE_CURRENT_SOURCE_DIR}/unidata/BidiBrackets.txt)
+add_custom_command(
+    OUTPUT ${output}
+    COMMAND gen-brackets-type-tab 
+        ${COMPRESSION}
+        ${depends}
+        > ${output}
+    DEPENDS ${depends}
+    COMMENT "Generate brackets-type.tab.i"
     VERBATIM
 )
 
@@ -114,6 +150,9 @@ add_custom_target(gen-tabs-target ALL
         ${FRIBIDI_GENERATED_INCLUDE_DIR}/joining-type.tab.i
         ${FRIBIDI_GENERATED_INCLUDE_DIR}/arabic-shaping.tab.i
         ${FRIBIDI_GENERATED_INCLUDE_DIR}/mirroring.tab.i
+        ${FRIBIDI_GENERATED_INCLUDE_DIR}/brackets.tab.i
+        ${FRIBIDI_GENERATED_INCLUDE_DIR}/brackets-type.tab.i
+        
     COMMENT "Running custom target: gen.tabs/gen-tabs-target"
     VERBATIM
     )
