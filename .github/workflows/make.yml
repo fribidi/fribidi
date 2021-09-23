@@ -15,10 +15,11 @@ jobs:
         compiler: [gcc]    
 
     steps:
-    - run: PATH=$PATH:$(pwd)/fribidi/c2man/c2man-install
     - uses: actions/checkout@v2
     - name: build c2man
       run: bash .ci/build-c2man.sh
+    - run: echo "$GITHUB_WORKSPACE/c2man/c2man-install" >> $GITHUB_PATH
+    - run: which c2man
     - name: configure
       run: ./autogen.sh
     - run: make
