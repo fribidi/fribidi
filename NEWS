@@ -1,3 +1,11 @@
+Overview of changes between 1.0.10 and 1.0.11
+=============================================
+
+* Updated Unicode tables to version 14.
+* Skip isolates in fribidi_get_par_direction().
+* Various fuzzing fixes.
+* Various build fixes.
+
 Overview of changes between 1.0.9 and 1.0.10
 =============================================
 
