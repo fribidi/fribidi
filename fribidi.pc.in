@@ -9,5 +9,6 @@ Name: @PACKAGE_NAME@
 Description: Unicode Bidirectional Algorithm Library
 Version: @VERSION@
 Libs: -L${libdir} -lfribidi
-Cflags: -I${includedir}/@PACKAGE@
-CFLAGS.private: -DFRIBIDI_LIB_STATIC
+@ENABLE_SHARED_TRUE@Cflags: -I${includedir}/@PACKAGE@
+@ENABLE_SHARED_TRUE@CFLAGS.private: @FRIBIDI_CPPFLAGS@
+@ENABLE_SHARED_FALSE@Cflags: -I${includedir}/@PACKAGE@ @FRIBIDI_CPPFLAGS@
