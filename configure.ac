@@ -153,6 +153,16 @@ if test "$enable_static" = "yes" ; then
 fi
 AC_SUBST(FRIBIDI_CPPFLAGS)
 
+if test x$enable_shared = xyes; then
+    ENABLE_SHARED_TRUE=
+    ENABLE_SHARED_FALSE="#"
+else
+    ENABLE_SHARED_TRUE="#"
+    ENABLE_SHARED_FALSE=
+fi
+AC_SUBST(ENABLE_SHARED_TRUE)
+AC_SUBST(ENABLE_SHARED_FALSE)
+
 
 # Generate output
 AC_CONFIG_FILES([fribidi.pc
