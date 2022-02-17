@@ -232,7 +232,12 @@ fribidi_cap_rtl_to_unicode (
 	    }
 	}
       else
-	us[j++] = caprtl_to_unicode[(int) s[i]];
+	{
+	  if (s[i] >= 0 && s[i] < CAPRTL_CHARS)
+	    us[j++] = caprtl_to_unicode[(int) s[i]];
+	  else
+	    us[j++] = s[i];
+	}
     }
 
   return j;
