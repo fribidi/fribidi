@@ -82,4 +82,5 @@ libfribidi = library('fribidi',
 
 libfribidi_dep = declare_dependency(link_with: libfribidi,
   include_directories: incs,
-  sources: [fribidi_unicode_version_h, fribidi_config_h])
+  sources: [fribidi_unicode_version_h, fribidi_config_h],
+  compile_args: fribidi_static_cargs)
