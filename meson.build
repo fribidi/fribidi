@@ -25,25 +25,13 @@ if cc.get_id() == 'gcc' and cc.has_argument('-ansi')
   add_project_arguments('-ansi', language: 'c')
 endif
 
-# Symbol visibility
-have_visibility_hidden = false
-if host_machine.system() != 'windows'
-  have_visibility_hidden = cc.has_argument('-fvisibility=hidden')
-  if have_visibility_hidden
-    add_project_arguments('-fvisibility=hidden', language: 'c')
-  endif
-endif
-
-# Must explicitly make symbols public if default visibility is hidden
-visibility_args = []
+# Handle symbol visibility for Windows
 fribidi_static_cargs = []
-if have_visibility_hidden
-  visibility_args = ['-DFRIBIDI_ENTRY=__attribute__ ((visibility ("default")))']
-else
-  if host_machine.system() == 'windows'
-    if get_option('default_library') == 'static'
-      fribidi_static_cargs = ['-DFRIBIDI_LIB_STATIC']
-    endif
+fribidi_build_cargs = []
+if host_machine.system() == 'windows'
+  fribidi_build_cargs = ['-DFRIBIDI_BUILD']
+  if get_option('default_library') == 'static'
+    fribidi_static_cargs = ['-DFRIBIDI_LIB_STATIC']
   endif
 endif
 
