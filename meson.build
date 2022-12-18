@@ -1,5 +1,5 @@
 project('fribidi', 'c', version: '1.0.12',
-  meson_version : '>= 0.48')
+  meson_version : '>= 0.54')
 
 # New release:
 #   interface_age++
