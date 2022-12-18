@@ -13,12 +13,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         compiler: [gcc]
-        python-version: [3.6]
+        python-version: [3.8]
         include:
         ## test with MSVC
         - os: windows-latest
           compiler: msvc
-          python-version: 3.6
+          python-version: 3.8
           msvc: true
 
     steps:
