@@ -1,9 +1,10 @@
 # Extract list of man pages (one man page per symbol) from lib/libfribidi.def
-python3 = import('python3').find_python()
+python3 = import('python').find_installation()
 
 result = run_command(python3,
   '-c', 'import sys; print(open(sys.argv[1], "r").read())',
-  files('../lib/fribidi.def'))
+  files('../lib/fribidi.def'),
+  check: false)
 
 if result.returncode() != 0
   error('Could not extract list of symbols from fribidi.def.')
@@ -21,7 +22,9 @@ endforeach
 
 # check if we have a tarball which contains the generated files
 result = run_command(python3, '-c', '''import os.path; import sys
-sys.exit(0 if os.path.isfile('@0@') else 1)'''.format(join_paths(meson.current_source_dir(), gen_man_pages[0])))
+sys.exit(0 if os.path.isfile('@0@') else 1)'''.format(join_paths(meson.current_source_dir(), gen_man_pages[0])),
+  check: false)
+
 have_man_pages = result.returncode() == 0
 message('Have pre-generated man pages: @0@'.format(have_man_pages))
 
