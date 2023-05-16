@@ -42,27 +42,21 @@
 
 
 /* FRIBIDI_ENTRY is a macro used to declare library entry points. */
-#ifndef FRIBIDI_LIB_STATIC
-# ifndef FRIBIDI_ENTRY
-#  ifdef _WIN32
-#   ifdef FRIBIDI_BUILD
-#     define FRIBIDI_ENTRY __declspec(dllexport)
-#   else
-#     define FRIBIDI_ENTRY __declspec(dllimport)
-#   endif
-#  elif (defined(__SUNPRO_C)  || defined(__SUNPRO_CC))
-#   define FRIBIDI_ENTRY __global
+#ifndef FRIBIDI_ENTRY
+# if (defined(__GNUC__) && __GNUC__ >= 4) || defined(__ICC)
+#  define FRIBIDI_ENTRY __attribute__ ((visibility("default")))
+# elif (defined(__SUNPRO_C)  || defined(__SUNPRO_CC))
+#  define FRIBIDI_ENTRY __global
+/* Windows is special and you cannot just define entry points unconditionally. */
+# elif defined(_WIN32) && ! defined(FRIBIDI_LIB_STATIC)
+#  ifdef FRIBIDI_BUILD
+#   define FRIBIDI_ENTRY __declspec(dllexport)
 #  else
-#   if (defined(__GNUC__) && __GNUC__ >= 4) || defined(__ICC)
-#     define FRIBIDI_ENTRY __attribute__ ((visibility("default")))
-#   else
-#    define FRIBIDI_ENTRY
-#   endif
+#   define FRIBIDI_ENTRY __declspec(dllimport)
 #  endif
-# endif
-#else
-# ifndef FRIBIDI_ENTRY
-#   define FRIBIDI_ENTRY
+# else
+/* nothing else worked, give up and do nothing */
+#  define FRIBIDI_ENTRY
 # endif
 #endif
 
