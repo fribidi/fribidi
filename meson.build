@@ -76,7 +76,7 @@ incs = include_directories('.', 'lib', 'gen.tab')
 
 subdir('gen.tab')
 subdir('lib')
-if get_option('bin')
+if get_option('bin') or get_option('tests')
   subdir('bin')
 endif
 if get_option('tests')
