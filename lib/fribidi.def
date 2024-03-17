@@ -22,6 +22,7 @@ fribidi_parse_charset
 fribidi_remove_bidi_marks
 fribidi_reorder_line
 fribidi_reorder_nsm_status
+fribidi_reorder_runs
 fribidi_set_debug
 fribidi_set_mirroring
 fribidi_set_reorder_nsm
