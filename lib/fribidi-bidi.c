@@ -1584,6 +1584,216 @@ out:
   return status ? max_level + 1 : 0;
 }
 
+struct range_t
+{
+  FriBidiLevel level;
+  /* Left-most and right-most runs in the range, in visual order.
+   * Following left's next member eventually gets us to right.
+   * The right run's next member is undefined. */
+  FriBidiRun *left;
+  FriBidiRun *right;
+  struct range_t *previous;
+};
+
+static struct range_t *
+merge_range_with_previous (
+  struct range_t *range
+)
+{
+  struct range_t *previous = range->previous;
+  struct range_t *left, *right;
+
+  fribidi_assert (range->previous);
+  fribidi_assert (previous->level < range->level);
+
+  if (FRIBIDI_LEVEL_IS_RTL (previous->level))
+  {
+    /* Odd, previous goes to the right of range. */
+    left = range;
+    right = previous;
+  }
+  else
+  {
+    /* Even, previous goes to the left of range. */
+    left = previous;
+    right = range;
+  }
+  /* Stich them. */
+  left->right->next = right->left;
+
+  previous->left = left->left;
+  previous->right = right->right;
+
+  fribidi_free (range);
+  return previous;
+}
+
+static FriBidiRun *
+linear_reorder (
+  FriBidiRun *runs
+)
+{
+  /* The algorithm here is something like this: sweep runs in the
+   * logical order, keeping a stack of ranges.  Upon seeing a run,
+   * we flatten all ranges before it that have a level higher than
+   * the run, by merging them, reordering as we go.  Then we either
+   * merge the run with the previous range, or create a new range
+   * for the run, depending on the level relationship.
+   */
+  struct range_t *range = NULL;
+  FriBidiRun *run;
+
+  if (!runs)
+    return NULL;
+
+  run = runs;
+  while (run)
+  {
+    FriBidiRun *next_run = run->next;
+
+    while (range && range->level > run->level &&
+           range->previous && range->previous->level >= run->level)
+      range = merge_range_with_previous (range);
+
+    if (range && range->level >= run->level)
+    {
+      /* Attach run to the range. */
+      if (FRIBIDI_LEVEL_IS_RTL (run->level))
+      {
+        /* Odd, range goes to the right of run. */
+        run->next = range->left;
+        range->left = run;
+      }
+      else
+      {
+        /* Even, range goes to the left of run. */
+        range->right->next = run;
+        range->right = run;
+      }
+      range->level = run->level;
+    }
+    else
+    {
+      /* Allocate new range for run and push into stack. */
+      struct range_t *r = fribidi_malloc (sizeof (struct range_t));
+      r->left = r->right = run;
+      r->level = run->level;
+      r->previous = range;
+      range = r;
+    }
+
+    run = next_run;
+  }
+
+  fribidi_assert (range);
+  while (range->previous)
+    range = merge_range_with_previous (range);
+
+  /* Terminate. */
+  range->right->next = NULL;
+
+  run = range->left;
+  fribidi_free (range);
+
+  return run;
+}
+
+FRIBIDI_ENTRY FriBidiStrIndex
+fribidi_reorder_runs (
+  /* input */
+  const FriBidiCharType *bidi_types,
+  const FriBidiStrIndex len,
+  const FriBidiParType base_dir,
+  /* input and output */
+  FriBidiLevel *embedding_levels,
+  /* input */
+  FriBidiStrIndex out_len,
+  /* output */
+  FriBidiStrIndex *run_positions,
+  FriBidiStrIndex *run_lengths,
+  FriBidiLevel *run_levels
+)
+{
+  FriBidiStrIndex i;
+  FriBidiStrIndex run_count = 0;
+  FriBidiStrIndex run_pos = 0;
+  FriBidiRun *run;
+  FriBidiRun *runs = NULL;
+
+  if UNLIKELY
+    (!len)
+    {
+      goto out;
+    }
+
+  DBG ("in fribidi_reorder_runs");
+
+  fribidi_assert (bidi_types);
+  fribidi_assert (embedding_levels);
+
+  DBG ("reset the embedding levels, 4. whitespace at the end of line");
+  {
+    /* L1. Reset the embedding levels of some chars:
+       4. any sequence of white space characters at the end of the line. */
+    for (i = len - 1; i >= 0 &&
+         FRIBIDI_IS_EXPLICIT_OR_BN_OR_WS (bidi_types[i]); i--)
+      embedding_levels[i] = FRIBIDI_DIR_TO_LEVEL (base_dir);
+  }
+
+  while (run_pos < len)
+    {
+      FriBidiStrIndex run_len = 0;
+      while ((run_pos + run_len) < len &&
+             embedding_levels[run_pos] == embedding_levels[run_pos + run_len])
+        run_len++;
+
+      run = new_run ();
+      run->pos = run_pos;
+      run->level = embedding_levels[run_pos];
+      run->len = run_len;
+      run->next = runs;
+      runs = run;
+
+      run_pos += run_len;
+    }
+
+  run = runs;
+  while (run)
+    {
+      run_count++;
+      run = run->next;
+    }
+
+  if (out_len <= 0 || !run_positions || !run_lengths || !run_levels)
+    goto out;
+
+  runs = linear_reorder (runs);
+
+  i = 0;
+  run = runs;
+  while (run && i < out_len)
+    {
+      run_positions[i] = run->pos;
+      run_lengths[i] = run->len;
+      run_levels[i] = run->level;
+      run = run->next;
+      i++;
+    }
+
+out:
+
+  run = runs;
+  while (run)
+    {
+      FriBidiRun *p = run;
+      run = run->next;
+      fribidi_free (p);
+    }
+
+  return run_count;
+}
+
+
 /* Editor directions:
  * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
  */
