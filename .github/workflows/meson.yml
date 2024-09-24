@@ -47,7 +47,7 @@ jobs:
     - name: ninja test
       run: ninja -C build test
     - name: 'Upload build logs'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         path: build/meson-logs/*
