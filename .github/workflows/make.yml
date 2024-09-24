@@ -27,12 +27,12 @@ jobs:
     - run: make distcheck
 
     - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         path: fribidi-*.tar.xz
 
     - name: 'Upload build logs'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         path: test/test-suite.log
