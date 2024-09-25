@@ -36,3 +36,10 @@ jobs:
       if: failure()
       with:
         path: test/test-suite.log
+
+    - name: Upload test-suite.log
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-suite-log
+        path: test/test-suite.log
