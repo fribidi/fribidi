@@ -48,29 +48,29 @@
 #  include <stdio.h>
 # endif	/* !__FRIBIDI_DOC */
 # define FRIBIDI_FPRINTF fprintf
-# define FRIBIDI_STDERR_ stderr,
+# define FRIBIDI_STDERR stderr
 #endif /* !FRIBIDI_FPRINTF */
 
 #ifndef MSG
 #define MSG(s) \
 	FRIBIDI_BEGIN_STMT \
-	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s); \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR, s); \
 	FRIBIDI_END_STMT
 #define MSG2(s, t) \
 	FRIBIDI_BEGIN_STMT \
-	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t); \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR, s, t); \
 	FRIBIDI_END_STMT
 #define MSG3(s, t, u) \
 	FRIBIDI_BEGIN_STMT \
-	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u); \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR, s, t, u); \
 	FRIBIDI_END_STMT
 #define MSG5(s, t, u, v, w) \
 	FRIBIDI_BEGIN_STMT \
-	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u, v, w); \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR, s, t, u, v, w); \
 	FRIBIDI_END_STMT
 #define MSG6(s, t, u, v, w, z)                    \
 	FRIBIDI_BEGIN_STMT \
-	FRIBIDI_FPRINTF(FRIBIDI_STDERR_ s, t, u, v, w, z);        \
+	FRIBIDI_FPRINTF(FRIBIDI_STDERR, s, t, u, v, w, z);        \
 	FRIBIDI_END_STMT
 #endif /* !MSG */
 
