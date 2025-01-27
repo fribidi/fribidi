@@ -21,10 +21,6 @@ libversion = '@0@.@1@.0'.format(soversion, interface_version, interface_age)
 # C compiler. This is the cross compiler if we're cross-compiling
 cc = meson.get_compiler('c')
 
-if cc.get_id() == 'gcc' and cc.has_argument('-ansi')
-  add_project_arguments('-ansi', language: 'c')
-endif
-
 # Handle symbol visibility for Windows
 fribidi_static_cargs = []
 fribidi_build_cargs = []
