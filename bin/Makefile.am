@@ -15,7 +15,17 @@ AM_CPPFLAGS = \
 
 LDADD = $(top_builddir)/lib/libfribidi.la
 
+dist_man_MANS = $(bin_PROGRAMS:=.1)
+MAINTAINERCLEANFILES = $(man1)
+
+man1 = $(dist_man_MANS)
+
 $(top_builddir)/lib/libfribidi.la:
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) libfribidi.la
+
+%.1: %
+	$(top_srcdir)/missing --run help2man ./$< --no-info \
+	--version-string=- -n "$(shell ./$< --help | head -n 2 | tail -n 1)" \
+	--output=$@
 
 -include $(top_srcdir)/git.mk
