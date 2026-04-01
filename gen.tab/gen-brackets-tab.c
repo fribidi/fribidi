@@ -166,7 +166,7 @@ read_unicode_data_txt_equivalence (
       if (s[0] == '#' || s[0] == '\0' || s[0] == '\n')
 	continue;
       /*  Field:       0 ; 1    ; 2    ; 3    ; 4    ; 5           */
-      i = sscanf (s, "%lx;%*[^;];%*[^;];%*[^;];%*[^;];%[^;]", &c, ce_string);
+      i = sscanf (s, "%lx;%*[^;];%*[^;];%*[^;];%*[^;];%255[^;]", &c, ce_string);
       if (c >= FRIBIDI_UNICODE_CHARS)
         {
           fprintf (stderr, "invalid input at line %ld: %s", l, s);
