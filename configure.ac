@@ -144,7 +144,7 @@ AC_ARG_ENABLE(deprecated,
                              [do not build deprecated functionality]))
 if test x$enable_deprecated = xno; then
 	AC_DEFINE(FRIBIDI_NO_DEPRECATED, 1,
-		  [Don not build deprecated functionality])
+		  [Do not build deprecated functionality])
 fi
 
 # define FRIBIDI_LIB_STATIC if in static mode
