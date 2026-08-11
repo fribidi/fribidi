@@ -15,7 +15,7 @@ jobs:
         compiler: [gcc]    
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
     - name: build c2man
       run: bash .ci/build-c2man.sh
     - run: echo "$GITHUB_WORKSPACE/c2man/c2man-install" >> $GITHUB_PATH
@@ -27,19 +27,19 @@ jobs:
     - run: make distcheck
 
     - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         path: fribidi-*.tar.xz
 
     - name: 'Upload build logs'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: failure()
       with:
         path: test/test-suite.log
 
     - name: Upload test-suite.log
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: test-suite-log
         path: test/test-suite.log
