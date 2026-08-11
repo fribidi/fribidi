@@ -22,7 +22,7 @@ jobs:
           msvc: true
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v7
 
     - name: Setup MSVC
       if: matrix.os == 'windows-latest' && matrix.msvc == true
@@ -30,7 +30,7 @@ jobs:
     
     ## Shared build steps
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Set up meson
@@ -47,7 +47,7 @@ jobs:
     - name: ninja test
       run: ninja -C build test
     - name: 'Upload build logs'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       if: failure()
       with:
         path: build/meson-logs/*
