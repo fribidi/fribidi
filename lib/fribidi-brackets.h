@@ -58,7 +58,7 @@ FRIBIDI_ENTRY FriBidiBracketType fribidi_get_bracket (
 
 /* fribidi_get_bracket_types - get bracketed characters
  *
- * This function finds the bracketed characters of an string of characters.
+ * This function finds the bracketed characters of a string of characters.
  * See fribidi_get_bracket() for more information about the bracketed
  * characters returned by this function.
  */
