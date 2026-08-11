@@ -51,7 +51,7 @@ FriBidiCharSet;
 
 /* fribidi_charset_to_unicode - convert string to Unicode
  *
- * This function converts an string from a character set, to a Unicode string.
+ * This function converts a string from a character set, to a Unicode string.
  *
  * Returns: The length of the new string.
  */
@@ -64,7 +64,7 @@ FRIBIDI_ENTRY FriBidiStrIndex fribidi_charset_to_unicode (
 
 /* fribidi_unicode_to_charset - convert string from Unicode
  *
- * This function converts a Unicode string to an string in another character
+ * This function converts a Unicode string to a string in another character
  * set.  It also null-terminates the output string.
  *
  * Returns: The length of the new string.

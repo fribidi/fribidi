@@ -371,9 +371,9 @@ fribidi_get_bidi_type (
   FriBidiChar ch		/* input character */
 ) FRIBIDI_GNUC_CONST;
 
-/* fribidi_get_bidi_types - get bidi types for an string of characters
+/* fribidi_get_bidi_types - get bidi types for a string of characters
  *
- * This function finds the bidi types of an string of characters.  See
+ * This function finds the bidi types of a string of characters.  See
  * fribidi_get_bidi_type() for more information about the bidi types returned
  * by this function.
  */

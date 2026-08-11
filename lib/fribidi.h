@@ -43,9 +43,9 @@
 
 #include "fribidi-begindecls.h"
 
-/* fribidi_remove_bidi_marks - remove bidi marks out of an string
+/* fribidi_remove_bidi_marks - remove bidi marks out of a string
  *
- * This function removes the bidi and boundary-neutral marks out of an string
+ * This function removes the bidi and boundary-neutral marks out of a string
  * and the accompanying lists.  It implements rule X9 of the Unicode
  * Bidirectional Algorithm available at
  * http://www.unicode.org/reports/tr9/#X9, with the exception that it removes

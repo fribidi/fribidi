@@ -216,9 +216,9 @@ fribidi_get_joining_type (
   FriBidiChar ch		/* input character */
 ) FRIBIDI_GNUC_CONST;
 
-/* fribidi_get_joining_types - get joining types for an string of characters
+/* fribidi_get_joining_types - get joining types for a string of characters
  *
- * This function finds the joining types of an string of characters.  See
+ * This function finds the joining types of a string of characters.  See
  * fribidi_get_joining_type for more information about the joining types
  * returned by this function.
  */
