@@ -53,7 +53,7 @@ message('Have pre-generated man pages: @0@'.format(have_man_pages))
 
 if have_man_pages
   install_man(gen_man_pages)
-else
+elif get_option('docs')
   help2man = find_program('help2man', required: false)
   if not help2man.found()
     error('help2man is required to build documentation from git.')
