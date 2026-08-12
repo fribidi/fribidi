@@ -50,13 +50,13 @@
 
 #ifndef ELIDE_CODE
 
+#include <stdlib.h>
 
 /* This needs to come after some library #include
    to get __GNU_LIBRARY__ defined.  */
 #ifdef	__GNU_LIBRARY__
-/* Don't include stdlib.h for non-GNU C libraries because some of them
+/* Don't include unistd.h for non-GNU C libraries because some of them
    contain conflicting prototypes for getopt.  */
-# include <stdlib.h>
 # include <unistd.h>
 #endif /* GNU C library.  */
 
@@ -137,18 +137,6 @@ int optopt = '?';
 static struct _getopt_data getopt_data;
 
 
-#ifndef __GNU_LIBRARY__
-
-/* Avoid depending on library functions or files
-   whose names are inconsistent.  */
-
-#ifndef getenv
-extern char *getenv (
-);
-#endif
-
-#endif /* not __GNU_LIBRARY__ */
-
 #ifdef _LIBC
 /* Stored original parameters.
    XXX This is no good solution.  We should rather copy the args so
