@@ -12,6 +12,8 @@ EXTRA_DIST = autogen.sh ChangeLog.old \
 	test/test-runner.py test/unicode-conformance/meson.build \
         README.md
 
+DISTCLEANFILES = bin/fribidi.1
+
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = @PACKAGE@.pc
 

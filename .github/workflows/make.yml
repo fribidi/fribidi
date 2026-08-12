@@ -9,10 +9,10 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    strategy: 
+    strategy:
       matrix:
         os: [ubuntu-latest]
-        compiler: [gcc]    
+        compiler: [gcc]
 
     steps:
     - uses: actions/checkout@v7
@@ -20,6 +20,10 @@ jobs:
       run: bash .ci/build-c2man.sh
     - run: echo "$GITHUB_WORKSPACE/c2man/c2man-install" >> $GITHUB_PATH
     - run: which c2man
+    - name: Install help2man
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y help2man
     - name: configure
       run: ./autogen.sh
     - run: make
