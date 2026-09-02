@@ -187,7 +187,12 @@ fribidi_cap_rtl_to_unicode (
       ch = s[i];
       if (ch == '_')
 	{
-	  switch (ch = s[++i])
+	  if (++i >= len)
+	    {
+	      us[j++] = '_';
+	      break;
+	    }
+	  switch (ch = s[i])
 	    {
 	    case '>':
 	      us[j++] = FRIBIDI_CHAR_LRM;
