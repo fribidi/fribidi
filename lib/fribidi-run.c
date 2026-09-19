@@ -34,14 +34,113 @@
 #include "run.h"
 #include "bidi-types.h"
 
+/* size, in FriBidiRun elements, of the first chunk allocated by a pool;
+   subsequent chunks (needed only if the initial size_hint underestimates
+   the eventual run count) double in size each time. */
+#define FRIBIDI_RUN_POOL_MIN_CHUNK 16
+
+#define FRIBIDI_RUN_POOL_CHUNK_RUNS(chunk) \
+  ((FriBidiRun *) (void *) ((chunk) + 1))
+
+static FriBidiRunPoolChunk *
+run_pool_chunk_new (
+  FriBidiStrIndex capacity
+)
+{
+  FriBidiRunPoolChunk *chunk;
+
+  if (capacity < FRIBIDI_RUN_POOL_MIN_CHUNK)
+    capacity = FRIBIDI_RUN_POOL_MIN_CHUNK;
+
+  chunk = fribidi_malloc (sizeof (FriBidiRunPoolChunk) +
+			   capacity * sizeof (FriBidiRun));
+  if LIKELY
+    (chunk)
+    {
+      chunk->next = NULL;
+      chunk->used = 0;
+      chunk->capacity = capacity;
+    }
+  return chunk;
+}
+
+FriBidiRunPool *
+fribidi_run_pool_new (
+  FriBidiStrIndex size_hint
+)
+{
+  FriBidiRunPool *pool = fribidi_malloc (sizeof (FriBidiRunPool));
+
+  if UNLIKELY
+    (!pool) return NULL;
+
+  /* Every FriBidiRun allocation made while resolving one paragraph's
+     embedding levels is, in the worst case, bounded by a small multiple
+     of the paragraph length (each run always covers at least one
+     character, and later stages only ever subdivide or merge existing
+     runs). Sizing the first chunk to fit the whole paragraph means a
+     single allocation almost always suffices. */
+  pool->chunk = run_pool_chunk_new (size_hint);
+  if UNLIKELY
+    (!pool->chunk)
+    {
+      fribidi_free (pool);
+      return NULL;
+    }
+
+  return pool;
+}
+
+void
+fribidi_run_pool_free (
+  FriBidiRunPool *pool
+)
+{
+  FriBidiRunPoolChunk *chunk;
+
+  if (!pool)
+    return;
+
+  chunk = pool->chunk;
+  while (chunk)
+    {
+      FriBidiRunPoolChunk *next = chunk->next;
+      fribidi_free (chunk);
+      chunk = next;
+    }
+  fribidi_free (pool);
+}
+
+static FriBidiRun *
+run_pool_alloc (
+  FriBidiRunPool *pool
+)
+{
+  FriBidiRunPoolChunk *chunk = pool->chunk;
+
+  if UNLIKELY
+    (chunk->used == chunk->capacity)
+    {
+      /* The size_hint under-estimated the run count (rare); grow. */
+      FriBidiRunPoolChunk *new_chunk = run_pool_chunk_new (chunk->capacity * 2);
+      if UNLIKELY
+	(!new_chunk) return NULL;
+      new_chunk->next = chunk;
+      pool->chunk = new_chunk;
+      chunk = new_chunk;
+    }
+
+  return FRIBIDI_RUN_POOL_CHUNK_RUNS (chunk) + chunk->used++;
+}
+
 FriBidiRun *
 new_run (
-  void
+  FriBidiRunPool *pool
 )
 {
   register FriBidiRun *run;
 
-  run = fribidi_malloc (sizeof (FriBidiRun));
+  run = run_pool_alloc (pool);
 
   if LIKELY
     (run)
@@ -54,12 +153,12 @@ new_run (
 
 FriBidiRun *
 new_run_list (
-  void
+  FriBidiRunPool *pool
 )
 {
   register FriBidiRun *run;
 
-  run = new_run ();
+  run = new_run (pool);
 
   if LIKELY
     (run)
@@ -79,26 +178,14 @@ free_run_list (
   FriBidiRun *run_list
 )
 {
+  /* Runs are owned by a FriBidiRunPool and are all released together via
+     fribidi_run_pool_free() once the paragraph they belong to has been
+     fully processed; there is nothing to do per-list here. This function
+     is kept (as a no-op) so existing call sites don't need to change. */
   if (!run_list)
     return;
 
   fribidi_validate_run_list (run_list);
-
-  {
-    register FriBidiRun *pp;
-
-    pp = run_list;
-    pp->prev->next = NULL;
-    while LIKELY
-      (pp)
-      {
-	register FriBidiRun *p;
-
-	p = pp;
-	pp = pp->next;
-	fribidi_free (p);
-      };
-  }
 }
 
 
@@ -107,7 +194,8 @@ run_list_encode_bidi_types (
   /* input */
   const FriBidiCharType *bidi_types,
   const FriBidiBracketType *bracket_types,
-  const FriBidiStrIndex len
+  const FriBidiStrIndex len,
+  FriBidiRunPool *pool
 )
 {
   FriBidiRun *list, *last;
@@ -117,7 +205,7 @@ run_list_encode_bidi_types (
   fribidi_assert (bidi_types);
 
   /* Create the list sentinel */
-  list = new_run_list ();
+  list = new_run_list (pool);
   if UNLIKELY
     (!list) return NULL;
   last = list;
@@ -129,14 +217,14 @@ run_list_encode_bidi_types (
       register FriBidiBracketType bracket_type = FRIBIDI_NO_BRACKET;
       if (bracket_types)
         bracket_type = bracket_types[i];
-      
+
       if (char_type != last->type
           || bracket_type != FRIBIDI_NO_BRACKET /* Always separate bracket into single char runs! */
           || last->bracket_type != FRIBIDI_NO_BRACKET
           || FRIBIDI_IS_ISOLATE(char_type)
           )
 	{
-	  run = new_run ();
+	  run = new_run (pool);
 	  if UNLIKELY
 	    (!run) break;
 	  run->type = char_type;
@@ -191,10 +279,11 @@ shadow_run_list (
   /* input */
   FriBidiRun *base,
   FriBidiRun *over,
-  fribidi_boolean preserve_length
+  fribidi_boolean preserve_length,
+  FriBidiRunPool *pool
 )
 {
-  register FriBidiRun *p = base, *q, *r, *s, *t;
+  register FriBidiRun *p = base, *q, *r, *t;
   register FriBidiStrIndex pos = 0, pos2;
   fribidi_boolean status = false;
 
@@ -224,7 +313,7 @@ shadow_run_list (
 	/* third part needed? */
 	if (p->pos + p->len > pos2)
 	  {
-	    r = new_run ();
+	    r = new_run (pool);
 	    if UNLIKELY
 	      (!r) goto out;
 	    p->next->prev = r;
@@ -246,11 +335,9 @@ shadow_run_list (
 	      /* cut the end of p. */
 	      p->len = pos - p->pos;
 	    else
-	      {
-		t = p;
-		p = p->prev;
-		fribidi_free (t);
-	      }
+	      /* p is pool-owned; it just becomes unreachable garbage
+	         within the pool instead of being freed individually. */
+	      p = p->prev;
 	  }
       }
     else
@@ -276,13 +363,9 @@ shadow_run_list (
 	else
 	  r = r->next;
 
-	/* remove the elements between p and r. */
-	for (s = p->next; s != r;)
-	  {
-	    t = s;
-	    s = s->next;
-	    fribidi_free (t);
-	  }
+	/* the elements between p and r are simply dropped: they are
+	   pool-owned, so no individual free is needed (see comment
+	   above new_run_list()). */
       }
     /* before updating the next and prev runs to point to the inserted q,
        we must remember the next element of q in the 'over' list.

@@ -52,20 +52,53 @@ struct _FriBidiRunStruct
   FriBidiBracketType bracket_type;
 
   /* Additional links for connecting the isolate tree */
-  FriBidiRun *prev_isolate, *next_isolate;  
+  FriBidiRun *prev_isolate, *next_isolate;
 };
 
+/* FriBidiRun nodes are created and destroyed in large numbers while
+   resolving the embedding levels of a single paragraph (one node per
+   maximal run of same-type characters initially, merged and occasionally
+   re-split as the various UBA rules are applied). Routing every node
+   through malloc()/free() individually showed up as a dominant cost in
+   profiling, so nodes are instead carved out of a growable arena
+   (FriBidiRunPool) that is created once per top-level call and released
+   in one shot when the call is done. Individual "frees" of pool-owned
+   runs are therefore no-ops; see free_run_list() below. */
+typedef struct _FriBidiRunPoolChunkStruct FriBidiRunPoolChunk;
+struct _FriBidiRunPoolChunkStruct
+{
+  FriBidiRunPoolChunk *next;
+  FriBidiStrIndex used;
+  FriBidiStrIndex capacity;
+  /* 'capacity' FriBidiRun elements are allocated right after this header. */
+};
+
+typedef struct _FriBidiRunPoolStruct FriBidiRunPool;
+struct _FriBidiRunPoolStruct
+{
+  FriBidiRunPoolChunk *chunk;	/* most recently allocated chunk */
+};
+
+FriBidiRunPool *
+fribidi_run_pool_new (
+  FriBidiStrIndex size_hint
+)
+     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
+
+     void fribidi_run_pool_free (
+  FriBidiRunPool *pool
+) FRIBIDI_GNUC_HIDDEN;
 
 FriBidiRun *
 new_run (
-  void
+  FriBidiRunPool *pool
 )
-     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
+     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 
      FriBidiRun *new_run_list (
-  void
+  FriBidiRunPool *pool
 )
-     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_MALLOC FRIBIDI_GNUC_WARN_UNUSED;
+     FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 
      void free_run_list (
   FriBidiRun *run_list
@@ -74,14 +107,16 @@ new_run (
      FriBidiRun *run_list_encode_bidi_types (
   const FriBidiCharType *bidi_types,
   const FriBidiBracketType *bracket_types,
-  const FriBidiStrIndex len
+  const FriBidiStrIndex len,
+  FriBidiRunPool *pool
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 
      fribidi_boolean shadow_run_list (
   FriBidiRun *base,
   FriBidiRun *over,
-  fribidi_boolean preserve_length
+  fribidi_boolean preserve_length,
+  FriBidiRunPool *pool
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 

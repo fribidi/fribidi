@@ -93,7 +93,8 @@ merge_with_prev (
     second->prev_isolate->next_isolate = second->next_isolate;
   first->next_isolate = second->next_isolate;
 
-  fribidi_free (second);
+  /* 'second' is pool-owned; it just becomes unreachable garbage within
+     the pool instead of being freed individually (see run.h). */
   return first;
 }
 static void
@@ -528,6 +529,7 @@ fribidi_get_par_embedding_levels_ex (
   FriBidiLevel base_level, max_level = 0;
   FriBidiParType base_dir;
   FriBidiRun *main_run_list = NULL, *explicits_list = NULL, *pp;
+  FriBidiRunPool *run_pool = NULL;
   fribidi_boolean status = false;
   int max_iso_level = 0;
 
@@ -544,10 +546,17 @@ fribidi_get_par_embedding_levels_ex (
   fribidi_assert (pbase_dir);
   fribidi_assert (embedding_levels);
 
+  /* All FriBidiRun nodes needed to resolve this paragraph's embedding
+     levels are carved out of this single pool and released together at
+     'out', rather than being malloc'd/freed one at a time. */
+  run_pool = fribidi_run_pool_new (len);
+  if UNLIKELY
+    (!run_pool) goto out;
+
   /* Determinate character types */
   {
     /* Get run-length encoded character types */
-    main_run_list = run_list_encode_bidi_types (bidi_types, bracket_types, len);
+    main_run_list = run_list_encode_bidi_types (bidi_types, bracket_types, len, run_pool);
     if UNLIKELY
       (!main_run_list) goto out;
   }
@@ -620,7 +629,7 @@ fribidi_get_par_embedding_levels_ex (
    codes that are removed from main_run_list, to reinsert them later by
    calling the shadow_run_list.
 */
-    explicits_list = new_run_list ();
+    explicits_list = new_run_list (run_pool);
     if UNLIKELY
       (!explicits_list) goto out;
 
@@ -1336,7 +1345,7 @@ fribidi_get_par_embedding_levels_ex (
     {
       register FriBidiRun *p;
       register fribidi_boolean stat =
-	shadow_run_list (main_run_list, explicits_list, true);
+	shadow_run_list (main_run_list, explicits_list, true, run_pool);
       explicits_list = NULL;
       if UNLIKELY
 	(!stat) goto out;
@@ -1374,7 +1383,7 @@ fribidi_get_par_embedding_levels_ex (
        4. any sequence of whitespace characters and/or isolate formatting
           characters at the end of the line.
        ... (to be continued in fribidi_reorder_line()). */
-    list = new_run_list ();
+    list = new_run_list (run_pool);
     if UNLIKELY
       (!list) goto out;
     q = list;
@@ -1397,7 +1406,7 @@ fribidi_get_par_embedding_levels_ex (
                    || FRIBIDI_IS_ISOLATE(char_type)))
 	  {
 	    state = 0;
-	    p = new_run ();
+	    p = new_run (run_pool);
 	    if UNLIKELY
 	      (!p)
 	      {
@@ -1413,7 +1422,7 @@ fribidi_get_par_embedding_levels_ex (
 	  }
       }
     if UNLIKELY
-      (!shadow_run_list (main_run_list, list, false)) goto out;
+      (!shadow_run_list (main_run_list, list, false, run_pool)) goto out;
   }
 
 # if DEBUG
@@ -1442,10 +1451,7 @@ fribidi_get_par_embedding_levels_ex (
 out:
   DBG ("leaving fribidi_get_par_embedding_levels");
 
-  if (main_run_list)
-    free_run_list (main_run_list);
-  if UNLIKELY
-    (explicits_list) free_run_list (explicits_list);
+  fribidi_run_pool_free (run_pool);
 
   return status ? max_level + 1 : 0;
 }
