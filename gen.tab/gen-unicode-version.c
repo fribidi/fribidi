@@ -89,9 +89,9 @@ init (
   strcpy (unicode_version, "(unknown)");
 }
 
-#define READ_VERSION(prefix) ((where = strstr(buf, prefix)) && \
-			      (3 == sscanf (where, \
-					    prefix"%d.%d.%d", &version_major, &version_minor, &version_micro)))
+#define READ_VERSION(prefix) ((where = strcasestr(buf, prefix)) && \
+			      (3 == sscanf (where + strlen (prefix), \
+					    "%d.%d.%d", &version_major, &version_minor, &version_micro)))
 
 static int
 read_file (

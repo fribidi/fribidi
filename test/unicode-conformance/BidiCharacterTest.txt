@@ -1,7 +1,8 @@
-# BidiCharacterTest-15.1.0.txt
-# Date: 2023-01-05
-# © 2023 Unicode®, Inc.
-# For terms of use, see https://www.unicode.org/terms_of_use.html
+# BidiCharacterTest-18.0.0.txt
+# Date: 2026-02-03
+# © 2026 Unicode®, Inc.
+# Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
+# For terms of use and license, see https://www.unicode.org/terms_of_use.html
 #
 # Unicode Character Database
 # For documentation, see https://www.unicode.org/reports/tr44/
@@ -38,7 +39,8 @@
 ################################################################################
 # Examples from UAX #9
 
-# Examples from Section 3.3.5
+# Examples from the "Resolving Neutral and Isolate Formatting Types" section of UAX #9
+# (https://www.unicode.org/reports/tr9/#Resolving_Neutral_Types)
 05D0 05D1 0028 05D2 05D3 005B 0026 0065 0066 005D 002E 0029 0067 0068;0;0;1 1 0 1 1 0 0 0 0 0 0 0 0 0;1 0 2 4 3 5 6 7 8 9 10 11 12 13
 05D0 05D1 0028 05D2 05D3 005B 0026 0065 0066 005D 002E 0029 0067 0068;1;1;1 1 1 1 1 1 1 2 2 1 1 1 2 2;12 13 11 10 9 7 8 6 5 4 3 2 1 0
 0061 0062 0063 0020 0028 0064 0065 0066 0020 0627 0628 062C 0029 0020 05D0 05D1 05D2;0;0;0 0 0 0 0 0 0 0 0 1 1 1 0 0 1 1 1;0 1 2 3 4 5 6 7 8 11 10 9 12 13 16 15 14
