@@ -235,6 +235,12 @@ typedef uint32_t FriBidiParType;
 # define FRIBIDI_PAR_WLTR	FRIBIDI_TYPE_WLTR_VAL
 # define FRIBIDI_PAR_WRTL	FRIBIDI_TYPE_WRTL_VAL
 
+/* _FRIBIDI_TYPE_SENTINEL and _FRIBIDI_PAR_SENTINEL must be defined in
+ * both branches of this #if, so that code using them (e.g. Pango's
+ * pango-bidi-type.c) compiles regardless of which branch was taken. */
+# define _FRIBIDI_TYPE_SENTINEL	FRIBIDI_TYPE_SENTINEL
+# define _FRIBIDI_PAR_SENTINEL	FRIBIDI_TYPE_SENTINEL
+
 #endif
 
 /* Please don't use these two type names, use FRIBIDI_PAR_* form instead. */
