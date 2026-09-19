@@ -80,6 +80,27 @@ int version_major, version_minor, version_micro;
 char unicode_version[100];
 char buf[4000];
 
+/* strcasestr() is a glibc/BSD extension, not available on all
+   platforms (e.g. MinGW's Strawberry Perl toolchain on Windows), so
+   provide a portable fallback instead of relying on it. */
+static const char *
+portable_strcasestr (
+  const char *haystack,
+  const char *needle
+)
+{
+  size_t needle_len = strlen (needle);
+
+  if (!needle_len)
+    return haystack;
+
+  for (; *haystack; haystack++)
+    if (!strncasecmp (haystack, needle, needle_len))
+      return haystack;
+
+  return NULL;
+}
+
 static void
 init (
   void
@@ -89,7 +110,7 @@ init (
   strcpy (unicode_version, "(unknown)");
 }
 
-#define READ_VERSION(prefix) ((where = strcasestr(buf, prefix)) && \
+#define READ_VERSION(prefix) ((where = portable_strcasestr(buf, prefix)) && \
 			      (3 == sscanf (where + strlen (prefix), \
 					    "%d.%d.%d", &version_major, &version_minor, &version_micro)))
 
