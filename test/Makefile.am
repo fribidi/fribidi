@@ -8,9 +8,20 @@ TESTS_ENVIRONMENT = \
 
 AM_TESTS_ENVIRONMENT = $(TESTS_ENVIRONMENT)
 
-TESTS = run.tests
+TESTS = run.tests test-reorder-nsm
 
 check_SCRIPTS = run.tests
+
+check_PROGRAMS = test-reorder-nsm
+
+test_reorder_nsm_SOURCES = test-reorder-nsm.c
+
+AM_CPPFLAGS = \
+		@FRIBIDI_CPPFLAGS@ \
+		-I$(top_builddir)/lib \
+		-I$(top_srcdir)/lib
+
+LDADD = $(top_builddir)/lib/libfribidi.la
 
 TEST_DATAS = \
 	test_CapRTL_explicit.input \
@@ -28,7 +39,7 @@ TEST_DATAS = \
 
 
 EXTRA_DIST = \
-	$(TESTS) \
+	run.tests \
 	$(TEST_DATAS)
 
 SUFFIXES: .reference .input

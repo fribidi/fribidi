@@ -132,7 +132,11 @@ out:
 
 /* Local array size, used for stack-based local arrays */
 #define LOCAL_LIST_SIZE 128
-static FriBidiFlags flags = FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC;
+
+/* Defined in fribidi-deprecated.c; shared so that fribidi_set_mirroring()
+   and fribidi_set_reorder_nsm() affect fribidi_log2vis() as they did
+   before fribidi_log2vis() was undeprecated into this file. */
+extern FriBidiFlags _fribidi_legacy_api_flags;
 
 
 FRIBIDI_ENTRY FriBidiLevel
@@ -252,7 +256,7 @@ fribidi_log2vis (
       fribidi_get_joining_types (str, len, ar_props);
       fribidi_join_arabic (bidi_types, len, embedding_levels, ar_props);
 
-      fribidi_shape (flags, embedding_levels, len, ar_props, visual_str);
+      fribidi_shape (_fribidi_legacy_api_flags, embedding_levels, len, ar_props, visual_str);
     }
 
   /* line breaking goes here, but we assume one line in this function */
@@ -260,7 +264,7 @@ fribidi_log2vis (
   /* and this should be called once per line, but again, we assume one
    * line in this deprecated function */
   status =
-    fribidi_reorder_line (flags, bidi_types, len, 0, *pbase_dir,
+    fribidi_reorder_line (_fribidi_legacy_api_flags, bidi_types, len, 0, *pbase_dir,
 			  embedding_levels, visual_str,
 			  positions_V_to_L);
 

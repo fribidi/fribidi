@@ -37,7 +37,10 @@
 #ifdef FRIBIDI_NO_DEPRECATED
 #else
 
-static FriBidiFlags flags = FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC;
+/* Shared with fribidi_log2vis() in fribidi.c, so that the deprecated
+   fribidi_set_mirroring()/fribidi_set_reorder_nsm() setters actually
+   affect it. */
+FriBidiFlags _fribidi_legacy_api_flags = FRIBIDI_FLAGS_DEFAULT | FRIBIDI_FLAGS_ARABIC;
 
 FRIBIDI_ENTRY fribidi_boolean
 fribidi_set_mirroring (
@@ -45,7 +48,7 @@ fribidi_set_mirroring (
   fribidi_boolean state
 )
 {
-  return FRIBIDI_ADJUST_AND_TEST_BITS (flags, FRIBIDI_FLAG_SHAPE_MIRRORING, state);
+  return FRIBIDI_ADJUST_AND_TEST_BITS (_fribidi_legacy_api_flags, FRIBIDI_FLAG_SHAPE_MIRRORING, state);
 }
 
 FRIBIDI_ENTRY fribidi_boolean
@@ -53,7 +56,7 @@ fribidi_mirroring_status (
   void
 )
 {
-  return FRIBIDI_TEST_BITS (flags, FRIBIDI_FLAG_SHAPE_MIRRORING);
+  return FRIBIDI_TEST_BITS (_fribidi_legacy_api_flags, FRIBIDI_FLAG_SHAPE_MIRRORING);
 }
 
 FRIBIDI_ENTRY fribidi_boolean
@@ -62,7 +65,7 @@ fribidi_set_reorder_nsm (
   fribidi_boolean state
 )
 {
-  return FRIBIDI_ADJUST_AND_TEST_BITS (flags, FRIBIDI_FLAG_REORDER_NSM, state);
+  return FRIBIDI_ADJUST_AND_TEST_BITS (_fribidi_legacy_api_flags, FRIBIDI_FLAG_REORDER_NSM, state);
 }
 
 fribidi_boolean
@@ -70,7 +73,7 @@ fribidi_reorder_nsm_status (
   void
 )
 {
-  return FRIBIDI_TEST_BITS (flags, FRIBIDI_FLAG_REORDER_NSM);
+  return FRIBIDI_TEST_BITS (_fribidi_legacy_api_flags, FRIBIDI_FLAG_REORDER_NSM);
 }
 
 
