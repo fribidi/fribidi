@@ -147,6 +147,7 @@ new_run (
     {
       run->len = run->pos = run->level = run->isolate_level = 0;
       run->next = run->prev = run->prev_isolate = run->next_isolate = NULL;
+      run->fsi_base_level = 0;
     }
   return run;
 }
@@ -195,7 +196,9 @@ run_list_encode_bidi_types (
   const FriBidiCharType *bidi_types,
   const FriBidiBracketType *bracket_types,
   const FriBidiStrIndex len,
-  FriBidiRunPool *pool
+  FriBidiRunPool *pool,
+  /* output */
+  fribidi_boolean *has_isolate
 )
 {
   FriBidiRun *list, *last;
@@ -203,6 +206,8 @@ run_list_encode_bidi_types (
   FriBidiStrIndex i;
 
   fribidi_assert (bidi_types);
+
+  *has_isolate = false;
 
   /* Create the list sentinel */
   list = new_run_list (pool);
@@ -215,13 +220,16 @@ run_list_encode_bidi_types (
     {
       register FriBidiCharType char_type = bidi_types[i];
       register FriBidiBracketType bracket_type = FRIBIDI_NO_BRACKET;
+      register fribidi_boolean is_isolate = FRIBIDI_IS_ISOLATE (char_type);
       if (bracket_types)
         bracket_type = bracket_types[i];
+      if UNLIKELY
+        (is_isolate) *has_isolate = true;
 
       if (char_type != last->type
           || bracket_type != FRIBIDI_NO_BRACKET /* Always separate bracket into single char runs! */
           || last->bracket_type != FRIBIDI_NO_BRACKET
-          || FRIBIDI_IS_ISOLATE(char_type)
+          || is_isolate
           )
 	{
 	  run = new_run (pool);

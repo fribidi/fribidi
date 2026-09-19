@@ -53,6 +53,11 @@ struct _FriBidiRunStruct
 
   /* Additional links for connecting the isolate tree */
   FriBidiRun *prev_isolate, *next_isolate;
+
+  /* Valid only when type == FRIBIDI_TYPE_FSI: the effective direction
+     level (X5c), resolved once in a single linear pass over the run
+     list before the X1-X8 loop runs. See fribidi-bidi.c. */
+  FriBidiLevel fsi_base_level;
 };
 
 /* FriBidiRun nodes are created and destroyed in large numbers while
@@ -108,7 +113,8 @@ new_run (
   const FriBidiCharType *bidi_types,
   const FriBidiBracketType *bracket_types,
   const FriBidiStrIndex len,
-  FriBidiRunPool *pool
+  FriBidiRunPool *pool,
+  fribidi_boolean *has_isolate
 )
      FRIBIDI_GNUC_HIDDEN FRIBIDI_GNUC_WARN_UNUSED;
 

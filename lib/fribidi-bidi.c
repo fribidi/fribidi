@@ -55,6 +55,7 @@
  (((list)->type == FRIBIDI_TYPE_AN) || ((list)->type == FRIBIDI_TYPE_EN) | ((list)->type == FRIBIDI_TYPE_RTL)) ? FRIBIDI_TYPE_RTL : (list)->type)
 #define RL_BRACKET_TYPE(list) ((list)->bracket_type)
 #define RL_ISOLATE_LEVEL(list) ((list)->isolate_level)
+#define RL_FSI_BASE_LEVEL(list) ((list)->fsi_base_level)
 
 #define LOCAL_BRACKET_SIZE 16
 
@@ -156,7 +157,7 @@ compact_neutrals (
 
 /* The static sentinel is used to signal the end of an isolating
    sequence */
-static FriBidiRun sentinel = { NULL, NULL, 0,0, FRIBIDI_TYPE_SENTINEL, -1,-1,FRIBIDI_NO_BRACKET, NULL, NULL };
+static FriBidiRun sentinel = { NULL, NULL, 0,0, FRIBIDI_TYPE_SENTINEL, -1,-1,FRIBIDI_NO_BRACKET, NULL, NULL, 0 };
 
 static FriBidiRun *get_adjacent_run(FriBidiRun *list, fribidi_boolean forward, fribidi_boolean skip_neutral)
 {
@@ -502,6 +503,7 @@ fribidi_get_par_embedding_levels_ex (
   FriBidiLevel base_level, max_level = 0;
   FriBidiParType base_dir;
   FriBidiRun *main_run_list = NULL, *explicits_list = NULL, *pp;
+  fribidi_boolean has_isolate = false;
   FriBidiRunPool *run_pool = NULL;
   fribidi_boolean status = false;
   int max_iso_level = 0;
@@ -529,7 +531,7 @@ fribidi_get_par_embedding_levels_ex (
   /* Determinate character types */
   {
     /* Get run-length encoded character types */
-    main_run_list = run_list_encode_bidi_types (bidi_types, bracket_types, len, run_pool);
+    main_run_list = run_list_encode_bidi_types (bidi_types, bracket_types, len, run_pool, &has_isolate);
     if UNLIKELY
       (!main_run_list) goto out;
   }
@@ -605,6 +607,82 @@ fribidi_get_par_embedding_levels_ex (
     explicits_list = new_run_list (run_pool);
     if UNLIKELY
       (!explicits_list) goto out;
+
+    /* X5c preprocessing: resolve the effective direction of every FSI
+       up front, in a single linear pass over the (still untouched)
+       run list, using an explicit stack to skip over nested isolates.
+       This replaces rescanning the tail of the run list from every FSI
+       individually, which made paragraphs with many FSIs -- or with no
+       strong character before an FSI's matching PDI -- quadratic. Only
+       the direct content of each isolate initiator counts towards its
+       own resolution; content of a nested isolate is skipped entirely,
+       which a stack captures naturally: a strong character only ever
+       resolves the isolate currently on top of the stack. Skipped
+       entirely when the text has no isolate-initiator at all, which is
+       the common case and would otherwise cost a full, pointless pass
+       over the run list. */
+    if (has_isolate)
+    {
+      FriBidiRun *local_fsi_stack[LOCAL_BRACKET_SIZE];
+      FriBidiRun **fsi_stack = local_fsi_stack;
+      int fsi_stack_capacity = LOCAL_BRACKET_SIZE;
+      int fsi_stack_size = 0;
+      fribidi_boolean fsi_stack_heap = false;
+      FriBidiRun *fsi_pp;
+
+      for_run_list (fsi_pp, main_run_list)
+        {
+          FriBidiCharType fsi_this_type = RL_TYPE (fsi_pp);
+
+          if (fsi_this_type == FRIBIDI_TYPE_PDI)
+            {
+              if (fsi_stack_size)
+                fsi_stack_size--;
+            }
+          else if (FRIBIDI_IS_ISOLATE (fsi_this_type))
+            {
+              if UNLIKELY
+                (fsi_stack_size == fsi_stack_capacity)
+                {
+                  int new_capacity = fsi_stack_capacity * 2;
+                  FriBidiRun **new_stack =
+                    fribidi_malloc (new_capacity * sizeof (*new_stack));
+                  if UNLIKELY
+                    (!new_stack) break;
+                  memcpy (new_stack, fsi_stack,
+                          fsi_stack_size * sizeof (*new_stack));
+                  if (fsi_stack_heap)
+                    fribidi_free (fsi_stack);
+                  fsi_stack = new_stack;
+                  fsi_stack_capacity = new_capacity;
+                  fsi_stack_heap = true;
+                }
+
+              if (fsi_this_type == FRIBIDI_TYPE_FSI)
+                {
+                  RL_FSI_BASE_LEVEL (fsi_pp) = 0;
+                  fsi_stack[fsi_stack_size++] = fsi_pp;
+                }
+              else
+                fsi_stack[fsi_stack_size++] = NULL;
+            }
+          else if (fsi_stack_size && FRIBIDI_IS_LETTER (fsi_this_type))
+            {
+              FriBidiRun *pending = fsi_stack[fsi_stack_size - 1];
+              if (pending)
+                {
+                  RL_FSI_BASE_LEVEL (pending) =
+                    FRIBIDI_DIR_TO_LEVEL (fsi_this_type);
+                  /* Found; stop this isolate from being resolved again
+                     by a later, incorrect, character. */
+                  fsi_stack[fsi_stack_size - 1] = NULL;
+                }
+            }
+        }
+
+      if (fsi_stack_heap)
+        fribidi_free (fsi_stack);
+    }
 
     /* X1. Begin by setting the current embedding level to the paragraph
        embedding level. Set the directional override status to neutral,
@@ -716,28 +794,9 @@ fribidi_get_par_embedding_levels_ex (
             new_level = level + 1 + (level%2);
           else if (this_type == FRIBIDI_TYPE_FSI)
             {
-              /* Search for a local strong character until we
-                 meet the corresponding PDI or the end of the
-                 paragraph */
-              FriBidiRun *fsi_pp;
-              int isolate_count = 0;
-              int fsi_base_level = 0;
-              for_run_list (fsi_pp, pp)
-                {
-                  if (RL_TYPE(fsi_pp) == FRIBIDI_TYPE_PDI)
-                    {
-                      isolate_count--;
-                      if (valid_isolate_count < 0)
-                        break;
-                    }
-                  else if (FRIBIDI_IS_ISOLATE(RL_TYPE(fsi_pp)))
-                    isolate_count++;
-                  else if (isolate_count==0 && FRIBIDI_IS_LETTER (RL_TYPE (fsi_pp)))
-                    {
-                      fsi_base_level = FRIBIDI_DIR_TO_LEVEL (RL_TYPE (fsi_pp));
-                      break;
-                    }
-                }
+              /* The effective direction was already resolved by the
+                 single-pass X5c preprocessing above; just look it up. */
+              FriBidiLevel fsi_base_level = RL_FSI_BASE_LEVEL (pp);
 
               /* Same behavior like RLI and LRI above */
               if (FRIBIDI_LEVEL_IS_RTL (fsi_base_level))
