@@ -1487,6 +1487,129 @@ index_array_reverse (
     }
 }
 
+/* A maximal run of consecutive characters that share the same resolved
+ * embedding level, as used by the linear-time implementation of L2 below. */
+typedef struct
+{
+  FriBidiStrIndex pos, len;
+  FriBidiLevel level;
+  FriBidiStrIndex next;	/* index into the runs array, or -1 */
+} FriBidiL2Run;
+
+/* A range groups one or more adjacent runs (in *visual* order) that have
+ * already been merged together, along with the highest level seen among
+ * the runs that produced it. */
+typedef struct
+{
+  FriBidiLevel level;
+  FriBidiStrIndex left, right;	/* indices into the runs array */
+  FriBidiStrIndex previous;	/* index into the ranges array, or -1 */
+} FriBidiL2Range;
+
+/* Merges ranges[top] with ranges[ranges[top].previous], frees the top
+ * range by returning its slot to the caller, and returns the index of
+ * the surviving (previous) range. */
+static FriBidiStrIndex
+fribidi_l2_merge_range_with_previous (
+  FriBidiL2Run *runs,
+  FriBidiL2Range *ranges,
+  FriBidiStrIndex top
+)
+{
+  FriBidiStrIndex previous = ranges[top].previous;
+  FriBidiStrIndex left, right;
+
+  fribidi_assert (previous != -1);
+  fribidi_assert (ranges[previous].level < ranges[top].level);
+
+  if (FRIBIDI_LEVEL_IS_RTL (ranges[previous].level))
+    {
+      /* Odd, previous goes to the right of range. */
+      left = top;
+      right = previous;
+    }
+  else
+    {
+      /* Even, previous goes to the left of range. */
+      left = previous;
+      right = top;
+    }
+  /* Stitch them. */
+  runs[ranges[left].right].next = ranges[right].left;
+
+  ranges[previous].left = ranges[left].left;
+  ranges[previous].right = ranges[right].right;
+
+  return previous;
+}
+
+/* A one-pass linear-time implementation of UAX#9 rule L2, operating on
+ * maximal same-level runs instead of individual characters.  This avoids
+ * the O(len * max_level) cost of repeatedly rescanning the whole line for
+ * each embedding level from max_level down to 1.
+ *
+ * Reorders runs[0..num_runs-1], which must be given in logical order and
+ * linked via ->next accordingly, and returns the index of the left-most
+ * (i.e. first in visual order) run.  The runs array is used both as
+ * storage for the run list and as a preallocated stack for ranges sized
+ * to num_runs, since neither structure can exceed num_runs entries.
+ */
+static FriBidiStrIndex
+fribidi_l2_linear_reorder (
+  FriBidiL2Run *runs,
+  FriBidiL2Range *ranges,
+  const FriBidiStrIndex num_runs
+)
+{
+  FriBidiStrIndex top = -1;
+  FriBidiStrIndex range_count = 0;
+  FriBidiStrIndex i;
+
+  for (i = 0; i < num_runs; i++)
+    {
+      while (top != -1 && ranges[top].level > runs[i].level &&
+	     ranges[top].previous != -1 &&
+	     ranges[ranges[top].previous].level >= runs[i].level)
+	top = fribidi_l2_merge_range_with_previous (runs, ranges, top);
+
+      if (top != -1 && ranges[top].level >= runs[i].level)
+	{
+	  /* Attach run to the range. */
+	  if (FRIBIDI_LEVEL_IS_RTL (runs[i].level))
+	    {
+	      /* Odd, range goes to the right of run. */
+	      runs[i].next = ranges[top].left;
+	      ranges[top].left = i;
+	    }
+	  else
+	    {
+	      /* Even, range goes to the left of run. */
+	      runs[ranges[top].right].next = i;
+	      ranges[top].right = i;
+	    }
+	  ranges[top].level = runs[i].level;
+	}
+      else
+	{
+	  /* Push new range for run. */
+	  FriBidiStrIndex r = range_count++;
+	  ranges[r].left = ranges[r].right = i;
+	  ranges[r].level = runs[i].level;
+	  ranges[r].previous = top;
+	  top = r;
+	}
+    }
+
+  fribidi_assert (top != -1);
+  while (ranges[top].previous != -1)
+    top = fribidi_l2_merge_range_with_previous (runs, ranges, top);
+
+  /* Terminate. */
+  runs[ranges[top].right].next = -1;
+
+  return ranges[top].left;
+}
+
 
 FRIBIDI_ENTRY FriBidiLevel
 fribidi_reorder_line (
@@ -1531,13 +1654,14 @@ fribidi_reorder_line (
 
   /* 7. Reordering resolved levels */
   {
-    register FriBidiLevel level;
     register FriBidiStrIndex i;
 
     /* Reorder both the outstring and the order array */
     {
       if (FRIBIDI_TEST_BITS (flags, FRIBIDI_FLAG_REORDER_NSM))
 	{
+	  register FriBidiLevel level;
+
 	  /* L3. Reorder NSMs. */
 	  for (i = off + len - 1; i >= off; i--)
 	    if (FRIBIDI_LEVEL_IS_RTL (embedding_levels[i])
@@ -1568,28 +1692,117 @@ fribidi_reorder_line (
 	      }
 	}
 
-      /* Find max_level of the line.  We don't reuse the paragraph
-       * max_level, both for a cleaner API, and that the line max_level
-       * may be far less than paragraph max_level. */
-      for (i = off + len - 1; i >= off; i--)
-	if (embedding_levels[i] > max_level)
-	  max_level = embedding_levels[i];
+      /* L2. Reorder, and along the way find max_level of the line.  We
+       * don't reuse the paragraph max_level, both for a cleaner API, and
+       * that the line max_level may be far less than paragraph max_level.
+       *
+       * This is done in linear time by grouping the line into maximal
+       * same-level runs and reordering the runs, rather than repeatedly
+       * rescanning the whole line once per embedding level as the naive
+       * algorithm from the standard does. */
+      {
+	/* Count the runs first, so the runs/ranges arrays below can be
+	 * sized to the actual run count rather than to len: real-world
+	 * lines usually consist of a handful of long runs, so this keeps
+	 * the common case cheap. */
+	FriBidiStrIndex num_runs = 0;
+	FriBidiStrIndex pos;
 
-      /* L2. Reorder. */
-      for (level = max_level; level > 0; level--)
-	for (i = off + len - 1; i >= off; i--)
-	  if (embedding_levels[i] >= level)
+	for (pos = off; pos < off + len; num_runs++)
+	  {
+	    FriBidiStrIndex run_len = 1;
+	    while (pos + run_len < off + len &&
+		   embedding_levels[pos + run_len] == embedding_levels[pos])
+	      run_len++;
+	    pos += run_len;
+	  }
+
+	{
+	  char *runs_and_ranges =
+	    fribidi_malloc (num_runs * (sizeof (FriBidiL2Run) +
+					 sizeof (FriBidiL2Range)));
+	  FriBidiL2Run *runs = (FriBidiL2Run *) runs_and_ranges;
+	  FriBidiL2Range *ranges =
+	    (FriBidiL2Range *) (runs_and_ranges +
+				 num_runs * sizeof (FriBidiL2Run));
+	  FriBidiStrIndex run_idx = 0;
+
+	  for (pos = off; pos < off + len; run_idx++)
 	    {
-	      /* Find all stretches that are >= level_idx */
-	      register FriBidiStrIndex seq_end = i;
-	      for (i--; i >= off && embedding_levels[i] >= level; i--)
-		;
+	      FriBidiStrIndex run_len = 1;
+	      while (pos + run_len < off + len &&
+		     embedding_levels[pos + run_len] == embedding_levels[pos])
+		run_len++;
 
-	      if (visual_str)
-		bidi_string_reverse (visual_str + i + 1, seq_end - i);
-	      if (map)
-		index_array_reverse (map + i + 1, seq_end - i);
+	      runs[run_idx].pos = pos;
+	      runs[run_idx].len = run_len;
+	      runs[run_idx].level = embedding_levels[pos];
+	      runs[run_idx].next = -1;
+
+	      if (runs[run_idx].level > max_level)
+		max_level = runs[run_idx].level;
+
+	      /* The run's own content must be reversed exactly once if it
+	       * is an RTL run; further reordering only ever moves whole
+	       * runs around, it never touches what is inside them. */
+	      if (FRIBIDI_LEVEL_IS_RTL (runs[run_idx].level))
+		{
+		  if (visual_str)
+		    bidi_string_reverse (visual_str + pos, run_len);
+		  if (map)
+		    index_array_reverse (map + pos, run_len);
+		}
+
+	      pos += run_len;
 	    }
+
+	  if (num_runs > 1)
+	    {
+	      FriBidiStrIndex left =
+		fribidi_l2_linear_reorder (runs, ranges, num_runs);
+
+	      if (visual_str || map)
+		{
+		  char *tmp =
+		    fribidi_malloc (len * ((visual_str ? sizeof (FriBidiChar) :
+					     0) +
+					    (map ? sizeof (FriBidiStrIndex) :
+					     0)));
+		  FriBidiChar *tmp_visual = visual_str ? (FriBidiChar *) tmp :
+		    NULL;
+		  FriBidiStrIndex *tmp_map =
+		    map ? (FriBidiStrIndex *) (tmp +
+						(visual_str ?
+						 len * sizeof (FriBidiChar) :
+						 0)) : NULL;
+		  FriBidiStrIndex out_pos = 0;
+		  FriBidiStrIndex idx;
+
+		  for (idx = left; idx != -1; idx = runs[idx].next)
+		    {
+		      if (tmp_visual)
+			memcpy (tmp_visual + out_pos,
+				visual_str + runs[idx].pos,
+				runs[idx].len * sizeof (FriBidiChar));
+		      if (tmp_map)
+			memcpy (tmp_map + out_pos, map + runs[idx].pos,
+				runs[idx].len * sizeof (FriBidiStrIndex));
+		      out_pos += runs[idx].len;
+		    }
+
+		  if (tmp_visual)
+		    memcpy (visual_str + off, tmp_visual,
+			    len * sizeof (FriBidiChar));
+		  if (tmp_map)
+		    memcpy (map + off, tmp_map, len * sizeof (FriBidiStrIndex));
+
+		  fribidi_free (tmp);
+		}
+	    }
+
+	  fribidi_free (runs_and_ranges);
+	}
+      }
     }
 
   }
