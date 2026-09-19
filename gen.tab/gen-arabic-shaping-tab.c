@@ -79,19 +79,6 @@ die2 (
 }
 
 static void
-die3 (
-  const char *fmt,
-  const char *p,
-  const char *q
-)
-{
-  fprintf (stderr, appname ": ");
-  fprintf (stderr, fmt, p, q);
-  fprintf (stderr, "\n");
-  exit (1);
-}
-
-static void
 die3l (
   const char *fmt,
   unsigned long l,
@@ -284,8 +271,8 @@ main (
     { "UnicodeData.txt", NULL };
 
   if (argc < 3)
-    die3 ("usage:\n  " appname " max-depth /path/to/%s /path/to/%s [junk...]",
-	  data_file_type[0], data_file_type[1]);
+    die2 ("usage:\n  " appname " max-depth /path/to/%s [junk...]",
+	  data_file_type[0]);
 
   {
     int max_depth = atoi (argv[1]);
