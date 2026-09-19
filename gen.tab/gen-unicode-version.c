@@ -80,9 +80,34 @@ int version_major, version_minor, version_micro;
 char unicode_version[100];
 char buf[4000];
 
-/* strcasestr() is a glibc/BSD extension, not available on all
-   platforms (e.g. MinGW's Strawberry Perl toolchain on Windows), so
-   provide a portable fallback instead of relying on it. */
+/* strcasestr() is a glibc/BSD extension, and even its usual portable
+   replacement, strncasecmp()/_strnicmp(), is spelled differently on
+   every platform (e.g. missing on MSVC, elsewhere in strings.h). Avoid
+   the whole mess by comparing case-insensitively by hand. */
+static int
+portable_toupper (
+  int c
+)
+{
+  return c >= 'a' && c <= 'z' ? c - 'a' + 'A' : c;
+}
+
+static int
+portable_strncasecmp (
+  const char *s1,
+  const char *s2,
+  size_t n
+)
+{
+  while (n-- && *s1 && portable_toupper (*s1) == portable_toupper (*s2))
+    {
+      s1++;
+      s2++;
+    }
+
+  return n == (size_t) -1 ? 0 : portable_toupper (*s1) - portable_toupper (*s2);
+}
+
 static const char *
 portable_strcasestr (
   const char *haystack,
@@ -95,7 +120,7 @@ portable_strcasestr (
     return haystack;
 
   for (; *haystack; haystack++)
-    if (!strncasecmp (haystack, needle, needle_len))
+    if (!portable_strncasecmp (haystack, needle, needle_len))
       return haystack;
 
   return NULL;
