@@ -378,17 +378,37 @@ FRIBIDI_END_IGNORE_DEPRECATIONS
 	padding_width = show_input ? (text_width - 10) / 2 : text_width;
 	break_width = do_break ? padding_width : 3 * MAX_STR_LEN;
 
-	while (fgets (S_, sizeof (S_) - 1, IN))
+	for (;;)
 	  {
 	    const char *new_line, *nl_found;
 	    FriBidiChar logical[MAX_STR_LEN];
 	    char outstring[MAX_STR_LEN];
 	    FriBidiParType base;
 	    FriBidiStrIndex len;
+	    fribidi_boolean got_input;
+	    int ch;
+
+	    /* Read one line, byte by byte, tracking the length explicitly
+	     * so that embedded NUL bytes in the input do not get mistaken
+	     * for the end of the line (as strlen() on the fgets() buffer
+	     * would do). */
+	    len = 0;
+	    got_input = false;
+	    while (len < (FriBidiStrIndex) sizeof (S_) - 1)
+	      {
+		ch = getc (IN);
+		if (ch == EOF)
+		  break;
+		got_input = true;
+		S_[len++] = (char) ch;
+		if (ch == '\n')
+		  break;
+	      }
+	    if (!got_input)
+	      break;
+	    S_[len] = '\0';
 
 	    nl_found = "";
-	    S_[sizeof (S_) - 1] = 0;
-	    len = strlen (S_);
 	    /* chop */
 	    if (len > 0 && S_[len - 1] == '\n')
 	      {
@@ -453,7 +473,7 @@ FRIBIDI_END_IGNORE_DEPRECATIONS
 			FriBidiStrIndex idx, st;
 			for (idx = 0; idx < len;)
 			  {
-			    FriBidiStrIndex wid, inlen;
+			    FriBidiStrIndex wid, inlen, outlen;
 
 			    wid = break_width;
 			    st = idx;
@@ -476,18 +496,29 @@ FRIBIDI_END_IGNORE_DEPRECATIONS
 			      idx--;
 			    inlen = idx - st;
 
-			    fribidi_unicode_to_charset (char_set_num,
-							visual + st, inlen,
-							outstring);
+			    outlen = fribidi_unicode_to_charset (char_set_num,
+								  visual + st,
+								  inlen,
+								  outstring);
 			    if (FRIBIDI_IS_RTL (base))
-			      printf ("%*s",
-				      (int) (do_pad ? (padding_width +
-						       strlen (outstring) -
-						       (break_width -
-							wid)) : 0),
-				      outstring);
+			      {
+				/* Write the converted bytes directly rather
+				 * than via printf's %s, since outstring may
+				 * contain embedded NUL bytes (e.g. U+0000 in
+				 * the input) that would otherwise truncate
+				 * the output. */
+				int fieldwidth = (int) (do_pad ?
+							 (padding_width +
+							  outlen -
+							  (break_width -
+							   wid)) : 0);
+				int pad = fieldwidth - (int) outlen;
+				while (pad-- > 0)
+				  putchar (' ');
+				fwrite (outstring, 1, outlen, stdout);
+			      }
 			    else
-			      printf ("%s", outstring);
+			      fwrite (outstring, 1, outlen, stdout);
 			    if (idx < len)
 			      printf ("\n");
 			  }
