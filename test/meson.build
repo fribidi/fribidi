@@ -18,7 +18,7 @@ foreach t : tests
   test(test_name, test_runner, args: [fribidi, charset, input_file, reference_file])
 endforeach
 
-test_reorder_nsm = executable('test-reorder-nsm', 'test-reorder-nsm.c',
+test_reorder_nsm = executable('test-reorder-nsm', 'test-reorder-nsm.c', fribidi_unicode_version_h,
   include_directories: incs,
   link_with: libfribidi,
 )
