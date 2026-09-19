@@ -1138,9 +1138,21 @@ fribidi_get_par_embedding_levels_ex (
     /* Start the N0 */
     {
       FriBidiPairingNode *ppairs = pairing_nodes;
+      /* Track, per isolate level, the level of the most recently seen
+         strong character while sweeping the run list forward exactly
+         once (strong_scan_pp only ever moves forward, it is never
+         rewound). This lets N0c below look up the preceding strong
+         character for each bracket pair in amortized O(1) instead of
+         rescanning backwards toward the start of the string for every
+         pair, which made runs of many bracket pairs with no strong
+         content quadratic. */
+      int last_strong_level[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL];
+      FriBidiRun *strong_scan_pp = main_run_list->next;
+      memset (last_strong_level, 0xFF, sizeof (int) * num_iso_levels);
+
       while (ppairs)
         {
-          int embedding_level = ppairs->open->level; 
+          int embedding_level = ppairs->open->level;
 
           /* Find matching strong. */
           fribidi_boolean found = false;
@@ -1167,20 +1179,25 @@ fribidi_get_par_embedding_levels_ex (
           /* Search for any strong type preceding and within the bracket pair */
           if (!found)
             {
-              /* Search for a preceding strong */
-              int prec_strong_level = embedding_level; /* TBDov! Extract from Isolate level in effect */
+              /* Search for a preceding strong. Catch the sweep cursor up
+                 to this pair's opening bracket, recording the level of
+                 every strong character passed along the way, indexed by
+                 its isolate level. */
               int iso_level = RL_ISOLATE_LEVEL(ppairs->open);
-              for (ppn = ppairs->open->prev; ppn->type != FRIBIDI_TYPE_SENTINEL; ppn=ppn->prev)
-                {
-                  FriBidiCharType this_type = RL_TYPE_AN_EN_AS_RTL(ppn);
-                  if (FRIBIDI_IS_STRONG (this_type) && RL_ISOLATE_LEVEL(ppn) == iso_level)
-                    {
-                      prec_strong_level = RL_LEVEL (ppn) +
-                        (FRIBIDI_LEVEL_IS_RTL (RL_LEVEL(ppn)) ^ FRIBIDI_DIR_TO_LEVEL (this_type));
+              int prec_strong_level;
 
-                      break;
+              for (; strong_scan_pp != ppairs->open; strong_scan_pp = strong_scan_pp->next)
+                {
+                  FriBidiCharType this_type = RL_TYPE_AN_EN_AS_RTL(strong_scan_pp);
+                  if (FRIBIDI_IS_STRONG (this_type))
+                    {
+                      last_strong_level[RL_ISOLATE_LEVEL(strong_scan_pp)] = RL_LEVEL (strong_scan_pp) +
+                        (FRIBIDI_LEVEL_IS_RTL (RL_LEVEL(strong_scan_pp)) ^ FRIBIDI_DIR_TO_LEVEL (this_type));
                     }
                 }
+
+              prec_strong_level = last_strong_level[iso_level] >= 0 ?
+                last_strong_level[iso_level] : embedding_level; /* TBDov! Extract from Isolate level in effect */
 
               for (ppn = ppairs->open; ppn!= ppairs->close; ppn = ppn->next)
                 {
