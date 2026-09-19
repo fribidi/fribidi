@@ -58,14 +58,24 @@
 
 #define LOCAL_BRACKET_SIZE 16
 
-/* Pairing nodes are used for holding a pair of open/close brackets as
-   described in BD16. */
-struct _FriBidiPairingNodeStruct {
+/* A pairing entry holds a pair of open/close brackets as described in
+   BD16. They are collected (in an arbitrary order determined by the
+   bracket-matching scan) into a flat, growable array rather than a
+   malloc-per-pair linked list, then qsort()ed by the open bracket's
+   position for the N0 pass below. Real-world text has few brackets, so
+   the array typically stays within its small initial allocation. */
+typedef struct {
   FriBidiRun *open;
   FriBidiRun *close;
-  struct _FriBidiPairingNodeStruct *next;
-};
-typedef struct _FriBidiPairingNodeStruct FriBidiPairingNode;
+} FriBidiPairingNode;
+
+typedef struct {
+  FriBidiPairingNode *nodes;
+  int count;
+  int capacity;
+} FriBidiPairingNodeArray;
+
+#define FRIBIDI_PAIRING_ARRAY_MIN_CAPACITY 16
 
 static FriBidiRun *
 merge_with_prev (
@@ -281,14 +291,12 @@ print_bidi_string (
   MSG ("\n");
 }
 
-static void print_pairing_nodes(FriBidiPairingNode *nodes)
+static void print_pairing_nodes(FriBidiPairingNodeArray *nodes)
 {
+  int i;
   MSG ("Pairs: ");
-  while (nodes)
-    {
-      MSG3 ("(%d, %d) ", nodes->open->pos, nodes->close->pos);
-      nodes = nodes->next;
-    }
+  for (i = 0; i < nodes->count; i++)
+    MSG3 ("(%d, %d) ", nodes->nodes[i].open->pos, nodes->nodes[i].close->pos);
   MSG ("\n");
 }
 #endif /* DEBUG */
@@ -423,95 +431,60 @@ fribidi_get_par_direction (
   return FRIBIDI_PAR_ON;
 }
 
-/* Push a new entry to the pairing linked list */
-static FriBidiPairingNode * pairing_nodes_push(FriBidiPairingNode *nodes,
+static void pairing_node_array_init(FriBidiPairingNodeArray *arr)
+{
+  arr->nodes = NULL;
+  arr->count = 0;
+  arr->capacity = 0;
+}
+
+/* Append a new (open, close) pair, growing the backing array (by
+   doubling, geometric growth) if needed. */
+static fribidi_boolean pairing_node_array_push(FriBidiPairingNodeArray *arr,
                                                FriBidiRun *open,
                                                FriBidiRun *close)
 {
-  FriBidiPairingNode *node = fribidi_malloc(sizeof(FriBidiPairingNode));
-  node->open = open;
-  node->close = close;
-  node->next = nodes;
-  nodes = node;
-  return nodes;
-}
-
-/* Sort by merge sort */
-static void pairing_nodes_front_back_split(FriBidiPairingNode *source,
-                                           /* output */
-                                           FriBidiPairingNode **front,
-                                           FriBidiPairingNode **back)
-{
-  FriBidiPairingNode *pfast, *pslow;
-  if (!source || !source->next)
+  if UNLIKELY
+    (arr->count == arr->capacity)
     {
-      *front = source;
-      *back = NULL;
-    }
-  else
-    {
-      pslow = source;
-      pfast = source->next;
-      while (pfast)
+      int new_capacity = arr->capacity ? arr->capacity * 2 :
+        FRIBIDI_PAIRING_ARRAY_MIN_CAPACITY;
+      FriBidiPairingNode *new_nodes =
+        fribidi_malloc (new_capacity * sizeof (FriBidiPairingNode));
+      if UNLIKELY
+        (!new_nodes) return false;
+      if (arr->nodes)
         {
-          pfast= pfast->next;
-          if (pfast)
-            {
-              pfast = pfast->next;
-              pslow = pslow->next;
-            }
+          memcpy (new_nodes, arr->nodes, arr->count * sizeof (FriBidiPairingNode));
+          fribidi_free (arr->nodes);
         }
-      *front = source;
-      *back = pslow->next;
-      pslow->next = NULL;
+      arr->nodes = new_nodes;
+      arr->capacity = new_capacity;
     }
+
+  arr->nodes[arr->count].open = open;
+  arr->nodes[arr->count].close = close;
+  arr->count++;
+  return true;
 }
 
-static FriBidiPairingNode *
-pairing_nodes_sorted_merge(FriBidiPairingNode *nodes1,
-                           FriBidiPairingNode *nodes2)
+static int pairing_node_compare (const void *a, const void *b)
 {
-  FriBidiPairingNode *res = NULL;
-  if (!nodes1)
-    return nodes2;
-  if (!nodes2)
-    return nodes1;
-
-  if (nodes1->open->pos < nodes2->open->pos)
-    {
-      res = nodes1;
-      res->next = pairing_nodes_sorted_merge(nodes1->next, nodes2);
-    }
-  else
-    {
-      res = nodes2;
-      res->next = pairing_nodes_sorted_merge(nodes1, nodes2->next);
-    }
-  return res;
+  const FriBidiPairingNode *na = a, *nb = b;
+  return (na->open->pos > nb->open->pos) - (na->open->pos < nb->open->pos);
 }
 
-static void sort_pairing_nodes(FriBidiPairingNode **nodes)
+static void sort_pairing_nodes(FriBidiPairingNodeArray *arr)
 {
-  FriBidiPairingNode *front, *back;
-
-  /* 0 or 1 node case */
-  if (!*nodes || !(*nodes)->next)
-    return;
-
-  pairing_nodes_front_back_split(*nodes, &front, &back);
-  sort_pairing_nodes(&front);
-  sort_pairing_nodes(&back);
-  *nodes = pairing_nodes_sorted_merge(front, back);
+  if (arr->count > 1)
+    qsort (arr->nodes, arr->count, sizeof (FriBidiPairingNode), pairing_node_compare);
 }
 
-static void free_pairing_nodes(FriBidiPairingNode *nodes)
+static void free_pairing_nodes(FriBidiPairingNodeArray *arr)
 {
-  while (nodes)
-    {
-      FriBidiPairingNode *p = nodes;
-      nodes = nodes->next;
-      fribidi_free(p);
-    }
+  fribidi_free (arr->nodes);
+  arr->nodes = NULL;
+  arr->count = arr->capacity = 0;
 }
 
 FRIBIDI_ENTRY FriBidiLevel
@@ -1063,13 +1036,15 @@ fribidi_get_par_embedding_levels_ex (
   {
     /*  BD16 - Build list of all pairs*/
     int num_iso_levels = max_iso_level + 1;
-    FriBidiPairingNode *pairing_nodes = NULL;
+    FriBidiPairingNodeArray pairing_nodes;
+    fribidi_boolean pairing_alloc_failed = false;
     FriBidiRun *local_bracket_stack[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL][LOCAL_BRACKET_SIZE];
     FriBidiRun **bracket_stack[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL];
     int bracket_stack_size[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL];
     int last_level = RL_LEVEL(main_run_list);
     int last_iso_level = 0;
 
+    pairing_node_array_init (&pairing_nodes);
     memset(bracket_stack, 0, sizeof(bracket_stack[0])*num_iso_levels);
     memset(bracket_stack_size, 0, sizeof(bracket_stack_size[0])*num_iso_levels);
 
@@ -1120,17 +1095,35 @@ fribidi_get_par_embedding_levels_ex (
                       {
                         bracket_stack_size[iso_level] = stack_idx;
 
-                        pairing_nodes = pairing_nodes_push(pairing_nodes,
-                                                           bracket_stack[iso_level][stack_idx],
-                                                           pp);
+                        if UNLIKELY
+                          (!pairing_node_array_push (&pairing_nodes,
+                                                     bracket_stack[iso_level][stack_idx],
+                                                     pp))
+                          pairing_alloc_failed = true;
                         break;
                     }
                     stack_idx--;
                   }
               }
           }
+        if UNLIKELY
+          (pairing_alloc_failed) break;
         last_level = level;
         last_iso_level = iso_level;
+      }
+
+    if UNLIKELY
+      (pairing_alloc_failed)
+      {
+        free_pairing_nodes (&pairing_nodes);
+        if (num_iso_levels >= LOCAL_BRACKET_SIZE)
+          {
+            int i;
+            for (i=LOCAL_BRACKET_SIZE; i<num_iso_levels; i++)
+              fribidi_free(bracket_stack[i]);
+          }
+        status = false;
+        goto out;
       }
 
     /* The list must now be sorted for the next algo to work! */
@@ -1140,13 +1133,13 @@ fribidi_get_par_embedding_levels_ex (
     if UNLIKELY
     (fribidi_debug_status ())
       {
-        print_pairing_nodes (pairing_nodes);
+        print_pairing_nodes (&pairing_nodes);
       }
 # endif	/* DEBUG */
 
     /* Start the N0 */
     {
-      FriBidiPairingNode *ppairs = pairing_nodes;
+      int ppairs_idx;
       /* Track, per isolate level, the level of the most recently seen
          strong character while sweeping the run list forward exactly
          once (strong_scan_pp only ever moves forward, it is never
@@ -1159,8 +1152,9 @@ fribidi_get_par_embedding_levels_ex (
       FriBidiRun *strong_scan_pp = main_run_list->next;
       memset (last_strong_level, 0xFF, sizeof (int) * num_iso_levels);
 
-      while (ppairs)
+      for (ppairs_idx = 0; ppairs_idx < pairing_nodes.count; ppairs_idx++)
         {
+          FriBidiPairingNode *ppairs = &pairing_nodes.nodes[ppairs_idx];
           int embedding_level = ppairs->open->level;
 
           /* Find matching strong. */
@@ -1223,11 +1217,9 @@ fribidi_get_par_embedding_levels_ex (
                     }
                 }
             }
-
-          ppairs = ppairs->next;
         }
 
-      free_pairing_nodes(pairing_nodes);
+      free_pairing_nodes(&pairing_nodes);
 
       if (num_iso_levels >= LOCAL_BRACKET_SIZE)
         {
