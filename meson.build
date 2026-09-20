@@ -1,4 +1,4 @@
-project('fribidi', 'c', version: '1.0.16',
+project('fribidi', 'c', version: '1.0.17',
   meson_version : '>= 0.54')
 
 # New release:

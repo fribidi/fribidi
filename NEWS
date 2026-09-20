@@ -1,7 +1,25 @@
 Unreleased changes
-===================
+==================
+
+
+Overview of changes between 1.0.16 and 1.0.17
+=============================================
 
 * Update Unicode character databases to v18.0.0
+* Significant performance improvements: FSI base direction resolution,
+  N0 bracket pairing, embedding-level resolution, and fribidi_reorder_line()
+  no longer have quadratic worst-case behavior, giving large speedups on
+  long paragraphs/lines.
+* Fixed fribidi_set_reorder_nsm() and fribidi_set_mirroring() not taking
+  effect when called before fribidi_log2vis().
+* Fixed bracket pairing (N0) to match brackets by canonical equivalence
+  only, per UAX #9 BD16.
+* Fixed a stack buffer overflow when parsing character-set equivalence
+  tables, and an out-of-bounds read on trailing '_' in charset data.
+* fribidi-main: fixed truncation of lines/output containing embedded
+  NUL bytes.
+* Generate and install the fribidi(1) man page.
+* Various build fixes (MSVC, MinGW, GCC 14 warnings).
 
 Overview of changes between 1.0.15 and 1.0.16
 =============================================
