@@ -97,6 +97,8 @@ AC_MSG_CHECKING([for some Win32 platform])
 AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
+AM_CONDITIONAL(CROSS_COMPILING, test "x$cross_compiling" = "xyes")
+
 
 # Checks for header files.
 AC_HEADER_STDC
