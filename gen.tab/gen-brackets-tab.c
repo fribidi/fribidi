@@ -282,7 +282,9 @@ read_data (
 
   fclose (f);
 
+#ifdef DEBUG
   fprintf (stderr, "Reading `%s'\n", bracket_datafile_name);
+#endif
   if (!(f = fopen (bracket_datafile_name, "rt")))
     die2 ("error: cannot open `%s' for reading", bracket_datafile_name);
 
