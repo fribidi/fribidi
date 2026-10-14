@@ -424,6 +424,8 @@ fribidi_get_par_direction (
         }
       else if (FRIBIDI_IS_ISOLATE(bidi_types[i]))
         valid_isolate_count++;
+      else if (bidi_types[i] == FRIBIDI_TYPE_BS)
+        valid_isolate_count = 0;
       else if (valid_isolate_count==0 && FRIBIDI_IS_LETTER (bidi_types[i]))
         return FRIBIDI_IS_RTL (bidi_types[i]) ? FRIBIDI_PAR_RTL :
           FRIBIDI_PAR_LTR;

@@ -24,6 +24,12 @@ test_reorder_nsm = executable('test-reorder-nsm', 'test-reorder-nsm.c', fribidi_
 )
 test('reorder-nsm', test_reorder_nsm)
 
+test_par_direction = executable('test-par-direction', 'test-par-direction.c', fribidi_unicode_version_h,
+  include_directories: incs,
+  link_with: libfribidi,
+)
+test('par-direction', test_par_direction)
+
 if get_option('fuzzer_ldflags') != ''
   cases = run_command(import('python').find_installation(), '-c',
     '''import os; print('\n'.join(os.listdir('@0@')))'''.format(join_paths(meson.current_source_dir(), 'fuzzing'))
