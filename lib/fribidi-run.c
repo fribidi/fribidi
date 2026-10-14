@@ -29,6 +29,9 @@
 
 #include "common.h"
 
+#include <limits.h>
+#include <stdint.h>
+
 #include <fribidi-bidi-types.h>
 
 #include "run.h"
@@ -52,8 +55,16 @@ run_pool_chunk_new (
   if (capacity < FRIBIDI_RUN_POOL_MIN_CHUNK)
     capacity = FRIBIDI_RUN_POOL_MIN_CHUNK;
 
+  /* Refuse sizes whose byte count is not representable in a size_t
+     (possible on 32-bit targets), rather than allocating a wrapped,
+     too-small block while still recording the large capacity. */
+  if UNLIKELY
+    ((size_t) capacity >
+     (SIZE_MAX - sizeof (FriBidiRunPoolChunk)) / sizeof (FriBidiRun))
+    return NULL;
+
   chunk = fribidi_malloc (sizeof (FriBidiRunPoolChunk) +
-			   capacity * sizeof (FriBidiRun));
+			   (size_t) capacity * sizeof (FriBidiRun));
   if LIKELY
     (chunk)
     {
@@ -122,7 +133,13 @@ run_pool_alloc (
     (chunk->used == chunk->capacity)
     {
       /* The size_hint under-estimated the run count (rare); grow. */
-      FriBidiRunPoolChunk *new_chunk = run_pool_chunk_new (chunk->capacity * 2);
+      FriBidiRunPoolChunk *new_chunk;
+
+      /* Doubling would overflow FriBidiStrIndex. */
+      if UNLIKELY
+	(chunk->capacity > INT_MAX / 2) return NULL;
+
+      new_chunk = run_pool_chunk_new (chunk->capacity * 2);
       if UNLIKELY
 	(!new_chunk) return NULL;
       new_chunk->next = chunk;
