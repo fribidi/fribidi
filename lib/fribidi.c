@@ -88,9 +88,8 @@ fribidi_remove_bidi_marks (
      not given by the caller, we have to make a private instance of it. */
   if (positions_to_this && !position_from_this_list)
     {
-      position_from_this_list = fribidi_malloc (sizeof
-						(position_from_this_list[0]) *
-						len);
+      position_from_this_list =
+	fribidi_malloc_array (len, sizeof (position_from_this_list[0]));
       if UNLIKELY
 	(!position_from_this_list) goto out;
       private_from_this = true;
@@ -182,7 +181,7 @@ fribidi_log2vis (
   if (len < LOCAL_LIST_SIZE)
     bidi_types = local_bidi_types;
   else
-    bidi_types = fribidi_malloc (len * sizeof bidi_types[0]);
+    bidi_types = fribidi_malloc_array (len, sizeof bidi_types[0]);
   if (!bidi_types)
     goto out;
 
@@ -191,7 +190,7 @@ fribidi_log2vis (
   if (len < LOCAL_LIST_SIZE)
     bracket_types = local_bracket_types;
   else
-    bracket_types = fribidi_malloc (len * sizeof bracket_types[0]);
+    bracket_types = fribidi_malloc_array (len, sizeof bracket_types[0]);
     
   if (!bracket_types)
     goto out;
@@ -204,7 +203,7 @@ fribidi_log2vis (
       if (len < LOCAL_LIST_SIZE)
         embedding_levels = local_embedding_levels;
       else
-        embedding_levels = fribidi_malloc (len * sizeof embedding_levels[0]);
+        embedding_levels = fribidi_malloc_array (len, sizeof embedding_levels[0]);
       if (!embedding_levels)
 	goto out;
       private_embedding_levels = true;
@@ -226,7 +225,7 @@ fribidi_log2vis (
         positions_V_to_L = local_positions_V_to_L;
       else
         positions_V_to_L =
-	(FriBidiStrIndex *) fribidi_malloc (sizeof (FriBidiStrIndex) * len);
+	(FriBidiStrIndex *) fribidi_malloc_array (len, sizeof (FriBidiStrIndex));
       if (!positions_V_to_L)
 	goto out;
       private_V_to_L = true;
@@ -252,7 +251,9 @@ fribidi_log2vis (
       if (len < LOCAL_LIST_SIZE)
         ar_props = local_ar_props;
       else
-        ar_props = fribidi_malloc (len * sizeof ar_props[0]);
+        ar_props = fribidi_malloc_array (len, sizeof ar_props[0]);
+      if (!ar_props)
+	goto out;
       fribidi_get_joining_types (str, len, ar_props);
       fribidi_join_arabic (bidi_types, len, embedding_levels, ar_props);
 

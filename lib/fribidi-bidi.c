@@ -453,7 +453,7 @@ static fribidi_boolean pairing_node_array_push(FriBidiPairingNodeArray *arr,
       int new_capacity = arr->capacity ? arr->capacity * 2 :
         FRIBIDI_PAIRING_ARRAY_MIN_CAPACITY;
       FriBidiPairingNode *new_nodes =
-        fribidi_malloc (new_capacity * sizeof (FriBidiPairingNode));
+        fribidi_malloc_array (new_capacity, sizeof (FriBidiPairingNode));
       if UNLIKELY
         (!new_nodes) return false;
       if (arr->nodes)
@@ -648,7 +648,7 @@ fribidi_get_par_embedding_levels_ex (
                 {
                   int new_capacity = fsi_stack_capacity * 2;
                   FriBidiRun **new_stack =
-                    fribidi_malloc (new_capacity * sizeof (*new_stack));
+                    fribidi_malloc_array (new_capacity, sizeof (*new_stack));
                   if UNLIKELY
                     (!new_stack) break;
                   memcpy (new_stack, fsi_stack,
@@ -1118,8 +1118,13 @@ fribidi_get_par_embedding_levels_ex (
         bracket_stack[iso_level] = local_bracket_stack[iso_level];
 
       for (iso_level=LOCAL_BRACKET_SIZE; iso_level < num_iso_levels; iso_level++)
-        bracket_stack[iso_level] = fribidi_malloc (sizeof (bracket_stack[0])
-                                                       * FRIBIDI_BIDI_MAX_NESTED_BRACKET_PAIRS);
+        {
+          bracket_stack[iso_level] =
+            fribidi_malloc_array (FRIBIDI_BIDI_MAX_NESTED_BRACKET_PAIRS,
+                                  sizeof (bracket_stack[0][0]));
+          if UNLIKELY
+            (!bracket_stack[iso_level]) pairing_alloc_failed = true;
+        }
     }
 
     /* Build the bd16 pair stack. */
@@ -1128,6 +1133,9 @@ fribidi_get_par_embedding_levels_ex (
         int level = RL_LEVEL(pp);
         int iso_level = RL_ISOLATE_LEVEL(pp);
         FriBidiBracketType brack_prop = RL_BRACKET_TYPE(pp);
+
+        if UNLIKELY
+          (pairing_alloc_failed) break;
 
         /* Interpret the isolating run sequence as such that they
            end at a change in the level, unless the iso_level has been
@@ -1777,14 +1785,37 @@ fribidi_reorder_line (
 	  }
 
 	{
-	  char *runs_and_ranges =
-	    fribidi_malloc (num_runs * (sizeof (FriBidiL2Run) +
-					 sizeof (FriBidiL2Range)));
-	  FriBidiL2Run *runs = (FriBidiL2Run *) runs_and_ranges;
-	  FriBidiL2Range *ranges =
-	    (FriBidiL2Range *) (runs_and_ranges +
-				 num_runs * sizeof (FriBidiL2Run));
+	  char *runs_and_ranges;
+	  char *tmp = NULL;
+	  FriBidiL2Run *runs;
+	  FriBidiL2Range *ranges;
 	  FriBidiStrIndex run_idx = 0;
+
+	  /* Allocate both buffers before the L2 run reversals below, so a
+	   * failure doesn't leave the runs half reordered. */
+	  runs_and_ranges =
+	    fribidi_malloc_array (num_runs, sizeof (FriBidiL2Run) +
+				  sizeof (FriBidiL2Range));
+	  if UNLIKELY
+	    (!runs_and_ranges) goto out;
+
+	  if (num_runs > 1 && (visual_str || map))
+	    {
+	      tmp =
+		fribidi_malloc_array (len, (visual_str ? sizeof (FriBidiChar) :
+					    0) +
+				      (map ? sizeof (FriBidiStrIndex) : 0));
+	      if UNLIKELY
+		(!tmp)
+		{
+		  fribidi_free (runs_and_ranges);
+		  goto out;
+		}
+	    }
+
+	  runs = (FriBidiL2Run *) runs_and_ranges;
+	  ranges = (FriBidiL2Range *) (runs_and_ranges +
+				       num_runs * sizeof (FriBidiL2Run));
 
 	  for (pos = off; pos < off + len; run_idx++)
 	    {
@@ -1820,13 +1851,8 @@ fribidi_reorder_line (
 	      FriBidiStrIndex left =
 		fribidi_l2_linear_reorder (runs, ranges, num_runs);
 
-	      if (visual_str || map)
+	      if (tmp)
 		{
-		  char *tmp =
-		    fribidi_malloc (len * ((visual_str ? sizeof (FriBidiChar) :
-					     0) +
-					    (map ? sizeof (FriBidiStrIndex) :
-					     0)));
 		  FriBidiChar *tmp_visual = visual_str ? (FriBidiChar *) tmp :
 		    NULL;
 		  FriBidiStrIndex *tmp_map =

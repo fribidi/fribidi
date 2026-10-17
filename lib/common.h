@@ -65,6 +65,15 @@
 # endif	/* !fribidi_free */
 #endif /* fribidi_malloc */
 
+/* fribidi_malloc_array should be used to allocate an array of count
+ * elements of size bytes each.  It returns NULL when count is negative or
+ * count * size is not representable in a size_t (possible on 32-bit
+ * targets), instead of allocating a wrapped, too-small block.  size must
+ * be nonzero, and both arguments are evaluated more than once. */
+#define fribidi_malloc_array(count, size) \
+  ((count) < 0 || (size_t) (count) > ((size_t) -1) / (size) ? NULL : \
+   fribidi_malloc ((size_t) (count) * (size)))
+
 #ifdef HAVE_STRING_H
 # if !STDC_HEADERS && HAVE_MEMORY_H
 #  include <memory.h>
