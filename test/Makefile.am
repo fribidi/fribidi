@@ -8,14 +8,15 @@ TESTS_ENVIRONMENT = \
 
 AM_TESTS_ENVIRONMENT = $(TESTS_ENVIRONMENT)
 
-TESTS = run.tests test-reorder-nsm test-par-direction
+TESTS = run.tests test-reorder-nsm test-par-direction test-reorder-line
 
 check_SCRIPTS = run.tests
 
-check_PROGRAMS = test-reorder-nsm test-par-direction
+check_PROGRAMS = test-reorder-nsm test-par-direction test-reorder-line
 
 test_reorder_nsm_SOURCES = test-reorder-nsm.c
 test_par_direction_SOURCES = test-par-direction.c
+test_reorder_line_SOURCES = test-reorder-line.c
 
 AM_CPPFLAGS = \
 		@FRIBIDI_CPPFLAGS@ \
