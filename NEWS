@@ -1,6 +1,34 @@
-Unreleased changes
-==================
+Overview of changes between 1.0.17 and 1.0.18
+=============================================
 
+* Security and robustness fixes found by an automated scan (Anthropic's
+  OSS Scanner):
+  - fribidi_remove_bidi_marks(): fixed an out-of-bounds write before the
+    caller's map when the position maps returned by one call are passed to
+    a second call. The maps it returns are now correct, and removed
+    characters are -1.
+  - Fixed unchecked memory allocations in fribidi_reorder_line(),
+    fribidi_log2vis() and the bracket pairing code, which could crash
+    when memory ran out instead of returning failure.
+  - Fixed an out-of-bounds read in the CapRTL decoder on platforms where
+    plain char is unsigned (e.g. aarch64, arm, ppc64le, s390x).
+  - Fixed quadratic running time on paragraphs made of many back-to-back
+    isolates, and on deeply nested isolates containing brackets (N0).
+* Fixed a stack buffer overflow in the CapRTL/UTF-8 output of fribidi and
+  fribidi-caprtl2utf8, and an integer overflow in the run-pool allocation
+  on 32-bit platforms.
+* Fixed paragraph direction detection to reset isolates at paragraph
+  boundaries.
+* Bidi fixes to match UAX #9 more closely. These can change the output for
+  unusual input:
+  - Overflow isolates are no longer treated as valid isolates (X5a-X5c),
+    and PDF handling checks the overflow counts first (X7).
+  - Bracket pairs (BD16/N0) no longer pair across isolates, and a full
+    bracket stack no longer stops pairing outside its isolating run
+    sequence.
+* fribidi_unicode_to_charset() now null-terminates the output for an
+  unknown character set.
+* Added regression tests and a fuzzing seed.
 
 Overview of changes between 1.0.16 and 1.0.17
 =============================================
