@@ -30,6 +30,12 @@ test_par_direction = executable('test-par-direction', 'test-par-direction.c', fr
 )
 test('par-direction', test_par_direction)
 
+test_isolate_chain = executable('test-isolate-chain', 'test-isolate-chain.c', fribidi_unicode_version_h,
+  include_directories: incs,
+  link_with: libfribidi,
+)
+test('isolate-chain', test_isolate_chain)
+
 if get_option('fuzzer_ldflags') != ''
   cases = run_command(import('python').find_installation(), '-c',
     '''import os; print('\n'.join(os.listdir('@0@')))'''.format(join_paths(meson.current_source_dir(), 'fuzzing'))

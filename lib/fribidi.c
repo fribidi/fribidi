@@ -95,7 +95,10 @@ fribidi_remove_bidi_marks (
 	(!position_from_this_list) goto out;
       private_from_this = true;
       for (i = 0; i < len; i++)
-	position_from_this_list[positions_to_this[i]] = i;
+	position_from_this_list[i] = i;
+      for (i = 0; i < len; i++)
+	if (positions_to_this[i] >= 0 && positions_to_this[i] < len)
+	  position_from_this_list[positions_to_this[i]] = i;
     }
 
   for (i = 0; i < len; i++)
@@ -116,8 +119,9 @@ fribidi_remove_bidi_marks (
     {
       for (i = 0; i < len; i++)
 	positions_to_this[i] = -1;
-      for (i = 0; i < len; i++)
-	positions_to_this[position_from_this_list[i]] = i;
+      for (i = 0; i < j; i++)
+	if (position_from_this_list[i] >= 0 && position_from_this_list[i] < len)
+	  positions_to_this[position_from_this_list[i]] = i;
     }
 
   status = true;
@@ -253,6 +257,8 @@ fribidi_log2vis (
         ar_props = local_ar_props;
       else
         ar_props = fribidi_malloc (len * sizeof ar_props[0]);
+      if (!ar_props)
+	goto out;
       fribidi_get_joining_types (str, len, ar_props);
       fribidi_join_arabic (bidi_types, len, embedding_levels, ar_props);
 

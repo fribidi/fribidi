@@ -238,10 +238,11 @@ fribidi_cap_rtl_to_unicode (
 	}
       else
       {
-        if ((int)s[i] < 0)
+        unsigned char c = (unsigned char) s[i];
+        if (c >= 0x80)
           us[j++] = '?';
         else
-          us[j++] = caprtl_to_unicode[(int) s[i]];
+          us[j++] = caprtl_to_unicode[c];
       }
     }
 
