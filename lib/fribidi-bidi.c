@@ -244,19 +244,27 @@ static char char_from_level_array[] = {
   'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
   'Y', 'Z',
 
-  /* TBD - insert another 125-64 levels */
-
-  '@',				/* 62 == only must appear after resolving
-				 * implicits. */
-
-  '!',				/* 63 == FRIBIDI_LEVEL_INVALID, internal error,
-				 * this level shouldn't be seen.  */
-
-  '*', '*', '*', '*', '*'	/* >= 64 == overflows, this levels and higher
-				 * levels show a real bug!. */
+  /* 62 and up, through FRIBIDI_BIDI_MAX_RESOLVED_LEVELS (127), are valid
+   * levels too since the maximum explicit level was raised to 125; they have
+   * no single-character representation and are printed as '*' by
+   * fribidi_char_from_level.  See print_types_re for the numeric level. */
 };
 
-#define fribidi_char_from_level(level) char_from_level_array[(level) + 1]
+/* Map a level to its one-character representation, or '*' for any level
+ * beyond the table above.  Resolved levels go up to 126, so the lookup
+ * must not trust the table to cover them all. */
+static char
+fribidi_char_from_level (
+  FriBidiLevel level
+)
+{
+  int i = level + 1;
+
+  if (i < 0 || i >= (int) sizeof (char_from_level_array))
+    return '*';
+
+  return char_from_level_array[i];
+}
 
 static void
 print_types_re (
@@ -772,10 +780,16 @@ fribidi_get_par_embedding_levels_ex (
 	    {
 	      /* 3. Terminating Embeddings and overrides */
 	      /*   X7. With each PDF, determine the matching embedding or
-	         override code. */
+	         override code. If the overflow isolate count is greater than
+	         zero, do nothing. Otherwise, if the overflow embedding count
+	         is greater than zero, decrement it. Otherwise pop the stack,
+	         unless the last entry is an isolate. */
               for (i = RL_LEN (pp); i; i--)
                 {
-                  if (stack_size && status_stack[stack_size-1].isolate != 0)
+                  if (isolate_overflow > 0)
+                    break;
+                  if (over_pushed == 0
+                      && stack_size && status_stack[stack_size-1].isolate != 0)
                     break;
                   POP_STATUS;
                 }
@@ -846,15 +860,20 @@ fribidi_get_par_embedding_levels_ex (
 
 	  RL_LEVEL (pp) = level;
           RL_ISOLATE_LEVEL (pp) = isolate_level;
-          if (isolate_level < FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1)
-              isolate_level++;
 
 	  if (!FRIBIDI_IS_NEUTRAL (override))
 	    RL_TYPE (pp) = override;
 
-          if (new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL)
+          /* X5a-X5c. The isolate is valid only if the new level is valid
+             and both the overflow isolate count and the overflow embedding
+             count are zero; otherwise it is an overflow isolate and leaves
+             the level, the isolate level and the stack unchanged. */
+          if (new_level <= FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL
+              && over_pushed == 0 && isolate_overflow == 0)
             {
               valid_isolate_count++;
+              if (isolate_level < FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL-1)
+                isolate_level++;
               PUSH_STATUS;
               level = new_level;
             }
@@ -1139,7 +1158,9 @@ fribidi_get_par_embedding_levels_ex (
     int num_iso_levels = max_iso_level + 1;
     FriBidiPairingNodeArray pairing_nodes;
     fribidi_boolean pairing_alloc_failed = false;
-    FriBidiRun *local_bracket_stack[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL][LOCAL_BRACKET_SIZE];
+    /* One full-size pair stack for each of the first LOCAL_BRACKET_SIZE
+       isolate levels; higher levels get theirs from the heap below. */
+    FriBidiRun *local_bracket_stack[LOCAL_BRACKET_SIZE][FRIBIDI_BIDI_MAX_NESTED_BRACKET_PAIRS];
     FriBidiRun **bracket_stack[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL];
     int bracket_stack_size[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL];
     /* Track the position of the most recently seen strong character, per
@@ -1152,8 +1173,6 @@ fribidi_get_par_embedding_levels_ex (
        isolate level at the same time. */
     FriBidiStrIndex last_strong_pos[FRIBIDI_BIDI_MAX_RESOLVED_LEVELS];
     FriBidiStrIndex last_iso_strong_pos[FRIBIDI_BIDI_MAX_EXPLICIT_LEVEL];
-    int last_level = RL_LEVEL(main_run_list);
-    int last_iso_level = 0;
 
     pairing_node_array_init (&pairing_nodes);
     memset(bracket_stack, 0, sizeof(bracket_stack[0])*num_iso_levels);
@@ -1194,11 +1213,13 @@ fribidi_get_par_embedding_levels_ex (
         FriBidiBracketType brack_prop = RL_BRACKET_TYPE(pp);
         FriBidiCharType this_type = RL_TYPE_AN_EN_AS_RTL(pp);
 
-        /* Interpret the isolating run sequence as such that they
-           end at a change in the level, unless the iso_level has been
-           raised. */
-        if (level != last_level && last_iso_level == iso_level)
-          bracket_stack_size[last_iso_level] = 0;
+        /* An isolating run sequence ends at a change in the level
+           between consecutive runs of an isolate chain, and when a new
+           chain starts (the first run of an isolate, also of a sibling
+           isolate at the same isolate level). Brackets do not pair
+           across sequences. */
+        if (!pp->prev_isolate || RL_LEVEL (pp->prev_isolate) != level)
+          bracket_stack_size[iso_level] = 0;
 
         if (FRIBIDI_IS_STRONG (this_type))
           {
@@ -1214,11 +1235,14 @@ fribidi_get_par_embedding_levels_ex (
           {
             if (FRIBIDI_IS_BRACKET_OPEN(brack_prop))
               {
+                /* BD16: a full stack stops pairing for the remainder of
+                   this isolating run sequence only. A negative size marks
+                   the sequence as stopped until the size is reset above. */
                 if (bracket_stack_size[iso_level]==FRIBIDI_BIDI_MAX_NESTED_BRACKET_PAIRS)
-                  break;
-
-                /* push onto the pair stack */
-                bracket_stack[iso_level][bracket_stack_size[iso_level]++] = pp;
+                  bracket_stack_size[iso_level] = -1;
+                else if (bracket_stack_size[iso_level] >= 0)
+                  /* push onto the pair stack */
+                  bracket_stack[iso_level][bracket_stack_size[iso_level]++] = pp;
               }
             else
               {
@@ -1246,8 +1270,6 @@ fribidi_get_par_embedding_levels_ex (
           }
         if UNLIKELY
           (pairing_alloc_failed) break;
-        last_level = level;
-        last_iso_level = iso_level;
       }
 
     if UNLIKELY
@@ -1316,18 +1338,37 @@ fribidi_get_par_embedding_levels_ex (
               int iso_level = RL_ISOLATE_LEVEL(ppairs->open);
               int prec_strong_level;
 
-              for (; strong_scan_pp != ppairs->open; strong_scan_pp = strong_scan_pp->next)
+              /* The sweep includes the opening bracket's own run, so that
+                 a pair starting an isolating run sequence sees its sos. */
+              for (; strong_scan_pp != ppairs->open->next; strong_scan_pp = strong_scan_pp->next)
                 {
                   FriBidiCharType this_type = RL_TYPE_AN_EN_AS_RTL(strong_scan_pp);
+                  int scan_iso_level = RL_ISOLATE_LEVEL(strong_scan_pp);
+                  int scan_level = RL_LEVEL(strong_scan_pp);
+                  FriBidiRun *scan_prev = strong_scan_pp->prev_isolate;
+
+                  /* A run that does not continue the previous run of its
+                     isolate chain at the same level starts a new isolating
+                     run sequence. The strong type preceding it is then the
+                     sequence's sos (X10): the higher of its level and the
+                     level before it, which for the first run of an isolate
+                     (or of the paragraph) is never above its own. It is not
+                     the last strong character of an earlier sequence at the
+                     same isolate level, such as a preceding sibling isolate. */
+                  if (!scan_prev)
+                    last_strong_level[scan_iso_level] = scan_level;
+                  else if (RL_LEVEL (scan_prev) != scan_level)
+                    last_strong_level[scan_iso_level] = MAX (scan_level, RL_LEVEL (scan_prev));
+
                   if (FRIBIDI_IS_STRONG (this_type))
                     {
-                      last_strong_level[RL_ISOLATE_LEVEL(strong_scan_pp)] = RL_LEVEL (strong_scan_pp) +
-                        (FRIBIDI_LEVEL_IS_RTL (RL_LEVEL(strong_scan_pp)) ^ FRIBIDI_DIR_TO_LEVEL (this_type));
+                      last_strong_level[scan_iso_level] = scan_level +
+                        (FRIBIDI_LEVEL_IS_RTL (scan_level) ^ FRIBIDI_DIR_TO_LEVEL (this_type));
                     }
                 }
 
               prec_strong_level = last_strong_level[iso_level] >= 0 ?
-                last_strong_level[iso_level] : embedding_level; /* TBDov! Extract from Isolate level in effect */
+                last_strong_level[iso_level] : embedding_level;
 
               RL_TYPE(ppairs->open) = RL_TYPE(ppairs->close) = prec_strong_level % 2 ? FRIBIDI_TYPE_RTL : FRIBIDI_TYPE_LTR;
             }

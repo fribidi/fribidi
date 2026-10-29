@@ -36,6 +36,18 @@ test_isolate_chain = executable('test-isolate-chain', 'test-isolate-chain.c', fr
 )
 test('isolate-chain', test_isolate_chain)
 
+test_debug_deep_levels = executable('test-debug-deep-levels', 'test-debug-deep-levels.c', fribidi_unicode_version_h,
+  include_directories: incs,
+  link_with: libfribidi,
+)
+test('debug-deep-levels', test_debug_deep_levels)
+
+test_charset_not_found = executable('test-charset-not-found', 'test-charset-not-found.c', fribidi_unicode_version_h,
+  include_directories: incs,
+  link_with: libfribidi,
+)
+test('charset-not-found', test_charset_not_found)
+
 if get_option('fuzzer_ldflags') != ''
   cases = run_command(import('python').find_installation(), '-c',
     '''import os; print('\n'.join(os.listdir('@0@')))'''.format(join_paths(meson.current_source_dir(), 'fuzzing'))

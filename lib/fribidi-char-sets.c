@@ -190,7 +190,11 @@ fribidi_unicode_to_charset (
       return len;
     }
   else
-    return 0;
+    {
+      /* Unknown character set: still null-terminate as documented. */
+      *s = '\0';
+      return 0;
+    }
 }
 
 FRIBIDI_ENTRY const char *

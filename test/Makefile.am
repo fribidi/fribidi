@@ -8,15 +8,17 @@ TESTS_ENVIRONMENT = \
 
 AM_TESTS_ENVIRONMENT = $(TESTS_ENVIRONMENT)
 
-TESTS = run.tests test-reorder-nsm test-par-direction test-isolate-chain
+TESTS = run.tests test-reorder-nsm test-par-direction test-isolate-chain test-debug-deep-levels test-charset-not-found
 
 check_SCRIPTS = run.tests
 
-check_PROGRAMS = test-reorder-nsm test-par-direction test-isolate-chain
+check_PROGRAMS = test-reorder-nsm test-par-direction test-isolate-chain test-debug-deep-levels test-charset-not-found
 
 test_reorder_nsm_SOURCES = test-reorder-nsm.c
 test_par_direction_SOURCES = test-par-direction.c
 test_isolate_chain_SOURCES = test-isolate-chain.c
+test_debug_deep_levels_SOURCES = test-debug-deep-levels.c
+test_charset_not_found_SOURCES = test-charset-not-found.c
 
 AM_CPPFLAGS = \
 		@FRIBIDI_CPPFLAGS@ \
